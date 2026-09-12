@@ -54,3 +54,13 @@ test('public last-version preferences survive reopening without a server',async(
   assert.equal(await versionPreferences(network,{storage}).load('chopin|op21'),'a'.repeat(64));
   assert.equal(await first.load('another-work'),null);
 });
+
+test('browser storage restrictions cannot crash the public library at startup',async()=>{
+  const original=Object.getOwnPropertyDescriptor(globalThis,'localStorage');
+  Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw new Error('Storage access denied');}});
+  try{
+    const prefs=versionPreferences(()=>assert.fail('No remote preference request'));
+    assert.equal(await prefs.load('chopin|op21'),null);
+    await assert.rejects(prefs.save('chopin|op21','a'.repeat(64)));
+  }finally{if(original)Object.defineProperty(globalThis,'localStorage',original);else delete globalThis.localStorage;}
+});
