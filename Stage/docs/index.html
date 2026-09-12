@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#122d28">
+  <meta name="description" content="导入 PDF 曲谱，学习一遍参考演奏，再用麦克风跟随音乐自动翻页。无需 MIDI。">
+  <title>Volta · 听谱翻页</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23122d28'/%3E%3Cpath d='M7 8l8 17L25 8h-5l-5 10-4-10z' fill='%23d8ee9a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark">V</span><span>volta<span class="brand-caption">听谱翻页</span></span></a>
+    <div class="top-note" id="account-note">公开试用 · 批注保存在本机</div>
+    <button id="help-button" class="quiet">使用指南 <span aria-hidden="true">↗</span></button>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="section-label">你的谱架 <span>01</span></div>
+      <button id="library-button" class="secondary full library-entry">打开曲谱库 <span aria-hidden="true">↗</span></button>
+      <button id="import-button" class="primary full"><span aria-hidden="true">＋</span> 导入 PDF 曲谱</button>
+      <input id="pdf-input" type="file" accept="application/pdf,.pdf" hidden>
+      <div class="import-links"><button id="imslp-button" class="text-button">从 IMSLP 获取</button><button id="demo-button" class="text-button">肖邦第二钢协</button></div>
+      <section class="score-card" id="score-card"><span class="eyebrow">当前曲谱</span><h1 id="score-title">还没有曲谱</h1><p id="score-meta">从 PDF 开始一场排练</p></section>
+      <div class="section-label">准备自动翻页 <span>02</span></div>
+      <div class="steps">
+        <div class="step"><span class="step-number">1</span><div><b>学习一次演奏</b><p>导入录音，或直接弹一遍。</p></div></div>
+        <button id="audio-button" class="secondary full" disabled>导入参考录音</button>
+        <input id="audio-input" type="file" accept="audio/*" hidden>
+        <button id="learn-button" class="quiet full" disabled>用麦克风学习</button>
+        <div class="step"><span class="step-number">2</span><div><b>标记翻页点</b><p>听到下一页开头时，按翻页。</p></div></div>
+        <div id="anchor-list" class="anchors"><p class="muted">学习完成后，翻页点会保存在这里。</p></div>
+      </div>
+      <div class="sidebar-bottom"><span class="privacy-icon" aria-hidden="true">⌁</span><p>手写批注仅保存在本机<br><span>声音在当前设备分析 · 无需 MIDI</span></p></div>
+    </aside>
+    <main class="reader">
+      <div class="reader-toolbar"><div class="reader-location"><span class="eyebrow">REHEARSAL ROOM</span><span id="page-label">等待导入</span></div><div class="view-controls"><button id="single-button" class="icon-button selected" aria-pressed="true" title="单页">▯</button><button id="spread-button" class="icon-button" aria-pressed="false" title="双页">▯▯</button><span class="separator"></span><button id="performance-open" class="secondary" disabled>演出模式</button><button id="fullscreen-button" class="icon-button" title="全屏谱架">⛶</button></div></div>
+      <section id="edition-toolbar" class="edition-toolbar" aria-label="当前曲目的版本" hidden><div><strong id="edition-work-title"></strong><label>曲谱版本 <select id="edition-select" aria-label="切换曲谱版本"></select></label></div><p id="edition-hint"></p><p id="edition-status" class="library-open-status" role="status" hidden></p></section>
+      <section id="ink-toolbar" class="ink-toolbar" aria-label="手写批注" hidden>
+        <div class="ink-tools"><button id="ink-read" class="quiet selected" aria-pressed="true">阅读</button><button id="ink-pen" class="quiet" aria-pressed="false">笔</button><button id="ink-erase" class="quiet" aria-pressed="false">橡皮</button><button id="ink-undo" class="quiet" title="撤销当前页批注">撤销</button><button id="ink-redo" class="quiet">重做</button>
+        <label>颜色 <select id="ink-color"><option value="#21382d">墨绿</option><option value="#bc3333">红色</option><option value="#2858aa">蓝色</option></select></label>
+        <label>放大 <select id="score-zoom"><option value="1">适合页面</option><option value="1.5">150%</option><option value="2">200%</option></select></label><button id="ink-export" class="quiet">导出批注备份</button></div>
+        <small><span id="ink-status">批注独立于原谱保存</span> · 书写模式仅接收笔／鼠标；切回阅读可移动谱页。</small>
+      </section>
+      <div id="score-stage" class="score-stage" tabindex="0" aria-label="曲谱阅读区，左右箭头翻页">
+        <div id="empty-state" class="empty-state"><div class="empty-kicker">VOLTA / YOUR LISTENING MUSIC STAND</div><h2>下一页，<br>让音乐来翻。</h2><p>放上曲谱，学习一次演奏。<br>之后的每一次排练，让谱页跟随你。</p><button id="empty-import" class="primary">选择 PDF <span aria-hidden="true">↗</span></button><small>支持从 IMSLP 下载的扫描曲谱</small></div>
+        <div id="pages" class="pages" hidden></div>
+        <div id="render-status" class="render-status" hidden>正在整理谱页…</div>
+      </div>
+      <div class="page-navigation" aria-label="翻页"><button id="prev-button" class="secondary" disabled>← <span>上一页</span></button><div class="page-jump"><input id="page-input" type="number" min="1" value="1" aria-label="跳转到 PDF 页" disabled><span id="page-count">/ —</span></div><div class="performance-only performance-position"><span id="performance-page-counter" aria-label="当前页码"></span><span id="performance-follow-status"></span></div><button id="next-button" class="secondary" disabled><span>下一页</span> →</button><button id="performance-exit" class="quiet performance-only">退出演出</button><p id="performance-error" role="status" hidden></p></div>
+      <section id="reference-panel" class="reference-panel" hidden><div class="reference-heading"><b id="reference-title">参考录音</b><span id="reference-status">准备中</span></div><audio id="reference-audio" controls></audio><div class="reference-actions"><button id="set-start-button" class="secondary">此处设为练习起点</button><button id="mark-button" class="secondary" disabled>此处开始第 <span id="mark-page">2</span> 页</button><button id="rest-button" class="quiet">标记钢琴休止开始</button><button id="finish-button" class="primary" disabled>完成学习</button><button id="cancel-button" class="quiet">取消</button></div><p id="reference-hint">在下一页的第一个音处标记。使用单页逐页标记；重复段也可以回到前面的页再标记。</p></section>
+      <section class="listening-bar"><div class="listening-info"><span id="mic-icon" class="mic-icon" aria-hidden="true">◉</span><div><strong id="listening-title">准备好，就开始演奏</strong><p id="listening-subtitle">先导入曲谱并学习一次翻页点</p></div></div><div class="meter" id="meter" aria-label="麦克风音量"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><button id="listen-button" class="primary" disabled>开始聆听 <span aria-hidden="true">↗</span></button></section>
+      <div class="reader-footer"><span id="confidence-label">等待准备</span><label>提前翻页 <select id="lead-select"><option value="0">0 秒</option><option value="0.4" selected>0.4 秒</option><option value="0.8">0.8 秒</option></select></label><span>← → 翻页 <kbd>Esc</kbd> 停止聆听</span></div>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="performance-dialog" aria-labelledby="performance-title"><button class="dialog-close quiet" aria-label="关闭">✕</button><h2 id="performance-title">演出模式</h2><p>只显示曲谱、已有批注和翻页控件。点击按钮、左右滑动，或使用方向键、PageUp／PageDown、空格翻页；也支持模拟这些按键的翻页踏板。</p><div class="performance-setup"><p id="performance-setup-status" role="status"></p><button id="performance-listen" class="secondary">开启自动翻页</button></div><p>手动翻页优先。自动跟随没跟上时可以直接翻页；翻到未学习的页，会转为手动。</p><p class="performance-notice">请先在系统开启“勿扰／专注模式”。网站无法屏蔽系统通知、来电或其他应用消息。</p><p>浏览器支持时进入全屏并尝试保持屏幕常亮。点击“退出演出”或按 Esc 返回；退出后停止自动聆听。</p><div class="dialog-actions"><button id="performance-begin" class="primary">进入演出</button><button class="secondary dialog-done">暂不进入</button></div></dialog>
+  <dialog id="metadata-dialog"><button class="dialog-close quiet" aria-label="关闭">✕</button><h2>整理曲谱资料</h2><p id="metadata-title"></p><form id="metadata-form" class="metadata-form"><label>原作作曲家<input id="meta-composer" maxlength="200" required></label><label>改编者（选填）<input id="meta-arranger" maxlength="200"></label><label>风格<input id="meta-style" maxlength="200" required></label><label>年代分组<input id="meta-era" maxlength="200" required placeholder="例如：19 世纪、2010 年代"></label><label>作品创作／发表年份<input id="meta-year" type="number" min="1" max="2100" placeholder="不确定则留空"></label><label>谱本出版年份<input id="meta-editionYear" type="number" min="1" max="2100" placeholder="不确定则留空"></label><p id="metadata-status" role="status"></p><button id="metadata-save" class="primary" type="submit">保存资料</button></form></dialog>
+  <dialog id="library-dialog" class="library-dialog"><button class="dialog-close quiet" aria-label="关闭">✕</button><span class="eyebrow">VOLTA / MUSIC LIBRARY</span><h2>曲目概览</h2><p id="library-summary">按作曲家、游戏与体裁找曲目，打开后切换版本。</p>
+    <div class="library-filters"><input id="library-search" type="search" placeholder="搜索作品、作曲家、改编者或版本" aria-label="搜索曲谱"><label>浏览方式 <select id="library-mode"><option value="composer">作曲家</option><option value="style">风格</option><option value="era">年代</option><option value="category">原收藏</option></select></label><label>格式 <select id="library-format"><option value="pdf">PDF 曲谱</option><option value="">全部格式</option><option value="sib">Sibelius</option><option value="mscz">MuseScore</option><option value="musicxml">MusicXML</option></select></label></div>
+    <div class="library-download-actions"><button id="library-refresh" class="secondary">刷新谱库</button><span id="library-download-help">下载完成后，刷新即可打开。</span></div>
+    <div class="library-body"><nav id="library-groups" class="library-groups" aria-label="曲谱分类"></nav><section><nav id="library-breadcrumbs" class="library-breadcrumbs" aria-label="当前曲谱分类路径"></nav><p id="library-count" role="status">正在读取曲谱库…</p><div id="library-results" class="library-results"></div></section></div>
+  </dialog>
+  <dialog id="help-dialog"><button class="dialog-close quiet" aria-label="关闭">✕</button><span class="eyebrow">HOW VOLTA LISTENS</span><h2>让曲谱认识你的演奏</h2><ol><li><b>导入 PDF。</b> 从 IMSLP 下载到本机，然后选择文件。页码使用 PDF 的实际页码，包含封面。</li><li><b>学习一遍。</b> 导入同一版本的录音，在每页开头标记位置；或开启“用麦克风学习”，弹奏时手动翻页。开始前先选好第一页。</li><li><b>再次演奏。</b> 回到学习的起始页，点击“开始聆听”。系统通过音乐的音高特征对齐参考演奏，跟随速度变化。</li></ol><p>批注、翻页点和版本偏好仅保存在当前浏览器，不跨设备同步；请定期导出批注备份。清除网站数据会移除这些本机记录。这是一版实验性听谱工具。重复乐句、很弱的声音或演奏与参考差异较大时，可能需要手动帮助定位。安静时会等待，意见不明确时不会自动跨页。扫描 PDF 尚不进行音符识别。</p><p>请通过 HTTPS 页面使用；iPad 可用 Safari，并在需要自动翻页时允许麦克风。耳机听参考录音时请关闭“开始聆听”。</p><button class="primary dialog-done">明白了</button></dialog>
+  <dialog id="imslp-dialog"><button class="dialog-close quiet" aria-label="关闭">✕</button><span class="eyebrow">IMSLP / PETRUCCI MUSIC LIBRARY</span><h2>把喜欢的版本放上谱架</h2><p>在 IMSLP 选择版本并下载 PDF，再回到这里导入。</p><div class="dialog-actions"><a href="https://imslp.org/" target="_blank" rel="noopener noreferrer" class="primary">打开 IMSLP ↗</a><button id="imslp-upload" class="secondary">选择已下载的 PDF</button></div><hr><label for="pdf-url">已有 PDF 直链</label><div class="url-row"><input id="pdf-url" type="url" placeholder="https://…/score.pdf"><button id="url-import" class="secondary">导入</button></div><p class="muted">只支持允许浏览器跨域读取的 PDF 直链。IMSLP 作品页、等待下载页请在原网站打开后下载。</p></dialog>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "publicLibrary": true,
+  "updatedAt": "2026-09-12T09:13:37.339Z",
+  "summary": {
+    "pdfs": 10,
+    "unique": 10,
+    "pending": 0
+  },
+  "items": [
+    {
+      "id": "88345f8f0f0a7270773ecaeed9fc02cb77b8c989ffd6664609b6051116a3dd72",
+      "title": "肖邦 - F小调钢琴协奏曲Op.21 双钢琴版（波兰国家版·第31册）",
+      "composer": "弗雷德里克·肖邦",
+      "arranger": null,
+      "style": "浪漫主义",
+      "era": "19 世纪",
+      "year": null,
+      "editionYear": null,
+      "bytes": 14923525,
+      "format": "pdf",
+      "sourceId": "88345f8f0f0a7270773ecaeed9fc02cb77b8c989ffd6664609b6051116a3dd72",
+      "available": true,
+      "aliases": [
+        "肖邦 - F小调钢琴协奏曲Op.21 双钢琴版（波兰国家版·第31册）.pdf"
+      ],
+      "category": "浪漫主义",
+      "collection": "试用曲谱",
+      "metadataStatus": "波兰国家版；版本信息据谱本封面"
+    },
+    {
+      "id": "0b29f86ea9dd20527b2f32c27e539123ca0d80ce2bc89bfa5bfb274bd51c40fc",
+      "title": "肖邦 - F小调钢琴协奏曲Op.21 总谱音乐会版（波兰国家版·第34册）",
+      "composer": "弗雷德里克·肖邦",
+      "arranger": null,
+      "style": "浪漫主义",
+      "era": "19 世纪",
+      "year": null,
+      "editionYear": null,
+      "bytes": 12844782,
+      "format": "pdf",
+      "sourceId": "0b29f86ea9dd20527b2f32c27e539123ca0d80ce2bc89bfa5bfb274bd51c40fc",
+      "available": true,
+      "aliases": [
+        "肖邦 - F小调钢琴协奏曲Op.21 总谱音乐会版（波兰国家版·第34册）.pdf"
+      ],
+      "category": "浪漫主义",
+      "collection": "试用曲谱",
+      "metadataStatus": "波兰国家版；版本信息据谱本封面"
+    },
+    {
+      "id": "cec21f3202edebcaef671e039f0f530cbacfbbb18bd2c65989a08f2923ecfe3e",
+      "title": "肖邦 - 叙事曲（波兰国家版·第1册）",
+      "composer": "弗雷德里克·肖邦",
+      "arranger": null,
+      "style": "浪漫主义",
+      "era": "19 世纪",
+      "year": null,
+      "editionYear": null,
+      "bytes": 26165539,
+      "format": "pdf",
+      "sourceId": "cec21f3202edebcaef671e039f0f530cbacfbbb18bd2c65989a08f2923ecfe3e",
+      "available": true,
+      "aliases": [
+        "肖邦 - 叙事曲（波兰国家版·第1册）.pdf"
+      ],
+      "category": "浪漫主义",
+      "collection": "试用曲谱",
+      "metadataStatus": "波兰国家版；版本信息据谱本封面"
+    },
+    {
+      "id": "d5aa7059ca818604bd7f11117baefb52d6e76021a781ba35c68640927e75ca55",
+      "title": "柴可夫斯基 - D大调小提琴协奏曲 Op.35（总谱·IMSLP949200）",
+      "composer": "彼得·柴可夫斯基",
+      "arranger": null,
+      "style": "浪漫主义",
+      "era": "19 世纪",
+      "year": null,
+      "editionYear": null,
+      "bytes": 12310668,
+      "format": "pdf",
+      "sourceId": "d5aa7059ca818604bd7f11117baefb52d6e76021a781ba35c68640927e75ca55",
+      "available": true,
+      "aliases": [
+        "柴可夫斯基 - D大调小提琴协奏曲 Op.35（总谱·IMSLP949200）.pdf"
+      ],
+      "category": "浪漫主义",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "f5bb2e8aa8c6661032c5d78a9f1535afe8cbea31aac154b9ab441d2dfe3e4f28",
+      "title": "Animenz（编曲） - 吹雪Fubuki",
+      "composer": "作曲家待核对",
+      "arranger": "Animenz",
+      "style": "动漫／影视",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 152816,
+      "format": "pdf",
+      "sourceId": "f5bb2e8aa8c6661032c5d78a9f1535afe8cbea31aac154b9ab441d2dfe3e4f28",
+      "available": true,
+      "aliases": [
+        "Animenz（编曲） - 吹雪Fubuki.pdf"
+      ],
+      "category": "动漫／影视",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "11f3dc028a4821dad0306e013427cbc695a95c4d5f2e1aaec0cc6576be30c8c1",
+      "title": "Animenz（编曲） - unravel-东京喰种OP",
+      "composer": "作曲家待核对",
+      "arranger": "Animenz",
+      "style": "动漫／影视",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 154575,
+      "format": "pdf",
+      "sourceId": "11f3dc028a4821dad0306e013427cbc695a95c4d5f2e1aaec0cc6576be30c8c1",
+      "available": true,
+      "aliases": [
+        "Animenz（编曲） - unravel-东京喰种OP.pdf"
+      ],
+      "category": "动漫／影视",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "a5a043c9f09b42dcb885851757f7386c8d00e8d6cae21a7c7be9827e0ccb81c3",
+      "title": "原神 - 碎浪之舞 钢琴+小提琴 6 - 总谱",
+      "composer": "作曲家待核对",
+      "arranger": null,
+      "style": "游戏音乐",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 159228,
+      "format": "pdf",
+      "sourceId": "a5a043c9f09b42dcb885851757f7386c8d00e8d6cae21a7c7be9827e0ccb81c3",
+      "available": true,
+      "aliases": [
+        "原神 - 碎浪之舞 钢琴+小提琴 6 - 总谱.pdf"
+      ],
+      "category": "游戏音乐",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "0abf48ceb62f5e9b24b1614f83ae1cd9baaa41edf381fc38ad185a02a6dc5149",
+      "title": "原神 - 华灯星聚 - 总谱",
+      "composer": "作曲家待核对",
+      "arranger": null,
+      "style": "游戏音乐",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 112987,
+      "format": "pdf",
+      "sourceId": "0abf48ceb62f5e9b24b1614f83ae1cd9baaa41edf381fc38ad185a02a6dc5149",
+      "available": true,
+      "aliases": [
+        "原神 - 华灯星聚 - 总谱.pdf"
+      ],
+      "category": "游戏音乐",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "5354d3e18edf46dea2afdf2ea4a28ce7d60301284b8079e01edfd046d3396e46",
+      "title": "崩坏3 - Befall（编曲：CC Music Piano and Stuff）",
+      "composer": "作曲家待核对",
+      "arranger": null,
+      "style": "游戏音乐",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 149124,
+      "format": "pdf",
+      "sourceId": "5354d3e18edf46dea2afdf2ea4a28ce7d60301284b8079e01edfd046d3396e46",
+      "available": true,
+      "aliases": [
+        "崩坏3 - Befall（编曲：CC Music Piano and Stuff）.pdf"
+      ],
+      "category": "游戏音乐",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    },
+    {
+      "id": "1453982d873d4fafcf988f253252d1f924bb41eb332b885df4bec882db7c25ea",
+      "title": "周杰伦 - 晴天 - 总谱",
+      "composer": "作曲家待核对",
+      "arranger": null,
+      "style": "流行音乐",
+      "era": "年代待核对",
+      "year": null,
+      "editionYear": null,
+      "bytes": 87275,
+      "format": "pdf",
+      "sourceId": "1453982d873d4fafcf988f253252d1f924bb41eb332b885df4bec882db7c25ea",
+      "available": true,
+      "aliases": [
+        "周杰伦 - 晴天 - 总谱.pdf"
+      ],
+      "category": "流行音乐",
+      "collection": "试用曲谱",
+      "metadataStatus": "曲目与版本信息据谱本标题"
+    }
+  ]
+}
