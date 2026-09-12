@@ -1,6 +1,7 @@
 const collator=new Intl.Collator('zh-CN',{numeric:true,sensitivity:'base'});
 export const compareNames=(a,b)=>collator.compare(a,b);
 const genres=[
+  ['交响曲',/交响曲|symphon/i],['组曲',/组曲|\bsuites?\b/i],['舞曲',/匈牙利舞曲|hungarian dances/i],
   ['练习曲',/练习曲|[ée]tudes?|\bstudies\b|肖练/i],['叙事曲',/叙事曲|ballad[es]/i],
   ['前奏曲',/前奏曲|pr[eé]ludes?/i],['夜曲',/夜曲|nocturnes?/i],['即兴曲',/即兴曲|impromptus?/i],
   ['圆舞曲',/圆舞曲|waltz|valse/i],['谐谑曲',/谐谑曲|scherz[oi]/i],['奏鸣曲',/奏鸣曲|sonata/i],
@@ -105,5 +106,5 @@ export function browseGroup(work){
 
 export function chooseVersion(work,sourceId){
   const ready=work.versions.filter(v=>v.format==='pdf'&&v.available);
-  return ready.find(v=>(v.sourceId||v.id)===sourceId||v.id===sourceId)||ready[0]||null;
+  return ready.find(v=>(v.sourceId||v.id)===sourceId||v.id===sourceId)||ready.reduce((latest,v)=>(Date.parse(v.modifiedAt)||0)>(Date.parse(latest?.modifiedAt)||0)?v:latest,ready[0])||null;
 }

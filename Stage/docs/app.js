@@ -1,18 +1,35 @@
 import * as pdfjs from './vendor/pdf.mjs';
 import {analyzeAudio,Microphone} from './audio.js';
 import {OnlineMatcher,TurnController,frameAtTime,validateReference,FEATURE_VERSION,MAX_FRAMES} from './matcher.js';
-import {scoreID,saveScore,loadScore} from './storage.js';
+import {scoreID,saveScore,savePosition,loadScore} from './storage.js';
 import {setupLibrary} from './library.js';
 import {Ink} from './ink.js';
 import {loadPDFDocument} from './pdf-document.js';
 import {PerformanceMode,performanceKey,ManualTurnGuard} from './performance-mode.js';
-import {PUBLIC_LIBRARY} from './site-config.js';
+import {PUBLIC_LIBRARY,CLOUD_LIBRARY} from './site-config.js';
+import {PageRenderCache,renderScorePage,adjacentPages} from './page-cache.js';
+import {includeInk} from './fit-layout.js';
+import {ReaderShell,TurnQueue,fullscreenElement,requestScoreFullscreen,leaveScoreFullscreen} from './reader-shell.js';
+import {setupSettings} from './settings.js';
+import {setupOffline} from './offline.js';
+import {installReaderViewport} from './reader-viewport.js';
+import {ReadingPosition} from './reading-position.js';
+import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
+import {setupCloudSync} from './cloud-sync.js';
+import {setupAnnotationBackup} from './annotation-backup.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
-const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,reference:null,microphone:null,matcher:null,turner:null,renderId:0,audioURL:null,abort:null,startAnchor:0,frameTime:0,op:0,zoom:1};
-const ink=new Ink(toast);
-let toastTimer,wakeLock,resizeTimer,library,performanceMode,performanceSnapshot,performanceTurning=false;
+const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,reference:null,microphone:null,matcher:null,turner:null,renderId:0,audioURL:null,abort:null,startAnchor:0,frameTime:0,op:0,zoom:1,fit:'screen'};
+let cloudSync;
+const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()&&!cloudSync?.busy});
+const readerViewport=installReaderViewport();
+const readingPosition=new ReadingPosition($('score-stage'));
+let toastTimer,wakeLock,resizeTimer,library,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
+let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
+const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
+const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
+const settings=setupSettings(()=>{clearTimeout(warmTimer);if(!settings.value.preload){pageCache.prioritize(visibleKeys);previewCache.prioritize([]);}action(renderPages)();},toast);
 const performing=()=>!!performanceMode?.active;
 const manualTurnGuard=new ManualTurnGuard();
 const canPerform=()=>!!state.pdf&&['idle','following'].includes(state.phase)&&!busy();
@@ -34,7 +51,7 @@ function controls(){
   $('performance-listen').textContent=state.phase==='following'?'关闭自动翻页':'开启自动翻页';
   if(!$('performance-setup-status').classList.contains('error'))$('performance-setup-status').textContent=state.phase==='starting'?'正在连接麦克风…':state.phase==='following'?'麦克风已开启：自动跟随和手动翻页同时可用。':state.reference?'已有学习记录。可以先开启自动翻页，也可以只用手动。':'这份曲谱尚未学习翻页点，现在可手动演出；学习完成后可启用自动跟随。';
   $('library-button').disabled=state.phase!=='idle'||performing();
-  $('ink-toolbar').hidden=!loaded;
+  $('ink-toolbar').hidden=!loaded||state.phase!=='idle'||performing();
   for(const id of ['ink-pen','ink-erase','ink-undo','ink-redo','score-zoom'])$(id).disabled=!loaded||state.phase!=='idle';
   if(state.phase!=='idle'&&ink.mode!=='read')ink.setMode('read');
   for(const id of ['import-button','empty-import','demo-button','url-import'])$(id).disabled=locked||learning()||state.phase==='following';
@@ -51,6 +68,7 @@ function controls(){
   $('single-button').classList.toggle('selected',!state.spread);$('single-button').setAttribute('aria-pressed',String(!state.spread));
   $('spread-button').classList.toggle('selected',state.spread);$('spread-button').setAttribute('aria-pressed',String(state.spread));
   $('reference-panel').hidden=!learning()&&state.phase!=='analyzing';
+  if(learning()||state.phase==='analyzing')$('practice-drawer').open=true;
   $('reference-audio').hidden=state.phase==='learning';
   $('set-start-button').hidden=state.phase!=='reference';$('rest-button').hidden=state.phase!=='reference';
   $('rest-button').textContent=state.draft?.restStart!==undefined?'标记钢琴重新进入':'标记钢琴休止开始';
@@ -76,6 +94,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
   const remote=buffer?.url?buffer:null;
   if(!remote&&buffer.byteLength>60*1024*1024)throw new Error('手动导入的 PDF 请小于 60 MB；曲谱库中的大文件采用按需读取。');
   const oldPhase=state.phase;state.phase='loading';controls();$('render-status').hidden=false;
+  clearTimeout(warmTimer);state.renderId++;pageCache.prioritize([]);previewCache.prioritize([]);
   try{
     const id=remote?.id||await scoreID(buffer),saved=restored||await loadScore(id).catch(()=>null);
     const source=remote?{url:remote.url,withCredentials:true,disableAutoFetch:true,disableStream:true,rangeChunkSize:262144}:{data:new Uint8Array(buffer.slice(0))};
@@ -84,35 +103,83 @@ async function openPDF(buffer,name,restored=null,onProgress){
       onProgress?.(total?`正在读取曲谱 ${Math.min(100,Math.round(loaded/total*100))}%…`:'正在读取曲谱…');
     });
     $('chopin-audio')?.remove();
-    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;$('score-zoom').value='1';ink.setScore(id);
+    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);
+    fitProfile=null;
+    try{const response=await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)});if(response.ok){const profile=await response.json();if(profile.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;}}catch{}
+    readingPosition.setScore(id);
     if(saved?.reference){try{state.reference=validateReference(saved.reference,pdf.numPages);}catch{toast('旧的学习记录需要重新建立；PDF 已恢复。');}}
     state.page=Math.max(1,Math.min(pdf.numPages,saved?.page||1));
-    $('score-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库 · 按需读取':'本机导入'} · 批注独立保存`;
+    $('score-title').textContent=name.replace(/\.pdf$/i,'');$('reader-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库':'本机导入'}`;
     $('empty-state').hidden=true;$('pages').hidden=false;
     onProgress?.('正在显示谱页…');
-    controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);
+    controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);shell?.close();offline?.refresh();
   }finally{state.phase=oldPhase;$('render-status').hidden=true;controls();}
 }
-async function renderPages(){
+async function renderPages({anchor=null,beforePaint=()=>{}}={}){
   if(!state.pdf)return;
   const version=++state.renderId,pdf=state.pdf,page=state.page;
-  $('render-status').hidden=false;
-  const container=document.createDocumentFragment();
-  try{
-    const numbers=[page];if(state.spread&&page<pdf.numPages)numbers.push(page+1);
-    const available=Math.max(120,$('score-stage').clientWidth-(performing()?20:50)),width=(available-(numbers.length-1)*20)/numbers.length;
-    for(const number of numbers){
-      const p=await pdf.getPage(number),natural=p.getViewport({scale:1});
-      const availableHeight=Math.max(100,$('score-stage').clientHeight-(performing()?20:38));
-      const cssWidth=Math.min(width,performing()?Infinity:780,availableHeight*natural.width/natural.height)*state.zoom,density=Math.min(window.devicePixelRatio||1,2),viewport=p.getViewport({scale:cssWidth/natural.width*density});
-      const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);canvas.style.width=cssWidth+'px';canvas.setAttribute('aria-label',`PDF 第 ${number} 页`);
-      await p.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
-      const sheet=document.createElement('div');sheet.className='sheet';sheet.dataset.page=String(number);sheet.style.width=cssWidth+'px';sheet.append(canvas);container.append(sheet);
+  const pose=settings.value.rememberPosition?readingPosition.snapshot():{x:0,y:0};
+  clearTimeout(warmTimer);
+  if(cachePDF!==pdf){pageCache.clear();previewCache.clear();visibleKeys=[];previewKeys=[];cachePDF=pdf;}
+  const numbers=[page];if(state.spread&&page<pdf.numPages)numbers.push(page+1);
+  const screenFit=state.fit==='screen',padding=screenFit?0:12,gap=screenFit?0:8;
+  $('score-stage').classList.toggle('screen-fit',screenFit);$('pages').classList.toggle('screen-fit',screenFit);
+  const metrics={width:Math.max(100,($('score-stage').clientWidth-padding-(numbers.length-1)*gap)/numbers.length),height:Math.max(100,$('score-stage').clientHeight-padding),zoom:state.zoom,fit:screenFit?'screen':'page',protectFit:settings.value.protectFit,density:Math.min(devicePixelRatio||1,2)};
+  const low={...metrics,density:.4};
+  const pageMetrics=new Map();
+  const scoreId=state.score.id,profile=fitProfile;
+  const forPage=async(p,preview=false)=>{
+    if(!pageMetrics.has(p)){
+      const record=await ink.record(scoreId,p);
+      const bounds=includeInk(profile?.pages[p-1]?.bounds,record.data.strokes);
+      pageMetrics.set(p,{...metrics,bounds});
     }
+    const value=pageMetrics.get(p);return preview?{...value,density:low.density}:value;
+  };
+  for(const p of numbers)await forPage(p);
+  if(version!==state.renderId)return;
+  const keys=numbers.map(p=>pageCache.key(p,pageMetrics.get(p)));
+  pageCache.pin([...visibleKeys,...keys]);pageCache.prioritize(keys);
+  previewCache.prioritize([]);
+  const paint=async values=>{
     if(version!==state.renderId)return;
-    ink.clearViews();$('pages').replaceChildren(container);$('score-stage').scrollTop=0;ink.page=page;
-    $('pages').classList.toggle('zoomed',state.zoom>1);$('score-stage').classList.toggle('zoomed',state.zoom>1);
-    for(const sheet of $('pages').children){if(version!==state.renderId)return;await ink.attach(sheet,Number(sheet.dataset.page));}
+    ink.clearViews();const container=document.createDocumentFragment();
+    values.forEach((value,i)=>{const sheet=document.createElement('div'),paper=document.createElement('div'),clip=value.clip||{x:0,y:0,width:value.cssWidth,height:value.cssHeight};sheet.className='sheet';sheet.dataset.page=String(numbers[i]);sheet.style.width=clip.width+'px';sheet.style.height=clip.height+'px';paper.className='paper';paper.dataset.page=String(numbers[i]);paper.style.cssText=`position:relative;left:${-clip.x}px;top:${-clip.y}px;width:${value.cssWidth}px;height:${value.cssHeight}px`;paper.append(value.canvas);sheet.append(paper);container.append(sheet);});
+    await readingPosition.paint(()=>{
+      $('pages').replaceChildren(container);ink.page=page;
+      $('pages').classList.toggle('zoomed',state.zoom>1);$('score-stage').classList.toggle('zoomed',state.zoom>1);
+      beforePaint();
+    },pose);
+    if(anchor&&state.zoom>1){const stage=$('score-stage'),rect=$('pages').getBoundingClientRect();stage.scrollLeft+=rect.left+rect.width*anchor.x-anchor.clientX;stage.scrollTop+=rect.top+rect.height*anchor.y-anchor.clientY;readingPosition.remember();}
+    const complete=values.every(v=>(v.clip?.width||v.cssWidth)<=metrics.width+1&&(v.clip?.height||v.cssHeight)<=metrics.height+1);
+    $('fit-check-status').textContent=(fitProfile?`已检查全谱 ${fitProfile.pages.length} 页 · `:'尚无全谱边界记录，保守保留整页 · ')+(complete?'当前谱面与批注边界完整可见。':'放大阅读，需移动查看完整内容。');
+    for(const paper of $('pages').querySelectorAll('.paper')){if(version!==state.renderId)return;await ink.attach(paper,Number(paper.dataset.page));}
+  };
+  // Swap in a pre-read preview immediately, then refine it without blanking paper.
+  if(!numbers.every(p=>pageCache.has(p,pageMetrics.get(p)))&&numbers.every(p=>previewCache.has(p,{...pageMetrics.get(p),density:low.density}))){
+    previewKeys=numbers.map(p=>previewCache.key(p,{...pageMetrics.get(p),density:low.density}));previewCache.pin(previewKeys);
+    await paint(numbers.map(p=>previewCache.peek(p,{...pageMetrics.get(p),density:low.density})));
+  }
+  $('render-status').hidden=numbers.every(p=>pageCache.has(p,pageMetrics.get(p)));
+  try{
+    const values=await Promise.all(numbers.map(p=>pageCache.get(p,pageMetrics.get(p))));
+    if(version!==state.renderId)return;
+    await paint(values);if(version!==state.renderId)return;visibleKeys=keys;pageCache.pin(keys);previewKeys=[];previewCache.pin([]);if(!settings.value.preload)previewCache.clear();
+    if(settings.value.preload)warmTimer=setTimeout(async()=>{
+      try{
+        // Full detail for the imminent turn; lightweight, decoded pages out to ±5.
+        for(const p of adjacentPages(page,pdf.numPages,state.spread)){
+          if(version!==state.renderId||!settings.value.preload)return;
+          await pageCache.get(p,await forPage(p));
+        }
+        for(let distance=1;distance<=5;distance++)for(const p of [page+distance,page-distance]){
+          if(version!==state.renderId||!settings.value.preload)return;
+          if(p<1||p>pdf.numPages||numbers.includes(p))continue;
+          if(pageCache.has(p,await forPage(p)))continue;
+          await previewCache.get(p,await forPage(p,true));
+        }
+      }catch(error){if(error.name!=='AbortError')console.debug('Page pre-read deferred',error.name);}
+    },120);
   }finally{if(version===state.renderId)$('render-status').hidden=true;}
 }
 
@@ -151,7 +218,7 @@ async function navigate(page,{mark:shouldMark=true,automatic=false,anchor}={}){
   const previousPage=state.page,performanceTurn=performing();
   if(performanceTurn){performanceTurning=true;$('performance-error').hidden=true;}
   state.page=page;controls();renderAnchors();
-  try{await renderPages();if(!learning())await persist();}
+  try{await renderPages();if(!learning())savePosition(state.score.id,state.page).catch(()=>toast('页码暂时无法保存；翻页仍可使用。'));}
   catch(error){
     if(!performanceTurn)throw error;
     state.page=previousPage;controls();$('performance-error').textContent='这页未能载入，请再按一次翻页。';$('performance-error').hidden=false;
@@ -249,26 +316,37 @@ async function startFollowing(){
 }
 
 const reader=document.querySelector('.reader');
+const turnQueue=new TurnQueue({page:()=>state.page,total:()=>state.pdf?.numPages||1,step:()=>state.spread?2:1,navigate:page=>navigate(page)});
+const requestTurn=action(delta=>{if(!state.pdf||!['idle','following','learning','reference'].includes(state.phase))return;return turnQueue.turn(delta);});
+shell=new ReaderShell({turn:requestTurn,canTurn:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),performing,writing:()=>ink.guardingTouch,zoomed:()=>state.zoom>1,settings:()=>settings.value,getZoom:()=>state.zoom,onError:error=>toast(errorMessage(error)),setZoom:async(zoom,anchor,beforePaint)=>{
+  state.zoom=zoom;state.fit='screen';
+  let option=$('score-zoom').querySelector('[data-custom-zoom]');
+  if(!option){option=document.createElement('option');option.dataset.customZoom='true';$('score-zoom').append(option);}
+  option.value=String(zoom);option.textContent=Math.round(zoom*100)+'%';$('score-zoom').value=zoom===1?'screen':String(zoom);
+  await renderPages({anchor,beforePaint});
+}});
+document.body.append($('performance-error'));
 performanceMode=new PerformanceMode({
   activate(){
-    performanceSnapshot={zoom:state.zoom,inkMode:ink.mode,inert:[]};
-    ink.setMode('read');state.zoom=1;$('score-zoom').value='1';manualTurnGuard.manual();
+    performanceSnapshot={zoom:state.zoom,inkMode:ink.mode,themeColor:document.querySelector('meta[name="theme-color"]').content};
+    ink.setMode('read');state.zoom=1;$('score-zoom').value=state.fit;manualTurnGuard.manual();
     $('reference-audio').pause();clearTimeout(toastTimer);$('toast').hidden=true;$('performance-error').hidden=true;
     document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
     document.body.classList.add('performance-mode');
-    for(const node of document.querySelectorAll('.topbar,.sidebar,.reader-toolbar,#edition-toolbar,#ink-toolbar,#reference-panel,.listening-bar,.reader-footer')){performanceSnapshot.inert.push([node,node.inert]);node.inert=true;}
+    document.documentElement.classList.add('performance-active');document.querySelector('meta[name="theme-color"]').content='#10151d';readerViewport.refresh();
+    shell.close();
     controls();$('score-stage').focus({preventScroll:true});
   },
   deactivate(){
     document.body.classList.remove('performance-mode');
-    for(const [node,inert] of performanceSnapshot?.inert||[])node.inert=inert;
-    state.zoom=performanceSnapshot?.zoom||1;$('score-zoom').value=String(state.zoom);ink.setMode(performanceSnapshot?.inkMode||'read');
-    $('performance-error').hidden=true;controls();$('performance-open').focus({preventScroll:true});
+    document.documentElement.classList.remove('performance-active');document.querySelector('meta[name="theme-color"]').content=performanceSnapshot?.themeColor||'#1e4c92';readerViewport.refresh();
+    state.zoom=performanceSnapshot?.zoom||1;$('score-zoom').value=state.zoom===1?state.fit:String(state.zoom);ink.setMode(performanceSnapshot?.inkMode||'read');
+    $('performance-error').hidden=true;controls();shell.open('tools');
   },
   render:async()=>{performanceTurning=true;controls();try{await renderPages();}finally{performanceTurning=false;controls();}},
   stopFollowing:()=>state.phase==='following'?stopSession():undefined,
-  fullscreen:()=>document.fullscreenElement===reader?true:reader.requestFullscreen?.().then(()=>true),
-  exitFullscreen:()=>document.fullscreenElement===reader?document.exitFullscreen():undefined,
+  fullscreen:()=>settings.value.fullscreen?requestScoreFullscreen():false,
+  exitFullscreen:leaveScoreFullscreen,
   wakeLock:()=>document.hidden?undefined:navigator.wakeLock?.request('screen'),
 });
 $('performance-open').onclick=()=>{if(!canPerform())return;$('performance-setup-status').classList.remove('error');controls();$('performance-dialog').showModal();};
@@ -279,9 +357,9 @@ $('performance-listen').onclick=async()=>{
 };
 $('performance-begin').onclick=()=>{if(!canPerform())return;performanceMode.enter().catch(e=>toast(errorMessage(e)));};
 $('performance-exit').onclick=action(()=>performanceMode.exit());
-document.addEventListener('fullscreenchange',()=>{
+for(const event of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(event,()=>{
   if(!performing())return;
-  if(document.fullscreenElement===reader)performanceMode.native=true;
+  if(fullscreenElement())performanceMode.native=true;
   else if(performanceMode.native)action(()=>performanceMode.exit())();
 });
 $('score-stage').addEventListener('contextmenu',e=>{if(performing())e.preventDefault();});
@@ -291,13 +369,14 @@ $('pdf-input').onchange=action(async e=>{const file=e.target.files[0];e.target.v
 $('audio-button').onclick=()=>$('audio-input').click();$('audio-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(file)await learnFile(file);});
 $('help-button').onclick=()=>$('help-dialog').showModal();$('imslp-button').onclick=()=>$('imslp-dialog').showModal();
 document.querySelectorAll('.dialog-close,.dialog-done').forEach(b=>b.onclick=()=>b.closest('dialog').close());
-$('prev-button').onclick=action(()=>navigate(Math.max(1,state.page-(state.spread?2:1))));
-$('next-button').onclick=action(()=>navigate(Math.min(state.pdf.numPages,state.page+(state.spread?2:1))));
+$('prev-button').onclick=()=>requestTurn(-1);
+$('next-button').onclick=()=>requestTurn(1);
 $('page-input').onchange=action(()=>navigate(Number($('page-input').value)));
 $('single-button').onclick=action(async()=>{state.spread=false;controls();await renderPages();});
 $('spread-button').onclick=action(async()=>{state.spread=true;controls();await renderPages();});
-$('score-zoom').onchange=action(async e=>{state.zoom=Number(e.target.value);await renderPages();});
-$('fullscreen-button').onclick=action(async()=>{if(document.fullscreenElement)await document.exitFullscreen();else await document.querySelector('.reader').requestFullscreen();});
+$('score-zoom').onchange=action(async e=>{const value=e.target.value;state.zoom=['screen','page'].includes(value)?1:Number(value);if(['screen','page'].includes(value))state.fit=value;await renderPages();});
+$('reading-position-reset').onclick=action(()=>readingPosition.reset());
+$('fullscreen-button').onclick=async()=>{if(fullscreenElement())await leaveScoreFullscreen();else if(!await requestScoreFullscreen())toast('此浏览器未提供全屏。iPad 可通过 Safari“添加到主屏幕”减少浏览器栏。');shell.close();};
 $('learn-button').onclick=action(learnLive);$('finish-button').onclick=action(finishLearning);$('cancel-button').onclick=action(stopSession);$('listen-button').onclick=action(startFollowing);$('mark-button').onclick=action(()=>navigate(state.page+1));
 $('lead-select').onchange=()=>{if(state.turner)state.turner.lead=Number($('lead-select').value);};
 $('set-start-button').onclick=action(()=>{
@@ -334,22 +413,21 @@ $('demo-button').onclick=action(async()=>{
 });
 document.addEventListener('keydown',e=>{
   if(performing()){
+    if(e.target.matches('input,select,textarea')||document.querySelector('dialog[open]'))return;
     const intent=performanceKey(e);
     if(intent===null)return;
     e.preventDefault();
     if(intent==='exit')action(()=>performanceMode.exit())();
-    else if(intent!=='ignore')action(()=>navigate(Math.max(1,Math.min(state.pdf.numPages,state.page+intent*(state.spread?2:1))),{mark:false}))();
+    else if(intent!=='ignore')requestTurn(intent);
     return;
   }
   action(async()=>{
   if(e.key==='Escape'&&['following','learning','starting'].includes(state.phase)){await stopSession();return;}
   if(e.target.matches('input,select,textarea')||document.querySelector('dialog[open]'))return;
-  if(e.key==='ArrowRight'&&state.pdf&&!busy()){e.preventDefault();await navigate(Math.min(state.pdf.numPages,state.page+(state.spread?2:1)));}
-  if(e.key==='ArrowLeft'&&state.pdf&&!busy()){e.preventDefault();await navigate(Math.max(1,state.page-(state.spread?2:1)));}
+  if(e.key==='ArrowRight'&&state.pdf&&!e.repeat){e.preventDefault();await requestTurn(1);}
+  if(e.key==='ArrowLeft'&&state.pdf&&!e.repeat){e.preventDefault();await requestTurn(-1);}
   })();
 });
-let touchX=null;$('score-stage').addEventListener('touchstart',e=>{if(ink.mode!=='read'||state.zoom>1){touchX=null;return;}touchX=e.touches[0].clientX;},{passive:true});
-$('score-stage').addEventListener('touchend',action(async e=>{if(touchX===null||!state.pdf)return;const delta=e.changedTouches[0].clientX-touchX;touchX=null;if(Math.abs(delta)>80)await navigate(Math.min(state.pdf.numPages,Math.max(1,state.page+(delta<0?1:-1)*(state.spread?2:1))));}),{passive:true});
 window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>action(renderPages)(),250);});
 new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>action(renderPages)(),200);}).observe($('score-stage'));
 window.addEventListener('pagehide',()=>{state.microphone?.stop();state.abort?.abort();performanceMode.suspend();});
@@ -368,7 +446,18 @@ if(document.modelContext?.registerTool){
 }
 controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
-if(PUBLIC_LIBRARY)$('account-note').textContent='公开试用 · 批注保存在本机';
+offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
+cloudSync=setupCloudSync(ink,toast,()=>state.phase==='idle'&&!performing());
+setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing()&&!cloudSync.busy);
+if(CLOUD_LIBRARY)$('account-note').textContent='私人谱库 · 批注按需同步';
+else if(PUBLIC_LIBRARY)$('account-note').textContent='本机阅谱 · 批注保存在本机';
 else if(['localhost','127.0.0.1'].includes(location.hostname))$('account-note').textContent='本机开发版 · 曲谱与批注尚未上线';
-loadScore().then(saved=>saved&&openPDF(saved.buffer||saved.remote,saved.name,saved)).catch(()=>toast('本机曲谱未能恢复，请重新导入。')).finally(()=>{const query=new URLSearchParams(location.search);if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();if(query.get('library')==='1')$('library-button').click();});
+requireCloudLogin().then(async allowed=>{
+  if(!allowed)return;setupCloudAccount(toast);
+  const query=new URLSearchParams(location.search);
+  // Library entry is a recovery route: do not reopen a heavy last PDF first.
+  if(query.get('library')==='1'){$('library-button').click();return;}
+  const saved=await loadScore();if(saved)await openPDF(saved.buffer||saved.remote,saved.name,saved);
+  if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
+}).catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
 if(PUBLIC_LIBRARY||!['localhost','127.0.0.1'].includes(location.hostname)){$('demo-button').textContent=PUBLIC_LIBRARY?'打开曲谱库':'打开曲谱库';$('demo-button').onclick=()=>$('library-button').click();}

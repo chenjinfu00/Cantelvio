@@ -1,5 +1,5 @@
 const DB_NAME='volta-score-library';
-function database(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,2);req.onupgradeneeded=()=>{for(const name of ['scores','inkDrafts'])if(!req.result.objectStoreNames.contains(name))req.result.createObjectStore(name,{keyPath:'id'});};req.onerror=()=>reject(req.error);req.onsuccess=()=>resolve(req.result);});}
+function database(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,4);req.onupgradeneeded=()=>{for(const name of ['scores','inkDrafts','positions','cloudBases'])if(!req.result.objectStoreNames.contains(name))req.result.createObjectStore(name,{keyPath:'id'});};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('请关闭另一页旧版谱架后重试'));req.onsuccess=()=>resolve(req.result);});}
 export async function scoreID(buffer){const hash=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');}
 let writes=Promise.resolve();
 export function saveScore(score){
@@ -8,12 +8,17 @@ export function saveScore(score){
 }
 async function writeScore(score){
   const db=await database();
-  try{await new Promise((resolve,reject)=>{const tx=db.transaction('scores','readwrite');tx.objectStore('scores').put(score);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});localStorage.setItem('volta:last-score',score.id);}finally{db.close();}
+  try{await new Promise((resolve,reject)=>{const tx=db.transaction(['scores','positions'],'readwrite');tx.objectStore('scores').put(score);tx.objectStore('positions').put({id:score.id,page:score.page});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});localStorage.setItem('volta:last-score',score.id);}finally{db.close();}
+}
+export async function savePosition(id,page){
+  if(!id||!Number.isInteger(page)||page<1)return;
+  const db=await database();
+  try{await new Promise((resolve,reject)=>{const tx=db.transaction('positions','readwrite');tx.objectStore('positions').put({id,page});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});localStorage.setItem('volta:last-score',id);}finally{db.close();}
 }
 export async function loadScore(id=localStorage.getItem('volta:last-score')){
   await writes.catch(()=>{});
   if(!id)return null;const db=await database();
-  try{return await new Promise((resolve,reject)=>{const req=db.transaction('scores').objectStore('scores').get(id);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);});}finally{db.close();}
+  try{return await new Promise((resolve,reject)=>{const tx=db.transaction(['scores','positions']),score=tx.objectStore('scores').get(id),position=tx.objectStore('positions').get(id);tx.oncomplete=()=>resolve(score.result?{...score.result,page:position.result?.page||score.result.page}:null);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
 }
 export async function inkDraft(id,value){
   const db=await database();
@@ -22,4 +27,13 @@ export async function inkDraft(id,value){
     const req=value===undefined?tx.objectStore('inkDrafts').get(id):tx.objectStore('inkDrafts').put({id,...value});
     tx.oncomplete=()=>resolve(value===undefined?req.result:null);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
   });}finally{db.close();}
+}
+export async function allInkDrafts(){
+  const db=await database();try{return await new Promise((resolve,reject)=>{const tx=db.transaction('inkDrafts'),req=tx.objectStore('inkDrafts').getAll();tx.oncomplete=()=>resolve(req.result);tx.onerror=()=>reject(tx.error);});}finally{db.close();}
+}
+export async function saveInkDrafts(rows){
+  const db=await database();try{await new Promise((resolve,reject)=>{const tx=db.transaction('inkDrafts','readwrite');for(const row of rows)tx.objectStore('inkDrafts').put(row);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
+}
+export async function cloudBase(id,value){
+  const db=await database();try{return await new Promise((resolve,reject)=>{const tx=db.transaction('cloudBases',value===undefined?'readonly':'readwrite'),req=value===undefined?tx.objectStore('cloudBases').get(id):tx.objectStore('cloudBases').put({id,data:value});tx.oncomplete=()=>resolve(req.result?.data);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
 }

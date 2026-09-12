@@ -1,6 +1,6 @@
 import {groupWorks,chooseVersion,compareNames} from './library-model.js';
 import {versionPreferences} from './version-preferences.js';
-import {PUBLIC_LIBRARY} from './site-config.js';
+import {PUBLIC_LIBRARY,CLOUD_LIBRARY} from './site-config.js';
 const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
@@ -112,9 +112,10 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       const response=await fetch(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',{cache:'no-store'});
       if(!response.ok)throw new Error('曲谱库暂时不可用，请检查网络后重试。');
       const data=await response.json();items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;metadataRevision=data.metadataRevision||'"new"';loaded=true;draw();setCurrent();
+      if(localLibrary)$('account-note').textContent='本地谱库 · 仅在当前局域网提供';
       const pending=items.filter(x=>!x.available).length,ready=items.filter(x=>x.format==='pdf'&&x.available).length;
       $('library-summary').textContent=works.filter(w=>w.versions.some(v=>v.format==='pdf')).length+' 首曲目／合集 · '+ready+' 份 PDF 可打开'+(pending?' · '+pending+' 份暂不可用':'');
-      $('library-download-help').textContent=localLibrary?(pending?'在 Finder 中下载曲谱后，刷新即可打开。':'下载状态已更新。原文件不移动、不删除。'):PUBLIC_LIBRARY?'公开试用谱库 · 批注与上次使用的版本仅保存在当前浏览器。':'刷新查看曲谱库的最新内容。';
+      $('library-download-help').textContent=CLOUD_LIBRARY?'私人云端谱库 · 下载完整后可离线使用；批注在设置中按需更新。':localLibrary?(pending?'在 Finder 中下载曲谱后，刷新即可打开。':'本地分类谱库 · 未上传公开网站 · 首次打开默认最新版本，以后记住你的选择。'):PUBLIC_LIBRARY?'公开试用谱库 · 批注与上次使用的版本仅保存在当前浏览器。':'刷新查看曲谱库的最新内容。';
     })().finally(()=>{refreshTask=null;$('library-refresh').disabled=false;$('library-refresh').textContent='刷新谱库';});
     return refreshTask;
   };

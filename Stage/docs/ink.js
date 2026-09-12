@@ -1,25 +1,28 @@
 import {inkDraft} from './storage.js';
 import {mergeInk,distanceToSegment} from './ink-model.js';
 import {PUBLIC_LIBRARY} from './site-config.js';
+import {PencilInput,strokeID} from './pencil-input.js';
 const blank=()=>({version:1,strokes:[]}),copy=structuredClone;
 const $=id=>document.getElementById(id);
 const timedFetch=(url,options={})=>fetch(url,{...options,signal:AbortSignal.timeout(12000)});
 export class Ink {
-  constructor(toast,{localOnly=PUBLIC_LIBRARY}={}){this.toast=toast;this.localOnly=localOnly;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#21382d';
-    for(const mode of ['read','pen','erase'])$('ink-'+mode).onclick=()=>this.setMode(mode);
+  constructor(toast,{localOnly=PUBLIC_LIBRARY,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.penDown=false;this.palmUntil=0;
+    for(const mode of ['pen','erase'])$('ink-'+mode).onclick=()=>this.setMode(this.mode===mode?'read':mode);
     $('ink-color').onchange=e=>this.color=e.target.value;
     $('ink-undo').onclick=()=>this.history(false);$('ink-redo').onclick=()=>this.history(true);
     $('ink-export').onclick=()=>this.export();
     window.addEventListener('online',()=>{for(const r of this.records.values())if(r.dirty)this.flush(r);});
   }
   setScore(id){this.clearViews();this.scoreId=id;this.setMode('read');for(const [key,r] of this.records)if(!key.startsWith(id+'/')&&!r.dirty&&!r.saving)this.records.delete(key);}
-  setMode(mode){for(const v of this.views)v.finish?.();this.mode=mode;for(const m of ['read','pen','erase']){$('ink-'+m).classList.toggle('selected',m===mode);$('ink-'+m).setAttribute('aria-pressed',String(m===mode));}for(const v of this.views)v.canvas.classList.toggle('writing',mode!=='read');}
+  setMode(mode,{finish=true}={}){if(finish)for(const v of this.views)v.finish?.();this.mode=mode;for(const m of ['pen','erase']){$('ink-'+m).classList.toggle('selected',m===mode);$('ink-'+m).setAttribute('aria-pressed',String(m===mode));}for(const v of this.views)v.canvas.classList.toggle('writing',mode!=='read');}
+  get guardingTouch(){return this.penDown||performance.now()<this.palmUntil;}
+  feedback(message){$('pencil-feedback').textContent=message;$('pencil-feedback').hidden=false;clearTimeout(this.feedbackTimer);this.feedbackTimer=setTimeout(()=>$('pencil-feedback').hidden=true,1300);}
   status(message){$('ink-status').textContent=message;}
   async record(id,page){
     const key=id+'/'+page;if(this.records.has(key)){const cached=this.records.get(key);return cached.ready||cached;}
     const r={key,data:blank(),base:blank(),etag:'"new"',dirty:false,revision:0,undo:[],redo:[],views:new Set(),loading:true};
     r.ready=new Promise(resolve=>r.resolveReady=resolve);this.records.set(key,r);
-    const draft=await inkDraft(key).catch(()=>null);
+    const draft=await this.draft(key).catch(()=>null);
     if(this.localOnly){
       r.data=draft?.data||blank();r.base=copy(r.data);r.loading=false;r.dirty=false;
       this.status('批注仅保存在当前浏览器 · 建议定期导出备份');
@@ -33,35 +36,49 @@ export class Ink {
     }catch{r.data=draft?.data||blank();r.base=draft?.base||blank();r.etag=draft?.etag||'"new"';r.dirty=!!draft?.dirty;r.loading=false;this.status('离线草稿 · 联网后重试同步');}
     r.resolveReady(r);delete r.resolveReady;return r;
   }
-  clearViews(){for(const v of this.views){v.finish?.();v.abort.abort();v.record.views.delete(v);}this.views.clear();}
+  clearViews(){for(const v of this.views){v.finish?.();v.abort.abort();v.record.views.delete(v);v.canvas.remove();v.canvas.width=0;v.canvas.height=0;}this.views.clear();}
   async attach(sheet,page){
     if(!this.scoreId)return;const id=this.scoreId,r=await this.record(id,page);
     if(id!==this.scoreId||!sheet.isConnected)return;
     const canvas=document.createElement('canvas'),base=sheet.querySelector('canvas');canvas.width=base.width;canvas.height=base.height;
     canvas.className='ink-overlay'+(this.mode!=='read'?' writing':'');canvas.ariaLabel='手写批注层';sheet.append(canvas);
     const v={canvas,record:r,abort:new AbortController()};this.views.add(v);r.views.add(v);
-    let current=null,active=null,before=null;
+    let current=null,before=null;
     const point=e=>{const rect=canvas.getBoundingClientRect();return [Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width)),Math.max(0,Math.min(1,(e.clientY-rect.top)/rect.height)),Math.max(.1,Math.min(1,e.pressure||.5))];};
     const erase=p=>{r.data.strokes=r.data.strokes.filter(s=>!s.points.some((b,i)=>distanceToSegment(p,i?s.points[i-1]:b,b)<.016));};
-    const finish=()=>{
-      if(active===null)return;
-      if(current?.points.length)r.data.strokes.push(current);
-      r.undo.push(before);if(r.undo.length>25)r.undo.shift();r.redo=[];current=null;active=null;this.changed(r);this.draw(r);
-    };v.finish=finish;
+    const input=new PencilInput({
+      allowed:e=>!r.loading&&!this.penDown&&this.canWrite()&&(e.pointerType==='pen'||this.mode!=='read'),
+      begin:e=>{
+        if(e.pointerType==='pen'&&this.mode==='read')this.setMode('pen',{finish:false});
+        this.penDown=true;this.page=page;before=copy(r.data);
+        if(this.mode==='pen')current={id:strokeID(),color:this.color,width:.0024,points:[point(e)]};else erase(point(e));
+        this.draw(r,current);
+      },
+      move:events=>{for(const event of events){if(current)current.points.push(point(event));else erase(point(event));}this.draw(r,current);},
+      commit:()=>{
+        if(current?.points.length)r.data.strokes.push(current);
+        // Erasing an empty area should not consume an undo step.
+        if(current||r.data.strokes.length!==before.strokes.length){r.undo.push(before);if(r.undo.length>25)r.undo.shift();r.redo=[];this.changed(r);}
+        current=null;before=null;this.draw(r);
+      },
+      cancel:()=>{if(before)r.data=before;current=null;before=null;this.draw(r);},
+      toggle:()=>{this.setMode(this.mode==='erase'?'pen':'erase',{finish:false});this.feedback(this.mode==='erase'?'已切换橡皮 · 抬笔后擦除':'已切换画笔 · 抬笔后书写');},
+      end:()=>{this.penDown=false;this.palmUntil=performance.now()+400;},
+    },this.inputOptions);v.finish=()=>input.finish();
     const options={signal:v.abort.signal};
+    // Cancel only stylus-native callouts/gestures; ordinary finger navigation
+    // and two-finger zoom remain available while the pen is not down.
+    for(const type of ['touchstart','touchmove'])canvas.addEventListener(type,e=>{
+      if(this.penDown||Array.from(e.changedTouches||[]).some(t=>t.touchType==='stylus'))e.preventDefault();
+    },{...options,passive:false});
     canvas.addEventListener('pointerdown',e=>{
-      // Touch is intentionally ignored in writing mode (palm/fingers).
-      if(this.mode==='read'||!['pen','mouse'].includes(e.pointerType)||e.button!==0||active!==null||r.loading)return;
-      e.preventDefault();e.stopPropagation();this.page=page;active=e.pointerId;before=copy(r.data);canvas.setPointerCapture(active);
-      if(this.mode==='pen')current={id:crypto.randomUUID(),color:this.color,width:.0024,points:[point(e)]};else erase(point(e));
-      this.draw(r,current);
+      if(!input.down(e))return;e.preventDefault();e.stopPropagation();try{canvas.setPointerCapture(e.pointerId);}catch{}
     },options);
     canvas.addEventListener('pointermove',e=>{
-      if(e.pointerId!==active)return;e.preventDefault();
-      const events=e.getCoalescedEvents?.();for(const event of events?.length?events:[e]){if(current)current.points.push(point(event));else erase(point(event));}
-      this.draw(r,current);
+      if(input.move(e)){e.preventDefault();e.stopPropagation();}
     },options);
-    for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,e=>{if(e.pointerId===active)finish();},options);
+    for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,e=>{if(input.end(e,event!=='pointerup')){e.preventDefault();e.stopPropagation();}},options);
+    canvas.addEventListener('contextmenu',e=>{if(this.mode!=='read'||this.penDown)e.preventDefault();},options);
     this.draw(r);
   }
   draw(r,draft=null){
@@ -81,13 +98,17 @@ export class Ink {
     }
   }
   changed(r){r.dirty=true;r.revision++;this.status('正在保存批注…');this.cache(r);clearTimeout(r.timer);r.timer=setTimeout(()=>this.flush(r),400);}
-  cache(r){return inkDraft(r.key,{data:r.data,base:r.base,etag:r.etag,dirty:r.dirty}).catch(()=>this.toast('本机草稿保存失败，请保持页面打开并导出批注备份。'));}
-  async flush(r){
-    if(r.saving||!r.dirty)return;r.saving=true;
+  cache(r){return this.draft(r.key,{data:r.data,base:r.base,etag:r.etag,dirty:r.dirty}).catch(()=>this.toast('本机草稿保存失败，请保持页面打开并导出批注备份。'));}
+  flush(r){
+    if(r.savePromise)return r.savePromise;
+    r.savePromise=this.flushNow(r).finally(()=>{r.savePromise=null;});return r.savePromise;
+  }
+  async flushNow(r){
+    if(!r.dirty)return;r.saving=true;
     if(this.localOnly){
       try{
-        while(r.dirty){const revision=r.revision,sent=copy(r.data);await inkDraft(r.key,{data:sent,base:sent,etag:'"local"',dirty:false});r.base=sent;r.dirty=r.revision!==revision;}
-        this.status('批注已保存到当前浏览器 · 不会上传');
+        while(r.dirty){const revision=r.revision,sent=copy(r.data);await this.draft(r.key,{data:sent,base:sent,etag:'"local"',dirty:false});r.base=sent;r.dirty=r.revision!==revision;}
+        this.status('批注已保存本机 · 可在设置中更新云端批注');
       }catch{this.status('批注保存失败 · 请立即导出备份');this.toast('浏览器存储不可用，请保持页面打开并导出批注备份。');}
       finally{r.saving=false;}return;
     }
