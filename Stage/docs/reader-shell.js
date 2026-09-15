@@ -1,5 +1,6 @@
 import {installDockPosition} from './dock-position.js';
 import {installScoreZoom} from './score-zoom.js';
+import {installIdleChrome} from './idle-chrome.js';
 export function readingGesture(start,end,{width,performance=false,canTurn=true,tap=true}={}){
   const dx=end.x-start.x,dy=end.y-start.y,ax=Math.abs(dx),ay=Math.abs(dy);
   if(start.y<=48&&dy>48&&ay>ax*1.4)return 'tools';
@@ -20,6 +21,7 @@ export class ReaderShell {
     for(const selector of ['#edition-toolbar','.reader-toolbar','.page-navigation'])this.tools.append(document.querySelector(selector));
     document.body.append(document.getElementById('ink-toolbar'));
     installDockPosition();
+    this.idle=installIdleChrome();
     const practice=document.getElementById('practice-live');
     for(const selector of ['#reference-panel','.listening-bar','.reader-footer'])practice.append(document.querySelector(selector));
     this.backdrop.onclick=()=>this.close();
@@ -64,13 +66,13 @@ export class ReaderShell {
   open(panel){
     if(this.effects.performing()&&panel==='shelf')panel='tools';
     document.getElementById('pencil-options').open=false;
-    this.panel=panel;this.sync();this.arm();(panel==='shelf'?this.shelf:this.tools).querySelector('button:not(:disabled)')?.focus({preventScroll:true});
+    this.panel=panel;this.sync();this.arm();this.idle?.wake();(panel==='shelf'?this.shelf:this.tools).querySelector('button:not(:disabled)')?.focus({preventScroll:true});
   }
   arm(){
     clearTimeout(this.timer);if(!this.panel||!this.effects.performing())return;
     this.timer=setTimeout(()=>{if(this.tools.contains(document.activeElement)&&document.activeElement.matches('input,select'))this.arm();else this.close();},5000);
   }
-  close({focus=true}={}){this.panel=null;clearTimeout(this.timer);this.sync();if(focus)this.stage.focus({preventScroll:true});}
+  close({focus=true}={}){this.panel=null;clearTimeout(this.timer);this.sync();this.idle?.wake();if(focus)this.stage.focus({preventScroll:true});}
   sync(){
     document.body.classList.toggle('shelf-open',this.panel==='shelf');document.body.classList.toggle('tools-open',this.panel==='tools');
     this.shelf.inert=this.panel!=='shelf';this.tools.inert=this.panel!=='tools';this.reader.inert=!!this.panel;

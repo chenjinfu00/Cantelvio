@@ -144,3 +144,10 @@ body.focus-reader .sheet{overflow:hidden;flex-shrink:0}
 .sidebar,.top-drawer,dialog{touch-action:pan-y}
 .sidebar input,.sidebar select,.top-drawer input,.top-drawer select,dialog input,dialog select,dialog textarea{font-size:16px!important}
 #cloud-login form{display:grid;gap:14px}#cloud-login input{min-width:0;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}#cloud-login-status,#cloud-status{font-size:13px;line-height:1.8;margin-top:12px}#trusted-devices{max-height:260px;overflow:auto}
+/* Idle chrome: the edge handles and the pencil dock fade away so nothing floats over the music. */
+body.chrome-idle .edge-reveal,body.chrome-idle .pencil-dock{opacity:0;transition:opacity .5s ease}
+body.chrome-idle .edge-reveal:hover,body.chrome-idle .edge-reveal:focus-visible{opacity:1;transition:opacity .15s}
+body.chrome-idle .pencil-dock:hover,body.chrome-idle .pencil-dock:focus-within,body.chrome-idle .pencil-dock.dragging,
+body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]){opacity:1;transition:opacity .15s}
+body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){opacity:1;transition:opacity .15s}
+@media(prefers-reduced-motion:reduce){body.chrome-idle .edge-reveal,body.chrome-idle .pencil-dock{transition:none}}
