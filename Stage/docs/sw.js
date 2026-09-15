@@ -1,5 +1,5 @@
 import {cachedPDFResponse} from './offline-range.js';
-const SHELL='volta-shell-20260912-reader-8c',PDFS='volta-offline-pdfs-v1',METADATA='volta-offline-metadata-v1';
+const SHELL='volta-shell-20260915-reader-9a',PDFS='volta-offline-pdfs-v1',METADATA='volta-offline-metadata-v1';
 const root=new URL('./',self.location.href);
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const response=await fetch(new URL('./cache-manifest.json',root),{cache:'reload'});if(!response.ok)throw new Error('App manifest unavailable');

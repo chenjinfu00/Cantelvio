@@ -9,6 +9,7 @@
   "./dock-position.js",
   "./fit-layout.js",
   "./icon.svg",
+  "./idle-chrome.js",
   "./index.html",
   "./ink-model.js",
   "./ink-validation.js",
