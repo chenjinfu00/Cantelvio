@@ -77,7 +77,10 @@ export class ReaderShell {
     document.body.classList.toggle('shelf-open',this.panel==='shelf');document.body.classList.toggle('tools-open',this.panel==='tools');
     this.shelf.inert=this.panel!=='shelf';this.tools.inert=this.panel!=='tools';this.reader.inert=!!this.panel;
     this.shelf.setAttribute('aria-hidden',String(this.panel!=='shelf'));this.tools.setAttribute('aria-hidden',String(this.panel!=='tools'));
-    this.backdrop.hidden=!this.panel;
+    // The backdrop stays on screen while a drawer slides away, then leaves with it.
+    clearTimeout(this.backdropTimer);
+    if(this.panel)this.backdrop.hidden=false;
+    else if(!this.backdrop.hidden)this.backdropTimer=setTimeout(()=>{this.backdrop.hidden=true;},280);
     document.getElementById('shelf-reveal').setAttribute('aria-expanded',String(this.panel==='shelf'));
     document.getElementById('tools-reveal').setAttribute('aria-expanded',String(this.panel==='tools'));
   }
