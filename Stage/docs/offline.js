@@ -34,6 +34,12 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     await Promise.race([navigator.serviceWorker.ready,new Promise((_,reject)=>setTimeout(()=>reject(new Error('离线应用准备较慢，请稍后再试。')),60000))]);
     shellReady=true;return true;
   })():Promise.reject(new Error('离线使用需要 HTTPS 或本机 localhost，并使用支持离线存储的浏览器。'));
+  // The worker reports what it is saving, so "准备中" is a number instead of a wait.
+  navigator.serviceWorker?.addEventListener?.('message',event=>{
+    const data=event.data||{};
+    if(data.type==='volta:shell-progress'&&!saving)$('offline-status').textContent=`正在保存离线阅谱应用 ${data.done}/${data.total}…`;
+    else if(data.type==='volta:shell-ready'){shellReady=true;refresh();}
+  });
   ready.then(()=>refresh()).catch(error=>{$('offline-summary').textContent=error.message;$('offline-status').textContent=error.message;});
   async function refresh(){
     if(!supported){$('offline-save').disabled=true;return;}
@@ -49,7 +55,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
         const title=document.createElement('span');title.textContent=item.name;const size=document.createElement('small');size.textContent=mb(item.bytes);title.append(size);
         const open=document.createElement('button');open.className='quiet';open.textContent='打开';open.onclick=async()=>{try{await openPDF(item.remote,item.name);$('settings-dialog').close();}catch(error){toast(error.message);}};
         const remove=document.createElement('button');remove.className='quiet';remove.textContent='移除';remove.ariaLabel='移除离线副本：'+item.name;
-        remove.onclick=async()=>{try{if(!confirm('仅移除这台设备上下载的 PDF？原谱和手写批注不会删除。'))return;const cache=await caches.open(PDFS);await cache.delete(item.url);await cache.delete(metaURL(item.id));await refresh();}catch{toast('离线副本暂时无法移除，请重试。');}};
+        remove.onclick=async()=>{try{if(!confirm('仅移除这台设备上下载的 PDF？原谱和手写批注不会删除。'))return;const cache=await caches.open(PDFS);await cache.delete(item.url);await cache.delete(metaURL(item.id));navigator.serviceWorker?.controller?.postMessage({type:'volta:forget',url:item.url});await refresh();}catch{toast('离线副本暂时无法移除，请重试。');}};
         row.append(title,open,remove);list.append(row);
       }
       if(score&&shellReady&&!saved&&!saving&&navigator.onLine&&settings().autoOffline&&attempted!==score.id){attempted=score.id;setTimeout(()=>{if(current()?.id===score.id&&!saving&&settings().autoOffline)$('offline-save').click();},1200);}

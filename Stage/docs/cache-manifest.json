@@ -19,6 +19,7 @@
   "./library/catalog.json",
   "./manifest.webmanifest",
   "./matcher.js",
+  "./offline-deploy.js",
   "./offline-range.js",
   "./offline.js",
   "./page-cache.js",
