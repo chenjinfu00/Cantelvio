@@ -199,3 +199,16 @@ body.chrome-idle .tools-reveal:hover,body.chrome-idle .tools-reveal:focus-visibl
   .focus-reader .sidebar,.focus-reader.shelf-open .sidebar,.top-drawer,.tools-open .top-drawer{transition:none}
   .drawer-backdrop{transition:none}
 }
+/* Deploying the reader to a device: one screen for the app, the scores and the progress of both. */
+#deploy-dialog{max-width:min(560px,92vw)}
+.deploy-step{margin:18px 0;padding-top:16px;border-top:1px solid var(--line)}
+.deploy-step strong{display:block;margin-bottom:10px;font-size:13px;color:var(--accent)}
+.deploy-bar{height:8px;border-radius:99px;background:var(--tint);overflow:hidden}
+.deploy-bar i{display:block;width:0;height:100%;border-radius:99px;background:var(--accent);transition:width .2s ease}
+#deploy-search{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.deploy-list{display:grid;gap:4px;max-height:260px;margin-top:10px;overflow:auto;overscroll-behavior:contain}
+.deploy-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;background:var(--tint);font-size:13px}
+.deploy-item span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deploy-item small{flex:none;color:var(--muted);font-size:11px}
+.deploy-item input{flex:none;width:20px;height:20px}
+#offline-deploy{margin-bottom:12px}

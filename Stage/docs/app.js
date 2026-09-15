@@ -12,6 +12,7 @@ import {includeInk} from './fit-layout.js';
 import {ReaderShell,TurnQueue,fullscreenElement,requestScoreFullscreen,leaveScoreFullscreen} from './reader-shell.js';
 import {setupSettings} from './settings.js';
 import {setupOffline} from './offline.js';
+import {setupDeploy} from './offline-deploy.js';
 import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
 import {setupRecentScores} from './recent-scores.js';
@@ -453,6 +454,8 @@ recent=setupRecentScores({
   onError:error=>toast(errorMessage(error)),
 });
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
+const deploy=setupDeploy({toast,onDone:()=>offline?.refresh()});
+$('offline-deploy').onclick=()=>deploy?.open();
 cloudSync=setupCloudSync(ink,toast,()=>state.phase==='idle'&&!performing());
 setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing()&&!cloudSync.busy);
 if(CLOUD_LIBRARY)$('account-note').textContent='私人谱库 · 批注按需同步';
