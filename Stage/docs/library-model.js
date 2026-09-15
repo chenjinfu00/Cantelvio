@@ -55,7 +55,8 @@ export function describeWork(item){
   name=name.replace(/\s*[-—–]?\s*(?:play version|coda revision|simple|[^\s-]{1,20}版本|v\d+(?:\.\d+)?|20\d{12}|钢琴|独奏)\s*$/i,part=>{edition.push(trim(part));return '';});
   name=trim(name);
   const originalContext=[name,...(item.aliases||[])].join(' ');
-  const genre=isGame?'游戏配乐':genres.find(([,pattern])=>pattern.test(name))?.[0]||genres.find(([,pattern])=>pattern.test(originalContext))?.[0]||(/合集|全集|作品集|补遗/.test(name)?'作品合集':item.style==='动漫／影视'||/Animenz/.test(prefix)?'动漫／影视':item.style==='流行音乐'?'流行歌曲':'其他作品');
+  // A game's tracks are all 游戏配乐; the region they come from is the useful second level.
+  const genre=isGame?(item.region||'游戏配乐'):genres.find(([,pattern])=>pattern.test(name))?.[0]||genres.find(([,pattern])=>pattern.test(originalContext))?.[0]||(/合集|全集|作品集|补遗/.test(name)?'作品合集':item.style==='动漫／影视'||/Animenz/.test(prefix)?'动漫／影视':item.style==='流行音乐'?'流行歌曲':'其他作品');
   const classical=!isGame&&/古典|浪漫|巴洛克|印象|当代钢琴/.test(item.style||'');
   // Anime OP1/OP2 means opening theme, not an opus number.
   const opus=classical?/\b(Op|BWV|D|S|K|KV|Hob)\.?\s*(\d+[a-z]?)(?:\s*[,.:·-]?\s*(?:No|Nr)\.?\s*(\d+[a-z]?))?/i.exec(name):null;
