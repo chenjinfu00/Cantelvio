@@ -44,16 +44,21 @@ test('local collection stays out of public assets and has 701 distinct classifie
   const folder=new URL('../.local-library/',import.meta.url);let catalog;
   try{catalog=JSON.parse(await fs.readFile(new URL('catalog.json',folder)));}catch(e){if(e.code==='ENOENT'){t.skip('Private collection is not distributed with the repository');return;}throw e;}
   const manifest=JSON.parse(await fs.readFile(new URL('manifest.json',folder)));
-  assert.equal(catalog.items.length,701);assert.equal(new Set(catalog.items.map(v=>v.id)).size,701);assert.equal(Object.keys(manifest.files).length,701);
+  // The collection is curated, so its size moves; what must hold is that the three views agree.
+  const total=catalog.items.length;assert.ok(total>500,'the private collection is present');
+  assert.equal(new Set(catalog.items.map(v=>v.id)).size,total);assert.equal(Object.keys(manifest.files).length,total);
+  assert.equal(catalog.summary.pdfs,total);
   for(const item of catalog.items){assert.ok(item.composer&&item.style&&item.era);assert.ok(manifest.files[item.id].startsWith('曲谱/'));assert.equal((await fs.stat(path.join(fileURLToPath(folder),manifest.files[item.id]))).size,item.bytes);assert.ok(!('absolute'in item));}
+  let retired={items:{}};try{retired=JSON.parse(await fs.readFile(new URL('retired.json',folder)));}catch{}
+  for(const id of Object.keys(retired.items||{}))assert.equal(manifest.files[id],undefined,'a retired score never returns to the catalogue');
   const works=groupWorks(catalog.items);assert.ok(works.some(w=>w.browseGroup==='原神'));assert.ok(works.some(w=>w.browseGroup==='Animenz'));assert.ok(works.some(w=>w.browseGroup==='流行音乐'));assert.ok(works.some(w=>w.genre==='练习曲'));
-  assert.equal(JSON.parse(await fs.readFile(new URL('../docs/library/catalog.json',import.meta.url))).items.length,10);
+  assert.equal(JSON.parse(await fs.readFile(new URL('../docs/library/catalog.json',import.meta.url))).items.length,0,'the public copy carries no scores');
 });
 test('local server serves only registered PDFs and metadata, with byte ranges and no private index access',async t=>{
   const library=path.resolve(import.meta.dirname,'../.local-library');try{await fs.access(library+'/manifest.json');}catch{t.skip('Private collection absent');return;}
   const server=await createPreviewServer({library});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   try{
-    const base=`http://127.0.0.1:${server.address().port}/volta/`,response=await fetch(base+'library/catalog.json'),catalog=await response.json();assert.equal(catalog.items.length,701);assert.match(response.headers.get('Cache-Control'),/private/);
+    const base=`http://127.0.0.1:${server.address().port}/volta/`,response=await fetch(base+'library/catalog.json'),catalog=await response.json();assert.ok(catalog.items.length>500);assert.match(response.headers.get('Cache-Control'),/private/);
     const first=catalog.items[0],pdf=await fetch(base+'scores/'+first.id+'.pdf',{headers:{Range:'bytes=0-4'}});assert.equal(pdf.status,206);assert.equal(await pdf.text(),'%PDF-');
     for(const route of ['manifest.json','merge-audit.json','.local-library/catalog.json','scores/nope.pdf','scores/'+('f'.repeat(64))+'.pdf'])assert.ok([403,404].includes((await fetch(base+route)).status));
     assert.equal((await fetch(base+'library/catalog.json',{headers:{Origin:'https://other.example'}})).status,403);
