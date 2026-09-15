@@ -31,7 +31,8 @@ export function versionDisplayTitle(item){
     const rest=inside.replace(/编曲\s*[:：]\s*animenzz*\b/ig,'').replace(/^[\s·,，;；]+|[\s·,，;；]+$/g,'');
     return rest?left+rest+right:'';
   });
-  return 'Animenz（编曲） - '+name.trim();
+  // Inside the Animenz shelf the arranger is the shelf; repeating it on every line is noise.
+  return name.trim();
 }
 
 export function describeWork(item){
@@ -87,7 +88,8 @@ export function groupWorks(items){
     for(const v of work.versions){const suffix=names.get(v.edition)>1?' · '+(v.sourceId||v.id).slice(0,6):'';v.versionLabel=`${v.edition}${suffix} · ${v.format.toUpperCase()}`;}
     work.browseGroup=browseGroup(work);
     const pdfs=work.versions.filter(v=>v.format==='pdf');
-    work.displayTitle=(pdfs.length&&pdfs.every(isAnimenzArrangement)?'Animenz（编曲） - ':'')+work.title;
+    work.animenz=!!pdfs.length&&pdfs.every(isAnimenzArrangement);
+    work.displayTitle=work.title;
     work.search=(work.browseGroup+' '+work.displayTitle+' '+work.versions.map(v=>v.search).join(' ')).toLocaleLowerCase();
   }
   return [...map.values()].sort((a,b)=>compareNames(a.title,b.title));
@@ -96,6 +98,8 @@ export function groupWorks(items){
 // Navigation categories are independent of authorship and stable work keys.
 // Regrouping the shelf must not reset saved editions or merge unrelated songs.
 export function browseGroup(work){
+  // A franchise with a single arrangement does not deserve a shelf of its own.
+  if(work.composer==='王者荣耀')return 'Animenz';
   if(games.test(work.composer))return work.composer;
   const context=work.versions.map(v=>[v.title,v.arranger,...(v.aliases||[])].join(' ')).join(' ');
   if(/animenz/i.test(context+' '+work.composer))return 'Animenz';
