@@ -61,6 +61,9 @@ test('the reader installs the idle chrome and styles both the edge handles and t
   const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
   assert.match(css,/body\.chrome-idle \.edge-reveal,body\.chrome-idle \.pencil-dock\{opacity:0/);
   assert.match(css,/body\.chrome-idle \.pencil-dock:has\(\.pencil-tool\.selected\)/);
+  assert.match(css,/body\.chrome-idle \.shelf-reveal\{transform:translateX\(calc\(-100% - 8px\)\)\}/,'the handle tucks behind its edge');
+  assert.match(css,/body\.chrome-idle \.shelf-reveal::after\{left:100%/,'and keeps a hit area on that edge');
+  assert.match(css,/body\.chrome-idle \.pencil-dock\[data-side=right\]::after\{right:100%/);
   const manifest=JSON.parse(await fs.readFile(new URL('../docs/cache-manifest.json',import.meta.url),'utf8'));
   assert.ok(manifest.includes('./idle-chrome.js'),'offline caches the new module');
 });

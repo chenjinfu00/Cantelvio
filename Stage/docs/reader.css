@@ -144,10 +144,32 @@ body.focus-reader .sheet{overflow:hidden;flex-shrink:0}
 .sidebar,.top-drawer,dialog{touch-action:pan-y}
 .sidebar input,.sidebar select,.top-drawer input,.top-drawer select,dialog input,dialog select,dialog textarea{font-size:16px!important}
 #cloud-login form{display:grid;gap:14px}#cloud-login input{min-width:0;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}#cloud-login-status,#cloud-status{font-size:13px;line-height:1.8;margin-top:12px}#trusted-devices{max-height:260px;overflow:auto}
-/* Idle chrome: the edge handles and the pencil dock fade away so nothing floats over the music. */
-body.chrome-idle .edge-reveal,body.chrome-idle .pencil-dock{opacity:0;transition:opacity .5s ease}
-body.chrome-idle .edge-reveal:hover,body.chrome-idle .edge-reveal:focus-visible{opacity:1;transition:opacity .15s}
+/* Idle chrome: the handles and the pencil dock tuck back into their edge so nothing floats over the music. */
+.edge-reveal,.pencil-dock{transition:opacity .18s ease,transform .18s ease}
+body:not(.chrome-idle) .edge-reveal,body:not(.chrome-idle) .pencil-dock{opacity:1}
+body.chrome-idle .edge-reveal,body.chrome-idle .pencil-dock{opacity:0;transition:opacity .3s ease,transform .3s ease}
+body.chrome-idle .shelf-reveal{transform:translateX(calc(-100% - 8px))}
+body.chrome-idle .tools-reveal{transform:translate(-50%,calc(-100% - 8px))}
+body.chrome-idle .pencil-dock[data-side=right]{transform:translateX(calc(100% + 14px))}
+body.chrome-idle .pencil-dock[data-side=left]{transform:translateX(calc(-100% - 14px))}
+/* A tucked control keeps a hit area on the edge it slid behind, so one touch slides it back out. */
+body.chrome-idle .edge-reveal::after,body.chrome-idle .pencil-dock::after{content:'';position:absolute}
+body.chrome-idle .shelf-reveal::after{left:100%;width:48px;top:-10px;bottom:-10px}
+body.chrome-idle .tools-reveal::after{top:100%;height:48px;left:-10px;right:-10px}
+body.chrome-idle .pencil-dock[data-side=right]::after{right:100%;width:56px;top:0;bottom:0}
+body.chrome-idle .pencil-dock[data-side=left]::after{left:100%;width:56px;top:0;bottom:0}
+/* Anything in use stays out on screen at full strength. */
+body.chrome-idle .edge-reveal:hover,body.chrome-idle .edge-reveal:focus-visible,
 body.chrome-idle .pencil-dock:hover,body.chrome-idle .pencil-dock:focus-within,body.chrome-idle .pencil-dock.dragging,
-body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]){opacity:1;transition:opacity .15s}
-body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){opacity:1;transition:opacity .15s}
-@media(prefers-reduced-motion:reduce){body.chrome-idle .edge-reveal,body.chrome-idle .pencil-dock{transition:none}}
+body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]),
+body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){opacity:1;transition:opacity .18s ease,transform .18s ease}
+body.chrome-idle .shelf-reveal:hover,body.chrome-idle .shelf-reveal:focus-visible,
+body.chrome-idle .pencil-dock:hover,body.chrome-idle .pencil-dock:focus-within,body.chrome-idle .pencil-dock.dragging,
+body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]),
+body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){transform:none}
+body.chrome-idle .tools-reveal:hover,body.chrome-idle .tools-reveal:focus-visible{transform:translateX(-50%)}
+@media(prefers-reduced-motion:reduce){
+  .edge-reveal,.pencil-dock{transition:none}
+  body.chrome-idle .shelf-reveal,body.chrome-idle .pencil-dock{transform:none}
+  body.chrome-idle .tools-reveal{transform:translateX(-50%)}
+}
