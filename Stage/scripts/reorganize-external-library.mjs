@@ -31,6 +31,15 @@ function cleanImportName(relative){
   return parts.join('/');
 }
 
+function flatPdfTarget(folder,record,hash,index=0){
+  const parts=record.relative.split('/');
+  if(parts.length===2&&parts[0]===folder)return record.relative;
+  const cleaned=path.posix.basename(cleanImportName(record.relative));
+  const extension=path.posix.extname(cleaned),stem=cleaned.slice(0,-extension.length);
+  const copy=index?`-${index+1}`:'';
+  return `${folder}/${stem} · ${hash.slice(0,8)}${copy}${extension}`;
+}
+
 function canonicalTarget(manifestPath){
   const relative=portable(manifestPath);
   if(!relative.startsWith('曲谱/'))throw new Error('Manifest path is outside 曲谱: '+manifestPath);
@@ -74,15 +83,16 @@ export function createExternalPlan(records,manifestFiles){
       matchedUnique++;matchedCopies+=copies.length;
       const target=canonicalTarget(manifestPath),keeper=preferredRecord(copies,target);
       add(keeper,target,'known-pdf');
+      let duplicateIndex=0;
       for(const copy of copies)if(copy!==keeper){
         duplicateCopies++;
-        const duplicateTarget=copy.relative.startsWith(DUPLICATES+'/')?copy.relative:`${DUPLICATES}/${copy.relative}`;
+        const duplicateTarget=flatPdfTarget(DUPLICATES,copy,hash,duplicateIndex++);
         add(copy,duplicateTarget,'duplicate-pdf');
       }
     }else{
       unmatchedUnique++;
-      for(const copy of copies){
-        const importTarget=copy.relative.startsWith(IMPORTS+'/')?copy.relative:`${IMPORTS}/${cleanImportName(copy.relative)}`;
+      for(const [index,copy] of copies.entries()){
+        const importTarget=flatPdfTarget(IMPORTS,copy,hash,index);
         add(copy,importTarget,'new-pdf');
       }
     }

@@ -18,13 +18,13 @@ test('exact duplicate copies are preserved for review',()=>{
   ];
   const plan=createExternalPlan(records,{[known]:'曲谱/Animenz/动漫／影视/作品 · aaaaaaaa.pdf'});
   assert.equal(plan.summary.duplicateCopies,1);
-  assert.ok(plan.moves.some(move=>move.target==='重复文件待确认/旧目录/副本.pdf'));
+  assert.ok(plan.moves.some(move=>move.target==='重复文件待确认/副本 · aaaaaaaa.pdf'));
 });
 
 test('unknown PDFs go to the import inbox and remove CN labels',()=>{
   const records=[{relative:'崩坏3/Da Capo (CN).pdf',extension:'.pdf',bytes:10,hash:other}];
   const plan=createExternalPlan(records,{});
-  assert.equal(plan.moves[0].target,'新导入 PDF/崩坏3/Da Capo.pdf');
+  assert.equal(plan.moves[0].target,'新导入 PDF/Da Capo · bbbbbbbb.pdf');
   assert.equal(plan.moves[0].kind,'new-pdf');
 });
 
@@ -45,8 +45,8 @@ test('editable scores and media are retained under related sources',()=>{
 test('already organized files are left in place',()=>{
   const records=[
     {relative:'游戏音乐/原神/璃月/标准名字 · aaaaaaaa.pdf',extension:'.pdf',bytes:10,hash:known},
-    {relative:'重复文件待确认/旧目录/副本.pdf',extension:'.pdf',bytes:10,hash:known},
-    {relative:'新导入 PDF/崩坏3/Da Capo.pdf',extension:'.pdf',bytes:10,hash:other},
+    {relative:'重复文件待确认/副本 · aaaaaaaa.pdf',extension:'.pdf',bytes:10,hash:known},
+    {relative:'新导入 PDF/Da Capo · bbbbbbbb.pdf',extension:'.pdf',bytes:10,hash:other},
     {relative:'相关源文件/原神/翠草之龙.mscz',extension:'.mscz',bytes:10}
   ];
   const plan=createExternalPlan(records,{[known]:'曲谱/游戏音乐/原神/璃月/标准名字 · aaaaaaaa.pdf'});
