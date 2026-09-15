@@ -9,10 +9,13 @@ const output=path.resolve(import.meta.dirname,'../.local-library');
 const index=JSON.parse(await fs.readFile(path.join(sourceDir,'library-private-index.json')));
 const imports=JSON.parse(await fs.readFile(path.join(sourceDir,'piascore-import-20260912/pdf-inspection.json')));
 const overrides=JSON.parse(await fs.readFile(path.join(output,'metadata.json')));
+// Scores retired on purpose never come back through a rebuild.
+let retired={items:{}};try{retired=JSON.parse(await fs.readFile(path.join(output,'retired.json')));}catch{}
+const isRetired=id=>Object.hasOwn(retired.items||{},id);
 const digest=async file=>{const h=createHash('sha256');for await(const chunk of createReadStream(file))h.update(chunk);return h.digest('hex');};
 function segment(value){let s=String(value||'待核对').normalize('NFC').replace(/[<>:"/\\|?*\x00-\x1f]/g,' ').replace(/\s+/g,' ').trim();while(Buffer.byteLength(s)>170)s=[...s].slice(0,-1).join('');return s||'待核对';}
 const candidates=new Map();
-for(const item of index.items.filter(x=>x.format==='pdf')){
+for(const item of index.items.filter(x=>x.format==='pdf'&&!isRetired(x.id))){
   const sources=[];for(const alias of item.aliases){const file=path.resolve(index.root,alias);if(!file.startsWith(index.root+path.sep))throw new Error('Invalid source path');const info=await fs.stat(file);sources.push({file,mtime:info.mtimeMs,original:alias});}
   candidates.set(item.id,{metadata:item,sources});
 }
