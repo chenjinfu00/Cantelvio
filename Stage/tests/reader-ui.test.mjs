@@ -8,7 +8,8 @@ const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8
 const shell=await fs.readFile(new URL('../docs/reader-shell.js',import.meta.url),'utf8');
 
 test('the shelf is for changing score, the top drawer is about the score you have open',()=>{
-  assert.match(shell,/'#score-card','#edition-toolbar','\.reader-toolbar','\.page-navigation','#practice-drawer'/);
+  for(const moved of ['#score-card','#edition-toolbar','.reader-toolbar','.page-navigation','#practice-drawer'])
+    assert.ok(shell.includes("'"+moved+"'"),moved+' moved into the top drawer');
   const sidebar=html.slice(html.indexOf('<aside class="sidebar"'),html.indexOf('<main'));
   for(const keep of ['library-button','import-button','recent-scores','imslp-button'])assert.ok(sidebar.includes(keep),keep+' stays on the shelf');
 });

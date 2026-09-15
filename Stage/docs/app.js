@@ -16,6 +16,7 @@ import {setupDeploy} from './offline-deploy.js';
 import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
 import {setupRecentScores} from './recent-scores.js';
+import {setupBookmarks} from './bookmarks.js';
 import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
 import {setupCloudSync} from './cloud-sync.js';
 import {setupAnnotationBackup} from './annotation-backup.js';
@@ -27,7 +28,7 @@ let cloudSync;
 const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()&&!cloudSync?.busy});
 const readerViewport=installReaderViewport();
 const readingPosition=new ReadingPosition($('score-stage'));
-let toastTimer,wakeLock,resizeTimer,library,recent,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
+let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
 let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
 const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
 const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
@@ -63,6 +64,7 @@ function controls(){
   const range=$('page-range');range.disabled=!loaded||locked;range.max=loaded?state.pdf.numPages:1;
   if(document.activeElement!==range)range.value=state.page;
   $('page-count').textContent=loaded?`/ ${state.pdf.numPages}`:'/ —';
+  bookmarks?.refresh();
   $('page-label').textContent=loaded?`PDF 第 ${state.page}${state.spread&&state.page<state.pdf.numPages?'–'+(state.page+1):''} 页`:'等待导入';
   $('listen-button').disabled=state.phase!=='following'&&(state.phase!=='idle'||!state.reference);
   $('listen-button').textContent=state.phase==='following'?'停止聆听':'开始聆听 ↗';
@@ -107,7 +109,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
       onProgress?.(total?`正在读取曲谱 ${Math.min(100,Math.round(loaded/total*100))}%…`:'正在读取曲谱…');
     });
     $('chopin-audio')?.remove();
-    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);
+    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);
     fitProfile=null;
     try{const response=await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)});if(response.ok){const profile=await response.json();if(profile.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;}}catch{}
     readingPosition.setScore(id);
@@ -453,6 +455,12 @@ if(document.modelContext?.registerTool){
 }
 controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
+bookmarks=setupBookmarks({
+  score:()=>state.score,page:()=>state.page,
+  canJump:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),
+  jump:page=>{shell?.close();navigate(page).catch(error=>toast(errorMessage(error)));},
+  toast,
+});
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
   open:async id=>{const saved=await loadScore(id);if(!saved)throw new Error('这份曲谱已不在本机，请从曲谱库重新打开。');await openPDF(saved.buffer||saved.remote,saved.name,saved);},
