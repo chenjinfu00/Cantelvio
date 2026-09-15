@@ -212,3 +212,26 @@ body.chrome-idle .tools-reveal:hover,body.chrome-idle .tools-reveal:focus-visibl
 .deploy-item small{flex:none;color:var(--muted);font-size:11px}
 .deploy-item input{flex:none;width:20px;height:20px}
 #offline-deploy{margin-bottom:12px}
+/* The top drawer is about the score in front of you: a slider replaces page buttons that only repeated a tap. */
+.page-scrubber{flex:1;min-width:0;display:flex;align-items:center;gap:14px}
+#page-range{flex:1;min-width:120px;height:32px;accent-color:var(--accent);background:transparent}
+#page-range:disabled{opacity:.4}
+body:not(.performance-mode) .top-drawer .page-navigation #prev-button,
+body:not(.performance-mode) .top-drawer .page-navigation #next-button{display:none}
+body.performance-mode .page-scrubber{display:none}
+.top-drawer #score-card{border:0;border-top:1px solid var(--line);border-radius:0;padding:14px 0 4px;margin:0}
+.top-drawer #score-card h1{font-size:16px;font-weight:600;margin:6px 0}
+.top-drawer #score-card p{font-size:12px}
+.top-drawer #offline-save{font-size:13px;background:var(--tint);border:0;min-height:40px;padding:9px;width:auto;min-width:220px}
+.top-drawer #practice-drawer{border-top:1px solid var(--line);padding-top:10px}
+body.performance-mode .top-drawer #score-card,body.performance-mode .top-drawer #practice-drawer{display:none!important}
+/* The pencil dock carries its own undo, and each tool opens its own settings. */
+.pencil-dock .pencil-tool:disabled{opacity:.35}
+.pencil-popover summary{list-style:none;cursor:pointer;min-height:26px;min-width:48px;text-align:center;font-size:20px;line-height:20px;border-radius:8px;color:var(--muted);user-select:none}
+.pencil-popover summary:hover{background:var(--tint)}
+.ink-swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 12px}
+.ink-swatches button{width:100%;min-height:34px;border:2px solid transparent;border-radius:9px;background:var(--swatch)}
+.ink-swatches button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset}
+.ink-size{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.ink-size input{flex:1;min-width:90px;accent-color:var(--accent)}
+.ink-size i{flex:none;width:var(--dot,6px);height:var(--dot,6px);max-width:22px;max-height:22px;border-radius:50%;background:var(--ink)}

@@ -4,17 +4,27 @@ import {PUBLIC_LIBRARY} from './site-config.js';
 import {PencilInput,strokeID} from './pencil-input.js';
 const blank=()=>({version:1,strokes:[]}),copy=structuredClone;
 const $=id=>document.getElementById(id);
+// Slider steps 1–10 map to a stroke that stays inside the validator's 0 < width <= .1 range.
+export const strokeWidth=step=>Math.round((.0012+(Math.max(1,Math.min(10,Number(step)||1))-1)*.0012)*1e6)/1e6;
+export const eraserRadius=step=>Math.round((.008+(Math.max(1,Math.min(10,Number(step)||1))-1)*.006)*1e6)/1e6;
 const timedFetch=(url,options={})=>fetch(url,{...options,signal:AbortSignal.timeout(12000)});
 export class Ink {
-  constructor(toast,{localOnly=PUBLIC_LIBRARY,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.penDown=false;this.palmUntil=0;
+  constructor(toast,{localOnly=PUBLIC_LIBRARY,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.width=strokeWidth(2);this.eraser=eraserRadius(2);this.penDown=false;this.palmUntil=0;
     for(const mode of ['pen','erase'])$('ink-'+mode).onclick=()=>this.setMode(this.mode===mode?'read':mode);
-    $('ink-color').onchange=e=>this.color=e.target.value;
+    for(const button of document.querySelectorAll('[data-ink-color]'))button.onclick=()=>this.setColor(button.dataset.inkColor);
+    // A stroke is stored as a fraction of the page, so the slider works the same on any paper size.
+    $('ink-width').oninput=e=>{this.width=strokeWidth(e.target.value);this.preview('ink-width-preview',this.width);};
+    $('eraser-width').oninput=e=>{this.eraser=eraserRadius(e.target.value);this.preview('eraser-width-preview',this.eraser);};
+    this.preview('ink-width-preview',this.width);this.preview('eraser-width-preview',this.eraser);
     $('ink-undo').onclick=()=>this.history(false);$('ink-redo').onclick=()=>this.history(true);
     $('ink-export').onclick=()=>this.export();
     window.addEventListener('online',()=>{for(const r of this.records.values())if(r.dirty)this.flush(r);});
   }
-  setScore(id){this.clearViews();this.scoreId=id;this.setMode('read');for(const [key,r] of this.records)if(!key.startsWith(id+'/')&&!r.dirty&&!r.saving)this.records.delete(key);}
-  setMode(mode,{finish=true}={}){if(finish)for(const v of this.views)v.finish?.();this.mode=mode;for(const m of ['pen','erase']){$('ink-'+m).classList.toggle('selected',m===mode);$('ink-'+m).setAttribute('aria-pressed',String(m===mode));}for(const v of this.views)v.canvas.classList.toggle('writing',mode!=='read');}
+  setScore(id){this.clearViews();this.scoreId=id;this.setMode('read');this.refreshHistory();for(const [key,r] of this.records)if(!key.startsWith(id+'/')&&!r.dirty&&!r.saving)this.records.delete(key);}
+  setColor(color){this.color=color;for(const button of document.querySelectorAll('[data-ink-color]'))button.setAttribute('aria-pressed',String(button.dataset.inkColor===color));}
+  preview(id,fraction){const node=$(id);if(node)node.style.setProperty('--dot',Math.max(3,Math.round(fraction*1400))+'px');}
+  setMode(mode,{finish=true}={}){for(const popover of document.querySelectorAll('.pencil-popover'))if(popover.id!==mode+'-options')popover.open=false;
+    if(finish)for(const v of this.views)v.finish?.();this.mode=mode;for(const m of ['pen','erase']){$('ink-'+m).classList.toggle('selected',m===mode);$('ink-'+m).setAttribute('aria-pressed',String(m===mode));}for(const v of this.views)v.canvas.classList.toggle('writing',mode!=='read');}
   get guardingTouch(){return this.penDown||performance.now()<this.palmUntil;}
   feedback(message){$('pencil-feedback').textContent=message;$('pencil-feedback').hidden=false;clearTimeout(this.feedbackTimer);this.feedbackTimer=setTimeout(()=>$('pencil-feedback').hidden=true,1300);}
   status(message){$('ink-status').textContent=message;}
@@ -45,13 +55,13 @@ export class Ink {
     const v={canvas,record:r,abort:new AbortController()};this.views.add(v);r.views.add(v);
     let current=null,before=null;
     const point=e=>{const rect=canvas.getBoundingClientRect();return [Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width)),Math.max(0,Math.min(1,(e.clientY-rect.top)/rect.height)),Math.max(.1,Math.min(1,e.pressure||.5))];};
-    const erase=p=>{r.data.strokes=r.data.strokes.filter(s=>!s.points.some((b,i)=>distanceToSegment(p,i?s.points[i-1]:b,b)<.016));};
+    const erase=p=>{const radius=this.eraser;r.data.strokes=r.data.strokes.filter(s=>!s.points.some((b,i)=>distanceToSegment(p,i?s.points[i-1]:b,b)<radius));};
     const input=new PencilInput({
       allowed:e=>!r.loading&&!this.penDown&&this.canWrite()&&(e.pointerType==='pen'||this.mode!=='read'),
       begin:e=>{
         if(e.pointerType==='pen'&&this.mode==='read')this.setMode('pen',{finish:false});
         this.penDown=true;this.page=page;before=copy(r.data);
-        if(this.mode==='pen')current={id:strokeID(),color:this.color,width:.0024,points:[point(e)]};else erase(point(e));
+        if(this.mode==='pen')current={id:strokeID(),color:this.color,width:this.width,points:[point(e)]};else erase(point(e));
         this.draw(r,current);
       },
       move:events=>{for(const event of events){if(current)current.points.push(point(event));else erase(point(event));}this.draw(r,current);},
@@ -59,6 +69,7 @@ export class Ink {
         if(current?.points.length)r.data.strokes.push(current);
         // Erasing an empty area should not consume an undo step.
         if(current||r.data.strokes.length!==before.strokes.length){r.undo.push(before);if(r.undo.length>25)r.undo.shift();r.redo=[];this.changed(r);}
+        this.refreshHistory();
         current=null;before=null;this.draw(r);
       },
       cancel:()=>{if(before)r.data=before;current=null;before=null;this.draw(r);},
@@ -127,10 +138,15 @@ export class Ink {
     }catch{this.status('批注保留在本机草稿 · 尚未同步');await this.cache(r);}
     finally{r.saving=false;if(r.dirty&&navigator.onLine){clearTimeout(r.timer);r.timer=setTimeout(()=>this.flush(r),15000);}}
   }
+  // Undo and redo say plainly whether there is anything to undo on the page you last wrote on.
+  refreshHistory(){
+    const r=this.records.get(this.scoreId+'/'+this.page);
+    $('ink-undo').disabled=!r?.undo?.length;$('ink-redo').disabled=!r?.redo?.length;
+  }
   history(redo){
     const r=this.records.get(this.scoreId+'/'+this.page);if(!r)return;
     const from=redo?r.redo:r.undo,to=redo?r.undo:r.redo;if(!from.length)return;
-    to.push(copy(r.data));if(to.length>25)to.shift();r.data=from.pop();this.changed(r);this.draw(r);
+    to.push(copy(r.data));if(to.length>25)to.shift();r.data=from.pop();this.changed(r);this.draw(r);this.refreshHistory();
   }
   export(){
     const pages={};for(const [key,r] of this.records)if(key.startsWith(this.scoreId+'/'))pages[key.split('/')[1]]=r.data;

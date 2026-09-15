@@ -60,6 +60,8 @@ function controls(){
   $('audio-button').disabled=!loaded||state.phase!=='idle';$('learn-button').disabled=!loaded||state.phase!=='idle';
   $('prev-button').disabled=!loaded||state.page===1||locked;$('next-button').disabled=!loaded||state.page>=state.pdf.numPages||locked;
   $('page-input').disabled=!loaded||locked;$('page-input').value=state.page;
+  const range=$('page-range');range.disabled=!loaded||locked;range.max=loaded?state.pdf.numPages:1;
+  if(document.activeElement!==range)range.value=state.page;
   $('page-count').textContent=loaded?`/ ${state.pdf.numPages}`:'/ —';
   $('page-label').textContent=loaded?`PDF 第 ${state.page}${state.spread&&state.page<state.pdf.numPages?'–'+(state.page+1):''} 页`:'等待导入';
   $('listen-button').disabled=state.phase!=='following'&&(state.phase!=='idle'||!state.reference);
@@ -374,6 +376,9 @@ document.querySelectorAll('.dialog-close,.dialog-done').forEach(b=>b.onclick=()=
 $('prev-button').onclick=()=>requestTurn(-1);
 $('next-button').onclick=()=>requestTurn(1);
 $('page-input').onchange=action(()=>navigate(Number($('page-input').value)));
+// Dragging shows the page you are heading for; the turn happens when you let go.
+$('page-range').oninput=()=>{$('page-input').value=$('page-range').value;$('page-label').textContent=`PDF 第 ${$('page-range').value} 页`;};
+$('page-range').onchange=action(()=>navigate(Number($('page-range').value)));
 $('single-button').onclick=action(async()=>{state.spread=false;controls();await renderPages();});
 $('spread-button').onclick=action(async()=>{state.spread=true;controls();await renderPages();});
 $('score-zoom').onchange=action(async e=>{const value=e.target.value;state.zoom=['screen','page'].includes(value)?1:Number(value);if(['screen','page'].includes(value))state.fit=value;await renderPages();});
