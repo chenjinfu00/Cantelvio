@@ -14,6 +14,7 @@ import {setupSettings} from './settings.js';
 import {setupOffline} from './offline.js';
 import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
+import {setupRecentScores} from './recent-scores.js';
 import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
 import {setupCloudSync} from './cloud-sync.js';
 import {setupAnnotationBackup} from './annotation-backup.js';
@@ -25,7 +26,7 @@ let cloudSync;
 const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()&&!cloudSync?.busy});
 const readerViewport=installReaderViewport();
 const readingPosition=new ReadingPosition($('score-stage'));
-let toastTimer,wakeLock,resizeTimer,library,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
+let toastTimer,wakeLock,resizeTimer,library,recent,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
 let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
 const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
 const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
@@ -112,7 +113,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     $('score-title').textContent=name.replace(/\.pdf$/i,'');$('reader-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库':'本机导入'}`;
     $('empty-state').hidden=true;$('pages').hidden=false;
     onProgress?.('正在显示谱页…');
-    controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);shell?.close();offline?.refresh();
+    controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);recent?.remember({id,name});shell?.close();offline?.refresh();
   }finally{state.phase=oldPhase;$('render-status').hidden=true;controls();}
 }
 async function renderPages({anchor=null,beforePaint=()=>{}}={}){
@@ -446,6 +447,11 @@ if(document.modelContext?.registerTool){
 }
 controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
+recent=setupRecentScores({
+  canOpen:()=>state.phase==='idle'&&!performing(),
+  open:async id=>{const saved=await loadScore(id);if(!saved)throw new Error('这份曲谱已不在本机，请从曲谱库重新打开。');await openPDF(saved.buffer||saved.remote,saved.name,saved);},
+  onError:error=>toast(errorMessage(error)),
+});
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
 cloudSync=setupCloudSync(ink,toast,()=>state.phase==='idle'&&!performing());
 setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing()&&!cloudSync.busy);

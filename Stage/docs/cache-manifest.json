@@ -30,6 +30,7 @@
   "./reader-viewport.js",
   "./reader.css",
   "./reading-position.js",
+  "./recent-scores.js",
   "./score-zoom.js",
   "./settings.js",
   "./site-config.js",

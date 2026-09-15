@@ -173,3 +173,29 @@ body.chrome-idle .tools-reveal:hover,body.chrome-idle .tools-reveal:focus-visibl
   body.chrome-idle .shelf-reveal,body.chrome-idle .pencil-dock{transform:none}
   body.chrome-idle .tools-reveal{transform:translateX(-50%)}
 }
+/* The paper colour is the reader's own setting; performance mode and the home screen keep their dark stage. */
+:root[data-surface=white]:not(.performance-active):not(.home-screen){--reader-background:#fff}
+:root[data-surface=paper]:not(.performance-active):not(.home-screen){--reader-background:#f6efe2}
+:root[data-surface=mist]:not(.performance-active):not(.home-screen){--reader-background:var(--workspace)}
+:root[data-surface=dark]:not(.performance-active):not(.home-screen){--reader-background:#10151d}
+.surface-choices{margin-bottom:8px}
+/* Drawers leave the screen the way they arrived: visibility waits for the slide to finish. */
+.focus-reader .sidebar{transition:transform .26s cubic-bezier(.32,.72,0,1),visibility 0s linear .26s}
+.focus-reader.shelf-open .sidebar{transition:transform .26s cubic-bezier(.32,.72,0,1),visibility 0s}
+.top-drawer{transition:transform .26s cubic-bezier(.32,.72,0,1),visibility 0s linear .26s}
+.tools-open .top-drawer{transition:transform .26s cubic-bezier(.32,.72,0,1),visibility 0s}
+.drawer-backdrop{opacity:0;transition:opacity .26s ease}
+.shelf-open .drawer-backdrop,.tools-open .drawer-backdrop{opacity:1}
+/* Recently played scores, in the shelf where you go to change score. */
+.recent-scores{margin:4px 0 18px}
+.recent-scores .section-label{margin-bottom:8px}
+.recent-list{display:grid;gap:6px;max-height:210px;overflow:auto;overscroll-behavior:contain}
+.recent-item{display:flex;align-items:baseline;justify-content:space-between;gap:12px;width:100%;min-height:40px;padding:8px 12px;border:0;border-radius:10px;background:var(--tint);color:var(--ink);font-size:13px;text-align:left}
+.recent-item:hover:enabled{background:var(--lime)}
+.recent-item:disabled{opacity:.6}
+.recent-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent-item small{flex:none;color:var(--muted);font-size:11px}
+@media(prefers-reduced-motion:reduce){
+  .focus-reader .sidebar,.focus-reader.shelf-open .sidebar,.top-drawer,.tools-open .top-drawer{transition:none}
+  .drawer-backdrop{transition:none}
+}
