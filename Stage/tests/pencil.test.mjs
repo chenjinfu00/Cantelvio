@@ -30,7 +30,7 @@ test('real ink handlers auto-select Pencil, persist strokes, erase, undo and ign
   const originals=new Map(['document','window','requestAnimationFrame','crypto'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   const nodes=new Map(),drafts=new Map(),timers=new Map();let timerId=0,ink;
   class Element {
-    constructor(){this.handlers={};this.children=[];this.classList={toggle(){}};this.style={};this.width=1000;this.height=1400;this.isConnected=true;}
+    constructor(){this.handlers={};this.children=[];this.classList={toggle(){}};this.style={setProperty(){}};this.width=1000;this.height=1400;this.isConnected=true;}
     addEventListener(name,fn){(this.handlers[name]??=[]).push(fn);}
     fire(name,event){for(const fn of this.handlers[name]||[])fn(event);}
     setAttribute(){} setPointerCapture(){} remove(){} append(node){this.children.push(node);}
@@ -39,7 +39,7 @@ test('real ink handlers auto-select Pencil, persist strokes, erase, undo and ign
     getContext(){return {clearRect(){},beginPath(){},arc(){},fill(){},moveTo(){},lineTo(){},stroke(){}};}
   }
   const node=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
-  Object.defineProperty(globalThis,'document',{configurable:true,value:{getElementById:node,createElement:()=>new Element()}});
+  Object.defineProperty(globalThis,'document',{configurable:true,value:{getElementById:node,createElement:()=>new Element(),querySelectorAll:()=>[]}});
   Object.defineProperty(globalThis,'window',{configurable:true,value:{addEventListener(){}}});
   Object.defineProperty(globalThis,'requestAnimationFrame',{configurable:true,value:fn=>{fn();return 1;}});
   let byte=0;Object.defineProperty(globalThis,'crypto',{configurable:true,value:{getRandomValues:array=>{array.forEach((_,i)=>array[i]=byte++%256);return array;}}});
