@@ -3,6 +3,7 @@
   "./annotation-backup.js",
   "./app.js",
   "./audio.js",
+  "./bookmarks.js",
   "./capture-worklet.js",
   "./cloud-account.js",
   "./cloud-sync.js",

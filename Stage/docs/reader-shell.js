@@ -18,7 +18,7 @@ export class ReaderShell {
     this.backdrop=document.getElementById('drawer-backdrop');this.stage=document.getElementById('score-stage');
     this.shelf.id='shelf-drawer';
     // The controls float over the score. Opening a drawer never changes its size.
-    for(const selector of ['#score-card','#edition-toolbar','.reader-toolbar','.page-navigation','#practice-drawer'])this.tools.append(document.querySelector(selector));
+    for(const selector of ['#score-card','#edition-toolbar','.reader-toolbar','.page-navigation','#bookmark-bar','#practice-drawer'])this.tools.append(document.querySelector(selector));
     document.body.append(document.getElementById('ink-toolbar'));
     installDockPosition();
     this.idle=installIdleChrome();
