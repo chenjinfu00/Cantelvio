@@ -63,7 +63,8 @@ test('a remembered catalogue draws the shelf with no network and asks for the fo
 
 test('the shelf can open a score from its durable offline copy after folder access expires',async()=>{
   const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
-  assert.match(library,/const offline=local\?null:await getOffline\(version\.id\)/);
+  assert.match(library,/const offline=await getOffline\(version\.id\)/);
+  assert.match(library,/let local=offline\?null:localSource\?await localSource\.url\(version\.id\)/);
   assert.match(library,/if\(!local&&!offline&&localSource\?\.needsFolder\)await localSource\.reopen/);
   assert.match(library,/await openPDF\(offline\.remote,version\.title/);
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');

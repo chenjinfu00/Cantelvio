@@ -43,8 +43,10 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
       // A folder remembered only as a catalogue can show the shelf offline but holds no files.
       // Prefer a durable PDF already stored on this device; only an uncached score asks for the
       // folder again. This is what makes the iPad Home Screen app useful after a restart.
-      let local=localSource?await localSource.url(version.id):null;
-      const offline=local?null:await getOffline(version.id).catch(()=>null);
+      // The folder's blob URL is useful for the first read, but it is slower on iPad and dies
+      // after a restart. Once the same content is cached, use the stable offline URL first.
+      const offline=await getOffline(version.id).catch(()=>null);
+      let local=offline?null:localSource?await localSource.url(version.id):null;
       if(!local&&!offline&&localSource?.needsFolder)await localSource.reopen?.();
       local=localSource?await localSource.url(version.id):null;
       if(!local&&offline){
