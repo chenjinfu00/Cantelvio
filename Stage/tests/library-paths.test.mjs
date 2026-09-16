@@ -44,3 +44,21 @@ test('two versions of one work never disagree on the folder spelling',()=>{
   assert.equal(folders[0],folders[1],'a case-folding filesystem would otherwise merge them by accident');
   assert.notEqual(plan[0].next,plan[1].next,'each version keeps its own file');
 });
+
+test('a shelf with only a couple of works is not sorted by genre as well',()=>{
+  const lone=pdf('m','冼星海 - 黄河钢琴协奏曲（双钢琴谱·编曲：殷承宗）',{composer:'冼星海',style:'中国音乐'});
+  assert.match(libraryRelativePath(lone,{shelfWorks:1}).relative,/^曲谱\/冼星海\/黄河钢琴协奏曲\//);
+  assert.match(libraryRelativePath(lone,{shelfWorks:40}).relative,/^曲谱\/冼星海\/协奏曲\/黄河钢琴协奏曲\//,'a full shelf keeps its genres');
+});
+
+test('a bracketed edition note never becomes part of the work name',()=>{
+  const cases={
+    '巴赫 - A小调小提琴协奏曲 BWV 1041（Sibley 版）':'A小调小提琴协奏曲 BWV 1041',
+    '柴可夫斯基 - 第一钢琴协奏曲 Op.23（Peters·Teichmüller 版）':'第一钢琴协奏曲 Op.23',
+    '里姆斯基-科萨科夫 - 野蜂飞舞（钢琴改编·Rachmaninoff／Kuliev）':'野蜂飞舞',
+  };
+  for(const [title,folder] of Object.entries(cases))
+    assert.equal(libraryRelativePath(pdf('n',title,{composer:'x',style:'古典'}),{shelfWorks:99}).relative.split('/').at(-2),folder,title);
+  // A name that only looks like one keeps every word.
+  assert.equal(libraryRelativePath(pdf('o','原神 - 散兵周本音乐改编',{composer:'原神',style:'游戏音乐',region:'须弥'})).relative.split('/').at(-2),'散兵周本音乐改编');
+});

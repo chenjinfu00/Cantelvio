@@ -21,7 +21,7 @@ export function classifyLibraryItem(item){
   return {item:normalized,work,browse,family};
 }
 
-export function libraryRelativePath(item,{current=null}={}){
+export function libraryRelativePath(item,{current=null,shelfWorks=Infinity}={}){
   const classified=classifyLibraryItem(item);
   const {family,browse,work}=classified;
   // Some manually curated genres are not present in the filename itself. Preserve that
@@ -40,7 +40,9 @@ export function libraryRelativePath(item,{current=null}={}){
   // category and otherwise force every score one click deeper.
   const redundantGenre=new Set(['游戏配乐','其他作品','流行歌曲','作曲家待核对']);
   const animeRepeatsParent=browse==='动漫'&&work.genre==='动漫／影视';
-  if(!redundantGenre.has(work.genre)&&!animeRepeatsParent)folders.push(segment(work.genre));
+  // A shelf holding two or three works is already a short list; sorting it by genre only buries it.
+  const tinyShelf=shelfWorks<=3;
+  if(!redundantGenre.has(work.genre)&&!animeRepeatsParent&&!tinyShelf)folders.push(segment(work.genre));
   // One folder per work: every edition of it, plus its MIDI and engraving sources, live together.
   folders.push(segment(work.title));
   // A lone edition label that only repeats the shelf ("编曲：Animenz" under Animenz) says nothing.
