@@ -18,7 +18,8 @@ import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
 import {setupMIDI} from './midi-ui.js';
 import {setupLocalFolder} from './local-library.js';
-import {setupAnnotationBackup} from './annotation-backup.js';
+import {setupAnnotationBackup,drainInk,showMerged} from './annotation-backup.js';
+import {setupInkFolder} from './ink-folder.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
@@ -26,7 +27,7 @@ const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,ref
 const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()});
 const readerViewport=installReaderViewport();
 const readingPosition=new ReadingPosition($('score-stage'));
-let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
+let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline,inkFolder;
 let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
 const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
 const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
@@ -107,6 +108,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
       onProgress?.(total?`正在读取曲谱 ${Math.min(100,Math.round(loaded/total*100))}%…`:'正在读取曲谱…');
     });
     $('chopin-audio')?.remove();
+    await inkFolder?.save({quiet:true}).catch(()=>{});
     state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
     // Page bounds travel with the collection, in its own folder.
@@ -467,8 +469,14 @@ midi=setupMIDI({
   },
   toast,
 });
-const localFolder=setupLocalFolder({toast,onLibrary:source=>library?.useLocal(source)});
+inkFolder=setupInkFolder({ink,library,toast,canRun:()=>state.phase==='idle'&&!performing(),drain:drainInk,showMerged});
+const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();}});
 localFolder?.restore?.().catch(()=>{});
+inkFolder?.describe();
+// Markings are written back at the moments a reader would expect them to be safe: when the
+// score is put down, and when the app goes away.
+addEventListener('pagehide',()=>{inkFolder?.save({quiet:true}).catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')inkFolder?.save({quiet:true}).catch(()=>{});});
 bookmarks=setupBookmarks({
   score:()=>state.score,page:()=>state.page,
   canJump:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),

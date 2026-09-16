@@ -80,3 +80,40 @@ test('a generated filename is told apart from the name a score arrived with',asy
     replaceLibraryAlias(['原神/旧地区/神女劈观/旧名 · abcdef01.pdf','神女劈观.pdf'],'原神/璃月/神女劈观/总谱 · abcdef01.pdf'),
     ['原神/璃月/神女劈观/总谱 · abcdef01.pdf','神女劈观.pdf']);
 });
+
+test('annotations can live beside the music, one file per score',async()=>{
+  const {inkPath,INK_DIR,inkFileFor,scoreIds,readFolderInk,writeFolderInk}=await import('../docs/ink-folder.js');
+  const id='a'.repeat(64),other='b'.repeat(64);
+  assert.equal(INK_DIR,'曲谱库数据/批注');
+  assert.equal(inkPath(id),'曲谱库数据/批注/'+id+'.json');
+  const rows=[
+    {id:id+'/1',data:{version:1,strokes:[{id:'s1'}]}},
+    {id:id+'/2',data:{version:1,strokes:[]}},
+    {id:other+'/1',data:{version:1,strokes:[{id:'s2'}]}},
+  ];
+  assert.deepEqual(scoreIds(rows),[id,other],'a page with nothing drawn on it is not a score to save');
+  const file=inkFileFor(id,rows);
+  assert.deepEqual(file.pages.map(page=>page.id),[id+'/1'],'only pages that carry strokes are written');
+  assert.equal(file.scoreId,id);
+  assert.equal(inkFileFor('c'.repeat(64),rows),null,'a score with no markings writes no file');
+  const written=[];
+  assert.equal(await writeFolderInk({writeJSON:(path,value)=>{written.push(path);return value;}},rows),2);
+  assert.deepEqual(written,[inkPath(id),inkPath(other)]);
+  await assert.rejects(writeFolderInk({writeJSON:null},rows),/不能写入文件夹/,'a browser that cannot write says so');
+  assert.deepEqual(await readFolderInk(null),[],'a folder that was never opened holds nothing');
+});
+
+test('annotations read from a folder are checked, and a file claiming the wrong score is ignored',async()=>{
+  const {readFolderInk}=await import('../docs/ink-folder.js');
+  const id='a'.repeat(64);
+  const page={id:id+'/1',data:{version:1,strokes:[{id:'s1',color:'#2858aa',width:0.004,points:[[0.1,0.1,0.5],[0.2,0.2,0.5]]}]}};
+  const local={inkFiles:async()=>[
+    {id,read:async()=>({format:'volta-annotations',version:1,scoreId:id,pages:[page]})},
+    {id:'b'.repeat(64),read:async()=>({format:'volta-annotations',version:1,scoreId:id,pages:[page]})},
+    {id:'c'.repeat(64),read:async()=>{throw new Error('damaged');}},
+    {id:'d'.repeat(64),read:async()=>({nonsense:true})},
+  ]};
+  const pages=await readFolderInk(local);
+  assert.equal(pages.length,1,'one good file in, one page out; the mislabelled, broken and foreign ones are skipped');
+  assert.equal(pages[0].id,page.id);
+});

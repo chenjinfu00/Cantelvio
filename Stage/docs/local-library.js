@@ -43,7 +43,9 @@ export function matchLibrary(catalog,manifest,entries){
 
 export async function openFolder(){
   if(canRemember()){
-    const handle=await window.showDirectoryPicker({id:'volta-library',mode:'read'});
+    // Asking to write as well is what lets annotations be kept beside the music. A reader who
+    // declines still gets everything else; only writing back is lost.
+    const handle=await window.showDirectoryPicker({id:'volta-library',mode:'readwrite'});
     return {kind:'handle',handle,entries:await walk(handle)};
   }
   return new Promise((resolve,reject)=>{
@@ -54,6 +56,16 @@ export async function openFolder(){
     input.oncancel=()=>{document.body.removeChild(input);reject(new Error('已取消。'));};
     document.body.append(input);input.click();
   });
+}
+// Creating the folders on the way down is what makes a first save work on a collection that has
+// never held annotations.
+export async function writeInto(handle,relative,text){
+  const parts=relative.split('/'),name=parts.pop();
+  let folder=handle;
+  for(const part of parts)folder=await folder.getDirectoryHandle(part,{create:true});
+  const file=await folder.getFileHandle(name,{create:true}),stream=await file.createWritable();
+  await stream.write(text);await stream.close();
+  return relative;
 }
 async function walk(handle,prefix='',out=[]){
   for await(const [name,entry] of handle.entries()){
@@ -87,11 +99,21 @@ export async function readLibrary(picked){
   // collection, so a chosen folder answers for them too instead of asking the network.
   const byPath=new Map(resolved.map(entry=>[entry.path,entry.file]));
   const fitFile=id=>dataPaths('fit/'+id+'.json').map(path=>byPath.get(path)).find(Boolean)||null;
+  const inkPrefix=DATA+'/批注/';
+  const writable=picked.kind==='handle'&&!!picked.handle
+    &&await picked.handle.queryPermission?.({mode:'readwrite'}).then(state=>state==='granted').catch(()=>false);
   const urls=new Map();
   const address=file=>{const known=urls.get(file);if(known)return known;const made=URL.createObjectURL(file);urls.set(file,made);return made;};
   return {
     kind:picked.kind,handle:picked.handle||null,catalog,missing,
     async fit(id){const file=fitFile(id);return file?readJSON(file):null;},
+    // Annotations kept beside the music, when the folder holds any.
+    writable,
+    async inkFiles(){
+      return resolved.filter(entry=>entry.path.startsWith(inkPrefix)&&entry.path.endsWith('.json'))
+        .map(entry=>({id:entry.path.slice(inkPrefix.length,-5),read:()=>readJSON(entry.file)}));
+    },
+    writeJSON:writable?(relative,value)=>writeInto(picked.handle,relative,JSON.stringify(value)):null,
     get size(){return files.size;},
     url:id=>{const found=files.get(id);return found?address(found.file):null;},
     sourceURL:(id,name)=>{const found=sources.get(id+'/'+name);return found?address(found):null;},
@@ -103,7 +125,7 @@ export async function readLibrary(picked){
 // while every file still has to come from a folder the player picks again.
 export const rememberedLibrary=(catalog,reopen)=>({
   kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,
-  url:()=>null,sourceURL:()=>null,fit:async()=>null,reopen,release(){},
+  url:()=>null,sourceURL:()=>null,fit:async()=>null,writable:false,inkFiles:async()=>[],writeJSON:null,reopen,release(){},
 });
 
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){

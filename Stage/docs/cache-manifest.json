@@ -10,6 +10,7 @@
   "./icon.svg",
   "./idle-chrome.js",
   "./index.html",
+  "./ink-folder.js",
   "./ink-model.js",
   "./ink-validation.js",
   "./ink.js",

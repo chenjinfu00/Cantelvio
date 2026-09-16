@@ -27,9 +27,24 @@ export function exportBackupRows(rows){
   const url=URL.createObjectURL(new Blob([JSON.stringify(value)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='volta-all-annotations-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
   return pages.length;
 }
+// Settle every stroke still in flight, so what is exported or written is what is on screen.
+export async function drainInk(ink){
+  for(const view of ink.views)view.finish?.();
+  for(const record of ink.records.values()){clearTimeout(record.timer);await ink.flush(record);if(record.dirty)throw Error('请先确保批注已保存，再导出或导入。');}
+}
+// Put merged pages back into the open score so the reader sees them without reopening.
+export async function showMerged(ink,merged){
+  for(const row of merged){
+    const record=ink.records.get(row.id);
+    if(!record)continue;
+    record.data=structuredClone(row.data);record.base=structuredClone(row.base);
+    record.dirty=true;record.undo=[];record.redo=[];record.revision++;
+    ink.draw(record);await ink.flush(record);
+  }
+}
 export function setupAnnotationBackup(ink,toast,canRun){
   const $=id=>document.getElementById(id);let busy=false;
-  async function drain(){for(const view of ink.views)view.finish?.();for(const record of ink.records.values()){clearTimeout(record.timer);await ink.flush(record);if(record.dirty)throw Error('请先确保批注已保存，再导出或导入。');}}
+  const drain=()=>drainInk(ink);
   $('backup-export').onclick=async()=>{
     if(busy||!canRun())return;busy=true;
     try{await drain();const count=exportBackupRows(await allInkDrafts());toast(`已导出这台设备全部 ${count} 页批注。`);
@@ -41,11 +56,11 @@ export function setupAnnotationBackup(ink,toast,canRun){
     try{
       if(file.size>30_000_000)throw Error('备份超过 30 MB，请分谱导出再导入。');
       const incoming=parseBackup(JSON.parse(await file.text()));
-      if(!confirm(`合并导入 ${incoming.length} 页批注？保留现有笔迹，不自动上传云端。`))return;
+      if(!confirm(`合并导入 ${incoming.length} 页批注？现有笔迹都会保留。`))return;
       await drain();const merged=mergeBackup(await allInkDrafts(),incoming);
       await saveInkDrafts(merged);
-      for(const row of merged){const record=ink.records.get(row.id);if(record){record.data=structuredClone(row.data);record.base=structuredClone(row.base);record.dirty=true;record.undo=[];record.redo=[];record.revision++;ink.draw(record);await ink.flush(record);}}
-      toast('已合并到本机；云端版本可在设置中点击“更新批注”。');
+      await showMerged(ink,merged);
+      toast('已合并到这台设备的批注里。');
     }catch(error){toast(error.message);}finally{busy=false;}
   };
 }
