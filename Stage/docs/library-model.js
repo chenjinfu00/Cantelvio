@@ -12,7 +12,7 @@ const genres=[
   ['进行曲',/进行曲|\bmarch\b/i],['苏格兰舞曲',/苏格兰舞曲|ecossaise|ecossiase/i],['塔兰泰拉',/塔兰塔拉|塔兰泰拉|tarantell/i],['博莱罗',/博莱罗|bolero/i],
 ];
 const games=/^(原神|鸣潮|崩坏3|崩坏：星穹铁道|崩坏:星穹铁道|崩坏星穹铁道|王者荣耀)$/;
-const editionWords=/总谱|分谱|缩谱|独奏|双钢琴|四手|弦乐队版|木管四重奏|编曲[:：]|改编版|钢琴\s*[+与]\s*小提琴|小提琴\s*[+与]\s*钢琴|Mutopia|IMSLP\d|国家版|水印版|原版|预览版|草稿|工作稿|初稿|精修|定稿|副本|修订|原编号|原 Fontain|^v\d+|版本/i;
+const editionWords=/总谱|分谱|缩谱|独奏|双钢琴|四手|弦乐队版|木管四重奏|编曲[:：]|改编版|钢琴\s*[+与]\s*小提琴|小提琴\s*[+与]\s*钢琴|Mutopia|IMSLP\d|国家版|水印版|原版|预览版|草稿|工作稿|初稿|精修|定稿|副本|修订|原编号|原 Fontain|^v\d+|版本|[A-Za-z\u4e00-\u9fff·]+\s*版$|钢琴改编|钢琴伴奏/i;
 const normalize=s=>s.normalize('NFKC').toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu,'');
 const trim=s=>s.replace(/^[\s,，·—–-]+|[\s,，·—–-]+$/g,'').replace(/\s+/g,' ').trim();
 

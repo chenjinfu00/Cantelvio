@@ -5,13 +5,21 @@ import {createReadStream} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {libraryRelativePath,replaceLibraryAlias} from './library-paths.mjs';
+import {libraryRelativePath,replaceLibraryAlias,classifyLibraryItem} from './library-paths.mjs';
 
 const digest=async file=>{const hash=createHash('sha256');for await(const chunk of createReadStream(file))hash.update(chunk);return hash.digest('hex');};
 const inside=(root,file)=>file===root||file.startsWith(root+path.sep);
 
+export function shelfSizes(items){
+  const works=new Map();
+  for(const item of items){
+    const {browse,work}=classifyLibraryItem(item);
+    works.set(browse,(works.get(browse)||new Set()).add(work.key));
+  }
+  return new Map([...works].map(([browse,keys])=>[browse,keys.size]));
+}
 export function reorganizationPlan(items,files){
-  const moves=[],folders=new Map();
+  const moves=[],folders=new Map(),shelves=shelfSizes(items);
   // macOS and iCloud fold case, so two versions of one work must not disagree on the folder's
   // spelling: the first spelling seen wins for every version that lands in the same folder.
   const settle=relative=>{
@@ -21,7 +29,8 @@ export function reorganizationPlan(items,files){
     return path.join(canonical,path.basename(relative));
   };
   for(const item of items){
-    const current=files[item.id],classified=libraryRelativePath(item,{current});
+    const current=files[item.id];
+    const classified=libraryRelativePath(item,{current,shelfWorks:shelves.get(classifyLibraryItem(item).browse)??Infinity});
     if(!current)throw new Error('Manifest has no path for '+item.id);
     const next=settle(classified.relative);
     if(current!==next)moves.push({id:item.id,title:item.title,current,next,classified});
