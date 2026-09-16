@@ -102,8 +102,10 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   }
   async function save({quiet=false}={}){
     const local=source();
-    if(!local||local.needsFolder||!local.writable)return 0;
+    // Safari cannot write beside the PDF, but it can still finish the durable local draft.
+    // Drain before checking the folder so pagehide/visibilitychange never lose the last strokes.
     await drain?.(ink);
+    if(!local||local.needsFolder||!local.writable)return 0;
     const written=await writeFolderInk(local,await allInkDrafts());
     if(!quiet&&written)toast(`已把 ${written} 首曲子的批注写进曲谱文件夹。`);
     return written;

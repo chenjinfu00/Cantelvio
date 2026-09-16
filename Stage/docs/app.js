@@ -462,11 +462,12 @@ controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score,offlineScore);
 midi=setupMIDI({
   sources:()=>library?.item(state.score?.id)?.sources||[],
-  // A folder on this device answers first; otherwise the private route serves it.
+  // A selected folder is authoritative; only the public demo/import path may use bundled sources.
   url:name=>{
     if(!state.score||!name)return null;
-    return library?.local?.sourceURL(state.score.id,name)
-      ||new URL('./sources/'+state.score.id+'/'+encodeURIComponent(name),import.meta.url).href;
+    const local=library?.local;
+    if(local)return local.sourceURL(state.score.id,name);
+    return new URL('./sources/'+state.score.id+'/'+encodeURIComponent(name),import.meta.url).href;
   },
   toast,
 });

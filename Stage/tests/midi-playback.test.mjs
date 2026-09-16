@@ -66,5 +66,6 @@ test('the reader can reach a source, offline and online alike',async()=>{
   const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
   assert.match(local,/sourceURL:\(id,name\)/,'a MIDI file is read from the folder that holds its score');
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
-  assert.match(app,/library\?\.local\?\.sourceURL/);
+  assert.match(app,/local\.sourceURL/);
+  assert.match(app,/if\(local\)return local\.sourceURL\(state\.score\.id,name\)/,'local mode never falls back to a server MIDI URL');
 });

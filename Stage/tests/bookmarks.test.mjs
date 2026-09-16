@@ -38,6 +38,15 @@ test('bookmarks belong to one score and survive a reload',()=>{
   assert.deepEqual(readBookmarks('score-b',memory).map(item=>item.page),[9],'the other score is untouched');
 });
 
+test('bookmarks share the durable local database with annotations',async()=>{
+  const storage=await fs.readFile(new URL('../docs/storage.js',import.meta.url),'utf8');
+  const bookmarks=await fs.readFile(new URL('../docs/bookmarks.js',import.meta.url),'utf8');
+  assert.match(storage,/indexedDB\.open\(DB_NAME,6\)/);
+  assert.match(storage,/objectStore\('bookmarks'\)/);
+  assert.match(bookmarks,/import \{loadBookmarks,saveBookmarks\} from '\.\/storage\.js'/);
+  assert.match(bookmarks,/saveBookmarks\(scoreId,value\)/);
+});
+
 test('the bar refuses to grow without limit',()=>{
   let list=[];
   for(let page=1;page<=BOOKMARK_LIMIT+5;page++)list=addBookmark(list,page,'');

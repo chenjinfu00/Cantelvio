@@ -65,7 +65,7 @@ def page_one(c):
     c.drawString(30*mm, y - 14*mm, '当前版本时间')
     c.setFillColor(NAVY)
     c.setFont('VoltaSans', 18)
-    c.drawString(30*mm, y - 28*mm, '2026-09-16 23:21 (+02:00)')
+    c.drawString(30*mm, y - 28*mm, '2026-09-16 23:36 (+02:00)')
     y -= 55*mm
     para(c, '启动后看到这一页是正常的。向左侧呼出谱架，选择“本地曲谱文件夹”，指定包含“曲谱库数据”的数据库根目录，之后即可打开你的曲谱。', 22*mm, y, small, 150*mm)
 
@@ -81,7 +81,7 @@ def page_two(c):
     for head, text in [
         ('相对路径', '历史记录保存曲谱相对于本地数据库根目录的路径，例如“原神/璃月/作品/总谱.pdf”。不再依赖 Safari 重启后失效的临时链接。'),
         ('内容校验', '同时保存曲谱内容 ID。路径用于定位，ID 用于确认文件仍是同一份曲谱。'),
-        ('本地优先', '曲谱库打开时优先使用当前选定的本地文件。只有尚未指定数据库时，才停留在这份版本说明页。'),
+        ('本地优先', '曲谱库打开时优先使用当前选定的本地文件；书签和批注统一保存在这台设备的本机数据库。只有尚未指定数据库时，才停留在这份版本说明页。'),
     ]:
         c.setFillColor(PALE)
         c.roundRect(22*mm, y - 22*mm, 8*mm, 8*mm, 2*mm, fill=1, stroke=0)
@@ -115,7 +115,7 @@ def page_three(c):
     c.setFillColor(PALE)
     c.roundRect(22*mm, y - 43*mm, 150*mm, 43*mm, 5*mm, fill=1, stroke=0)
     y -= 12*mm
-    y = para(c, '<b>提示</b><br/>iPad Safari 不允许网页永久保存《文件》App 的文件夹授权。若系统要求重新选择数据库，这是 Safari 的权限限制；选择同一个根目录即可恢复。历史记录不会因此变成失效链接。', 30*mm, y, small, 134*mm)
+    y = para(c, '<b>提示</b><br/>iPad Safari 不允许网页永久保存《文件》App 的文件夹授权。若系统要求重新选择数据库，这是 Safari 的权限限制；选择同一个根目录即可恢复。历史记录不会因此变成失效链接，书签和批注仍保存在这台设备。', 30*mm, y, small, 134*mm)
     para(c, '版本说明结束 · 现在可以打开谱架', 22*mm, 42*mm, small, 150*mm)
 
 def main():

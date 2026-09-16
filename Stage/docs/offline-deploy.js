@@ -46,7 +46,7 @@ export function installShell({onProgress=()=>{},timeout=180000}={}){
     const cleanup=()=>{clearTimeout(timer);navigator.serviceWorker.removeEventListener('message',listen);};
     navigator.serviceWorker.addEventListener('message',listen);
     try{
-      await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2311',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+      await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2336',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
       const registration=await navigator.serviceWorker.ready;
       (registration.active||navigator.serviceWorker.controller)?.postMessage({type:'volta:prime'});
     }catch(error){cleanup();reject(error);}
