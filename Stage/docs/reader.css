@@ -249,3 +249,13 @@ body.performance-mode .top-drawer #score-card,body.performance-mode .top-drawer 
 .bookmark-go:hover,.bookmark-remove:hover{background:#00000010}
 body.performance-mode .top-drawer .bookmark-add{display:none}
 body.performance-mode .top-drawer .bookmark-bar{border:0;padding:6px 0 0}
+/* MIDI listening sits with the score's own information, in the top drawer. */
+.midi-bar{border-top:1px solid var(--line);padding:12px 0 4px}
+.midi-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#midi-play{flex:none;min-height:40px;padding:8px 16px;white-space:nowrap}
+#midi-pick{flex:none;max-width:44%;min-height:40px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+#midi-seek{flex:1;min-width:120px;height:32px;accent-color:var(--accent);background:transparent}
+.midi-time{flex:none;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+#midi-status:empty{display:none}
+#midi-status{margin:8px 0 0;font-size:12px}
+body.performance-mode .top-drawer .midi-bar{display:none}

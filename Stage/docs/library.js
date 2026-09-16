@@ -133,5 +133,5 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       $('metadata-dialog').close();await refresh();toast('资料已保存，分类已更新。');
     }catch(error){$('metadata-status').textContent=error.message;}finally{$('metadata-save').disabled=false;}
   };
-  return {refresh,setCurrent,syncControls};
+  return {refresh,setCurrent,syncControls,item:id=>items.find(entry=>entry.id===id)||null};
 }

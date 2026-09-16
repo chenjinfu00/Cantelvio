@@ -6,7 +6,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {parseRange} from '../docs/offline-range.js';
 const root=path.resolve(fileURLToPath(new URL('../docs/',import.meta.url)));
-const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.pdf':'application/pdf','.svg':'image/svg+xml','.wasm':'application/wasm'};
+const types={'.mid':'audio/midi','.midi':'audio/midi','.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.pdf':'application/pdf','.svg':'image/svg+xml','.wasm':'application/wasm'};
 export async function createPreviewServer({library=null}={}){
   const localRoot=library?await fs.realpath(library):null;
   const manifest=localRoot?JSON.parse(await fs.readFile(path.join(localRoot,'manifest.json'))):null;
@@ -20,7 +20,15 @@ export async function createPreviewServer({library=null}={}){
     let file=path.resolve(root,relative||'index.html'),allowedRoot=root;
     if(localRoot&&relative==='library/catalog.json'){file=path.join(localRoot,'catalog.json');allowedRoot=localRoot;}
     if(localRoot&&/^fit\/[a-f0-9]{64}\.json$/.test(relative)){file=path.join(localRoot,relative);allowedRoot=localRoot;}
-    if(localRoot&&relative.startsWith('scores/')){
+    if(localRoot&&relative.startsWith('sources/')){
+      // A work's MIDI and engraving files live beside its score.
+      const match=/^sources\/([a-f0-9]{64})\/(.+)$/.exec(relative),score=match&&manifest.files[match[1]];
+      if(!score){res.writeHead(404).end();return;}
+      const name=decodeURIComponent(match[2]);
+      if(name.includes('/')||name.includes('\\')||name.startsWith('.')){res.writeHead(403).end();return;}
+      file=path.resolve(localRoot,path.dirname(score),name);allowedRoot=localRoot;
+    }
+    else if(localRoot&&relative.startsWith('scores/')){
       const match=/^scores\/([a-f0-9]{64})\.pdf$/.exec(relative),registered=match&&manifest.files[match[1]];
       if(!registered){res.writeHead(404).end();return;}
       file=path.resolve(localRoot,registered);allowedRoot=localRoot;
