@@ -19,9 +19,9 @@ test('content fit contains complete marked bounds for both orientations without 
   const box=includeInk([.1,.1,.9,.9],[{width:.002,points:[[.03,.98,.5]]}]);assert.ok(box[0]<.03&&box[3]>.98);
 });
 test('all private pages have conservative finite bounds and keep originals unchanged',async t=>{
-  let summary;try{summary=JSON.parse(await fs.readFile(new URL('../.local-library/fit-summary.json',import.meta.url)));}catch{t.skip('Private collection not present');return;}
+  let summary;try{summary=JSON.parse(await fs.readFile(new URL('../本地曲谱/fit-summary.json',import.meta.url)));}catch{t.skip('Private collection not present');return;}
   assert.equal(summary.pdfs,701);assert.equal(summary.pages,11259);assert.deepEqual(summary.failed,[]);
-  for(const name of await fs.readdir(new URL('../.local-library/fit/',import.meta.url))){const value=JSON.parse(await fs.readFile(new URL('../.local-library/fit/'+name,import.meta.url)));for(const page of value.pages)assert.deepEqual(safeBounds(page.bounds),page.bounds);}
+  for(const name of await fs.readdir(new URL('../本地曲谱/fit/',import.meta.url))){const value=JSON.parse(await fs.readFile(new URL('../本地曲谱/fit/'+name,import.meta.url)));for(const page of value.pages)assert.deepEqual(safeBounds(page.bounds),page.bounds);}
 });
 test('pinch clamps minimum to fit and uses a score-local transform, not document zoom',()=>{
   const start={zoom:1,distance:100,left:0,top:0,center:{x:200,y:200}};
@@ -55,6 +55,6 @@ test('annotation update retries conflicts and preserves independent additions an
 });
 test('private Netlify build publishes no static PDFs, secrets, catalogue or local paths',async()=>{
   const base=new URL('../dist/volta/',import.meta.url);try{await fs.access(base);}catch{return;}
-  for(const name of ['scores','library','fit','.env','.local-library'])await assert.rejects(fs.access(new URL(name,base)));
+  for(const name of ['scores','library','fit','.env','本地曲谱'])await assert.rejects(fs.access(new URL(name,base)));
   const manifest=JSON.parse(await fs.readFile(new URL('cache-manifest.json',base)));assert.ok(manifest.every(x=>!x.includes('catalog.json')&&!x.endsWith('.pdf')));
 });

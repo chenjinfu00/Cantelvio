@@ -5,7 +5,7 @@ import fitz
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-LIBRARY = ROOT / '.local-library'
+LIBRARY = ROOT / '本地曲谱'
 VERSION = 1
 
 def page_bounds(page):
