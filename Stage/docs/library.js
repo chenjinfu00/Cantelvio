@@ -67,7 +67,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
   function versionDetails(work,statusNode){
     const details=el('details',null,'work-versions');details.append(el('summary','版本与来源 · '+work.versions.length));
     for(const item of work.versions){
-      const row=el('section',null,'work-version');row.append(el('strong',item.versionLabel),el('p',item.title),el('small',(item.bytes/1048576).toFixed(1)+' MB · '+item.aliases.length+' 个来源'));
+      const row=el('section',null,'work-version');row.append(el('strong',item.versionLabel),el('p',item.title),el('small',(item.bytes/1048576).toFixed(1)+' MB · '+(item.aliases||[]).length+' 个来源'));
       const sources=el('details');sources.append(el('summary','查看原文件位置与资料依据'),el('p',item.metadataStatus+'。'+item.aliases.join('；')));row.append(sources);
       if(!item.available){row.append(button('暂不可用 · 查看位置',()=>{sources.open=true;feedback(statusNode,localLibrary?'请在 Finder 中找到来源文件，下载后点“刷新谱库”。':'这个版本尚未导入谱库存储。');}));}
       else if(item.format==='pdf'){const b=button('打开此版本',()=>openWork(work,item,statusNode));b.dataset.openScore='true';row.append(b);}
