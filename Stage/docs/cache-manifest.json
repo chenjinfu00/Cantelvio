@@ -4,6 +4,7 @@
   "./app.js",
   "./audio.js",
   "./bookmarks.js",
+  "./build-info.js",
   "./capture-worklet.js",
   "./dock-position.js",
   "./fit-layout.js",

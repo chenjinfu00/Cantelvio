@@ -32,6 +32,12 @@ test('a broken or empty store never breaks the shelf',()=>{
   assert.deepEqual(readRecent(store('[{"id":"a","name":"x","at":1}]')).map(i=>i.id),['a']);
 });
 
+test('history keeps the relative folder path when a score is reopened',()=>{
+  let list=rememberScore([],{id:'a',name:'曲.pdf',path:'原神/璃月/曲/曲.pdf',at:1});
+  list=rememberScore(list,{id:'a',name:'曲.pdf',at:2});
+  assert.equal(list[0].path,'原神/璃月/曲/曲.pdf');
+});
+
 test('the reader source prefers a durable offline copy over a stale folder URL',async()=>{
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
   assert.match(app,/const saved=await loadScore\(id\),offlineCopy=await offlineScore\(id\)/);

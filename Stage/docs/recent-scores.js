@@ -6,7 +6,8 @@ export function rememberScore(list,entry,limit=RECENT_LIMIT){
   const kept=(Array.isArray(list)?list:[]).filter(item=>item&&typeof item.id==='string');
   if(!entry||typeof entry.id!=='string'||!entry.id)return kept.slice(0,limit);
   const name=String(entry.name||'').replace(/\.pdf$/i,'').trim()||'未命名曲谱';
-  return [{id:entry.id,name,at:Number.isFinite(entry.at)?entry.at:Date.now()},...kept.filter(item=>item.id!==entry.id)].slice(0,limit);
+  const previous=kept.find(item=>item.id===entry.id),path=typeof entry.path==='string'&&entry.path.trim()?entry.path.trim():previous?.path||null;
+  return [{id:entry.id,name,path,at:Number.isFinite(entry.at)?entry.at:Date.now()},...kept.filter(item=>item.id!==entry.id)].slice(0,limit);
 }
 export function readRecent(storage=localStorage){
   try{const saved=JSON.parse(storage.getItem(RECENT_KEY));return Array.isArray(saved)?saved.filter(item=>item&&typeof item.id==='string').slice(0,RECENT_LIMIT):[];}catch{return [];}

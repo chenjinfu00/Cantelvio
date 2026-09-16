@@ -56,7 +56,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
       }
       if(!local&&localSource&&!localSource.needsFolder&&localSource.missing?.includes?.(version.id))throw new Error('本地曲谱文件夹里没有这份 PDF。请检查文件夹，或重新选择。');
       if(!local)throw new Error('这份曲谱在本地曲谱文件夹里找不到。请在左栏重新选择文件夹。');
-      await openPDF({id:version.id,url:local,workKey:work.key,local:true},version.title,null,message=>feedback(statusNode,message));
+      await openPDF({id:version.id,url:local,path:localSource?.path?.(version.id)||null,workKey:work.key,local:true},version.title,null,message=>feedback(statusNode,message));
       let message='已记住此版本，下次打开这首曲目会继续使用。',failed=false;
       try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
       setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);

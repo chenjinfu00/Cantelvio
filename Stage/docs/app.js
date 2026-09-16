@@ -20,6 +20,7 @@ import {setupMIDI} from './midi-ui.js';
 import {setupLocalFolder} from './local-library.js';
 import {setupAnnotationBackup,drainInk,showMerged} from './annotation-backup.js';
 import {setupInkFolder} from './ink-folder.js';
+import {BUILD_INFO} from './build-info.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
@@ -109,7 +110,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     });
     $('chopin-audio')?.remove();
     await inkFolder?.save({quiet:true}).catch(()=>{});
-    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
+    state.pdf=pdf;state.score=remote?{id,name,remote,path:remote.path||null}:{id,name,buffer,path:buffer.path||null};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
     // Page bounds travel with the collection, in its own folder.
     try{
@@ -122,7 +123,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     $('score-title').textContent=name.replace(/\.pdf$/i,'');$('reader-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库':'本机导入'}`;
     $('empty-state').hidden=true;$('pages').hidden=false;
     onProgress?.('正在显示谱页…');
-    controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);recent?.remember({id,name});shell?.close();offline?.refresh();
+  controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);recent?.remember({id,name,path:state.score.path||library?.local?.path?.(id)||null});shell?.close();offline?.refresh();
   }finally{state.phase=oldPhase;$('render-status').hidden=true;controls();}
 }
 async function renderPages({anchor=null,beforePaint=()=>{}}={}){
@@ -499,10 +500,13 @@ bookmarks=setupBookmarks({
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
   open:async id=>{
-    const saved=await loadScore(id),offlineCopy=await offlineScore(id);
-    if(!saved&&!offlineCopy)throw new Error('这份曲谱尚未保存到本机，请先从曲谱库打开并等待离线保存完成。');
-    const restored=offlineCopy?{...saved,...offlineCopy,remote:offlineCopy.remote}:saved;
-    await openPDF(restored.buffer||restored.remote,restored.name,restored);
+    const saved=await loadScore(id),offlineCopy=await offlineScore(id),item=recent?.items.find(entry=>entry.id===id);
+    if(offlineCopy){const restored={...saved,...offlineCopy,remote:offlineCopy.remote};await openPDF(restored.remote,restored.name,restored);return;}
+    if(saved?.buffer){await openPDF(saved.buffer,saved.name,saved);return;}
+    if(library?.local?.needsFolder)await library.local.reopen?.();
+    const local=library?.local?.url?.(id)||library?.local?.pathURL?.(item?.path);
+    if(!local)throw new Error('这份曲谱尚未保存到本机，请先从曲谱库打开并等待离线保存完成。');
+    await openPDF({id,url:local,path:item?.path||library.local.path?.(id),local:true},item?.name||saved?.name||'未命名曲谱',saved||null);
   },
   onError:error=>toast(errorMessage(error)),
 });
@@ -526,3 +530,4 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
 })().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
 $('demo-button').onclick=()=>$('library-button').click();
+const buildVersion=$('build-version');if(buildVersion)buildVersion.textContent=`版本时间：${BUILD_INFO.label}`;

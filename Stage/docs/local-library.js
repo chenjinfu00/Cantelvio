@@ -109,6 +109,7 @@ export async function readLibrary(picked){
     async fit(id){const file=fitFile(id);return file?readJSON(file):null;},
     // Annotations kept beside the music, when the folder holds any.
     writable,
+    path:id=>files.get(id)?.relative||null,
     async inkFiles(){
       return resolved.filter(entry=>entry.path.startsWith(inkPrefix)&&entry.path.endsWith('.json'))
         .map(entry=>({id:entry.path.slice(inkPrefix.length,-5),read:()=>readJSON(entry.file)}));
@@ -116,6 +117,7 @@ export async function readLibrary(picked){
     writeJSON:writable?(relative,value)=>writeInto(picked.handle,relative,JSON.stringify(value)):null,
     get size(){return files.size;},
     url:id=>{const found=files.get(id);return found?address(found.file):null;},
+    pathURL:relative=>{const file=byPath.get(relative);return file?address(file):null;},
     sourceURL:(id,name)=>{const found=sources.get(id+'/'+name);return found?address(found):null;},
     release(){for(const url of urls.values())URL.revokeObjectURL(url);urls.clear();},
   };
@@ -125,7 +127,7 @@ export async function readLibrary(picked){
 // while every file still has to come from a folder the player picks again.
 export const rememberedLibrary=(catalog,reopen)=>({
   kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,
-  url:()=>null,sourceURL:()=>null,fit:async()=>null,writable:false,inkFiles:async()=>[],writeJSON:null,reopen,release(){},
+  url:()=>null,path:()=>null,pathURL:()=>null,sourceURL:()=>null,fit:async()=>null,writable:false,inkFiles:async()=>[],writeJSON:null,reopen,release(){},
 });
 
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){

@@ -15,7 +15,7 @@ test('the folder name the picker prepends is stripped once, and only when it is 
   assert.deepEqual(relativePaths([{name:'x.pdf'}]).map(i=>i.path),['x.pdf'],'a plain file still has a path');
 });
 
-test('a folder answers with the scores the catalogue asks for, and says which are absent',()=>{
+test('a folder answers with the scores the catalogue asks for, and says which are absent',async()=>{
   const catalog={items:[{id:'a'},{id:'b'},{id:'c'}]};
   const manifest={files:{a:'曲谱/甲/版本一 · a.pdf',b:'曲谱/甲/版本二 · b.pdf',c:'曲谱/乙/丙 · c.pdf'}};
   const entries=[
@@ -30,6 +30,8 @@ test('a folder answers with the scores the catalogue asks for, and says which ar
   assert.deepEqual(missing,['c'],'a score the folder does not hold is reported, not invented');
   assert.deepEqual([...sources.keys()].sort(),['a/曲.mid','a/曲.sib','b/曲.mid','b/曲.sib'],'both versions of a work share its sources');
   assert.equal(files.get('a').relative,'曲谱/甲/版本一 · a.pdf');
+  const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
+  assert.match(local,/pathURL:relative=>\{const file=byPath\.get\(relative\)/,'history can resolve its relative path after the folder is selected');
 });
 
 test('the shelf reads a folder before it reads the network, and the app keeps working offline',async()=>{

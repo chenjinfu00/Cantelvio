@@ -23,6 +23,7 @@ test('app shell has no platform branding or bundled personal records',async()=>{
   assert.equal((await fs.readdir(path.join(root,'scores')).catch(()=>[])).filter(name=>name.endsWith('.pdf')).length,0);
   const html=await read('index.html');assert.doesNotMatch(html,/仅限本人|PRIVATE LIBRARY|曲谱与批注仅你可见/);
   assert.match(html,/翻页点和版本偏好保存在当前浏览器/);
+  assert.match(html,/id="build-version"/);
   assert.match(html,/更新批注/);assert.match(html,/导出全部批注/);
 });
 
@@ -33,6 +34,7 @@ test('entrypoint resources and local module imports resolve beneath the project 
     const text=await read(name);
     for(const [,relative] of text.matchAll(/(?:from|import)\s*['"](\.\/[^'"]+)['"]/g))await fs.access(path.resolve(root,relative));
   }
+  assert.match(await read('app.js'),/BUILD_INFO/,'the app displays a static build time while offline');
   assert.equal(new URL('./library/catalog.json','https://example.test/volta/').pathname,'/volta/library/catalog.json');
 });
 
