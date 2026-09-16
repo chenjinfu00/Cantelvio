@@ -55,7 +55,8 @@ test('the service worker saves the shell in batches and answers the page',async(
   assert.match(sw,/volta:shell-status/);
   assert.doesNotMatch(sw,/cache\.addAll/,'one missing asset must not throw the whole shell away');
   assert.match(sw,/\.shell-state/,'the file list is kept for offline status');
-  assert.match(sw,/volta-shell-20260916-start-d/,'a published shell update gets a fresh cache');
+  assert.match(sw,/volta-shell-20260916-start-e/,'a published shell update gets a fresh cache');
+  assert.match(sw,/skipWaiting/,'a new shell takes control without waiting for an old tab to close');
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="offline-deploy"/);
   assert.match(html,/id="deploy-dialog"/);

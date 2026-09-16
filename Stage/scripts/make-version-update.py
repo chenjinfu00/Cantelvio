@@ -65,7 +65,7 @@ def page_one(c):
     c.drawString(30*mm, y - 14*mm, '当前版本时间')
     c.setFillColor(NAVY)
     c.setFont('VoltaSans', 18)
-    c.drawString(30*mm, y - 28*mm, '2026-09-16 22:57 (+02:00)')
+    c.drawString(30*mm, y - 28*mm, '2026-09-16 23:11 (+02:00)')
     y -= 55*mm
     para(c, '启动后看到这一页是正常的。向左侧呼出谱架，选择“本地曲谱文件夹”，指定包含“曲谱库数据”的数据库根目录，之后即可打开你的曲谱。', 22*mm, y, small, 150*mm)
 

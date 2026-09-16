@@ -39,7 +39,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
   let saving=false,shellReady=false,attempted=null;
   const supported='serviceWorker' in navigator&&'caches' in globalThis&&isSecureContext;
   const ready=supported?(async()=>{
-    await navigator.serviceWorker.register(new URL('./sw.js',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+    await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2311',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
     await Promise.race([navigator.serviceWorker.ready,new Promise((_,reject)=>setTimeout(()=>reject(new Error('离线应用准备较慢，请稍后再试。')),60000))]);
     shellReady=true;return true;
   })():Promise.reject(new Error('离线使用需要 HTTPS 或本机 localhost，并使用支持离线存储的浏览器。'));

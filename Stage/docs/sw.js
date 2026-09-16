@@ -1,5 +1,5 @@
 import {cachedPDFResponse,forgetCachedBody} from './offline-range.js';
-const SHELL='volta-shell-20260916-start-d',PDFS='volta-offline-pdfs-v1';
+const SHELL='volta-shell-20260916-start-e',PDFS='volta-offline-pdfs-v1';
 const root=new URL('./',self.location.href),STATE=new URL('./.shell-state',root).href,BATCH=8;
 
 async function report(message){for(const client of await self.clients.matchAll({includeUncontrolled:true}))client.postMessage(message);}
@@ -38,7 +38,7 @@ async function shellStatus(){
   let done=0;for(const href of files)if(await cache.match(href))done++;
   await report({type:'volta:shell-ready',done,failed:files.length-done,total:files.length});
 }
-self.addEventListener('install',event=>event.waitUntil(primeShell().catch(()=>{})));
+self.addEventListener('install',event=>event.waitUntil((async()=>{await primeShell().catch(()=>{});await self.skipWaiting();})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   for(const name of await caches.keys())if(name.startsWith('volta-shell-')&&name!==SHELL)await caches.delete(name);
   await self.clients.claim();
