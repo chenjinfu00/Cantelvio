@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 export const SOURCE_TYPES=['.mid','.midi','.sib','.mscz','.musicxml','.mxl','.xml','.cap','.mus'];
 
@@ -83,8 +83,8 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const argument=name=>{const at=process.argv.indexOf(name);return at>=0?process.argv[at+1]:null;};
   const sources=path.resolve(argument('--from')||path.join(root,'相关源文件'));
   const apply=process.argv.includes('--apply');
-  const catalog=JSON.parse(await fs.readFile(path.join(library,'catalog.json')));
-  const manifest=JSON.parse(await fs.readFile(path.join(library,'manifest.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(library),'catalog.json')));
+  const manifest=JSON.parse(await fs.readFile(path.join(libraryData(library),'manifest.json')));
   const walk=async folder=>{
     const out=[];
     for(const entry of await fs.readdir(folder,{withFileTypes:true})){
@@ -107,7 +107,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   let moved=0;
   for(const move of plan.matched){
     const from=path.join(sources,move.relative),to=path.join(library,move.target);
-    if(!to.startsWith(path.join(library,'曲谱')+path.sep))continue;
+    if(!to.startsWith(library+path.sep))continue;
     try{await fs.access(to);continue;}catch{}
     await fs.mkdir(path.dirname(to),{recursive:true});
     await fs.rename(from,to);moved++;

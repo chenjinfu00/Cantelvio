@@ -3,6 +3,10 @@
 // or a one-shot folder pick that works everywhere else, iPad included.
 import {saveLocalLibrary,loadLocalLibrary,forgetLocalLibrary} from './storage.js';
 export const LOCAL_DB='volta:local-library:v1';
+// Everything the collection says about itself sits in one named drawer, so that opening the
+// folder shows shelves and nothing else. An older collection kept it all loose at the top.
+export const DATA='曲谱库数据';
+export const dataPaths=name=>[DATA+'/'+name,name];
 
 export const canRemember=()=>typeof window!=='undefined'&&typeof window.showDirectoryPicker==='function';
 
@@ -74,14 +78,20 @@ export async function readLibrary(picked){
     if(!entry)return null;
     return readJSON(await (entry.file instanceof Promise?entry.file:Promise.resolve(entry.file)));
   };
-  const catalog=await find('catalog.json'),manifest=await find('manifest.json');
+  const first=async names=>{for(const name of names){const found=await find(name);if(found)return found;}return null;};
+  const catalog=await first(dataPaths('catalog.json')),manifest=await first(dataPaths('manifest.json'));
   if(!catalog||!manifest)throw new Error('这个文件夹不像曲谱库：缺少 catalog.json 或 manifest.json。');
   const resolved=await Promise.all(entries.map(async entry=>({path:entry.path,file:await (entry.file instanceof Promise?entry.file:Promise.resolve(entry.file))})));
   const {files,sources,missing}=matchLibrary(catalog,manifest,resolved);
+  // Page bounds are what lets a score fill the screen without losing a stave; they belong to the
+  // collection, so a chosen folder answers for them too instead of asking the network.
+  const byPath=new Map(resolved.map(entry=>[entry.path,entry.file]));
+  const fitFile=id=>dataPaths('fit/'+id+'.json').map(path=>byPath.get(path)).find(Boolean)||null;
   const urls=new Map();
   const address=file=>{const known=urls.get(file);if(known)return known;const made=URL.createObjectURL(file);urls.set(file,made);return made;};
   return {
     kind:picked.kind,handle:picked.handle||null,catalog,missing,
+    async fit(id){const file=fitFile(id);return file?readJSON(file):null;},
     get size(){return files.size;},
     url:id=>{const found=files.get(id);return found?address(found.file):null;},
     sourceURL:(id,name)=>{const found=sources.get(id+'/'+name);return found?address(found):null;},
@@ -93,7 +103,7 @@ export async function readLibrary(picked){
 // while every file still has to come from a folder the player picks again.
 export const rememberedLibrary=(catalog,reopen)=>({
   kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,
-  url:()=>null,sourceURL:()=>null,reopen,release(){},
+  url:()=>null,sourceURL:()=>null,fit:async()=>null,reopen,release(){},
 });
 
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){

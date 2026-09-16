@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 export function resolveIds(items,wanted){
   const found=[],missing=[],ambiguous=[];
@@ -32,10 +32,10 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const reasonAt=args.indexOf('--reason'),reason=reasonAt>=0?args[reasonAt+1]||'':'';
   const wanted=args.filter((value,index)=>!value.startsWith('--')&&args[index-1]!=='--reason');
   if(!wanted.length){console.error('用法: node scripts/retire-scores.mjs <id 或 id 前缀> [...] [--reason "原因"] [--apply]');process.exit(1);}
-  const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json')));
-  const manifest=JSON.parse(await fs.readFile(path.join(root,'manifest.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(root),'catalog.json')));
+  const manifest=JSON.parse(await fs.readFile(path.join(libraryData(root),'manifest.json')));
   let retired={version:1,items:{}};
-  try{retired=JSON.parse(await fs.readFile(path.join(root,'retired.json')));}catch{}
+  try{retired=JSON.parse(await fs.readFile(path.join(libraryData(root),'retired.json')));}catch{}
   const plan=retirePlan(catalog,manifest,wanted);
   for(const item of plan.missing)console.error('找不到:',item);
   for(const item of plan.ambiguous)console.error('前缀不唯一:',item.needle,item.ids.join(' '));
@@ -49,7 +49,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
       await fs.mkdir(path.dirname(target),{recursive:true});
       await fs.rename(source,target).catch(async error=>{if(error.code!=='ENOENT')throw error;});
     }
-    const fit=path.join(root,'fit',move.id+'.json');
+    const fit=path.join(libraryData(root),'fit',move.id+'.json');
     await fs.mkdir(path.join(root,'retired','fit'),{recursive:true});
     await fs.rename(fit,path.join(root,'retired','fit',move.id+'.json')).catch(()=>{});
     delete manifest.files[move.id];
@@ -58,8 +58,8 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   catalog.items=plan.keep;
   if(catalog.summary){catalog.summary.pdfs=plan.keep.length;catalog.summary.unique=plan.keep.length;catalog.summary.bytes=plan.keep.reduce((sum,item)=>sum+(Number(item.bytes)||0),0);}
   catalog.updatedAt=new Date().toISOString();
-  await fs.writeFile(path.join(root,'catalog.json'),JSON.stringify(catalog,null,2));
-  await fs.writeFile(path.join(root,'manifest.json'),JSON.stringify(manifest,null,2));
-  await fs.writeFile(path.join(root,'retired.json'),JSON.stringify(retired,null,2));
+  await fs.writeFile(path.join(libraryData(root),'catalog.json'),JSON.stringify(catalog,null,2));
+  await fs.writeFile(path.join(libraryData(root),'manifest.json'),JSON.stringify(manifest,null,2));
+  await fs.writeFile(path.join(libraryData(root),'retired.json'),JSON.stringify(retired,null,2));
   console.log('已完成。重新运行 scripts/upload-private-library.mjs 后，这些曲谱会从 app 里消失。');
 }

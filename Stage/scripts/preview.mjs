@@ -5,12 +5,12 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
 import {parseRange} from '../docs/offline-range.js';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 const root=path.resolve(fileURLToPath(new URL('../docs/',import.meta.url)));
 const types={'.mid':'audio/midi','.midi':'audio/midi','.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.pdf':'application/pdf','.svg':'image/svg+xml','.wasm':'application/wasm'};
 export async function createPreviewServer({library=null}={}){
   const localRoot=library?await fs.realpath(library):null;
-  const manifest=localRoot?JSON.parse(await fs.readFile(path.join(localRoot,'manifest.json'))):null;
+  const manifest=localRoot?JSON.parse(await fs.readFile(path.join(libraryData(localRoot),'manifest.json'))):null;
   return http.createServer(async(req,res)=>{
   try{
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(405).end();return;}
@@ -19,7 +19,7 @@ export async function createPreviewServer({library=null}={}){
     if(!url.pathname.startsWith('/volta/')){res.writeHead(302,{Location:'/volta/'}).end();return;}
     if(relative.split('/').some(segment=>segment.startsWith('.'))){res.writeHead(403).end();return;}
     let file=path.resolve(root,relative||'index.html'),allowedRoot=root;
-    if(localRoot&&relative==='library/catalog.json'){file=path.join(localRoot,'catalog.json');allowedRoot=localRoot;}
+    if(localRoot&&relative==='library/catalog.json'){file=path.join(libraryData(localRoot),'catalog.json');allowedRoot=localRoot;}
     if(localRoot&&/^fit\/[a-f0-9]{64}\.json$/.test(relative)){file=path.join(localRoot,relative);allowedRoot=localRoot;}
     if(localRoot&&relative.startsWith('sources/')){
       // A work's MIDI and engraving files live beside its score.

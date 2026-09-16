@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 // Leftovers from downloading the same file twice, or from a copy in Finder.
 export function cleanTitle(title){
@@ -44,8 +44,8 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   for(const pair of args.filter(value=>value.startsWith('--set='))){
     const [id,...rest]=pair.slice('--set='.length).split('=');overrides[id]=rest.join('=');
   }
-  const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json')));
-  const manifest=JSON.parse(await fs.readFile(path.join(root,'manifest.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(root),'catalog.json')));
+  const manifest=JSON.parse(await fs.readFile(path.join(libraryData(root),'manifest.json')));
   const changes=retitlePlan(catalog.items,{overrides});
   const titles=changes.filter(change=>change.from!==change.to);
   for(const change of titles)console.log(`  ${change.id.slice(0,8)}  ${change.from}\n        → ${change.to}`);
@@ -70,7 +70,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
     item.composer=change.composerTo;
   }
   catalog.updatedAt=new Date().toISOString();
-  await fs.writeFile(path.join(root,'catalog.json'),JSON.stringify(catalog,null,2));
-  await fs.writeFile(path.join(root,'manifest.json'),JSON.stringify(manifest,null,2));
+  await fs.writeFile(path.join(libraryData(root),'catalog.json'),JSON.stringify(catalog,null,2));
+  await fs.writeFile(path.join(libraryData(root),'manifest.json'),JSON.stringify(manifest,null,2));
   console.log('已完成。重新运行 scripts/upload-private-library.mjs 后，app 里的名字会跟着更新。');
 }

@@ -113,7 +113,13 @@ async function openPDF(buffer,name,restored=null,onProgress){
     $('chopin-audio')?.remove();
     state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
-    try{const response=await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)});if(response.ok){const profile=await response.json();if(profile.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;}}catch{}
+    // A folder chosen on this device carries its own page bounds; the network is the fallback.
+    try{
+      const profile=await library?.local?.fit?.(id)
+        ||await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)})
+          .then(response=>response.ok?response.json():null).catch(()=>null);
+      if(profile?.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;
+    }catch{}
     readingPosition.setScore(id);
     if(saved?.reference){try{state.reference=validateReference(saved.reference,pdf.numPages);}catch{toast('旧的学习记录需要重新建立；PDF 已恢复。');}}
     state.page=Math.max(1,Math.min(pdf.numPages,saved?.page||1));

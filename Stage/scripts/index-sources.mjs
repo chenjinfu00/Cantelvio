@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 export const PLAYABLE=new Set(['.mid','.midi']);
 export const KEEPABLE=new Set([...PLAYABLE,'.sib','.mscz','.musicxml','.mxl','.xml']);
@@ -23,8 +23,8 @@ export function indexSources(items,files,folderFiles){
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const library=libraryRoot(),apply=process.argv.includes('--apply');
-  const catalog=JSON.parse(await fs.readFile(path.join(library,'catalog.json')));
-  const manifest=JSON.parse(await fs.readFile(path.join(library,'manifest.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(library),'catalog.json')));
+  const manifest=JSON.parse(await fs.readFile(path.join(libraryData(library),'manifest.json')));
   const folders=new Map();
   for(const file of Object.values(manifest.files||{})){
     const folder=path.dirname(file);
@@ -42,6 +42,6 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
     if(change.sources.length)item.sources=change.sources;else delete item.sources;
   }
   catalog.updatedAt=new Date().toISOString();
-  await fs.writeFile(path.join(library,'catalog.json'),JSON.stringify(catalog,null,2));
+  await fs.writeFile(path.join(libraryData(library),'catalog.json'),JSON.stringify(catalog,null,2));
   console.log('目录已更新。');
 }

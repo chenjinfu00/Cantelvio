@@ -1,3 +1,4 @@
+import {libraryData} from './library-root.mjs';
 // Byte-preserving local collection builder. Nothing is written under docs/.
 import fs from 'node:fs/promises';
 import {createReadStream,constants} from 'node:fs';
@@ -12,9 +13,9 @@ const sourceDir=path.resolve(process.argv[2]||'../Score_Turner_Web/local_data');
 const output=path.resolve(import.meta.dirname,'../../本地曲谱');
 const index=JSON.parse(await fs.readFile(path.join(sourceDir,'library-private-index.json')));
 const imports=JSON.parse(await fs.readFile(path.join(sourceDir,'piascore-import-20260912/pdf-inspection.json')));
-const overrides=JSON.parse(await fs.readFile(path.join(output,'metadata.json')));
+const overrides=JSON.parse(await fs.readFile(path.join(libraryData(output),'metadata.json')));
 // Scores retired on purpose never come back through a rebuild.
-let retired={items:{}};try{retired=JSON.parse(await fs.readFile(path.join(output,'retired.json')));}catch{}
+let retired={items:{}};try{retired=JSON.parse(await fs.readFile(path.join(libraryData(output),'retired.json')));}catch{}
 const isRetired=id=>Object.hasOwn(retired.items||{},id);
 const digest=async file=>{const h=createHash('sha256');for await(const chunk of createReadStream(file))h.update(chunk);return h.digest('hex');};
 const candidates=new Map();
@@ -54,7 +55,8 @@ for(const [id,entry] of candidates){
 }
 const works=groupWorks(items),summary={pdfs:items.length,unique:items.length,pending:0,works:works.length,existing:oldCount,added:newCount,piascoreCopies:imports.length,piascoreUnique:new Set(imports.map(x=>x.sha256)).size,bytes:items.reduce((sum,x)=>sum+x.bytes,0)};
 const catalog={version:1,localLibrary:true,publicLibrary:false,updatedAt:new Date().toISOString(),summary,items};
-await fs.writeFile(path.join(output,'catalog.json'),JSON.stringify(catalog,null,2));
-await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({version:1,files},null,2));
-await fs.writeFile(path.join(output,'merge-audit.json'),JSON.stringify({summary,audit},null,2));
+await fs.mkdir(libraryData(output),{recursive:true});
+await fs.writeFile(path.join(libraryData(output),'catalog.json'),JSON.stringify(catalog,null,2));
+await fs.writeFile(path.join(libraryData(output),'manifest.json'),JSON.stringify({version:1,files},null,2));
+await fs.writeFile(path.join(libraryData(output),'merge-audit.json'),JSON.stringify({summary,audit},null,2));
 console.log(JSON.stringify(summary));

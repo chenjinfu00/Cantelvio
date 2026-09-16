@@ -2,13 +2,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import {getStore} from '@netlify/blobs';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 const root=path.resolve(import.meta.dirname,'..'),library=libraryRoot();
 const {siteId}=JSON.parse(await fs.readFile(path.join(root,'.netlify/state.json')));
 const auth=JSON.parse(await fs.readFile(path.join(os.homedir(),'Library/Preferences/netlify/config.json')));
 const store=getStore('volta-pdf-chunks',{siteID:siteId,token:auth.users[auth.userId].auth.token});
-const manifest=JSON.parse(await fs.readFile(path.join(library,'manifest.json')));
-const missing=JSON.parse(await fs.readFile(path.join(library,'cloud-missing-chunks.json')));
+const manifest=JSON.parse(await fs.readFile(path.join(libraryData(library),'manifest.json')));
+const missing=JSON.parse(await fs.readFile(path.join(libraryData(library),'cloud-missing-chunks.json')));
 for(const item of missing){
   if(!/^[a-f0-9]{64}$/.test(item.id)||!Number.isInteger(item.index)||item.index<0)throw Error('Invalid repair target');
   const file=path.resolve(library,manifest.files[item.id]);if(!file.startsWith(library+path.sep))throw Error('Invalid source');

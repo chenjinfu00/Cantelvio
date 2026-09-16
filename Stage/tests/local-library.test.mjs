@@ -58,3 +58,25 @@ test('a remembered catalogue draws the shelf with no network and asks for the fo
   const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
   assert.match(library,/localSource\?\.needsFolder\)await localSource\.reopen/,'the shelf asks before it gives up');
 });
+
+test('the collection describes itself from one named drawer, and an older one still opens',async()=>{
+  const {dataPaths,DATA}=await import('../docs/local-library.js');
+  assert.deepEqual(dataPaths('catalog.json'),[DATA+'/catalog.json','catalog.json'],'the drawer is read first, the old top level second');
+  assert.deepEqual(dataPaths('fit/abc.json'),[DATA+'/fit/abc.json','fit/abc.json']);
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/library\?\.local\?\.fit\?\.\(id\)/,'page bounds come from the folder before the network');
+  const paths=await fs.readFile(new URL('../scripts/library-paths.mjs',import.meta.url),'utf8');
+  assert.match(paths,/const folders=\[segment\(browse\)\]/,'shelves sit at the top of the folder');
+});
+
+test('a generated filename is told apart from the name a score arrived with',async()=>{
+  const {generatedAlias,replaceLibraryAlias}=await import('../scripts/library-paths.mjs');
+  const id='abcdef01'+'0'.repeat(56);
+  assert.equal(generatedAlias('原神/璃月/神女劈观/总谱 · abcdef01.pdf',id),true);
+  assert.equal(generatedAlias('曲谱/原神/旧布局.pdf',id),true,'the previous layout is still recognised');
+  assert.equal(generatedAlias('神女劈观（原版）.pdf',id),false,'a downloaded name is not mistaken for ours');
+  assert.equal(generatedAlias('别人的 · 12345678.pdf',id),false,'another score fingerprint is not ours either');
+  assert.deepEqual(
+    replaceLibraryAlias(['原神/旧地区/神女劈观/旧名 · abcdef01.pdf','神女劈观.pdf'],'原神/璃月/神女劈观/总谱 · abcdef01.pdf'),
+    ['原神/璃月/神女劈观/总谱 · abcdef01.pdf','神女劈观.pdf']);
+});

@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {regionFor,REGIONS} from './region-rules.mjs';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 export function regionPlan(items,{overrides={},composer='原神'}={}){
   const changes=[],undecided=[];
@@ -25,7 +25,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   for(const pair of args.filter(value=>value.startsWith('--set='))){
     const [id,...rest]=pair.slice('--set='.length).split('=');overrides[id]=rest.join('=');
   }
-  const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(root),'catalog.json')));
   const {changes,undecided}=regionPlan(catalog.items,{overrides});
   const counts={};for(const change of changes)counts[change.region]=(counts[change.region]||0)+1;
   for(const [region,count] of Object.entries(counts).sort((a,b)=>b[1]-a[1]))console.log(`  ${region}: ${count} 份`);
@@ -34,6 +34,6 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const byId=new Map(catalog.items.map(item=>[item.id,item]));
   for(const change of changes)byId.get(change.id).region=change.region;
   catalog.updatedAt=new Date().toISOString();
-  await fs.writeFile(path.join(root,'catalog.json'),JSON.stringify(catalog,null,2));
+  await fs.writeFile(path.join(libraryData(root),'catalog.json'),JSON.stringify(catalog,null,2));
   console.log(`已写入 ${changes.length} 份的地区。`);
 }

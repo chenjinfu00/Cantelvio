@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 // Every key a single score owns in the two blob stores.
 export function purgeKeys(id,meta){
@@ -22,10 +22,10 @@ export function pruneCheckpoint(lines,ids){
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const root=path.resolve(import.meta.dirname,'..'),library=libraryRoot();
   const apply=process.argv.includes('--apply'),alsoLocal=process.argv.includes('--local');
-  const retired=JSON.parse(await fs.readFile(path.join(library,'retired.json')));
+  const retired=JSON.parse(await fs.readFile(path.join(libraryData(library),'retired.json')));
   const ids=Object.keys(retired.items||{});
   if(!ids.length){console.log('没有已退役的曲谱。');process.exit(0);}
-  const catalog=JSON.parse(await fs.readFile(path.join(library,'catalog.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(library),'catalog.json')));
   const live=new Set(catalog.items.map(item=>item.id));
   const targets=ids.filter(id=>!live.has(id));
   if(targets.length!==ids.length)console.log(`跳过 ${ids.length-targets.length} 份：它们又回到了目录里。`);
@@ -48,7 +48,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   }
   console.log(`${targets.length} 份 · ${blobs} 个对象 · ${(bytes/1048576).toFixed(1)} MB${missing?` · ${missing} 份云端本就没有`:''}`);
   if(!apply){console.log('这是预览。确认后加 --apply 执行（云端删除不可撤销）。');process.exit(0);}
-  const checkpoint=path.join(library,'upload-'+siteId+'.jsonl');
+  const checkpoint=path.join(libraryData(library),'upload-'+siteId+'.jsonl');
   try{
     const lines=(await fs.readFile(checkpoint,'utf8')).split('\n');
     const kept=pruneCheckpoint(lines,targets);

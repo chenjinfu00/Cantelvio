@@ -4,17 +4,17 @@ import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {getStore} from '@netlify/blobs';
 import {streamQueue} from './stream-queue.mjs';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 const root=path.resolve(import.meta.dirname,'..'),library=libraryRoot();
 const {siteId}=JSON.parse(await fs.readFile(path.join(root,'.netlify/state.json')));
 const config=JSON.parse(await fs.readFile(path.join(os.homedir(),'Library/Preferences/netlify/config.json')));
 const token=config.users?.[config.userId]?.auth?.token;
 if(!siteId||!token)throw Error('Run the official Netlify login and link commands first.');
 const store=getStore('volta-files',{siteID:siteId,token}),chunks=getStore('volta-pdf-chunks',{siteID:siteId,token});
-const manifest=JSON.parse(await fs.readFile(path.join(library,'manifest.json'))),catalog=JSON.parse(await fs.readFile(path.join(library,'catalog.json')));
+const manifest=JSON.parse(await fs.readFile(path.join(libraryData(library),'manifest.json'))),catalog=JSON.parse(await fs.readFile(path.join(libraryData(library),'catalog.json')));
 const selected=catalog.items;
 const chunkSize=2*1024*1024;let count=0,total=0,stopping=false;
-const checkpoint=path.join(library,'upload-'+siteId+'.jsonl'),completed=new Set();
+const checkpoint=path.join(libraryData(library),'upload-'+siteId+'.jsonl'),completed=new Set();
 try{for(const line of (await fs.readFile(checkpoint,'utf8')).split('\n'))try{completed.add(JSON.parse(line).id);}catch{}}catch{}
 let writer=Promise.resolve();const failures=[];
 process.on('SIGTERM',()=>{stopping=true;});process.on('SIGINT',()=>{stopping=true;});
@@ -31,7 +31,7 @@ await streamQueue(selected,async item=>{
     if(hash.digest('hex')!==item.id)throw Error('Source hash mismatch');
     await store.setJSON(item.id,{id:item.id,bytes:item.bytes,chunkSize,chunks:index});
   }
-  const fit=JSON.parse(await fs.readFile(path.join(library,'fit',item.id+'.json')));await store.setJSON('fit-'+item.id,fit);
+  const fit=JSON.parse(await fs.readFile(path.join(libraryData(library),'fit',item.id+'.json')));await store.setJSON('fit-'+item.id,fit);
   writer=writer.then(()=>fs.appendFile(checkpoint,JSON.stringify({id:item.id,bytes:item.bytes})+'\n'));await writer;return;
   }catch(error){if(attempt===2||error.status&&error.status!==429&&error.status<500)throw error;await new Promise(resolve=>setTimeout(resolve,1000*2**attempt));}
 },{workers:6,shouldStop:()=>stopping,onResult:(_,item)=>{count++;total+=item.bytes;if(count%10===0||count===selected.length)console.log(`Stored ${count}/${selected.length} unique PDFs · ${(total/1048576).toFixed(1)} MiB`);},onError:(error,item)=>{failures.push({id:item.id,status:error.status,message:error.message});if([401,403].includes(error.status))stopping=true;console.error(`Upload deferred ${item.id.slice(0,8)} (${error.status||error.name})`);}});
@@ -48,7 +48,7 @@ for(const item of selected)for(const source of item.sources||[]){
   await store.set(key,body,{metadata:{bytes:body.byteLength}});sources++;
 }
 if(sources)console.log(`Uploaded ${sources} MIDI or engraving sources.`);
-if(failures.length||stopping){await fs.writeFile(path.join(library,'upload-errors.json'),JSON.stringify(failures,null,2));throw Error('Upload incomplete; checkpoints preserved. Catalogue was not published.');}
+if(failures.length||stopping){await fs.writeFile(path.join(libraryData(library),'upload-errors.json'),JSON.stringify(failures,null,2));throw Error('Upload incomplete; checkpoints preserved. Catalogue was not published.');}
 // A completed catalogue is the publication boundary; never expose a partial library.
 const cloud={version:catalog.version,localLibrary:false,cloudLibrary:true,summary:{pdfs:selected.length,bytes:total,omittedLarge:catalog.items.length-selected.length},items:selected.map(item=>({...item,aliases:[item.title],category:'私人谱库'}))};
 await store.setJSON('catalog',cloud);

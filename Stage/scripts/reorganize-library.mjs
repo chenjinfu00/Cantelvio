@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {libraryRelativePath,replaceLibraryAlias,classifyLibraryItem} from './library-paths.mjs';
-import {libraryRoot} from './library-root.mjs';
+import {libraryRoot,libraryData} from './library-root.mjs';
 
 const digest=async file=>{const hash=createHash('sha256');for await(const chunk of createReadStream(file))hash.update(chunk);return hash.digest('hex');};
 const inside=(root,file)=>file===root||file.startsWith(root+path.sep);
@@ -48,9 +48,9 @@ async function pruneEmpty(folder,keep){
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const root=libraryRoot(),apply=process.argv.includes('--apply');
-  const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'))),manifest=JSON.parse(await fs.readFile(path.join(root,'manifest.json')));
+  const catalog=JSON.parse(await fs.readFile(path.join(libraryData(root),'catalog.json'))),manifest=JSON.parse(await fs.readFile(path.join(libraryData(root),'manifest.json')));
   const moves=reorganizationPlan(catalog.items,manifest.files||{}),counts={};
-  for(const move of moves){const group=path.dirname(move.next).split(path.sep).slice(1).join(' / ');counts[group]=(counts[group]||0)+1;}
+  for(const move of moves){const group=path.dirname(move.next).split(path.sep).join(' / ');counts[group]=(counts[group]||0)+1;}
   for(const [group,count] of Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh-CN')))console.log(`  ${count}  ${group}`);
   console.log(`${moves.length} / ${catalog.items.length} 份需要移动或改名。`);
   if(!apply){console.log('这是预览。确认后加 --apply 执行。');process.exit(0);}
@@ -71,13 +71,13 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
     item.category=move.classified.browse;item.aliases=replaceLibraryAlias(item.aliases,move.next);
   }
   catalog.updatedAt=new Date().toISOString();
-  await fs.writeFile(path.join(root,'catalog.json'),JSON.stringify(catalog,null,2));
-  await fs.writeFile(path.join(root,'manifest.json'),JSON.stringify(manifest,null,2));
+  await fs.writeFile(path.join(libraryData(root),'catalog.json'),JSON.stringify(catalog,null,2));
+  await fs.writeFile(path.join(libraryData(root),'manifest.json'),JSON.stringify(manifest,null,2));
   try{
-    const auditPath=path.join(root,'merge-audit.json'),audit=JSON.parse(await fs.readFile(auditPath));
+    const auditPath=path.join(libraryData(root),'merge-audit.json'),audit=JSON.parse(await fs.readFile(auditPath));
     for(const record of audit.audit||[])if(manifest.files[record.id])record.target=manifest.files[record.id];
     await fs.writeFile(auditPath,JSON.stringify(audit,null,2));
   }catch{}
-  await pruneEmpty(path.join(root,'曲谱'),path.join(root,'曲谱'));
+  await pruneEmpty(root,root);
   console.log(`已整理 ${moves.length} 份；目录、manifest、catalog 与审计记录已同步。`);
 }
