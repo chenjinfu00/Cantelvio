@@ -64,11 +64,11 @@ test('performance requests fullscreen within entry click; fallback and manual co
   let now=0;const guard=new ManualTurnGuard(()=>now);guard.manual();const revision=guard.revision;assert.equal(guard.permits(),false);now=2600;assert.equal(guard.permits(),true);guard.manual();now=5200;assert.equal(guard.permits(revision),false);
   assert.equal(performanceKey({key:'ArrowRight',repeat:true}),'ignore');
 });
-test('offline shell includes all local modules, PDF engine resources and no scores or remote font requests',async()=>{
+test('offline shell includes all local modules, the built-in update PDF and no score PDFs',async()=>{
   const root=new URL('../docs/',import.meta.url),manifest=JSON.parse(await fs.readFile(new URL('cache-manifest.json',root),'utf8'));
   for(const path of ['./index.html','./reader.css','./app.js','./reader-shell.js','./offline.js','./local-library.js','./vendor/pdf.worker.mjs'])assert.ok(manifest.includes(path),path);
   assert.ok(manifest.some(p=>p.includes('/cmaps/')));assert.ok(manifest.some(p=>p.includes('/wasm/')));
-  for(const path of manifest){assert.ok(path.startsWith('./'));assert.ok(!path.endsWith('.pdf'));await fs.access(new URL(path,root));}
+  for(const path of manifest){assert.ok(path.startsWith('./'));if(path.endsWith('.pdf'))assert.equal(path,'./version-update.pdf');await fs.access(new URL(path,root));}
   assert.doesNotMatch(await fs.readFile(new URL('style.css',root),'utf8'),/@import/);
 });
 test('service worker serves offline navigation and PDF ranges within /volta only',async()=>{

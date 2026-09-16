@@ -40,15 +40,13 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
       const previous=explicitVersion?null:await preferences.load(work.key);
       const version=explicitVersion||chooseVersion(work,previous);
       if(!version||!version.available)throw new Error(localLibrary?'这首曲目暂无可打开的 PDF。请先下载对应文件，再刷新谱库。':'这首曲目暂无已导入的 PDF。');
-      // A folder remembered only as a catalogue can show the shelf offline but holds no files.
-      // Prefer a durable PDF already stored on this device; only an uncached score asks for the
-      // folder again. This is what makes the iPad Home Screen app useful after a restart.
-      // The folder's blob URL is useful for the first read, but it is slower on iPad and dies
-      // after a restart. Once the same content is cached, use the stable offline URL first.
-      const offline=await getOffline(version.id).catch(()=>null);
-      let local=offline?null:localSource?await localSource.url(version.id):null;
-      if(!local&&!offline&&localSource?.needsFolder)await localSource.reopen?.();
+      // The selected folder is the source of truth. A remembered catalogue has no file handles,
+      // so iPad asks for the same root once before opening a score. Old device caches remain only
+      // as a backwards-compatible fallback and are never preferred over the local file.
+      let local=localSource?await localSource.url(version.id):null;
+      if(!local&&localSource?.needsFolder)await localSource.reopen?.();
       local=localSource?await localSource.url(version.id):null;
+      const offline=!local?await getOffline(version.id).catch(()=>null):null;
       if(!local&&offline){
         await openPDF(offline.remote,version.title,null,message=>feedback(statusNode,message));
         let message='已从这台设备的离线副本打开；已记住此版本。',failed=false;

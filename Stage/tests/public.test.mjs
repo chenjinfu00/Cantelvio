@@ -35,6 +35,8 @@ test('entrypoint resources and local module imports resolve beneath the project 
     for(const [,relative] of text.matchAll(/(?:from|import)\s*['"](\.\/[^'"]+)['"]/g))await fs.access(path.resolve(root,relative));
   }
   assert.match(await read('app.js'),/BUILD_INFO/,'the app displays a static build time while offline');
+  assert.match(await read('app.js'),/VERSION_UPDATE/,'the reader has a built-in version update score');
+  await fs.access(path.join(root,'version-update.pdf'));
   assert.equal(new URL('./library/catalog.json','https://example.test/volta/').pathname,'/volta/library/catalog.json');
 });
 

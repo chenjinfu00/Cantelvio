@@ -20,7 +20,7 @@ import {setupMIDI} from './midi-ui.js';
 import {setupLocalFolder} from './local-library.js';
 import {setupAnnotationBackup,drainInk,showMerged} from './annotation-backup.js';
 import {setupInkFolder} from './ink-folder.js';
-import {BUILD_INFO} from './build-info.js';
+import {BUILD_INFO,VERSION_UPDATE} from './build-info.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
@@ -110,7 +110,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     });
     $('chopin-audio')?.remove();
     await inkFolder?.save({quiet:true}).catch(()=>{});
-    state.pdf=pdf;state.score=remote?{id,name,remote,path:remote.path||null}:{id,name,buffer,path:buffer.path||null};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
+    state.pdf=pdf;state.score=remote?{id,name,remote,path:remote.path||null,local:!!remote.local,system:!!remote.system}:{id,name,buffer,path:buffer.path||null,local:false,system:false};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
     // Page bounds travel with the collection, in its own folder.
     try{
@@ -123,7 +123,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     $('score-title').textContent=name.replace(/\.pdf$/i,'');$('reader-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库':'本机导入'}`;
     $('empty-state').hidden=true;$('pages').hidden=false;
     onProgress?.('正在显示谱页…');
-  controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);recent?.remember({id,name,path:state.score.path||library?.local?.path?.(id)||null});shell?.close();offline?.refresh();
+  controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);if(!state.score.system)recent?.remember({id,name,path:state.score.path||library?.local?.path?.(id)||null});shell?.close();offline?.refresh();
   }finally{state.phase=oldPhase;$('render-status').hidden=true;controls();}
 }
 async function renderPages({anchor=null,beforePaint=()=>{}}={}){
@@ -471,8 +471,8 @@ midi=setupMIDI({
   toast,
 });
 inkFolder=setupInkFolder({ink,library,toast,canRun:()=>state.phase==='idle'&&!performing(),drain:drainInk,showMerged});
-const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();emptyState();}});
-localFolder?.restore?.().catch(()=>{});
+  const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();emptyState();}});
+  const localRestore=localFolder?.restore?.()||Promise.resolve(null);
 // The first thing a reader sees should be the thing that fills the shelf. Once it is filled,
 // the same place becomes the way back into it.
 function emptyState(){
@@ -500,13 +500,14 @@ bookmarks=setupBookmarks({
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
   open:async id=>{
-    const saved=await loadScore(id),offlineCopy=await offlineScore(id),item=recent?.items.find(entry=>entry.id===id);
-    if(offlineCopy){const restored={...saved,...offlineCopy,remote:offlineCopy.remote};await openPDF(restored.remote,restored.name,restored);return;}
+    const saved=await loadScore(id),item=recent?.items.find(entry=>entry.id===id);
     if(saved?.buffer){await openPDF(saved.buffer,saved.name,saved);return;}
     if(library?.local?.needsFolder)await library.local.reopen?.();
     const local=library?.local?.url?.(id)||library?.local?.pathURL?.(item?.path);
-    if(!local)throw new Error('这份曲谱尚未保存到本机，请先从曲谱库打开并等待离线保存完成。');
-    await openPDF({id,url:local,path:item?.path||library.local.path?.(id),local:true},item?.name||saved?.name||'未命名曲谱',saved||null);
+    if(local){await openPDF({id,url:local,path:item?.path||library.local.path?.(id),local:true},item?.name||saved?.name||'未命名曲谱',saved||null);return;}
+    const offlineCopy=await offlineScore(id);
+    if(offlineCopy){const restored={...saved,...offlineCopy,remote:offlineCopy.remote};await openPDF(restored.remote,restored.name,restored);return;}
+    throw new Error('这份曲谱尚未在当前本地数据库中找到，请重新选择数据库后再试。');
   },
   onError:error=>toast(errorMessage(error)),
 });
@@ -520,13 +521,15 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
   const query=new URLSearchParams(location.search);
   // Library entry is a recovery route: do not reopen a heavy last PDF first.
   if(query.get('library')==='1'){$('library-button').click();return;}
+  await localRestore.catch(()=>null);
   const saved=await loadScore();
-  if(saved){
-    const offlineCopy=await offlineScore(saved.id),restored=offlineCopy?{...saved,...offlineCopy,remote:offlineCopy.remote}:saved;
-    // A stale folder blob must not prevent the reader from starting. If no durable copy exists,
-    // leave the shelf available and let the reader explain that the folder needs reconnecting.
-    try{await openPDF(restored.buffer||restored.remote,restored.name,restored);}catch(error){toast('上次曲谱的本机副本不可用，请从曲谱库重新打开；应用仍可继续使用。');}
-  }
+  if(saved?.system){try{await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,saved);}catch{toast('版本说明页暂时无法打开。');}}
+  else if(saved?.buffer){try{await openPDF(saved.buffer,saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
+  else if(saved&&library?.local&&!library.local.needsFolder){
+    const local=library.local.url?.(saved.id)||library.local.pathURL?.(saved.path);
+    if(local){try{await openPDF({id:saved.id,url:local,path:saved.path||library.local.path?.(saved.id),local:true},saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
+    else await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,null).catch(()=>{});
+  }else await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,null).catch(()=>{});
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
 })().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
 $('demo-button').onclick=()=>$('library-button').click();

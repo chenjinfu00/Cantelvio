@@ -81,7 +81,9 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
         remove.onclick=async()=>{try{if(!confirm('仅移除这台设备上下载的 PDF？原谱和手写批注不会删除。'))return;const cache=await caches.open(PDFS);await cache.delete(item.url);await cache.delete(metaURL(item.id));navigator.serviceWorker?.controller?.postMessage({type:'volta:forget',url:item.url});await refresh();}catch{toast('离线副本暂时无法移除，请重试。');}};
         row.append(title,open,remove);list.append(row);
       }
-      if(score&&shellReady&&!saved&&!saving&&navigator.onLine&&settings().autoOffline&&attempted!==score.id){attempted=score.id;setTimeout(()=>{if(current()?.id===score.id&&!saving&&settings().autoOffline)$('offline-save').click();},1200);}
+      // Local libraries already have the authoritative PDF. Do not silently duplicate every
+      // local score into Cache Storage; explicit offline deployment remains available.
+      if(score&&!score.local&&!score.system&&shellReady&&!saved&&!saving&&navigator.onLine&&settings().autoOffline&&attempted!==score.id){attempted=score.id;setTimeout(()=>{if(current()?.id===score.id&&!current()?.local&&!saving&&settings().autoOffline)$('offline-save').click();},1200);}
     }catch{$('offline-summary').textContent='当前浏览器未允许本机存储，请检查浏览器设置。';}
   }
   $('offline-save').onclick=async()=>{

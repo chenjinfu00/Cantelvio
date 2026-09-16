@@ -276,5 +276,6 @@
   "./vendor/wasm/quickjs-eval.js",
   "./vendor/wasm/quickjs-eval.wasm",
   "./verified-download.js",
-  "./version-preferences.js"
+  "./version-preferences.js",
+  "./version-update.pdf"
 ]

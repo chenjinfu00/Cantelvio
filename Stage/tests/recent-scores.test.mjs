@@ -38,10 +38,11 @@ test('history keeps the relative folder path when a score is reopened',()=>{
   assert.equal(list[0].path,'原神/璃月/曲/曲.pdf');
 });
 
-test('the reader source prefers a durable offline copy over a stale folder URL',async()=>{
+test('the reader source prefers the selected local folder over an old cache',async()=>{
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
-  assert.match(app,/const saved=await loadScore\(id\),offlineCopy=await offlineScore\(id\)/);
-  assert.match(app,/remote:offlineCopy\.remote/);
+  assert.match(app,/const saved=await loadScore\(id\),item=recent\?\.items\.find/);
+  assert.match(app,/const local=library\?\.local\?\.url/);
+  assert.match(app,/const offlineCopy=await offlineScore\(id\)/);
   const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
   assert.match(offline,/const sourceURL=score\.remote\?\.url/);
   assert.match(offline,/const url=new URL\('\.\/offline-score\/'/);
