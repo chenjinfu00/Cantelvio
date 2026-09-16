@@ -265,3 +265,13 @@ body.performance-mode .top-drawer .midi-bar{display:none}
 #local-folder{font-size:13px;min-height:42px}
 #local-folder-status{margin:8px 0 0}
 #local-folder-status:empty{display:none}
+
+/* The one thing a newcomer needs before the app can do anything: what folder to point it at. */
+.folder-intro{margin-top:.75rem;font-size:.82rem;line-height:1.55;color:var(--muted)}
+.folder-intro p{margin:0 0 .5rem}
+.folder-intro summary{cursor:pointer;color:var(--ink);font-weight:600}
+.folder-intro pre{margin:.5rem 0;padding:.5rem .6rem;border-radius:.5rem;background:rgba(127,127,127,.12);
+  font-size:.72rem;line-height:1.5;white-space:pre;overflow-x:auto}
+.folder-intro ul{margin:.4rem 0 0;padding-left:1.1rem}
+.folder-intro li{margin:.3rem 0}
+.folder-intro a{color:inherit}

@@ -32,7 +32,14 @@
       <button id="import-button" class="secondary full"><span aria-hidden="true">＋</span> 导入 PDF</button>
       <input id="pdf-input" type="file" accept="application/pdf,.pdf" hidden>
       <div class="import-links"><button id="imslp-button" class="text-button">从 IMSLP 获取曲谱 ↗</button><button id="demo-button" class="text-button" hidden>肖邦第二钢协</button></div>
-      <section class="local-folder" id="local-folder-box"><div class="section-label">本地曲谱文件夹</div><button id="local-folder" class="secondary full">选择本地曲谱文件夹</button><p id="local-folder-status" class="offline-status"></p></section><section class="recent-scores" id="recent-scores" hidden><div class="section-label">最近弹过</div><div class="recent-list" id="recent-list"></div></section><section class="score-card" id="score-card"><span class="eyebrow">当前曲谱</span><h1 id="score-title">还没有曲谱</h1><p id="score-meta">从 PDF 开始一场排练</p></section>
+      <section class="local-folder" id="local-folder-box"><div class="section-label">本地曲谱文件夹</div><button id="local-folder" class="secondary full">选择本地曲谱文件夹</button><p id="local-folder-status" class="offline-status"></p><div id="local-folder-intro" class="folder-intro"><p>选一个你自己放曲谱的文件夹，Volta 就把里面的 PDF 当成曲谱库来读。曲谱不上传，也不经过任何服务器——这个页面本身就是整个应用。</p><details><summary>文件夹该怎么放</summary><pre>我的曲谱/
+├ 肖邦/练习曲/练习曲 Op.10 No.1/
+│    钢琴独奏 · 1fdb0518.pdf
+│    钢琴与小提琴 · 6f8ea4b2.pdf
+│    练习曲.mid
+└ 曲谱库数据/
+     catalog.json
+     manifest.json</pre><ul><li>一首曲子一个文件夹，同一首的不同版本 PDF 放在一起。</li><li>同一层里的 MIDI 文件会被当成这首曲子的源文件，可以在应用里直接播放。</li><li><b>曲谱库数据/manifest.json</b> 把每份 PDF 的 SHA-256 对应到它的相对路径，<b>catalog.json</b> 写曲名、作曲家、编曲。两份都是纯文本，可以自己写，也可以用仓库里的脚本扫描生成。</li><li>完整字段说明和生成脚本：<a href="https://github.com/chenjinfu00/volta#readme" target="_blank" rel="noopener">GitHub 上的 README</a>。</li></ul></details></div></section><section class="recent-scores" id="recent-scores" hidden><div class="section-label">最近弹过</div><div class="recent-list" id="recent-list"></div></section><section class="score-card" id="score-card"><span class="eyebrow">当前曲谱</span><h1 id="score-title">还没有曲谱</h1><p id="score-meta">选择左边的曲谱文件夹，或导入一份 PDF</p></section>
       <button id="offline-save" class="secondary full" disabled>保存当前曲谱供离线使用</button><p id="offline-status" class="offline-status" role="status">打开曲谱后可保存到这台设备。</p>
       <details id="practice-drawer" class="practice-drawer"><summary><span>自动翻页<small>学习演奏，然后跟随你</small></span><span aria-hidden="true">⌄</span></summary>
         <div class="practice-content"><p class="practice-intro">先选一种方式，边听边标记翻页点。</p><div class="learning-actions"><button id="audio-button" class="secondary" disabled>导入录音</button><input id="audio-input" type="file" accept="audio/*" hidden><button id="learn-button" class="secondary" disabled>现场弹一遍</button></div><div id="practice-live"></div><details class="anchor-details"><summary>已标记的翻页点</summary><div id="anchor-list" class="anchors"><p class="muted">学习完成后，翻页点会保存在这里。</p></div></details></div>

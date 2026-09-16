@@ -130,7 +130,10 @@ export const rememberedLibrary=(catalog,reopen)=>({
 
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
   const button=document.getElementById('local-folder'),status=document.getElementById('local-folder-status');
+  const intro=document.getElementById('local-folder-intro');
   if(!button)return null;
+  // The how-to earns its space only until a folder is open.
+  const settled=()=>{if(intro)intro.hidden=true;};
   let current=null;
   const say=text=>{if(status)status.textContent=text;};
   async function use(picked,{save=true}={}){
@@ -140,7 +143,7 @@ export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
     if(save)await remember(library.handle,library.catalog).catch(()=>{});
     const missing=library.missing.length?` · ${library.missing.length} 份在目录里但文件夹里没有`:'';
     say(`已连接本地曲谱：${library.size} 份${missing}${library.kind==='files'?' · 重开应用需要再选一次':''}`);
-    button.textContent='更换本地曲谱文件夹';
+    button.textContent='更换本地曲谱文件夹';settled();
     return library;
   }
   button.onclick=async()=>{
@@ -170,7 +173,7 @@ export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
       current?.release();current=remembered;
       await onLibrary(remembered);
       say(saved.handle?'上次的本地曲谱文件夹需要再授权一次；打开曲谱时会请你选择。':'已恢复上次的曲谱目录；打开曲谱时需要再选一次文件夹。');
-      button.textContent='重新连接本地曲谱文件夹';
+      button.textContent='重新连接本地曲谱文件夹';settled();
       return remembered;
     },
   };

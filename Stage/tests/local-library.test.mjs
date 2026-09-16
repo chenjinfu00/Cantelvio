@@ -117,3 +117,16 @@ test('annotations read from a folder are checked, and a file claiming the wrong 
   assert.equal(pages.length,1,'one good file in, one page out; the mislabelled, broken and foreign ones are skipped');
   assert.equal(pages[0].id,page.id);
 });
+
+test('a newcomer is told what folder to point at, and told only until they have',async()=>{
+  const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
+  assert.match(html,/id="local-folder-intro"/,'the how-to sits with the button it explains');
+  assert.match(html,/曲谱库数据\/\n?\s*catalog\.json|catalog\.json/,'the example names the files the app looks for');
+  assert.match(html,/github\.com\/chenjinfu00\/volta#readme/,'the long version is one link away');
+  const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
+  assert.match(local,/const settled=\(\)=>\{if\(intro\)intro\.hidden=true;\}/,'it stops taking up room once a folder is open');
+  const readme=await fs.readFile(new URL('../README.md',import.meta.url),'utf8');
+  for(const promised of ['曲谱库数据','manifest.json','catalog.json','SHA-256','sources'])
+    assert.ok(readme.includes(promised),'README explains '+promised);
+  assert.doesNotMatch(readme,/netlify/i,'the README no longer points at a host that is gone');
+});
