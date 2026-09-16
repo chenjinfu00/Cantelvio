@@ -27,8 +27,11 @@ export function libraryRelativePath(item,{current=null}={}){
   // Some manually curated genres are not present in the filename itself. Preserve that
   // useful decision when the automatic model can only say "其他作品".
   if(current&&work.genre==='其他作品'){
-    const previous=path.dirname(current).split(path.sep).at(-1);
-    if(previous&&previous!=='其他作品'&&previous!==family&&previous!==browse)work.genre=previous;
+    // The curated genre sits above the work folder in the new layout and one level up in the old one.
+    const parts=path.dirname(current).split(path.sep);
+    const previous=[parts.at(-1),parts.at(-2)].find(name=>
+      name&&![segment(work.title),'其他作品',family,browse,'曲谱'].includes(name));
+    if(previous)work.genre=previous;
   }
   // The folders are the shelf the app shows: browse group, then the level you drill into.
   // A 游戏音乐／古典与器乐 layer would exist only on disk, so it is not one.
@@ -38,7 +41,12 @@ export function libraryRelativePath(item,{current=null}={}){
   const redundantGenre=new Set(['游戏配乐','其他作品','流行歌曲','作曲家待核对']);
   const animeRepeatsParent=browse==='动漫'&&work.genre==='动漫／影视';
   if(!redundantGenre.has(work.genre)&&!animeRepeatsParent)folders.push(segment(work.genre));
-  folders.push(segment(classified.item.title)+' · '+item.id.slice(0,8)+'.pdf');
+  // One folder per work: every edition of it, plus its MIDI and engraving sources, live together.
+  folders.push(segment(work.title));
+  // A lone edition label that only repeats the shelf ("编曲：Animenz" under Animenz) says nothing.
+  const blank=!work.edition||work.edition==='未标注版本'||work.edition==='编曲：'+browse;
+  const label=blank?work.title:work.edition;
+  folders.push(segment(label)+' · '+item.id.slice(0,8)+'.pdf');
   return {relative:path.join(...folders),...classified};
 }
 
