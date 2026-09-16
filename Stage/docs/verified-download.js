@@ -1,7 +1,7 @@
 import {sha256} from './vendor/sha256.js';
 // Only bounded network chunks enter JavaScript memory, even for large editions.
 // A failed/interrupted download never replaces an already usable offline PDF.
-export async function downloadVerifiedPDF(cache,pending,url,{id,progress=()=>{},fetcher=fetch}={}){
+export async function downloadVerifiedPDF(cache,pending,url,{id,progress=()=>{},fetcher=fetch,cacheURL=url}={}){
   const response=await fetcher(url,{cache:'no-store',signal:AbortSignal.timeout(180000)});
   if(!response.ok||response.status===206||!response.body)throw Error('未能完整下载，请联网重试。');
   const total=Number(response.headers.get('Content-Length')),hash=sha256.create();let loaded=0,yieldAt=performance.now();
@@ -22,7 +22,7 @@ export async function downloadVerifiedPDF(cache,pending,url,{id,progress=()=>{},
   try{
     await cache.put(pending,new Response(body,{headers:response.headers}));
     progress('校验通过，正在保存…');
-    await cache.put(url,await cache.match(pending));
+    await cache.put(cacheURL,await cache.match(pending));
     return loaded;
   }finally{hash.destroy();await cache.delete(pending);}
 }

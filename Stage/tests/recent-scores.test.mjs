@@ -32,6 +32,15 @@ test('a broken or empty store never breaks the shelf',()=>{
   assert.deepEqual(readRecent(store('[{"id":"a","name":"x","at":1}]')).map(i=>i.id),['a']);
 });
 
+test('the reader source prefers a durable offline copy over a stale folder URL',async()=>{
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/const saved=await loadScore\(id\),offlineCopy=await offlineScore\(id\)/);
+  assert.match(app,/remote:offlineCopy\.remote/);
+  const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
+  assert.match(offline,/const sourceURL=score\.remote\?\.url/);
+  assert.match(offline,/const url=new URL\('\.\/offline-score\/'/);
+});
+
 test('recency reads as a phrase, not a timestamp',()=>{
   const now=Date.parse('2026-09-15T12:00:00Z');
   assert.equal(whenLabel(now-30*1000,now),'刚刚');

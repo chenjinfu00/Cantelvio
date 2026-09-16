@@ -10,19 +10,28 @@ export async function offlineItems(){
   }
   return items.sort((a,b)=>b.savedAt-a.savedAt);
 }
+// Return a stable URL for a PDF that was already kept on this device. Blob URLs from a
+// previously selected iPad folder are intentionally never returned: they die with that page.
+export async function offlineScore(id){
+  if(!id)return null;
+  return (await offlineItems()).find(item=>item.id===id)||null;
+}
 export async function saveOffline(score,progress=()=>{}){
   if(!score?.id)throw new Error('请先打开曲谱。');
-  const url=score.remote?.url||new URL('./offline-score/'+score.id+'.pdf',root).href;
-  if(new URL(url).origin!==root.origin)throw new Error('请先把外部曲谱导入，再保存到本机。');
+  const sourceURL=score.remote?.url||new URL('./offline-score/'+score.id+'.pdf',root).href;
+  const url=new URL('./offline-score/'+score.id+'.pdf',root).href;
+  if(new URL(sourceURL).origin!==root.origin)throw new Error('请先把外部曲谱导入，再保存到本机。');
   const cache=await caches.open(PDFS),pending=new URL('./.offline-pending/'+score.id,root).href;let bytes;
-  if(!score.buffer)bytes=await downloadVerifiedPDF(cache,pending,url,{id:score.id,progress});
+  if(!score.buffer)bytes=await downloadVerifiedPDF(cache,pending,sourceURL,{id:score.id,progress,cacheURL:url});
   else{
     progress('正在校验并保存…');
     if(await scoreID(score.buffer)!==score.id)throw new Error('文件校验未通过，请重新下载。');
     bytes=score.buffer.byteLength;
     await cache.put(url,new Response(score.buffer,{headers:{'Content-Type':'application/pdf','Content-Length':String(bytes),'Accept-Ranges':'bytes'}}));
   }
-  const item={id:score.id,name:score.name,url,remote:score.remote||{id:score.id,url},bytes,savedAt:Date.now()};
+  // Always publish the stable local URL. In particular, an iPad folder gives us a blob: URL
+  // that cannot be reopened after Safari or the Home Screen app is restarted.
+  const item={id:score.id,name:score.name,url,remote:{id:score.id,url},bytes,savedAt:Date.now()};
   try{await cache.put(metaURL(score.id),new Response(JSON.stringify(item),{headers:{'Content-Type':'application/json'}}));}catch(error){await cache.delete(url);throw error;}
   return item;
 }

@@ -3,7 +3,7 @@ import {versionPreferences} from './version-preferences.js';
 const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
-export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
+export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getOffline=async()=>null){
   let localSource=null;   // a folder chosen on this device, read instead of the network
   let items=[],works=[],mode='composer',selected='',genre='',loaded=false,localLibrary=false,refreshTask=null,opening=false,currentWork=null;
   const preferences=versionPreferences(),labels={composer:'曲目分类',style:'风格',era:'年代',category:'原收藏'};
@@ -40,10 +40,20 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       const previous=explicitVersion?null:await preferences.load(work.key);
       const version=explicitVersion||chooseVersion(work,previous);
       if(!version||!version.available)throw new Error(localLibrary?'这首曲目暂无可打开的 PDF。请先下载对应文件，再刷新谱库。':'这首曲目暂无已导入的 PDF。');
-      // A folder remembered only as a catalogue can show the shelf offline but holds no files;
-      // opening a score is the moment to ask for it back.
-      if(localSource?.needsFolder)await localSource.reopen?.();
-      const local=localSource?await localSource.url(version.id):null;
+      // A folder remembered only as a catalogue can show the shelf offline but holds no files.
+      // Prefer a durable PDF already stored on this device; only an uncached score asks for the
+      // folder again. This is what makes the iPad Home Screen app useful after a restart.
+      let local=localSource?await localSource.url(version.id):null;
+      const offline=local?null:await getOffline(version.id).catch(()=>null);
+      if(!local&&!offline&&localSource?.needsFolder)await localSource.reopen?.();
+      local=localSource?await localSource.url(version.id):null;
+      if(!local&&offline){
+        await openPDF(offline.remote,version.title,null,message=>feedback(statusNode,message));
+        let message='已从这台设备的离线副本打开；已记住此版本。',failed=false;
+        try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
+        setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
+        $('library-dialog').close();return;
+      }
       if(!local&&localSource&&!localSource.needsFolder&&localSource.missing?.includes?.(version.id))throw new Error('本地曲谱文件夹里没有这份 PDF。请检查文件夹，或重新选择。');
       if(!local)throw new Error('这份曲谱在本地曲谱文件夹里找不到。请在左栏重新选择文件夹。');
       await openPDF({id:version.id,url:local,workKey:work.key,local:true},version.title,null,message=>feedback(statusNode,message));

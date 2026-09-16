@@ -10,7 +10,7 @@ import {PageRenderCache,renderScorePage,adjacentPages} from './page-cache.js';
 import {includeInk} from './fit-layout.js';
 import {ReaderShell,TurnQueue,fullscreenElement,requestScoreFullscreen,leaveScoreFullscreen} from './reader-shell.js';
 import {setupSettings} from './settings.js';
-import {setupOffline} from './offline.js';
+import {setupOffline,offlineScore} from './offline.js';
 import {setupDeploy} from './offline-deploy.js';
 import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
@@ -458,7 +458,7 @@ if(document.modelContext?.registerTool){
   window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
 }
 controls();ready();
-library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
+library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score,offlineScore);
 midi=setupMIDI({
   sources:()=>library?.item(state.score?.id)?.sources||[],
   // A folder on this device answers first; otherwise the private route serves it.
@@ -498,7 +498,12 @@ bookmarks=setupBookmarks({
 });
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
-  open:async id=>{const saved=await loadScore(id);if(!saved)throw new Error('这份曲谱已不在本机，请从曲谱库重新打开。');await openPDF(saved.buffer||saved.remote,saved.name,saved);},
+  open:async id=>{
+    const saved=await loadScore(id),offlineCopy=await offlineScore(id);
+    if(!saved&&!offlineCopy)throw new Error('这份曲谱尚未保存到本机，请先从曲谱库打开并等待离线保存完成。');
+    const restored=offlineCopy?{...saved,...offlineCopy,remote:offlineCopy.remote}:saved;
+    await openPDF(restored.buffer||restored.remote,restored.name,restored);
+  },
   onError:error=>toast(errorMessage(error)),
 });
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
@@ -511,7 +516,13 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
   const query=new URLSearchParams(location.search);
   // Library entry is a recovery route: do not reopen a heavy last PDF first.
   if(query.get('library')==='1'){$('library-button').click();return;}
-  const saved=await loadScore();if(saved)await openPDF(saved.buffer||saved.remote,saved.name,saved);
+  const saved=await loadScore();
+  if(saved){
+    const offlineCopy=await offlineScore(saved.id),restored=offlineCopy?{...saved,...offlineCopy,remote:offlineCopy.remote}:saved;
+    // A stale folder blob must not prevent the reader from starting. If no durable copy exists,
+    // leave the shelf available and let the reader explain that the folder needs reconnecting.
+    try{await openPDF(restored.buffer||restored.remote,restored.name,restored);}catch(error){toast('上次曲谱的本机副本不可用，请从曲谱库重新打开；应用仍可继续使用。');}
+  }
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
 })().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
 $('demo-button').onclick=()=>$('library-button').click();

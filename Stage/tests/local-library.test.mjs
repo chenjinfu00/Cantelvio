@@ -59,6 +59,15 @@ test('a remembered catalogue draws the shelf with no network and asks for the fo
   assert.match(library,/localSource\?\.needsFolder\)await localSource\.reopen/,'the shelf asks before it gives up');
 });
 
+test('the shelf can open a score from its durable offline copy after folder access expires',async()=>{
+  const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
+  assert.match(library,/const offline=local\?null:await getOffline\(version\.id\)/);
+  assert.match(library,/if\(!local&&!offline&&localSource\?\.needsFolder\)await localSource\.reopen/);
+  assert.match(library,/await openPDF\(offline\.remote,version\.title/);
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/setupLibrary\(openPDF,toast,[^;]*offlineScore\)/);
+});
+
 test('the collection describes itself from one named drawer, and an older one still opens',async()=>{
   const {dataPaths,DATA}=await import('../docs/local-library.js');
   assert.deepEqual(dataPaths('catalog.json'),[DATA+'/catalog.json','catalog.json'],'the drawer is read first, the old top level second');

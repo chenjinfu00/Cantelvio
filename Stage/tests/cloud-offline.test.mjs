@@ -14,6 +14,12 @@ test('offline download incrementally verifies bytes before promoting to usable c
   const size=await downloadVerifiedPDF(cache,'pending','pdf',{id:digest(bytes),progress:x=>status.push(x),fetcher:async()=>source(bytes)});
   assert.equal(size,bytes.length);assert.deepEqual(cache.data.get('pdf'),bytes);assert.equal(cache.data.has('pending'),false);assert.ok(status.some(x=>x.includes('校验通过')));
 });
+test('offline downloads use a stable local URL instead of a selected-folder blob URL',async()=>{
+  const bytes=Buffer.from('%PDF-stable-key'),cache=memoryCache(),target='https://app.test/offline-score/id.pdf';
+  await downloadVerifiedPDF(cache,'pending','blob:https://app.test/temporary',{id:digest(bytes),cacheURL:target,fetcher:async()=>source(bytes)});
+  assert.equal(cache.data.has('blob:https://app.test/temporary'),false);
+  assert.deepEqual(cache.data.get(target),bytes);
+});
 test('wrong hash, truncation, interruption and partial HTTP responses cannot overwrite an offline PDF',async()=>{
   const bytes=Buffer.from('partial PDF');
   for(const kind of ['hash','truncated','interrupt','range']){
