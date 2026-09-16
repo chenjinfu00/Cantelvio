@@ -22,9 +22,9 @@ test('app shell has no platform branding or bundled personal records',async()=>{
   }
   assert.equal((await fs.readdir(path.join(root,'scores')).catch(()=>[])).filter(name=>name.endsWith('.pdf')).length,0);
   const html=await read('index.html');assert.doesNotMatch(html,/仅限本人|PRIVATE LIBRARY|曲谱与批注仅你可见/);
-  assert.match(html,/翻页点和版本偏好保存在当前浏览器/);
+  assert.match(html,/批注保存在本机/);
   assert.match(html,/id="build-version"/);
-  assert.match(html,/更新批注/);assert.match(html,/导出全部批注/);
+  assert.match(html,/确认本机保存/);assert.match(html,/导出全部批注/);
 });
 
 test('entrypoint resources and local module imports resolve beneath the project subpath',async()=>{

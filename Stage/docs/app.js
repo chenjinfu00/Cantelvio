@@ -513,7 +513,7 @@ recent=setupRecentScores({
   onError:error=>toast(errorMessage(error)),
 });
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
-const deploy=setupDeploy({toast,onDone:()=>offline?.refresh(),local:()=>library?.local});
+const deploy=setupDeploy({toast,onDone:()=>offline?.refresh()});
 $('offline-deploy').onclick=()=>deploy?.open();
 setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing());
 $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，批注保存在本机';

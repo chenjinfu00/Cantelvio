@@ -9,4 +9,4 @@ async function walk(url,prefix=''){
   }
 }
 await walk(root);await fs.writeFile(new URL('cache-manifest.json',root),JSON.stringify(files.sort(),null,2)+'\n');
-console.log(`Offline app: ${files.length} files (PDFs are saved only on request).`);
+console.log(`Offline app: ${files.length} shell files (library PDFs are never part of the shell).`);

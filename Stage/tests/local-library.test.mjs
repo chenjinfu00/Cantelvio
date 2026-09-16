@@ -42,7 +42,7 @@ test('the shelf reads a folder before it reads the network, and the app keeps wo
   assert.match(app,/local\.sourceURL/,'MIDI comes from the folder too');
   const storage=await fs.readFile(new URL('../docs/storage.js',import.meta.url),'utf8');
   assert.match(storage,/indexedDB\.open\(DB_NAME,6\)/,'the store holding the folder is part of the database');
-  assert.match(storage,/'cloudBases','local','bookmarks'/);
+  assert.match(storage,/'scores','inkDrafts','positions','local','bookmarks'/);
   const manifest=JSON.parse(await fs.readFile(new URL('../docs/cache-manifest.json',import.meta.url),'utf8'));
   assert.ok(manifest.includes('./local-library.js'),'choosing a folder works offline too');
 });

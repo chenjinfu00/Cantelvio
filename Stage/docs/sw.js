@@ -14,23 +14,34 @@ async function shellFiles(cache){
     return (await saved.json()).files||[];
   }
 }
+async function fetchShellAsset(href){
+  let error;
+  for(let attempt=0;attempt<3;attempt++){
+    try{
+      const response=await fetch(href,{cache:'reload'});
+      if(!response.ok)throw new Error(String(response.status));
+      return response;
+    }catch(reason){error=reason;if(attempt<2)await new Promise(resolve=>setTimeout(resolve,150*(attempt+1)));}
+  }
+  throw error;
+}
 // Saving the shell one small batch at a time: a single missing asset no longer throws the whole app away.
 async function primeShell({refresh=false}={}){
   const cache=await caches.open(SHELL),files=await shellFiles(cache);
-  let done=0,failed=0;
+  let done=0,failed=0;const failedURLs=[];
   for(let index=0;index<files.length;index+=BATCH){
     await Promise.all(files.slice(index,index+BATCH).map(async href=>{
       try{
         if(!refresh&&await cache.match(href)){done++;return;}
-        const response=await fetch(href,{cache:'reload'});if(!response.ok)throw new Error(String(response.status));
+        const response=await fetchShellAsset(href);
         await cache.put(href,response);done++;
-      }catch{failed++;}
+      }catch{failed++;failedURLs.push(href);}
     }));
     await report({type:'volta:shell-progress',done,failed,total:files.length});
   }
-  await cache.put(STATE,new Response(JSON.stringify({files,done,failed,at:Date.now()}),{headers:{'Content-Type':'application/json'}}));
-  await report({type:'volta:shell-ready',done,failed,total:files.length});
-  return {done,failed,total:files.length};
+  await cache.put(STATE,new Response(JSON.stringify({files,done,failed,failedURLs,at:Date.now()}),{headers:{'Content-Type':'application/json'}}));
+  await report({type:'volta:shell-ready',done,failed,failedURLs,total:files.length});
+  return {done,failed,failedURLs,total:files.length};
 }
 async function shellStatus(){
   const cache=await caches.open(SHELL);

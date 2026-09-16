@@ -1,116 +1,68 @@
-import {saveOffline,offlineItems} from './offline.js';
 const $=id=>document.getElementById(id),root=new URL('./',import.meta.url);
-export const mb=bytes=>(bytes/1048576).toFixed(1)+' MB';
 
-// What a deployment will actually cost, before it starts.
-export function deployPlan(items,selected){
-  const chosen=new Set(selected||[]);
-  const picked=(items||[]).filter(item=>chosen.has(item.id));
-  return {count:picked.length,bytes:picked.reduce((sum,item)=>sum+(Number(item.bytes)||0),0),items:picked};
-}
-export function matchScores(items,query,limit=60){
-  const words=String(query||'').toLowerCase().split(/\s+/).filter(Boolean);
-  const hits=(items||[]).filter(item=>{
-    if(item.format!=='pdf'||item.available===false)return false;
-    if(!words.length)return true;
-    const haystack=[item.title,item.composer,item.arranger,...(item.aliases||[])].join(' ').toLowerCase();
-    return words.every(word=>haystack.includes(word));
-  });
-  return {total:hits.length,shown:hits.slice(0,limit)};
-}
-
-// The collection is the folder chosen on this device; nothing is fetched.
-export async function loadCatalog(local=null){
-  return Array.isArray(local?.catalog?.items)?local.catalog.items:[];
-}
-
-// Saving a score off a folder needs no network at all: the bytes are already on this device,
-// and saveOffline checks them against the fingerprint the catalogue names before keeping them.
-export async function bufferFrom(local,id){
-  const url=local?.url?.(id);
-  if(!url)return null;
-  return (await fetch(url)).arrayBuffer();
-}
-
-// Ask the service worker to save every app asset, and follow along.
+// The only deployment target is the reader shell. PDFs stay in the user-selected folder and
+// are never copied to a server or silently duplicated into browser storage.
 export function installShell({onProgress=()=>{},timeout=180000}={}){
   if(!('serviceWorker' in navigator)||!('caches' in globalThis)||!isSecureContext)
     return Promise.reject(new Error('离线使用需要 HTTPS 或本机 localhost，并使用支持离线存储的浏览器。'));
   return new Promise(async(resolve,reject)=>{
     const timer=setTimeout(()=>{cleanup();reject(new Error('离线应用保存较慢，可稍后再试；已保存的部分会保留。'));},timeout);
+    let retries=0;
     const listen=event=>{
       const data=event.data||{};
       if(data.type==='volta:shell-progress')onProgress(data);
-      else if(data.type==='volta:shell-ready'){cleanup();data.error?reject(new Error(data.error)):resolve(data);}
+      else if(data.type==='volta:shell-ready'){
+        if(data.error){cleanup();reject(new Error(data.error));return;}
+        if(data.failed&&retries<1){
+          retries++;
+          onProgress({...data,retry:true});
+          const send=worker=>worker?.postMessage({type:'volta:prime'});
+          if(navigator.serviceWorker.controller)send(navigator.serviceWorker.controller);
+          else navigator.serviceWorker.ready.then(reg=>send(reg.active)).catch(()=>{});
+          return;
+        }
+        cleanup();resolve(data);
+      }
     };
     const cleanup=()=>{clearTimeout(timer);navigator.serviceWorker.removeEventListener('message',listen);};
     navigator.serviceWorker.addEventListener('message',listen);
     try{
-      await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2336',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
-      const registration=await navigator.serviceWorker.ready;
-      (registration.active||navigator.serviceWorker.controller)?.postMessage({type:'volta:prime'});
+      const registration=await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2352',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+      const active=registration.active||navigator.serviceWorker.controller;
+      if(active)active.postMessage({type:'volta:prime'});
+      else await navigator.serviceWorker.ready.then(reg=>reg.active?.postMessage({type:'volta:prime'}));
     }catch(error){cleanup();reject(error);}
   });
 }
 
-export function setupDeploy({toast=()=>{},onDone=()=>{},local=()=>null}={}){
+export function setupDeploy({toast=()=>{},onDone=()=>{}}={}){
   const dialog=$('deploy-dialog');if(!dialog)return null;
-  let items=[],selected=new Set(),saved=new Set(),running=false;
-  const shellStatus=$('deploy-shell-status'),bar=$('deploy-shell-bar'),list=$('deploy-list'),status=$('deploy-status');
-  function summary(){
-    const plan=deployPlan(items,selected);
-    $('deploy-selection').textContent=plan.count?`已选 ${plan.count} 份 · ${mb(plan.bytes)}`:'未选择曲谱（只装应用也可以）';
-    $('deploy-start').disabled=running;
-  }
-  function render(){
-    const {total,shown}=matchScores(items,$('deploy-search').value);
-    list.textContent='';
-    for(const item of shown){
-      const row=document.createElement('label');row.className='deploy-item';
-      const box=document.createElement('input');box.type='checkbox';box.checked=selected.has(item.id);box.disabled=running;
-      box.onchange=()=>{box.checked?selected.add(item.id):selected.delete(item.id);summary();};
-      const name=document.createElement('span');name.textContent=item.title;
-      const size=document.createElement('small');size.textContent=(saved.has(item.id)?'已在本机 · ':'')+mb(item.bytes||0);
-      row.append(box,name,size);list.append(row);
-    }
-    if(!shown.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='没有匹配的曲谱。';list.append(empty);}
-    else if(total>shown.length){const more=document.createElement('p');more.className='muted';more.textContent=`还有 ${total-shown.length} 份未显示，用搜索缩小范围。`;list.append(more);}
-    summary();
-  }
-  async function refresh(){
-    try{saved=new Set((await offlineItems()).map(item=>item.id));}catch{saved=new Set();}
-    if(!items.length){try{items=await loadCatalog(local());}catch(error){status.textContent=error.message;}}
-    if(!items.length&&!local())status.textContent='还没有曲谱可以保存。先在左栏选择本地曲谱文件夹，这里就会列出你的曲目。';
-    render();
-  }
-  $('deploy-search').oninput=render;
-  $('deploy-start').onclick=async()=>{
+  let running=false;
+  const shellStatus=$('deploy-shell-status'),bar=$('deploy-shell-bar'),status=$('deploy-status'),start=$('deploy-start');
+  const refresh=()=>{
+    $('deploy-summary').textContent='曲谱不会在这里复制；打开曲谱时直接从你选择的本地文件夹读取。';
+    start.disabled=running;
+  };
+  start.onclick=async()=>{
     if(running)return;
-    running=true;$('deploy-start').disabled=true;render();
+    running=true;start.disabled=true;bar.style.width='0%';shellStatus.textContent='准备保存阅谱应用…';
     try{
       status.textContent='正在保存阅谱应用…';
-      const shell=await installShell({onProgress:({done,total})=>{
+      const shell=await installShell({onProgress:({done,total,retry})=>{
         bar.style.width=total?Math.round(done/total*100)+'%':'0%';
-        shellStatus.textContent=`阅谱应用 ${done}/${total}`;
+        shellStatus.textContent=retry?`发现失败资源，正在重试（${done}/${total}）…`:`阅谱应用 ${done}/${total}`;
       }});
       bar.style.width='100%';
-      shellStatus.textContent=shell.failed?`阅谱应用已保存 ${shell.done}/${shell.total}，${shell.failed} 项稍后重试。`:`阅谱应用已完整保存（${shell.done} 项）。`;
-      const plan=deployPlan(items,selected);let index=0,failed=0;
-      for(const item of plan.items){
-        index++;
-        if(saved.has(item.id))continue;
-        status.textContent=`正在下载 ${index}/${plan.count} · ${item.title}`;
-        try{
-          const buffer=await bufferFrom(local(),item.id);
-          if(!buffer)throw new Error('本地曲谱文件夹里没有这份 PDF。');
-          await saveOffline({id:item.id,name:item.title,buffer},message=>{status.textContent=`${index}/${plan.count} · ${item.title} · ${message}`;});saved.add(item.id);}
-        catch(error){failed++;status.textContent=`${item.title}：${error.message}`;}
-      }
+      shellStatus.textContent=shell.failed
+        ? `阅谱应用已保存 ${shell.done}/${shell.total}，仍有 ${shell.failed} 项稍后重试。${shell.failedURLs?.[0]?' 失败资源：'+new URL(shell.failedURLs[0]).pathname:''}`
+        : `阅谱应用已完整保存（${shell.done} 项）。`;
       try{await navigator.storage?.persist?.();}catch{}
-      status.textContent=failed?`部署完成，${failed} 份曲谱未能保存，可稍后重试。`:plan.count?`已部署到这台设备：应用 + ${plan.count} 份曲谱，断网可用。`:'阅谱应用已部署到这台设备，断网可打开已保存的曲谱。';
+      status.textContent=shell.failed
+        ? '应用已保存，但有资源暂时失败；请保持联网后再次部署。'
+        : '阅谱应用已部署到这台设备。曲谱仍从本地曲谱文件夹读取，断网后可继续使用已选数据库中的曲谱。';
       toast(status.textContent);
     }catch(error){status.textContent=error.message;toast(error.message);}
-    finally{running=false;await refresh();onDone();}
+    finally{running=false;start.disabled=false;refresh();onDone();}
   };
   dialog.querySelectorAll('[data-close-deploy]').forEach(button=>button.onclick=()=>dialog.close());
   return {open(){dialog.showModal();refresh();},refresh};

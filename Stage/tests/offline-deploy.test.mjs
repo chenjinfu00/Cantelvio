@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {cachedBody,cachedPDFResponse,forgetCachedBody} from '../docs/offline-range.js';
-import {deployPlan,matchScores} from '../docs/offline-deploy.js';
 
 test('a cached score is read into memory once, not once per range request',async()=>{
   const body=new Uint8Array(1000).fill(7);
@@ -24,28 +23,13 @@ test('a cached score is read into memory once, not once per range request',async
   forgetCachedBody();
 });
 
-test('a deployment says what it will cost before it starts',()=>{
-  const items=[{id:'a',title:'甲',bytes:1048576,format:'pdf'},{id:'b',title:'乙',bytes:2097152,format:'pdf'}];
-  assert.deepEqual(deployPlan(items,[]),{count:0,bytes:0,items:[]});
-  const plan=deployPlan(items,['a','b','missing']);
-  assert.equal(plan.count,2);assert.equal(plan.bytes,3145728);
-  assert.equal(deployPlan(items,['b']).items[0].title,'乙');
-});
-
-test('the picker searches titles and hides unavailable or non-PDF entries',()=>{
-  const items=[
-    {id:'a',title:'肖邦 - 夜曲 Op.9 No.2',composer:'弗雷德里克·肖邦',format:'pdf'},
-    {id:'b',title:'原神 - 璃月',composer:'原神',format:'pdf'},
-    {id:'c',title:'未上传',format:'pdf',available:false},
-    {id:'d',title:'音频',format:'mp3'},
-  ];
-  assert.deepEqual(matchScores(items,'').shown.map(i=>i.id),['a','b']);
-  assert.deepEqual(matchScores(items,'夜曲').shown.map(i=>i.id),['a']);
-  assert.deepEqual(matchScores(items,'肖邦 op.9').shown.map(i=>i.id),['a'],'all words must match');
-  assert.deepEqual(matchScores(items,'找不到').shown,[]);
-  const many=Array.from({length:100},(_,i)=>({id:'s'+i,title:'第 '+i+' 份',format:'pdf'}));
-  const limited=matchScores(many,'',20);
-  assert.equal(limited.total,100);assert.equal(limited.shown.length,20);
+test('deployment only saves the application shell, never a score plan',async()=>{
+  const deploy=await fs.readFile(new URL('../docs/offline-deploy.js',import.meta.url),'utf8');
+  assert.doesNotMatch(deploy,/deployPlan|matchScores|bufferFrom|saveOffline/);
+  assert.match(deploy,/volta:prime/);
+  const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
+  assert.doesNotMatch(html,/id="deploy-search"|id="deploy-list"|id="deploy-selection"/);
+  assert.match(html,/id="deploy-summary"/);
 });
 
 test('the service worker saves the shell in batches and answers the page',async()=>{
@@ -54,6 +38,9 @@ test('the service worker saves the shell in batches and answers the page',async(
   assert.match(sw,/volta:shell-progress/);
   assert.match(sw,/volta:shell-status/);
   assert.doesNotMatch(sw,/cache\.addAll/,'one missing asset must not throw the whole shell away');
+  assert.match(sw,/fetchShellAsset/,'a transient asset failure is retried before reporting the shell');
+  assert.match(sw,/attempt<3/,'each shell asset gets bounded retries');
+  assert.match(sw,/failedURLs/,'a persistent failure identifies the resource for diagnosis');
   assert.match(sw,/\.shell-state/,'the file list is kept for offline status');
   assert.match(sw,/volta-shell-20260916-start-e/,'a published shell update gets a fresh cache');
   assert.match(sw,/skipWaiting/,'a new shell takes control without waiting for an old tab to close');
@@ -64,17 +51,11 @@ test('the service worker saves the shell in batches and answers the page',async(
   assert.doesNotMatch(app,/await requireCloudLogin/,'startup waits for nothing before opening the reader');
 });
 
-test('a chosen folder is what gets saved for offline use, with no server in the picture',async()=>{
-  const {loadCatalog,bufferFrom}=await import('../docs/offline-deploy.js');
-  const local={catalog:{items:[{id:'a',title:'甲'},{id:'b',title:'乙'}]},url:id=>id==='a'?'blob:fake-a':null};
-  assert.deepEqual((await loadCatalog(local)).map(item=>item.id),['a','b'],'the folder answers instead of the network');
-  assert.equal(await bufferFrom(local,'b'),null,'a score the folder does not hold is not invented');
-  assert.equal(await bufferFrom(null,'a'),null);
-  const deploy=await fs.readFile(new URL('../docs/offline-deploy.js',import.meta.url),'utf8');
-  assert.match(deploy,/saveOffline\(\{id:item\.id,name:item\.title,buffer\}/,'folder bytes are saved directly, never downloaded');
-  assert.doesNotMatch(deploy,/scoreURL/,'there is no server address left to fall back to');
+test('the local folder remains the only score source',async()=>{
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
-  assert.match(app,/local:\(\)=>library\?\.local/,'the dialog is told which folder is open');
+  assert.match(app,/if\(local\)return local\.sourceURL/,'MIDI reads from the selected folder');
+  const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
+  assert.match(library,/path:localSource\?\.path/,'history stores a relative folder path');
 });
 
 test('the published page is the app, with no server left to talk to',async()=>{
@@ -89,4 +70,6 @@ test('the published page is the app, with no server left to talk to',async()=>{
   }
   const library=await fs.readFile(new URL('library.js',docs),'utf8');
   assert.doesNotMatch(library,/fetch\(/,'the shelf makes no request at all');
+  const preferences=await fs.readFile(new URL('version-preferences.js',docs),'utf8');
+  assert.doesNotMatch(preferences,/fetcher\(|\/api\//,'version choices stay on this device');
 });

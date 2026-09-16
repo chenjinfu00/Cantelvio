@@ -39,7 +39,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
   let saving=false,shellReady=false,attempted=null;
   const supported='serviceWorker' in navigator&&'caches' in globalThis&&isSecureContext;
   const ready=supported?(async()=>{
-    await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2336',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+    await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2352',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
     await Promise.race([navigator.serviceWorker.ready,new Promise((_,reject)=>setTimeout(()=>reject(new Error('离线应用准备较慢，请稍后再试。')),60000))]);
     shellReady=true;return true;
   })():Promise.reject(new Error('离线使用需要 HTTPS 或本机 localhost，并使用支持离线存储的浏览器。'));
@@ -68,10 +68,11 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     if(!supported){$('offline-save').disabled=true;return;}
     try{
       const items=await offlineItems(),score=current(),saved=items.some(item=>item.id===score?.id);
-      $('offline-save').disabled=saving||!score||saved&&shellReady;
-      $('offline-save').textContent=saved&&shellReady?'✓ 已保存到这台设备':'保存当前曲谱供离线使用';
-      if(!saving)$('offline-status').textContent=saved&&shellReady?'PDF 和阅谱应用均已保存，可断网打开。':shellReady?'离线应用已就绪。保存 PDF 后可断网阅读。':'正在准备离线阅谱应用…';
-      $('offline-summary').textContent=`${items.length} 份已保存 · ${mb(items.reduce((sum,item)=>sum+item.bytes,0))}${shellReady?' · 离线应用已就绪':''}`;
+      const local=!!score?.local;
+      $('offline-save').disabled=saving||!score||local||saved&&shellReady;
+      $('offline-save').textContent=local?'本地曲谱无需复制':saved&&shellReady?'✓ 已保存到这台设备':'保存当前导入曲谱供离线使用';
+      if(!saving)$('offline-status').textContent=local?'当前曲谱直接从本地曲谱文件夹读取，不会复制到浏览器。':saved&&shellReady?'PDF 和阅谱应用均已保存，可断网打开。':shellReady?'离线应用已就绪。导入曲谱可另存本机副本。':'正在准备离线阅谱应用…';
+      $('offline-summary').textContent=`${items.length} 份本机导入副本 · ${mb(items.reduce((sum,item)=>sum+item.bytes,0))}${shellReady?' · 离线应用已就绪':''}`;
       const list=$('offline-list');list.replaceChildren();
       for(const item of items){
         const row=document.createElement('div');row.className='offline-item';
@@ -87,7 +88,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     }catch{$('offline-summary').textContent='当前浏览器未允许本机存储，请检查浏览器设置。';}
   }
   $('offline-save').onclick=async()=>{
-    if(saving||!current())return;saving=true;const score=current();$('offline-save').disabled=true;
+    if(saving||!current())return;const score=current();if(score.local){toast('本地曲谱已经在所选文件夹中，无需复制。');return;}saving=true;$('offline-save').disabled=true;
     try{$('offline-status').textContent='正在确认离线应用已完整保存…';await ready;await saveOffline(score,message=>$('offline-status').textContent=message);toast('已完整保存到这台设备，可断网阅读。');}
     catch(error){$('offline-status').textContent=error.name==='QuotaExceededError'?'本机空间不足，未完成保存。请移除不需要的离线副本。':error.message;toast($('offline-status').textContent);}
     finally{const message=$('offline-status').textContent;saving=false;await refresh();if(!message.startsWith('正在')&&!message.startsWith('已下载'))$('offline-status').textContent=message;}
