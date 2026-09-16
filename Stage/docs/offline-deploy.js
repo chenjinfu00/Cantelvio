@@ -21,10 +21,20 @@ export function matchScores(items,query,limit=60){
   return {total:hits.length,shown:hits.slice(0,limit)};
 }
 
-export async function loadCatalog(){
+// A folder chosen on this device is the collection now; the network is only for the older setup.
+export async function loadCatalog(local=null){
+  if(local?.catalog)return Array.isArray(local.catalog.items)?local.catalog.items:[];
   const response=await fetch(new URL(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',root),{cache:'no-store'});
   if(!response.ok)throw new Error('曲谱库暂时不可用，请联网后重试。');
   const data=await response.json();return Array.isArray(data.items)?data.items:[];
+}
+
+// Saving a score off a folder needs no network at all: the bytes are already on this device,
+// and saveOffline checks them against the fingerprint the catalogue names before keeping them.
+export async function bufferFrom(local,id){
+  const url=local?.url?.(id);
+  if(!url)return null;
+  return (await fetch(url)).arrayBuffer();
 }
 
 // Ask the service worker to save every app asset, and follow along.
@@ -48,7 +58,7 @@ export function installShell({onProgress=()=>{},timeout=180000}={}){
   });
 }
 
-export function setupDeploy({toast=()=>{},onDone=()=>{}}={}){
+export function setupDeploy({toast=()=>{},onDone=()=>{},local=()=>null}={}){
   const dialog=$('deploy-dialog');if(!dialog)return null;
   let items=[],selected=new Set(),saved=new Set(),running=false;
   const shellStatus=$('deploy-shell-status'),bar=$('deploy-shell-bar'),list=$('deploy-list'),status=$('deploy-status');
@@ -74,7 +84,8 @@ export function setupDeploy({toast=()=>{},onDone=()=>{}}={}){
   }
   async function refresh(){
     try{saved=new Set((await offlineItems()).map(item=>item.id));}catch{saved=new Set();}
-    if(!items.length){try{items=await loadCatalog();}catch(error){status.textContent=error.message;}}
+    if(!items.length){try{items=await loadCatalog(local());}catch(error){status.textContent=error.message;}}
+    if(!items.length&&!local())status.textContent='还没有曲谱可以保存。先在左栏选择本地曲谱文件夹，这里就会列出你的曲目。';
     render();
   }
   $('deploy-search').oninput=render;
@@ -94,7 +105,10 @@ export function setupDeploy({toast=()=>{},onDone=()=>{}}={}){
         index++;
         if(saved.has(item.id))continue;
         status.textContent=`正在下载 ${index}/${plan.count} · ${item.title}`;
-        try{await saveOffline({id:item.id,name:item.title,remote:{id:item.id,url:scoreURL(item.id)}},message=>{status.textContent=`${index}/${plan.count} · ${item.title} · ${message}`;});saved.add(item.id);}
+        try{
+          const buffer=await bufferFrom(local(),item.id);
+          const score=buffer?{id:item.id,name:item.title,buffer}:{id:item.id,name:item.title,remote:{id:item.id,url:scoreURL(item.id)}};
+          await saveOffline(score,message=>{status.textContent=`${index}/${plan.count} · ${item.title} · ${message}`;});saved.add(item.id);}
         catch(error){failed++;status.textContent=`${item.title}：${error.message}`;}
       }
       try{await navigator.storage?.persist?.();}catch{}

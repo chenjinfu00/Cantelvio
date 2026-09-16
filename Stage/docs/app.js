@@ -487,7 +487,7 @@ recent=setupRecentScores({
   onError:error=>toast(errorMessage(error)),
 });
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
-const deploy=setupDeploy({toast,onDone:()=>offline?.refresh()});
+const deploy=setupDeploy({toast,onDone:()=>offline?.refresh(),local:()=>library?.local});
 $('offline-deploy').onclick=()=>deploy?.open();
 cloudSync=setupCloudSync(ink,toast,()=>state.phase==='idle'&&!performing());
 setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing()&&!cloudSync.busy);

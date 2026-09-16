@@ -11,10 +11,10 @@ import {groupWorks} from '../docs/library-model.js';
 const root=fileURLToPath(new URL('../docs/',import.meta.url));
 const read=file=>fs.readFile(path.join(root,file),'utf8');
 
-test('GitHub entry carries no PDFs and points to the password-protected cloud',async()=>{
+test('the published page carries no scores and sends its visitors nowhere',async()=>{
   const catalogue=JSON.parse(await read('library/catalog.json'));
-  assert.equal(catalogue.items.length,0);assert.equal(catalogue.cloudHome,CLOUD_HOME);
-  assert.equal(CLOUD_HOME,'https://volta-chenjinfu.netlify.app/volta/');
+  assert.equal(catalogue.items.length,0,'the published copy ships an empty shelf; the music is a folder on the reader\'s device');
+  assert.equal(CLOUD_HOME,'','there is no server copy to hand a visitor off to');
   const files=await fs.readdir(path.join(root,'scores')).catch(()=>[]);assert.equal(files.filter(name=>name.endsWith('.pdf')).length,0);
 });
 

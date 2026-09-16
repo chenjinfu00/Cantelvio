@@ -1,4 +1,4 @@
-import {CLOUD_LIBRARY,CLOUD_HOME} from './site-config.js';
+import {CLOUD_LIBRARY} from './site-config.js';
 const $=id=>document.getElementById(id),trustedKey='volta:trusted-local:v1';
 export async function cloudRequest(path,options={}){
   const response=await fetch(new URL('./api/'+path,import.meta.url),{...options,cache:'no-store',credentials:'same-origin',signal:AbortSignal.timeout(30000)});
@@ -16,7 +16,8 @@ export function readTrustedDevice(storage=localStorage){
   try{const saved=JSON.parse(storage.getItem(trustedKey));return saved&&typeof saved==='object'?saved:null;}catch{return null;}
 }
 export async function requireCloudLogin(){
-  if(CLOUD_HOME&&location.hostname.endsWith('.github.io')&&navigator.onLine){location.replace(CLOUD_HOME);return false;}
+  // This page used to send its visitors to the server copy. There is no server copy now: the
+  // collection is a folder on the reader's own device, so the page they opened is the app.
   if(!CLOUD_LIBRARY)return true;
   const dialog=$('cloud-login'),status=$('cloud-login-status');
   const askForPassword=()=>{

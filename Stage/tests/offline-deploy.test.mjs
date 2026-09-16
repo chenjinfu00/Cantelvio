@@ -71,3 +71,24 @@ test('the service worker saves the shell in batches and answers the page',async(
   const account=await fs.readFile(new URL('../docs/cloud-account.js',import.meta.url),'utf8');
   assert.doesNotMatch(account,/const response=await cloudRequest\('session'\);if\(!response\.ok\)throw Error/,'startup no longer hangs on the session check');
 });
+
+test('a chosen folder is what gets saved for offline use, with no server in the picture',async()=>{
+  const {loadCatalog,bufferFrom}=await import('../docs/offline-deploy.js');
+  const local={catalog:{items:[{id:'a',title:'甲'},{id:'b',title:'乙'}]},url:id=>id==='a'?'blob:fake-a':null};
+  assert.deepEqual((await loadCatalog(local)).map(item=>item.id),['a','b'],'the folder answers instead of the network');
+  assert.equal(await bufferFrom(local,'b'),null,'a score the folder does not hold is not invented');
+  assert.equal(await bufferFrom(null,'a'),null);
+  const deploy=await fs.readFile(new URL('../docs/offline-deploy.js',import.meta.url),'utf8');
+  assert.match(deploy,/const score=buffer\?\{id:item\.id,name:item\.title,buffer\}/,'folder bytes are saved directly, not re-downloaded');
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/local:\(\)=>library\?\.local/,'the dialog is told which folder is open');
+});
+
+test('the published page is the app, not a signpost to a server',async()=>{
+  const account=await fs.readFile(new URL('../docs/cloud-account.js',import.meta.url),'utf8');
+  assert.doesNotMatch(account,/location\.replace/,'a visitor is never sent somewhere else');
+  assert.doesNotMatch(account,/github\.io/);
+  const config=await fs.readFile(new URL('../docs/site-config.js',import.meta.url),'utf8');
+  assert.match(config,/CLOUD_LIBRARY = false/,'the published build talks to no server');
+  assert.match(config,/CLOUD_HOME = ''/);
+});
