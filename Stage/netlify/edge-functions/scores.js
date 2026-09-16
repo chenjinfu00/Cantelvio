@@ -5,6 +5,17 @@ export default async request=>{
   if(!['GET','HEAD'].includes(request.method))return json({error:'Method not allowed'},405);
   if(!await sessionFor(request,getStore('volta-devices',{consistency:'strong'})))return json({error:'请先登录。'},401);
   const path=new URL(request.url).pathname,store=getStore('volta-files');
+  // A work's MIDI and engraving files, stored whole: they are small enough not to be chunked.
+  const source=/^\/volta\/sources\/([a-f0-9]{64})\/(.+)$/.exec(path);
+  if(source){
+    const name=decodeURIComponent(source[2]);
+    if(name.includes('/')||name.includes('\\'))return json({error:'不支持的文件名'},400);
+    const blob=await store.get(`source-${source[1]}-${name}`,{type:'arrayBuffer'});
+    if(!blob)return json({error:'源文件不存在。'},404);
+    return new Response(blob,{headers:{'Content-Type':/\.midi?$/i.test(name)?'audio/midi':'application/octet-stream',
+      'Content-Length':String(blob.byteLength),'Cache-Control':'private, no-store','Content-Disposition':'inline',
+      'X-Content-Type-Options':'nosniff'}});
+  }
   if(path==='/volta/library/catalog.json'){
     const data=await store.get('catalog',{type:'json'});return data?json(data):json({error:'曲谱尚未上传完成。'},503);
   }
@@ -29,4 +40,4 @@ export default async request=>{
   },cancel(){cancelled=true;}});
   return new Response(stream,{status:requested?206:200,headers});
 };
-export const config={path:['/volta/scores/*','/volta/fit/*','/volta/library/catalog.json']};
+export const config={path:['/volta/scores/*','/volta/sources/*','/volta/fit/*','/volta/library/catalog.json']};

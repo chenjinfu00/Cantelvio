@@ -17,6 +17,7 @@ import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
 import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
+import {setupMIDI} from './midi-ui.js';
 import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
 import {setupCloudSync} from './cloud-sync.js';
 import {setupAnnotationBackup} from './annotation-backup.js';
@@ -28,7 +29,7 @@ let cloudSync;
 const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()&&!cloudSync?.busy});
 const readerViewport=installReaderViewport();
 const readingPosition=new ReadingPosition($('score-stage'));
-let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
+let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
 let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
 const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
 const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
@@ -109,7 +110,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
       onProgress?.(total?`正在读取曲谱 ${Math.min(100,Math.round(loaded/total*100))}%…`:'正在读取曲谱…');
     });
     $('chopin-audio')?.remove();
-    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);
+    state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
     try{const response=await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)});if(response.ok){const profile=await response.json();if(profile.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;}}catch{}
     readingPosition.setScore(id);
@@ -455,6 +456,11 @@ if(document.modelContext?.registerTool){
 }
 controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
+midi=setupMIDI({
+  sources:()=>library?.item(state.score?.id)?.sources||[],
+  url:name=>state.score&&name?new URL('./sources/'+state.score.id+'/'+encodeURIComponent(name),import.meta.url).href:null,
+  toast,
+});
 bookmarks=setupBookmarks({
   score:()=>state.score,page:()=>state.page,
   canJump:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),
