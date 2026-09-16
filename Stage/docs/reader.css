@@ -259,3 +259,9 @@ body.performance-mode .top-drawer .bookmark-bar{border:0;padding:6px 0 0}
 #midi-status:empty{display:none}
 #midi-status{margin:8px 0 0;font-size:12px}
 body.performance-mode .top-drawer .midi-bar{display:none}
+/* Choosing a folder on this device is a way to change score, so it lives on the shelf. */
+.local-folder{margin:4px 0 18px}
+.local-folder .section-label{margin-bottom:8px}
+#local-folder{font-size:13px;min-height:42px}
+#local-folder-status{margin:8px 0 0}
+#local-folder-status:empty{display:none}

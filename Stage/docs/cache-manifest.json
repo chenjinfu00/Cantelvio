@@ -18,6 +18,7 @@
   "./library-model.js",
   "./library.js",
   "./library/catalog.json",
+  "./local-library.js",
   "./manifest.webmanifest",
   "./matcher.js",
   "./midi-file.js",
