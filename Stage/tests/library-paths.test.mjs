@@ -62,3 +62,12 @@ test('a bracketed edition note never becomes part of the work name',()=>{
   // A name that only looks like one keeps every word.
   assert.equal(libraryRelativePath(pdf('o','原神 - 散兵周本音乐改编',{composer:'原神',style:'游戏音乐',region:'须弥'})).relative.split('/').at(-2),'散兵周本音乐改编');
 });
+
+test('a catalogue may state the version outright, so a merged work keeps one folder',()=>{
+  const main=pdf('p','原神 - 轻涟',{composer:'原神',style:'游戏音乐',region:'枫丹',edition:'总谱'});
+  const pv=pdf('q','原神 - 轻涟',{composer:'原神',style:'游戏音乐',region:'枫丹',edition:'功能谱剧情PV'});
+  const [a,b]=[main,pv].map(item=>libraryRelativePath(item).relative);
+  assert.equal(a.split('/').slice(0,-1).join('/'),b.split('/').slice(0,-1).join('/'),'both land in 轻涟');
+  assert.match(a,/\/轻涟\/总谱 · pppppppp\.pdf$/);
+  assert.match(b,/\/轻涟\/功能谱剧情PV · qqqqqqqq\.pdf$/);
+});

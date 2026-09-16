@@ -70,7 +70,7 @@ export function describeWork(item){
   const folder=(item.aliases?.[0]||'').split('/').slice(0,-1).findLast(x=>/\d\s*版|国家版|原典版|手稿|Henle|Peters|Breitkopf|Mutopia/i.test(x));
   if(folder&&!edition.some(x=>x.includes(folder)))edition.push(folder);
   if(item.arranger&&!edition.some(x=>x.includes(item.arranger)))edition.push('编曲：'+item.arranger);
-  return {key,title:name,composer,genre,classical,catalogue:!!opus,stem:normalize(opus?name.replace(opus[0],''):name),edition:edition.filter(Boolean).join(' · ')||'未标注版本',search:[title,composer,item.composer,item.arranger,...(item.aliases||[])].join(' ').toLocaleLowerCase()};
+  return {key,title:name,composer,genre,classical,catalogue:!!opus,stem:normalize(opus?name.replace(opus[0],''):name),edition:String(item.edition||'').trim()||edition.filter(Boolean).join(' · ')||'未标注版本',search:[title,composer,item.composer,item.arranger,...(item.aliases||[])].join(' ').toLocaleLowerCase()};
 }
 
 export function groupWorks(items){
