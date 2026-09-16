@@ -75,16 +75,18 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   function describe(){
     const local=source();
     if(!local||local.needsFolder){
-      // Nothing to save into yet, but the file can still be handed to the reader.
-      if(dock){dock.disabled=false;dock.title='导出批注为文件';dock.querySelector('span').textContent='导出';}
-      return say('尚未选择本地曲谱文件夹。批注保存在这台设备上。');
+      // Safari/iPad cannot write to a user-selected Files folder. The ordinary save action
+      // therefore confirms the IndexedDB copy; exporting is kept as an explicit backup action.
+      if(button)button.textContent='确认本机保存';
+      if(dock){dock.disabled=false;dock.title='批注已自动保存到本机';dock.querySelector('span').textContent='已保存';}
+      return say('批注已自动保存在这台设备上，无需另选保存位置。');
     }
-    say(local.writable?'已连接文件夹，批注会自动存进「曲谱库数据／批注」。':'这个浏览器不能写入文件夹。点上面的按钮，把批注存进文件 App 里的曲谱文件夹。');
-    if(button)button.textContent=local.writable?'立即保存批注到曲谱文件夹':'导出批注，存进曲谱文件夹';
+    say(local.writable?'已连接文件夹，批注会自动存进「曲谱库数据／批注」。':'Safari 不能直接写入文件 App 的指定文件夹；批注已自动保存在这台设备上。需要文件时，请使用下面的“导出批注”。');
+    if(button)button.textContent=local.writable?'立即保存批注到曲谱文件夹':'确认本机保存';
     if(dock){
       dock.disabled=false;
-      dock.title=local.writable?'保存批注到曲谱文件夹':'导出批注，存进曲谱文件夹';
-      dock.querySelector('span').textContent=local.writable?'保存':'导出';
+      dock.title=local.writable?'保存批注到曲谱文件夹':'批注已自动保存到本机';
+      dock.querySelector('span').textContent=local.writable?'保存':'已保存';
     }
   }
   // Opening a folder brings in whatever other devices left there.
@@ -117,10 +119,11 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
         say(`已写入 ${written} 首曲子的批注。`);
         toast(written?'批注已保存到曲谱文件夹。':'还没有批注可以保存。');
       }else{
-        const {pages,how}=await offerInkFile(await allInkDrafts());
-        const where=how==='share'?`已导出 ${pages} 页批注，请在分享面板里选择「存储到文件」，存进 曲谱库数据／批注。`
-          :`已下载 ${pages} 页批注，请把它放进 曲谱库数据／批注。`;
-        say(where);toast(where);
+        // The draft is already written to IndexedDB while drawing. Drain here so the button
+        // still provides a meaningful save checkpoint without opening Safari's file picker.
+        await drain?.(ink);
+        const message='批注已保存到这台设备，无需另选位置。若要放进曲谱文件夹，请使用设置里的“导出这份曲谱的批注”。';
+        say(message);toast(message);
       }
     }catch(error){say(error.message);toast(error.message);}
     finally{busy=false;if(button)button.disabled=false;if(dock)dock.disabled=false;}

@@ -147,6 +147,15 @@ test('the writing dock carries its own save, and a tool button is its own settin
   assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock button and the settings button do the same thing');
 });
 
+test('Safari save confirms the local draft instead of opening a file picker',async()=>{
+  const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
+  assert.match(folder,/批注已自动保存在这台设备上，无需另选保存位置/);
+  assert.match(folder,/const message='批注已保存到这台设备，无需另选位置/);
+  assert.doesNotMatch(folder,/const \{pages,how\}=await offerInkFile\(await allInkDrafts\(\)\)/);
+  const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
+  assert.match(html,/iPad Safari 不允许网页自动选择/);
+});
+
 test('whether markings survive a closed app is answered without being asked',async()=>{
   const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
   assert.match(offline,/navigator\.storage\?\.persisted\?\.\(\)/,'the state is read, not guessed');
