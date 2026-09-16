@@ -146,3 +146,10 @@ test('the writing dock carries its own save, and a tool button is its own settin
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
   assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock button and the settings button do the same thing');
 });
+
+test('whether markings survive a closed app is answered without being asked',async()=>{
+  const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
+  assert.match(offline,/navigator\.storage\?\.persisted\?\.\(\)/,'the state is read, not guessed');
+  assert.match(offline,/sayDurability\(\);\n\s*if\(!supported\)/,'it is reported every time the settings open');
+  assert.match(offline,/加到主屏幕/,'the iPad is told what actually improves its odds');
+});

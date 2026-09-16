@@ -41,7 +41,21 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     else if(data.type==='volta:shell-ready'){shellReady=true;refresh();}
   });
   ready.then(()=>refresh()).catch(error=>{$('offline-summary').textContent=error.message;$('offline-status').textContent=error.message;});
+  // Whether markings survive a closed app is not something a reader should have to click to find
+  // out, so the answer is on screen whenever the settings are.
+  async function sayDurability(){
+    const node=$('storage-status');if(!node)return;
+    try{
+      const kept=await navigator.storage?.persisted?.();
+      const estimate=await navigator.storage?.estimate?.();
+      const used=estimate?.usage?` 本网站已用 ${mb(estimate.usage)}。`:'';
+      node.textContent=kept===true?'浏览器已同意长期保留本机数据，关掉应用批注仍在。'+used
+        :kept===false?'浏览器尚未保证长期保留。点下面的按钮申请；iPad 上把网页加到主屏幕后更容易获批。'+used
+        :'此浏览器不报告存储状态，重要批注请定期导出备份。';
+    }catch{node.textContent='此浏览器暂不支持持久存储申请。';}
+  }
   async function refresh(){
+    sayDurability();
     if(!supported){$('offline-save').disabled=true;return;}
     try{
       const items=await offlineItems(),score=current(),saved=items.some(item=>item.id===score?.id);
