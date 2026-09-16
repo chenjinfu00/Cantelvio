@@ -1,15 +1,14 @@
 import {inkDraft} from './storage.js';
-import {mergeInk,distanceToSegment} from './ink-model.js';
+import {distanceToSegment} from './ink-model.js';
 import {PencilInput,strokeID} from './pencil-input.js';
 const blank=()=>({version:1,strokes:[]}),copy=structuredClone;
 const $=id=>document.getElementById(id);
 // Slider steps 1–10 map to a stroke that stays inside the validator's 0 < width <= .1 range.
 export const strokeWidth=step=>Math.round((.0012+(Math.max(1,Math.min(10,Number(step)||1))-1)*.0012)*1e6)/1e6;
 export const eraserRadius=step=>Math.round((.008+(Math.max(1,Math.min(10,Number(step)||1))-1)*.006)*1e6)/1e6;
-const timedFetch=(url,options={})=>fetch(url,{...options,signal:AbortSignal.timeout(12000)});
 export class Ink {
-  constructor(toast,{localOnly=true,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.width=strokeWidth(2);this.eraser=eraserRadius(2);this.penDown=false;this.palmUntil=0;
-    for(const mode of ['pen','erase'])$('ink-'+mode).onclick=()=>this.setMode(this.mode===mode?'read':mode);
+  constructor(toast,{canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.width=strokeWidth(2);this.eraser=eraserRadius(2);this.penDown=false;this.palmUntil=0;
+    for(const mode of ['pen','erase'])this.holdable($('ink-'+mode),mode);
     for(const button of document.querySelectorAll('[data-ink-color]'))button.onclick=()=>this.setColor(button.dataset.inkColor);
     // A stroke is stored as a fraction of the page, so the slider works the same on any paper size.
     $('ink-width').oninput=e=>{this.width=strokeWidth(e.target.value);this.preview('ink-width-preview',this.width);};
@@ -17,12 +16,43 @@ export class Ink {
     this.preview('ink-width-preview',this.width);this.preview('eraser-width-preview',this.eraser);
     $('ink-undo').onclick=()=>this.history(false);$('ink-redo').onclick=()=>this.history(true);
     $('ink-export').onclick=()=>this.export();
+    // A settings panel opened by holding should close the way any popover does.
+    document.addEventListener('pointerdown',event=>{
+      const dock=$('ink-toolbar');
+      if(dock&&!dock.contains(event.target))for(const popover of document.querySelectorAll('.pencil-popover'))popover.open=false;
+    },true);
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape')for(const popover of document.querySelectorAll('.pencil-popover'))popover.open=false;
+    });
     window.addEventListener('online',()=>{for(const r of this.records.values())if(r.dirty)this.flush(r);});
+  }
+  // Tap switches tool, hold opens that tool's settings. One button, both jobs, and no row of
+  // dots taking up the dock for a panel that is wanted once a session.
+  holdable(button,mode,{delay=450}={}){
+    let timer=null,held=false;
+    const cancel=()=>{clearTimeout(timer);timer=null;};
+    const hold=()=>{held=true;cancel();this.setMode(mode,{finish:false});this.openOptions(mode);};
+    button.addEventListener('pointerdown',event=>{
+      if(event.button)return;held=false;cancel();timer=setTimeout(hold,delay);
+    });
+    for(const name of ['pointerup','pointerleave','pointercancel'])button.addEventListener(name,cancel);
+    button.addEventListener('contextmenu',event=>{event.preventDefault();hold();});
+    button.onclick=event=>{
+      if(held){held=false;event.preventDefault();return;}   // the hold already did the work
+      this.setMode(this.mode===mode?'read':mode);
+    };
+  }
+  openOptions(mode){
+    const panel=$(mode+'-options');
+    if(!panel)return;
+    for(const other of document.querySelectorAll('.pencil-popover'))other.open=other===panel;
+    this.feedback(mode==='erase'?'橡皮大小':'颜色与粗细');
   }
   setScore(id){this.clearViews();this.scoreId=id;this.setMode('read');this.refreshHistory();for(const [key,r] of this.records)if(!key.startsWith(id+'/')&&!r.dirty&&!r.saving)this.records.delete(key);}
   setColor(color){this.color=color;for(const button of document.querySelectorAll('[data-ink-color]'))button.setAttribute('aria-pressed',String(button.dataset.inkColor===color));}
   preview(id,fraction){const node=$(id);if(node)node.style.setProperty('--dot',Math.max(3,Math.round(fraction*1400))+'px');}
   setMode(mode,{finish=true}={}){for(const popover of document.querySelectorAll('.pencil-popover'))if(popover.id!==mode+'-options')popover.open=false;
+    if(mode==='read')for(const popover of document.querySelectorAll('.pencil-popover'))popover.open=false;
     if(finish)for(const v of this.views)v.finish?.();this.mode=mode;for(const m of ['pen','erase']){$('ink-'+m).classList.toggle('selected',m===mode);$('ink-'+m).setAttribute('aria-pressed',String(m===mode));}for(const v of this.views)v.canvas.classList.toggle('writing',mode!=='read');}
   get guardingTouch(){return this.penDown||performance.now()<this.palmUntil;}
   feedback(message){$('pencil-feedback').textContent=message;$('pencil-feedback').hidden=false;clearTimeout(this.feedbackTimer);this.feedbackTimer=setTimeout(()=>$('pencil-feedback').hidden=true,1300);}
@@ -32,17 +62,7 @@ export class Ink {
     const r={key,data:blank(),base:blank(),etag:'"new"',dirty:false,revision:0,undo:[],redo:[],views:new Set(),loading:true};
     r.ready=new Promise(resolve=>r.resolveReady=resolve);this.records.set(key,r);
     const draft=await this.draft(key).catch(()=>null);
-    if(this.localOnly){
-      r.data=draft?.data||blank();r.base=copy(r.data);r.loading=false;r.dirty=false;
-      this.status('批注仅保存在当前浏览器 · 建议定期导出备份');
-      r.resolveReady(r);delete r.resolveReady;return r;
-    }
-    try{
-      const response=await timedFetch('./api/notes/'+key,{cache:'no-store'});if(!response.ok)throw new Error('读取失败');
-      const remote=await response.json();r.etag=response.headers.get('ETag');r.base=copy(remote);
-      r.data=draft?.dirty?mergeInk(draft.base,draft.data,remote):remote;r.dirty=!!draft?.dirty;r.loading=false;
-      if(r.dirty)this.flush(r);else this.status('批注已载入');
-    }catch{r.data=draft?.data||blank();r.base=draft?.base||blank();r.etag=draft?.etag||'"new"';r.dirty=!!draft?.dirty;r.loading=false;this.status('离线草稿 · 联网后重试同步');}
+    r.data=draft?.data||blank();r.base=copy(r.data);r.loading=false;r.dirty=false;
     r.resolveReady(r);delete r.resolveReady;return r;
   }
   clearViews(){for(const v of this.views){v.finish?.();v.abort.abort();v.record.views.delete(v);v.canvas.remove();v.canvas.width=0;v.canvas.height=0;}this.views.clear();}
@@ -115,27 +135,11 @@ export class Ink {
   }
   async flushNow(r){
     if(!r.dirty)return;r.saving=true;
-    if(this.localOnly){
-      try{
-        while(r.dirty){const revision=r.revision,sent=copy(r.data);await this.draft(r.key,{data:sent,base:sent,etag:'"local"',dirty:false});r.base=sent;r.dirty=r.revision!==revision;}
-        this.status('批注已保存本机 · 可在设置中更新云端批注');
-      }catch{this.status('批注保存失败 · 请立即导出备份');this.toast('浏览器存储不可用，请保持页面打开并导出批注备份。');}
-      finally{r.saving=false;}return;
-    }
     try{
-      for(let attempt=0;attempt<3&&r.dirty;attempt++){
-        const sent=copy(r.data),revision=r.revision;
-        const response=await timedFetch('./api/notes/'+r.key,{method:'PUT',headers:{'Content-Type':'application/json','If-Match':r.etag},body:JSON.stringify(sent)});
-        if(response.status===409){
-          const latest=await timedFetch('./api/notes/'+r.key,{cache:'no-store'});if(!latest.ok)throw new Error('暂时无法合并');
-          const remote=await latest.json();r.data=mergeInk(r.base,r.data,remote);r.base=copy(remote);r.etag=latest.headers.get('ETag');this.draw(r);await this.cache(r);continue;
-        }
-        if(!response.ok)throw new Error('同步暂不可用');
-        r.etag=response.headers.get('ETag');r.base=sent;r.dirty=r.revision!==revision;await this.cache(r);
-      }
-      this.status(r.dirty?'批注合并中，请稍后重试':'批注已保存');
-    }catch{this.status('批注保留在本机草稿 · 尚未同步');await this.cache(r);}
-    finally{r.saving=false;if(r.dirty&&navigator.onLine){clearTimeout(r.timer);r.timer=setTimeout(()=>this.flush(r),15000);}}
+      while(r.dirty){const revision=r.revision,sent=copy(r.data);await this.draft(r.key,{data:sent,base:sent,etag:'"local"',dirty:false});r.base=sent;r.dirty=r.revision!==revision;}
+      this.status('批注已保存在这台设备上');
+    }catch{this.status('批注保存失败 · 请立即导出备份');this.toast('浏览器存储不可用，请保持页面打开并导出批注备份。');}
+    finally{r.saving=false;}
   }
   // Undo and redo say plainly whether there is anything to undo on the page you last wrote on.
   refreshHistory(){

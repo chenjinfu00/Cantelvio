@@ -275,3 +275,9 @@ body.performance-mode .top-drawer .midi-bar{display:none}
 .folder-intro ul{margin:.4rem 0 0;padding-left:1.1rem}
 .folder-intro li{margin:.3rem 0}
 .folder-intro a{color:inherit}
+
+/* The tool button is its own settings button: hold it. The summary stays for the details
+   element to work, but it has nothing left to show. */
+.pencil-dock .pencil-popover>summary{display:none}
+.pencil-options-panel .popover-hint{margin:-6px 0 12px;font-size:11px;color:var(--muted)}
+.pencil-tool[disabled]{opacity:.38}

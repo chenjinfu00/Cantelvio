@@ -67,14 +67,25 @@ export async function offerInkFile(rows,{share=navigator.share?.bind(navigator),
 // put this device's markings back whenever the browser allows it.
 export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,showMerged}){
   const $=id=>document.getElementById(id),button=$('ink-folder-save'),status=$('ink-folder-status');
+  // The same action from two places: the settings panel, and the dock the writing hand is on.
+  const dock=$('ink-save');
   let busy=false;
   const source=()=>library?.local||null;
   const say=text=>{if(status)status.textContent=text;};
   function describe(){
     const local=source();
-    if(!local||local.needsFolder)return say('尚未选择本地曲谱文件夹。批注保存在这台设备上。');
+    if(!local||local.needsFolder){
+      // Nothing to save into yet, but the file can still be handed to the reader.
+      if(dock){dock.disabled=false;dock.title='导出批注为文件';dock.querySelector('span').textContent='导出';}
+      return say('尚未选择本地曲谱文件夹。批注保存在这台设备上。');
+    }
     say(local.writable?'已连接文件夹，批注会自动存进「曲谱库数据／批注」。':'这个浏览器不能写入文件夹。点上面的按钮，把批注存进文件 App 里的曲谱文件夹。');
     if(button)button.textContent=local.writable?'立即保存批注到曲谱文件夹':'导出批注，存进曲谱文件夹';
+    if(dock){
+      dock.disabled=false;
+      dock.title=local.writable?'保存批注到曲谱文件夹':'导出批注，存进曲谱文件夹';
+      dock.querySelector('span').textContent=local.writable?'保存':'导出';
+    }
   }
   // Opening a folder brings in whatever other devices left there.
   async function adopt(){
@@ -95,20 +106,29 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
     if(!quiet&&written)toast(`已把 ${written} 首曲子的批注写进曲谱文件夹。`);
     return written;
   }
-  if(button)button.onclick=async()=>{
-    if(busy||!canRun())return;busy=true;button.disabled=true;
+  async function keep(){
+    if(busy||!canRun())return;
+    busy=true;if(button)button.disabled=true;if(dock)dock.disabled=true;
     try{
       await drain?.(ink);
       const local=source();
-      if(local?.writable){const written=await save();say(`已写入 ${written} 首曲子的批注。`);toast('批注已保存到曲谱文件夹。');}
-      else{const {pages,how}=await offerInkFile(await allInkDrafts());
-        say(how==='share'?`已导出 ${pages} 页批注，请在分享面板里选择「存储到文件」，存进本地曲谱／曲谱库数据／批注。`
-          :`已下载 ${pages} 页批注，请把这个文件放进 本地曲谱／曲谱库数据／批注。`);}
+      if(local?.writable&&!local.needsFolder){
+        const written=await save();
+        say(`已写入 ${written} 首曲子的批注。`);
+        toast(written?'批注已保存到曲谱文件夹。':'还没有批注可以保存。');
+      }else{
+        const {pages,how}=await offerInkFile(await allInkDrafts());
+        const where=how==='share'?`已导出 ${pages} 页批注，请在分享面板里选择「存储到文件」，存进 曲谱库数据／批注。`
+          :`已下载 ${pages} 页批注，请把它放进 曲谱库数据／批注。`;
+        say(where);toast(where);
+      }
     }catch(error){say(error.message);toast(error.message);}
-    finally{busy=false;button.disabled=false;}
-  };
+    finally{busy=false;if(button)button.disabled=false;if(dock)dock.disabled=false;}
+  }
+  if(button)button.onclick=keep;
+  if(dock)dock.onclick=keep;
   return {
-    describe,save,
+    describe,save,keep,
     async onFolder(){
       describe();
       try{

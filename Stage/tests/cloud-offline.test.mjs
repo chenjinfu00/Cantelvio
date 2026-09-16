@@ -57,6 +57,6 @@ test('annotation backup accepts old and full formats; merges idempotently withou
 });
 test('manual cloud sync can await an already-running local ink write',async()=>{
   let release;const ink=Object.create(Ink.prototype),record={dirty:true,revision:1,key:'page',data:{version:1,strokes:[]}};
-  ink.localOnly=true;ink.status=()=>{};ink.toast=()=>{};ink.draft=()=>new Promise(r=>release=r);
+  ink.status=()=>{};ink.toast=()=>{};ink.draft=()=>new Promise(r=>release=r);
   const first=ink.flush(record),second=ink.flush(record);assert.equal(first,second);assert.equal(record.saving,true);release();await second;assert.equal(record.dirty,false);assert.equal(record.saving,false);
 });

@@ -1,5 +1,5 @@
 import {cachedPDFResponse,forgetCachedBody} from './offline-range.js';
-const SHELL='volta-shell-20260916-share-a',PDFS='volta-offline-pdfs-v1';
+const SHELL='volta-shell-20260916-dock-a',PDFS='volta-offline-pdfs-v1';
 const root=new URL('./',self.location.href),STATE=new URL('./.shell-state',root).href,BATCH=8;
 
 async function report(message){for(const client of await self.clients.matchAll({includeUncontrolled:true}))client.postMessage(message);}

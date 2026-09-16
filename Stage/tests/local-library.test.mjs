@@ -130,3 +130,19 @@ test('a newcomer is told what folder to point at, and told only until they have'
     assert.ok(readme.includes(promised),'README explains '+promised);
   assert.doesNotMatch(readme,/netlify/i,'the README no longer points at a host that is gone');
 });
+
+test('the writing dock carries its own save, and a tool button is its own settings button',async()=>{
+  const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
+  assert.match(html,/id="ink-save"/,'saving is where the writing hand already is');
+  assert.doesNotMatch(html,/画笔设置|橡皮设置/,'the two ··· buttons are gone');
+  assert.match(html,/id="pen-options"/);assert.match(html,/id="erase-options"/);
+  assert.match(html,/长按选颜色和粗细/,'the pen says how to reach its settings');
+  const ink=await fs.readFile(new URL('../docs/ink.js',import.meta.url),'utf8');
+  assert.match(ink,/holdable\(\$\('ink-'\+mode\),mode\)/,'both tools are tap-to-switch, hold-for-settings');
+  assert.match(ink,/if\(held\)\{held=false;event\.preventDefault\(\);return;\}/,'a hold does not also switch the tool');
+  assert.match(ink,/contextmenu/,'a right click reaches the same panel with a mouse');
+  const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
+  assert.match(css,/\.pencil-dock \.pencil-popover>summary\{display:none\}/);
+  const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
+  assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock button and the settings button do the same thing');
+});

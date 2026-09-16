@@ -39,12 +39,12 @@ test('real ink handlers auto-select Pencil, persist strokes, erase, undo and ign
     getContext(){return {clearRect(){},beginPath(){},arc(){},fill(){},moveTo(){},lineTo(){},stroke(){}};}
   }
   const node=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
-  Object.defineProperty(globalThis,'document',{configurable:true,value:{getElementById:node,createElement:()=>new Element(),querySelectorAll:()=>[]}});
+  Object.defineProperty(globalThis,'document',{configurable:true,value:{getElementById:node,createElement:()=>new Element(),querySelectorAll:()=>[],addEventListener(){}}});
   Object.defineProperty(globalThis,'window',{configurable:true,value:{addEventListener(){}}});
   Object.defineProperty(globalThis,'requestAnimationFrame',{configurable:true,value:fn=>{fn();return 1;}});
   let byte=0;Object.defineProperty(globalThis,'crypto',{configurable:true,value:{getRandomValues:array=>{array.forEach((_,i)=>array[i]=byte++%256);return array;}}});
   try{
-    ink=new Ink(()=>{}, {localOnly:true,draft:async(id,value)=>{if(value!==undefined)drafts.set(id,structuredClone(value));return drafts.get(id);},inputOptions:{setTimer:fn=>{timers.set(++timerId,fn);return timerId;},clearTimer:id=>timers.delete(id)}});
+    ink=new Ink(()=>{}, {draft:async(id,value)=>{if(value!==undefined)drafts.set(id,structuredClone(value));return drafts.get(id);},inputOptions:{setTimer:fn=>{timers.set(++timerId,fn);return timerId;},clearTimer:id=>timers.delete(id)}});
     ink.setScore('test-score');const sheet=new Element();sheet.base=new Element();await ink.attach(sheet,1);const canvas=sheet.children[0],record=await ink.record('test-score',1);
     assert.equal(ink.mode,'read');canvas.fire('pointerdown',pen());assert.equal(ink.mode,'pen');assert.equal(ink.guardingTouch,true);
     canvas.fire('pointermove',pen(200,240));canvas.fire('pointerup',pen(200,240));await ink.flush(record);
