@@ -3,7 +3,10 @@ import fs from 'node:fs/promises';
 import {createReadStream,constants} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {describeWork,groupWorks,versionDisplayTitle} from '../docs/library-model.js';
+import {groupWorks} from '../docs/library-model.js';
+import {cleanComposer} from './retitle-scores.mjs';
+import {regionFor} from './region-rules.mjs';
+import {classifyLibraryItem,libraryRelativePath} from './library-paths.mjs';
 const sourceDir=path.resolve(process.argv[2]||'../Score_Turner_Web/local_data');
 const output=path.resolve(import.meta.dirname,'../.local-library');
 const index=JSON.parse(await fs.readFile(path.join(sourceDir,'library-private-index.json')));
@@ -13,7 +16,6 @@ const overrides=JSON.parse(await fs.readFile(path.join(output,'metadata.json')))
 let retired={items:{}};try{retired=JSON.parse(await fs.readFile(path.join(output,'retired.json')));}catch{}
 const isRetired=id=>Object.hasOwn(retired.items||{},id);
 const digest=async file=>{const h=createHash('sha256');for await(const chunk of createReadStream(file))h.update(chunk);return h.digest('hex');};
-function segment(value){let s=String(value||'待核对').normalize('NFC').replace(/[<>:"/\\|?*\x00-\x1f]/g,' ').replace(/\s+/g,' ').trim();while(Buffer.byteLength(s)>170)s=[...s].slice(0,-1).join('');return s||'待核对';}
 const candidates=new Map();
 for(const item of index.items.filter(x=>x.format==='pdf'&&!isRetired(x.id))){
   const sources=[];for(const alias of item.aliases){const file=path.resolve(index.root,alias);if(!file.startsWith(index.root+path.sep))throw new Error('Invalid source path');const info=await fs.stat(file);sources.push({file,mtime:info.mtimeMs,original:alias});}
@@ -29,14 +31,15 @@ for(const imported of imports){
 const items=[],files={},audit=[];
 for(const [id,entry] of candidates){
   const metadata={...entry.metadata,...(overrides[id.slice(0,8)]||{})};
-  metadata.title=versionDisplayTitle(metadata);const work=describeWork(metadata);
+  metadata.composer=cleanComposer(metadata.composer);
+  if(metadata.composer==='原神'&&!metadata.region)metadata.region=regionFor(metadata.title,(metadata.aliases||[]).join(' '));
+  const classification=classifyLibraryItem(metadata);metadata.title=classification.item.title;const work=classification.work;
   if(/待核对/.test(metadata.composer||'')&&!/待核对/.test(work.composer))metadata.composer=work.composer;
-  const browse=groupWorks([metadata])[0].browseGroup;
-  const family=/^(原神|崩坏3|崩坏：星穹铁道|鸣潮|王者荣耀)$/.test(browse)?'游戏音乐':browse==='Animenz'?'Animenz':browse==='动漫'?'动漫':browse==='流行音乐'?'流行音乐':/待核对/.test(browse)?'待核对':'古典与器乐';
+  const {browse,family}=classifyLibraryItem(metadata);
   if(family==='游戏音乐'){metadata.style='游戏音乐';if(!metadata.era||/待核对/.test(metadata.era))metadata.era='21 世纪';}
   if(family==='Animenz'){metadata.arranger='Animenz';metadata.style='动漫／影视';if(!metadata.era||/待核对/.test(metadata.era))metadata.era='21 世纪';}
   if(family==='流行音乐')metadata.style='流行音乐';
-  const relative=path.join('曲谱',family,...(family===browse?[]:[segment(browse)]),segment(work.genre),segment(metadata.title)+' · '+id.slice(0,8)+'.pdf');
+  const relative=libraryRelativePath(metadata).relative;
   const target=path.join(output,relative);const sources=[...new Map(entry.sources.map(x=>[x.file,x])).values()].sort((a,b)=>b.mtime-a.mtime);
   for(const source of sources)if(await digest(source.file)!==id)throw new Error('Source changed; stop before merging: '+source.original);
   await fs.mkdir(path.dirname(target),{recursive:true});
