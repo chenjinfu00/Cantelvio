@@ -30,13 +30,13 @@ export function libraryRelativePath(item,{current=null}={}){
     const previous=path.dirname(current).split(path.sep).at(-1);
     if(previous&&previous!=='其他作品'&&previous!==family&&previous!==browse)work.genre=previous;
   }
-  const folders=['曲谱',family];
-  const redundantBrowse=family==='待核对'&&browse==='作曲家待核对';
-  if(family!==browse&&!redundantBrowse)folders.push(segment(browse));
+  // The folders are the shelf the app shows: browse group, then the level you drill into.
+  // A 游戏音乐／古典与器乐 layer would exist only on disk, so it is not one.
+  const folders=['曲谱',segment(browse)];
   // A folder should add information. These labels merely repeat their parent
   // category and otherwise force every score one click deeper.
   const redundantGenre=new Set(['游戏配乐','其他作品','流行歌曲','作曲家待核对']);
-  const animeRepeatsParent=family==='动漫'&&work.genre==='动漫／影视';
+  const animeRepeatsParent=browse==='动漫'&&work.genre==='动漫／影视';
   if(!redundantGenre.has(work.genre)&&!animeRepeatsParent)folders.push(segment(work.genre));
   folders.push(segment(classified.item.title)+' · '+item.id.slice(0,8)+'.pdf');
   return {relative:path.join(...folders),...classified};

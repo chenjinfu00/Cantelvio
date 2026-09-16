@@ -28,7 +28,7 @@ async function pruneEmpty(folder,keep){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const root=path.resolve(import.meta.dirname,'../.local-library'),apply=process.argv.includes('--apply');
+  const root=path.resolve(import.meta.dirname,'../本地曲谱'),apply=process.argv.includes('--apply');
   const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'))),manifest=JSON.parse(await fs.readFile(path.join(root,'manifest.json')));
   const moves=reorganizationPlan(catalog.items,manifest.files||{}),counts={};
   for(const move of moves){const group=path.dirname(move.next).split(path.sep).slice(1).join(' / ');counts[group]=(counts[group]||0)+1;}

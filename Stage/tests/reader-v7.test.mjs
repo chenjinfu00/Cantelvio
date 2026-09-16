@@ -41,7 +41,7 @@ test('latest version is the initial choice but a saved choice takes priority',()
   const work={versions:[{id:'old',format:'pdf',available:true,modifiedAt:'2020-01-01'},{id:'new',format:'pdf',available:true,modifiedAt:'2025-01-01'}]};assert.equal(chooseVersion(work).id,'new');assert.equal(chooseVersion(work,'old').id,'old');
 });
 test('local collection stays out of public assets and has 701 distinct classified PDFs',async t=>{
-  const folder=new URL('../.local-library/',import.meta.url);let catalog;
+  const folder=new URL('../本地曲谱/',import.meta.url);let catalog;
   try{catalog=JSON.parse(await fs.readFile(new URL('catalog.json',folder)));}catch(e){if(e.code==='ENOENT'){t.skip('Private collection is not distributed with the repository');return;}throw e;}
   const manifest=JSON.parse(await fs.readFile(new URL('manifest.json',folder)));
   // The collection is curated, so its size moves; what must hold is that the three views agree.
@@ -55,12 +55,12 @@ test('local collection stays out of public assets and has 701 distinct classifie
   assert.equal(JSON.parse(await fs.readFile(new URL('../docs/library/catalog.json',import.meta.url))).items.length,0,'the public copy carries no scores');
 });
 test('local server serves only registered PDFs and metadata, with byte ranges and no private index access',async t=>{
-  const library=path.resolve(import.meta.dirname,'../.local-library');try{await fs.access(library+'/manifest.json');}catch{t.skip('Private collection absent');return;}
+  const library=path.resolve(import.meta.dirname,'../本地曲谱');try{await fs.access(library+'/manifest.json');}catch{t.skip('Private collection absent');return;}
   const server=await createPreviewServer({library});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   try{
     const base=`http://127.0.0.1:${server.address().port}/volta/`,response=await fetch(base+'library/catalog.json'),catalog=await response.json();assert.ok(catalog.items.length>500);assert.match(response.headers.get('Cache-Control'),/private/);
     const first=catalog.items[0],pdf=await fetch(base+'scores/'+first.id+'.pdf',{headers:{Range:'bytes=0-4'}});assert.equal(pdf.status,206);assert.equal(await pdf.text(),'%PDF-');
-    for(const route of ['manifest.json','merge-audit.json','.local-library/catalog.json','scores/nope.pdf','scores/'+('f'.repeat(64))+'.pdf'])assert.ok([403,404].includes((await fetch(base+route)).status));
+    for(const route of ['manifest.json','merge-audit.json','本地曲谱/catalog.json','scores/nope.pdf','scores/'+('f'.repeat(64))+'.pdf'])assert.ok([403,404].includes((await fetch(base+route)).status));
     assert.equal((await fetch(base+'library/catalog.json',{headers:{Origin:'https://other.example'}})).status,403);
   }finally{await new Promise(resolve=>server.close(resolve));}
 });

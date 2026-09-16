@@ -18,7 +18,7 @@ export function regionPlan(items,{overrides={},composer='原神'}={}){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const root=path.resolve(import.meta.dirname,'../.local-library');
+  const root=path.resolve(import.meta.dirname,'../本地曲谱');
   const args=process.argv.slice(2),apply=args.includes('--apply');
   const overrides={};
   for(const pair of args.filter(value=>value.startsWith('--set='))){

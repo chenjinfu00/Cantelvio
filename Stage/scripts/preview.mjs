@@ -35,7 +35,7 @@ export async function createPreviewServer({library=null}={}){
   });
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-const library=process.argv.includes('--library')?path.resolve(import.meta.dirname,'../.local-library'):null;
+const library=process.argv.includes('--library')?path.resolve(import.meta.dirname,'../本地曲谱'):null;
 const server=await createPreviewServer({library});
 server.listen(Number(process.argv[2]||4318),process.argv.includes('--lan')?'0.0.0.0':'127.0.0.1',()=>{
   const port=process.argv[2]||4318;console.log(`Volta preview: http://localhost:${port}/volta/`);

@@ -8,7 +8,7 @@ const {siteId}=JSON.parse(await fs.readFile(path.join(root,'.netlify/state.json'
 const auth=JSON.parse(await fs.readFile(path.join(os.homedir(),'Library/Preferences/netlify/config.json')));
 const options={siteID:siteId,token:auth.users[auth.userId].auth.token,consistency:'strong'};
 const files=getStore('volta-files',options),chunks=getStore('volta-pdf-chunks',options);
-const source=JSON.parse(await fs.readFile(path.join(root,'.local-library/catalog.json')));
+const source=JSON.parse(await fs.readFile(path.join(root,'本地曲谱/catalog.json')));
 const catalog=await files.get('catalog',{type:'json'});if(!catalog)throw Error('Catalogue not published yet');
 const expected=new Map(source.items.map(item=>[item.id,item]));
 if(catalog.items.length!==expected.size||new Set(catalog.items.map(x=>x.id)).size!==expected.size)throw Error('Catalogue count mismatch');
@@ -22,7 +22,7 @@ for(const item of catalog.items){
   totalBytes+=item.bytes;
 }
 if(missingChunks.length){
-  await fs.writeFile(path.join(root,'.local-library/cloud-missing-chunks.json'),JSON.stringify(missingChunks,null,2));
+  await fs.writeFile(path.join(root,'本地曲谱/cloud-missing-chunks.json'),JSON.stringify(missingChunks,null,2));
   throw Error(`Missing ${missingChunks.length} chunks from ${new Set(missingChunks.map(x=>x.id)).size} PDFs; repair list saved locally.`);
 }
 const large=[];
@@ -33,5 +33,5 @@ for(const item of catalog.items.filter(x=>x.bytes>100_000_000)){
   large.push({id:item.id,title:item.title,bytes,sha256Verified:true});console.log('Large PDF fully read-back verified: '+item.title);
 }
 const report={checkedAt:new Date().toISOString(),pdfs:catalog.items.length,bytes:totalBytes,requiredChunks,large,missing:[]};
-await fs.writeFile(path.join(root,'.local-library/cloud-verification.json'),JSON.stringify(report,null,2));
+await fs.writeFile(path.join(root,'本地曲谱/cloud-verification.json'),JSON.stringify(report,null,2));
 console.log(JSON.stringify(report,null,2));

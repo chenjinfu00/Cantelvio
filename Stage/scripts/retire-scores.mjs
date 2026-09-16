@@ -1,4 +1,4 @@
-// Retiring a score never deletes it: the PDF moves to .local-library/retired/ and the id is
+// Retiring a score never deletes it: the PDF moves to 本地曲谱/retired/ and the id is
 // recorded so a later rebuild does not bring it back. Nothing here touches docs/.
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -26,7 +26,7 @@ export function retirePlan(catalog,manifest,wanted){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const root=path.resolve(import.meta.dirname,'../.local-library');
+  const root=path.resolve(import.meta.dirname,'../本地曲谱');
   const args=process.argv.slice(2),apply=args.includes('--apply');
   const reasonAt=args.indexOf('--reason'),reason=reasonAt>=0?args[reasonAt+1]||'':'';
   const wanted=args.filter((value,index)=>!value.startsWith('--')&&args[index-1]!=='--reason');

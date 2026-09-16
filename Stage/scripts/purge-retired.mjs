@@ -19,7 +19,7 @@ export function pruneCheckpoint(lines,ids){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const root=path.resolve(import.meta.dirname,'..'),library=path.join(root,'.local-library');
+  const root=path.resolve(import.meta.dirname,'..'),library=path.join(root,'本地曲谱');
   const apply=process.argv.includes('--apply'),alsoLocal=process.argv.includes('--local');
   const retired=JSON.parse(await fs.readFile(path.join(library,'retired.json')));
   const ids=Object.keys(retired.items||{});

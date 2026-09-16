@@ -1,9 +1,10 @@
 .DS_Store
 node_modules/
 *.log
-.local-library/
+本地曲谱/
 tmp/
 .venv-fit/
 .netlify/
 .env*
 dist/
+曲谱/

@@ -4,7 +4,7 @@ import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {getStore} from '@netlify/blobs';
 import {streamQueue} from './stream-queue.mjs';
-const root=path.resolve(import.meta.dirname,'..'),library=path.join(root,'.local-library');
+const root=path.resolve(import.meta.dirname,'..'),library=path.join(root,'本地曲谱');
 const {siteId}=JSON.parse(await fs.readFile(path.join(root,'.netlify/state.json')));
 const config=JSON.parse(await fs.readFile(path.join(os.homedir(),'Library/Preferences/netlify/config.json')));
 const token=config.users?.[config.userId]?.auth?.token;
