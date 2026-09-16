@@ -499,12 +499,12 @@ bookmarks=setupBookmarks({
 });
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
-  open:async id=>{
-    const saved=await loadScore(id),item=recent?.items.find(entry=>entry.id===id);
-    if(saved?.buffer){await openPDF(saved.buffer,saved.name,saved);return;}
+  open:async (id,item)=>{
     if(library?.local?.needsFolder)await library.local.reopen?.();
     const local=library?.local?.url?.(id)||library?.local?.pathURL?.(item?.path);
+    const saved=await loadScore(id).catch(()=>null);
     if(local){await openPDF({id,url:local,path:item?.path||library.local.path?.(id),local:true},item?.name||saved?.name||'未命名曲谱',saved||null);return;}
+    if(saved?.buffer){await openPDF(saved.buffer,saved.name,saved);return;}
     const offlineCopy=await offlineScore(id);
     if(offlineCopy){const restored={...saved,...offlineCopy,remote:offlineCopy.remote};await openPDF(restored.remote,restored.name,restored);return;}
     throw new Error('这份曲谱尚未在当前本地数据库中找到，请重新选择数据库后再试。');

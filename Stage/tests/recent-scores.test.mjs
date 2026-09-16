@@ -40,8 +40,9 @@ test('history keeps the relative folder path when a score is reopened',()=>{
 
 test('the reader source prefers the selected local folder over an old cache',async()=>{
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
-  assert.match(app,/const saved=await loadScore\(id\),item=recent\?\.items\.find/);
+  assert.match(app,/open:async \(id,item\)=>/);
   assert.match(app,/const local=library\?\.local\?\.url/);
+  assert.match(app,/if\(local\)\{await openPDF/);
   assert.match(app,/const offlineCopy=await offlineScore\(id\)/);
   const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
   assert.match(offline,/const sourceURL=score\.remote\?\.url/);
