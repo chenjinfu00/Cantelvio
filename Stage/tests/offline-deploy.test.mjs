@@ -1,18 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {startupDecision} from '../docs/cloud-account.js';
 import {cachedBody,cachedPDFResponse,forgetCachedBody} from '../docs/offline-range.js';
 import {deployPlan,matchScores} from '../docs/offline-deploy.js';
-
-test('a device that logged in before opens the reader without waiting for the network',()=>{
-  const device={id:'d1'};
-  assert.equal(startupDecision({trusted:device,online:false}),'open','offline cold start must not block');
-  assert.equal(startupDecision({trusted:device,online:true}),'open');
-  assert.equal(startupDecision({trusted:null,online:true}),'verify');
-  assert.equal(startupDecision({trusted:null,online:false}),'login');
-  assert.equal(startupDecision({cloudLibrary:false,trusted:null,online:false}),'open');
-});
 
 test('a cached score is read into memory once, not once per range request',async()=>{
   const body=new Uint8Array(1000).fill(7);
@@ -68,8 +58,8 @@ test('the service worker saves the shell in batches and answers the page',async(
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="offline-deploy"/);
   assert.match(html,/id="deploy-dialog"/);
-  const account=await fs.readFile(new URL('../docs/cloud-account.js',import.meta.url),'utf8');
-  assert.doesNotMatch(account,/const response=await cloudRequest\('session'\);if\(!response\.ok\)throw Error/,'startup no longer hangs on the session check');
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.doesNotMatch(app,/await requireCloudLogin/,'startup waits for nothing before opening the reader');
 });
 
 test('a chosen folder is what gets saved for offline use, with no server in the picture',async()=>{
@@ -79,16 +69,22 @@ test('a chosen folder is what gets saved for offline use, with no server in the 
   assert.equal(await bufferFrom(local,'b'),null,'a score the folder does not hold is not invented');
   assert.equal(await bufferFrom(null,'a'),null);
   const deploy=await fs.readFile(new URL('../docs/offline-deploy.js',import.meta.url),'utf8');
-  assert.match(deploy,/const score=buffer\?\{id:item\.id,name:item\.title,buffer\}/,'folder bytes are saved directly, not re-downloaded');
+  assert.match(deploy,/saveOffline\(\{id:item\.id,name:item\.title,buffer\}/,'folder bytes are saved directly, never downloaded');
+  assert.doesNotMatch(deploy,/scoreURL/,'there is no server address left to fall back to');
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
   assert.match(app,/local:\(\)=>library\?\.local/,'the dialog is told which folder is open');
 });
 
-test('the published page is the app, not a signpost to a server',async()=>{
-  const account=await fs.readFile(new URL('../docs/cloud-account.js',import.meta.url),'utf8');
-  assert.doesNotMatch(account,/location\.replace/,'a visitor is never sent somewhere else');
-  assert.doesNotMatch(account,/github\.io/);
-  const config=await fs.readFile(new URL('../docs/site-config.js',import.meta.url),'utf8');
-  assert.match(config,/CLOUD_LIBRARY = false/,'the published build talks to no server');
-  assert.match(config,/CLOUD_HOME = ''/);
+test('the published page is the app, with no server left to talk to',async()=>{
+  const docs=new URL('../docs/',import.meta.url);
+  for(const gone of ['cloud-account.js','cloud-sync.js','site-config.js'])
+    await assert.rejects(fs.access(new URL(gone,docs)),'the server-era module '+gone+' is gone');
+  const html=await fs.readFile(new URL('index.html',docs),'utf8');
+  assert.doesNotMatch(html,/cloud-login|cloud-password|受信任设备/,'nothing asks for a password any more');
+  for(const name of ['app.js','library.js','offline-deploy.js','ink.js','version-preferences.js']){
+    const source=await fs.readFile(new URL(name,docs),'utf8');
+    assert.doesNotMatch(source,/PUBLIC_LIBRARY|CLOUD_LIBRARY|CLOUD_HOME/,name+' still branches on a server mode');
+  }
+  const library=await fs.readFile(new URL('library.js',docs),'utf8');
+  assert.doesNotMatch(library,/fetch\(/,'the shelf makes no request at all');
 });

@@ -9,10 +9,6 @@
     "preview": "node scripts/preview.mjs"
   },
   "dependencies": {
-    "@netlify/blobs": "^11.0.3",
     "@noble/hashes": "^2.4.0"
-  },
-  "devDependencies": {
-    "netlify-cli": "^27.5.2"
   }
 }

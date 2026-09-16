@@ -63,11 +63,8 @@ test('the reader can reach a source, offline and online alike',async()=>{
   const manifest=JSON.parse(await fs.readFile(new URL('../docs/cache-manifest.json',import.meta.url),'utf8'));
   for(const path of ['./midi-file.js','./piano.js','./midi-player.js','./midi-ui.js','./vendor/piano/C4.mp3'])
     assert.ok(manifest.includes(path),path+' is saved for offline use');
-  const edge=await fs.readFile(new URL('../netlify/edge-functions/scores.js',import.meta.url),'utf8');
-  assert.match(edge,/\/volta\/sources\/\*/);
-  assert.match(edge,/source-\$\{source\[1\]\}/);
-  const preview=await fs.readFile(new URL('../scripts/preview.mjs',import.meta.url),'utf8');
-  assert.match(preview,/sources\//);
-  const upload=await fs.readFile(new URL('../scripts/upload-private-library.mjs',import.meta.url),'utf8');
-  assert.match(upload,/source-\$\{item\.id\}/);
+  const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
+  assert.match(local,/sourceURL:\(id,name\)/,'a MIDI file is read from the folder that holds its score');
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/library\?\.local\?\.sourceURL/);
 });

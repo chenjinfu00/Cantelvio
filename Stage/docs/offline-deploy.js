@@ -1,8 +1,6 @@
-import {PUBLIC_LIBRARY} from './site-config.js';
 import {saveOffline,offlineItems} from './offline.js';
 const $=id=>document.getElementById(id),root=new URL('./',import.meta.url);
 export const mb=bytes=>(bytes/1048576).toFixed(1)+' MB';
-export const scoreURL=id=>new URL(PUBLIC_LIBRARY?'./scores/'+id+'.pdf':'./api/files/'+id,root).href;
 
 // What a deployment will actually cost, before it starts.
 export function deployPlan(items,selected){
@@ -21,12 +19,9 @@ export function matchScores(items,query,limit=60){
   return {total:hits.length,shown:hits.slice(0,limit)};
 }
 
-// A folder chosen on this device is the collection now; the network is only for the older setup.
+// The collection is the folder chosen on this device; nothing is fetched.
 export async function loadCatalog(local=null){
-  if(local?.catalog)return Array.isArray(local.catalog.items)?local.catalog.items:[];
-  const response=await fetch(new URL(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',root),{cache:'no-store'});
-  if(!response.ok)throw new Error('曲谱库暂时不可用，请联网后重试。');
-  const data=await response.json();return Array.isArray(data.items)?data.items:[];
+  return Array.isArray(local?.catalog?.items)?local.catalog.items:[];
 }
 
 // Saving a score off a folder needs no network at all: the bytes are already on this device,
@@ -107,8 +102,8 @@ export function setupDeploy({toast=()=>{},onDone=()=>{},local=()=>null}={}){
         status.textContent=`正在下载 ${index}/${plan.count} · ${item.title}`;
         try{
           const buffer=await bufferFrom(local(),item.id);
-          const score=buffer?{id:item.id,name:item.title,buffer}:{id:item.id,name:item.title,remote:{id:item.id,url:scoreURL(item.id)}};
-          await saveOffline(score,message=>{status.textContent=`${index}/${plan.count} · ${item.title} · ${message}`;});saved.add(item.id);}
+          if(!buffer)throw new Error('本地曲谱文件夹里没有这份 PDF。');
+          await saveOffline({id:item.id,name:item.title,buffer},message=>{status.textContent=`${index}/${plan.count} · ${item.title} · ${message}`;});saved.add(item.id);}
         catch(error){failed++;status.textContent=`${item.title}：${error.message}`;}
       }
       try{await navigator.storage?.persist?.();}catch{}

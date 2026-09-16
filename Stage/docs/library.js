@@ -1,12 +1,11 @@
 import {groupWorks,chooseVersion,compareNames} from './library-model.js';
 import {versionPreferences} from './version-preferences.js';
-import {PUBLIC_LIBRARY,CLOUD_LIBRARY} from './site-config.js';
 const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
 export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
   let localSource=null;   // a folder chosen on this device, read instead of the network
-  let items=[],works=[],mode='composer',selected='',genre='',loaded=false,metadataRevision='"new"',editing=null,localLibrary=false,refreshTask=null,opening=false,currentWork=null;
+  let items=[],works=[],mode='composer',selected='',genre='',loaded=false,localLibrary=false,refreshTask=null,opening=false,currentWork=null;
   const preferences=versionPreferences(),labels={composer:'曲目分类',style:'风格',era:'年代',category:'原收藏'};
   const feedback=(node,message,error=false)=>{node.hidden=!message;node.textContent=message;node.classList.toggle('error',error);};
   const counts=(list,field)=>{const groups=new Map();for(const work of list){const key=work[field]||'待核对';groups.set(key,(groups.get(key)||0)+1);}return [...groups].sort(([a],[b])=>compareNames(a,b));};
@@ -46,8 +45,8 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       if(localSource?.needsFolder)await localSource.reopen?.();
       const local=localSource?await localSource.url(version.id):null;
       if(!local&&localSource&&!localSource.needsFolder&&localSource.missing?.includes?.(version.id))throw new Error('本地曲谱文件夹里没有这份 PDF。请检查文件夹，或重新选择。');
-      const url=local||new URL(PUBLIC_LIBRARY?'./scores/'+version.id+'.pdf':'./api/files/'+version.id,location.href).href;
-      await openPDF({id:version.id,url,workKey:work.key,local:!!local},version.title,null,message=>feedback(statusNode,message));
+      if(!local)throw new Error('这份曲谱在本地曲谱文件夹里找不到。请在左栏重新选择文件夹。');
+      await openPDF({id:version.id,url:local,workKey:work.key,local:true},version.title,null,message=>feedback(statusNode,message));
       let message='已记住此版本，下次打开这首曲目会继续使用。',failed=false;
       try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
       setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
@@ -59,11 +58,6 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
     const work=currentWork,version=work?.versions.find(v=>v.id===$('edition-select').value);
     if(version)openWork(work,version,$('edition-status'));
   };
-  function editVersion(item){
-    editing=item;
-    for(const name of ['composer','arranger','style','era','year','editionYear'])$('meta-'+name).value=item[name]||'';
-    $('metadata-title').textContent=item.title;$('metadata-status').textContent='';$('metadata-dialog').showModal();
-  }
   function versionDetails(work,statusNode){
     const details=el('details',null,'work-versions');details.append(el('summary','版本与来源 · '+work.versions.length));
     for(const item of work.versions){
@@ -71,8 +65,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       const sources=el('details');sources.append(el('summary','查看原文件位置与资料依据'),el('p',item.metadataStatus+'。'+item.aliases.join('；')));row.append(sources);
       if(!item.available){row.append(button('暂不可用 · 查看位置',()=>{sources.open=true;feedback(statusNode,localLibrary?'请在 Finder 中找到来源文件，下载后点“刷新谱库”。':'这个版本尚未导入谱库存储。');}));}
       else if(item.format==='pdf'){const b=button('打开此版本',()=>openWork(work,item,statusNode));b.dataset.openScore='true';row.append(b);}
-      else{const a=el('a','下载制谱源文件','secondary');a.href='./api/files/'+item.id;a.download=item.title+'.'+item.format;row.append(a);}
-      if(!PUBLIC_LIBRARY)row.append(button('整理资料',()=>editVersion(item),'quiet'));details.append(row);
+      details.append(row);
     }
     return details;
   }
@@ -116,14 +109,9 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
     $('library-refresh').disabled=true;$('library-refresh').textContent='正在检查…';
     refreshTask=(async()=>{
       $('library-count').textContent='正在核对曲谱下载状态…';
-      let data;
-      // A folder chosen on this device answers before the network does.
-      if(localSource)data=localSource.catalog;
-      else{
-        const response=await fetch(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',{cache:'no-store'});
-        if(!response.ok)throw new Error('曲谱库暂时不可用，请检查网络后重试。');
-        data=await response.json();
-      }items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;metadataRevision=data.metadataRevision||'"new"';loaded=true;draw();setCurrent();
+      // The collection is a folder on this device. There is no server to ask.
+      const data=localSource?.catalog||{items:[]};
+      items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;loaded=true;draw();setCurrent();
       if(localLibrary)$('account-note').textContent='本地谱库 · 仅在当前局域网提供';
       const pending=items.filter(x=>!x.available).length,ready=items.filter(x=>x.format==='pdf'&&x.available).length;
       $('library-summary').textContent=works.filter(w=>w.versions.some(v=>v.format==='pdf')).length+' 首曲目／合集 · '+ready+' 份 PDF 可打开'+(pending?' · '+pending+' 份暂不可用':'');
@@ -133,7 +121,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
         $('library-download-help').textContent='在左栏点「选择本地曲谱文件夹」，选中你存放曲谱的文件夹，这里就会出现你的全部曲目。';
         return;
       }
-      $('library-download-help').textContent=CLOUD_LIBRARY?'私人云端谱库 · 下载完整后可离线使用；批注在设置中按需更新。':localLibrary?(pending?'在 Finder 中下载曲谱后，刷新即可打开。':'本地分类谱库 · 未上传公开网站 · 首次打开默认最新版本，以后记住你的选择。'):PUBLIC_LIBRARY?'公开试用谱库 · 批注与上次使用的版本仅保存在当前浏览器。':'刷新查看曲谱库的最新内容。';
+      $('library-download-help').textContent='曲谱来自你选的本地文件夹 · 首次打开默认最新版本，以后记住你的选择。';
     })().finally(()=>{refreshTask=null;$('library-refresh').disabled=false;$('library-refresh').textContent='刷新谱库';});
     return refreshTask;
   };
@@ -141,16 +129,6 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
   $('library-button').onclick=async()=>{$('library-dialog').showModal();try{await refresh();}catch(e){$('library-count').textContent=e.message;}};
   $('library-search').oninput=()=>{selected='';genre='';draw();};$('library-format').onchange=draw;
   $('library-mode').onchange=e=>{mode=e.target.value;selected='';genre='';draw();};
-  $('metadata-form').onsubmit=async e=>{
-    e.preventDefault();if(!editing||PUBLIC_LIBRARY)return;
-    const values={};for(const key of ['composer','arranger','style','era'])values[key]=$('meta-'+key).value.trim();
-    for(const key of ['year','editionYear'])values[key]=$('meta-'+key).value?Number($('meta-'+key).value):null;
-    $('metadata-save').disabled=true;
-    try{const response=await fetch('./api/metadata/'+(editing.sourceId||editing.id.replace('pending-','')),{method:'PUT',headers:{'Content-Type':'application/json','If-Match':metadataRevision},body:JSON.stringify(values)});
-      if(!response.ok)throw new Error((await response.json()).error||'保存失败');
-      $('metadata-dialog').close();await refresh();toast('资料已保存，分类已更新。');
-    }catch(error){$('metadata-status').textContent=error.message;}finally{$('metadata-save').disabled=false;}
-  };
   return {refresh,setCurrent,syncControls,item:id=>items.find(entry=>entry.id===id)||null,
     useLocal(source){localSource=source;loaded=false;return refresh();},
     get local(){return localSource;}};

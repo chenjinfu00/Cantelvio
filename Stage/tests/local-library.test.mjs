@@ -34,7 +34,7 @@ test('a folder answers with the scores the catalogue asks for, and says which ar
 
 test('the shelf reads a folder before it reads the network, and the app keeps working offline',async()=>{
   const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
-  assert.match(library,/if\(localSource\)data=localSource\.catalog/);
+  assert.match(library,/const data=localSource\?\.catalog\|\|\{items:\[\]\}/,'the shelf is whatever folder is open');
   assert.match(library,/localSource\?await localSource\.url\(version\.id\)/);
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
   assert.match(app,/library\?\.local\?\.sourceURL/,'MIDI comes from the folder too');

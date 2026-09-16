@@ -1,5 +1,5 @@
 import {cachedPDFResponse,forgetCachedBody} from './offline-range.js';
-const SHELL='volta-shell-20260916-pages-a',PDFS='volta-offline-pdfs-v1',METADATA='volta-offline-metadata-v1';
+const SHELL='volta-shell-20260916-solo-a',PDFS='volta-offline-pdfs-v1';
 const root=new URL('./',self.location.href),STATE=new URL('./.shell-state',root).href,BATCH=8;
 
 async function report(message){for(const client of await self.clients.matchAll({includeUncontrolled:true}))client.postMessage(message);}
@@ -52,11 +52,6 @@ self.addEventListener('message',event=>{
 self.addEventListener('fetch',event=>{
   const request=event.request,url=new URL(request.url);
   if(request.method!=='GET'||url.origin!==root.origin||!url.pathname.startsWith(root.pathname))return;
-  // Session, device list and annotations must never be answered from a cache.
-  if(url.pathname.includes('/api/'))return;
-  if(url.pathname.endsWith('/library/catalog.json')||url.pathname.includes('/fit/')){
-    event.respondWith((async()=>{const cache=await caches.open(METADATA);try{const response=await fetch(request);if(response.ok)await cache.put(request.url,response.clone());return response;}catch(error){const saved=await cache.match(request.url);if(saved)return saved;throw error;}})());return;
-  }
   if(url.pathname.endsWith('.pdf')){
     event.respondWith((async()=>{const saved=await (await caches.open(PDFS)).match(request.url);return saved?cachedPDFResponse(saved,request):fetch(request);})());return;
   }

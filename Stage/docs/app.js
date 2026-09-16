@@ -6,7 +6,6 @@ import {setupLibrary} from './library.js';
 import {Ink} from './ink.js';
 import {loadPDFDocument} from './pdf-document.js';
 import {PerformanceMode,performanceKey,ManualTurnGuard} from './performance-mode.js';
-import {PUBLIC_LIBRARY,CLOUD_LIBRARY} from './site-config.js';
 import {PageRenderCache,renderScorePage,adjacentPages} from './page-cache.js';
 import {includeInk} from './fit-layout.js';
 import {ReaderShell,TurnQueue,fullscreenElement,requestScoreFullscreen,leaveScoreFullscreen} from './reader-shell.js';
@@ -19,15 +18,12 @@ import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
 import {setupMIDI} from './midi-ui.js';
 import {setupLocalFolder} from './local-library.js';
-import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
-import {setupCloudSync} from './cloud-sync.js';
 import {setupAnnotationBackup} from './annotation-backup.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
 const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,reference:null,microphone:null,matcher:null,turner:null,renderId:0,audioURL:null,abort:null,startAnchor:0,frameTime:0,op:0,zoom:1,fit:'screen'};
-let cloudSync;
-const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()&&!cloudSync?.busy});
+const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()});
 const readerViewport=installReaderViewport();
 const readingPosition=new ReadingPosition($('score-stage'));
 let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline;
@@ -113,11 +109,9 @@ async function openPDF(buffer,name,restored=null,onProgress){
     $('chopin-audio')?.remove();
     state.pdf=pdf;state.score=remote?{id,name,remote}:{id,name,buffer};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
     fitProfile=null;
-    // A folder chosen on this device carries its own page bounds; the network is the fallback.
+    // Page bounds travel with the collection, in its own folder.
     try{
-      const profile=await library?.local?.fit?.(id)
-        ||await fetch(new URL('./fit/'+id+'.json',import.meta.url),{signal:AbortSignal.timeout(6000)})
-          .then(response=>response.ok?response.json():null).catch(()=>null);
+      const profile=await library?.local?.fit?.(id);
       if(profile?.id===id&&profile.pages?.length===pdf.numPages)fitProfile=profile;
     }catch{}
     readingPosition.setScore(id);
@@ -489,17 +483,14 @@ recent=setupRecentScores({
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
 const deploy=setupDeploy({toast,onDone:()=>offline?.refresh(),local:()=>library?.local});
 $('offline-deploy').onclick=()=>deploy?.open();
-cloudSync=setupCloudSync(ink,toast,()=>state.phase==='idle'&&!performing());
-setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing()&&!cloudSync.busy);
-if(CLOUD_LIBRARY)$('account-note').textContent='私人谱库 · 批注按需同步';
-else if(PUBLIC_LIBRARY)$('account-note').textContent='本机阅谱 · 批注保存在本机';
-else if(['localhost','127.0.0.1'].includes(location.hostname))$('account-note').textContent='本机开发版 · 曲谱与批注尚未上线';
-requireCloudLogin().then(async allowed=>{
-  if(!allowed)return;setupCloudAccount(toast);
+setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing());
+$('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，批注保存在本机';
+// Nothing to sign in to: the reader opens straight into whatever this device already holds.
+(async()=>{
   const query=new URLSearchParams(location.search);
   // Library entry is a recovery route: do not reopen a heavy last PDF first.
   if(query.get('library')==='1'){$('library-button').click();return;}
   const saved=await loadScore();if(saved)await openPDF(saved.buffer||saved.remote,saved.name,saved);
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
-}).catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
-if(PUBLIC_LIBRARY||!['localhost','127.0.0.1'].includes(location.hostname)){$('demo-button').textContent=PUBLIC_LIBRARY?'打开曲谱库':'打开曲谱库';$('demo-button').onclick=()=>$('library-button').click();}
+})().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
+$('demo-button').onclick=()=>$('library-button').click();

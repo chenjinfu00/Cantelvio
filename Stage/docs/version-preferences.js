@@ -1,10 +1,9 @@
-import {PUBLIC_LIBRARY} from './site-config.js';
 async function address(workKey){
   const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(workKey));
   const id=[...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,'0')).join('');
   return './api/preferences/versions/'+id;
 }
-export function versionPreferences(fetcher=fetch,{localOnly=PUBLIC_LIBRARY,storage}={}){
+export function versionPreferences(fetcher=fetch,{localOnly=true,storage}={}){
   return {
     async load(workKey){
       if(localOnly){try{return (storage||globalThis.localStorage).getItem('volta:version:'+workKey)||null;}catch{return null;}}

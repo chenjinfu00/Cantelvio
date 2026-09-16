@@ -4,22 +4,18 @@ import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {PUBLIC_LIBRARY,CLOUD_HOME} from '../docs/site-config.js';
 import {versionPreferences} from '../docs/version-preferences.js';
 import {groupWorks} from '../docs/library-model.js';
 
 const root=fileURLToPath(new URL('../docs/',import.meta.url));
 const read=file=>fs.readFile(path.join(root,file),'utf8');
 
-test('the published page carries no scores and sends its visitors nowhere',async()=>{
-  const catalogue=JSON.parse(await read('library/catalog.json'));
-  assert.equal(catalogue.items.length,0,'the published copy ships an empty shelf; the music is a folder on the reader\'s device');
-  assert.equal(CLOUD_HOME,'','there is no server copy to hand a visitor off to');
-  const files=await fs.readdir(path.join(root,'scores')).catch(()=>[]);assert.equal(files.filter(name=>name.endsWith('.pdf')).length,0);
+test('the published page carries no music of its own',async()=>{
+  for(const folder of ['scores','library'])
+    assert.deepEqual(await fs.readdir(path.join(root,folder)).catch(()=>[]),[],folder+' ships nothing; the music is a folder on the reader\'s device');
 });
 
 test('app shell has no platform branding or bundled personal records',async()=>{
-  assert.equal(PUBLIC_LIBRARY,true);
   for(const entry of await fs.readdir(root,{withFileTypes:true})){
     assert.ok(!['server','api','.openai','notes','local_data','local','preferences'].includes(entry.name));
     if(entry.isFile()&&/\.(js|html|css)$/.test(entry.name))assert.doesNotMatch(await read(entry.name),/chatgpt|openai|signin-with-|\/Users\//i);

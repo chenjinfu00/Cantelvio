@@ -1,6 +1,5 @@
 import {inkDraft} from './storage.js';
 import {mergeInk,distanceToSegment} from './ink-model.js';
-import {PUBLIC_LIBRARY} from './site-config.js';
 import {PencilInput,strokeID} from './pencil-input.js';
 const blank=()=>({version:1,strokes:[]}),copy=structuredClone;
 const $=id=>document.getElementById(id);
@@ -9,7 +8,7 @@ export const strokeWidth=step=>Math.round((.0012+(Math.max(1,Math.min(10,Number(
 export const eraserRadius=step=>Math.round((.008+(Math.max(1,Math.min(10,Number(step)||1))-1)*.006)*1e6)/1e6;
 const timedFetch=(url,options={})=>fetch(url,{...options,signal:AbortSignal.timeout(12000)});
 export class Ink {
-  constructor(toast,{localOnly=PUBLIC_LIBRARY,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.width=strokeWidth(2);this.eraser=eraserRadius(2);this.penDown=false;this.palmUntil=0;
+  constructor(toast,{localOnly=true,canWrite=()=>true,draft=inkDraft,inputOptions={}}={}){this.toast=toast;this.localOnly=localOnly;this.canWrite=canWrite;this.draft=draft;this.inputOptions=inputOptions;this.records=new Map();this.views=new Set();this.scoreId=null;this.mode='read';this.page=1;this.color='#2858aa';this.width=strokeWidth(2);this.eraser=eraserRadius(2);this.penDown=false;this.palmUntil=0;
     for(const mode of ['pen','erase'])$('ink-'+mode).onclick=()=>this.setMode(this.mode===mode?'read':mode);
     for(const button of document.querySelectorAll('[data-ink-color]'))button.onclick=()=>this.setColor(button.dataset.inkColor);
     // A stroke is stored as a fraction of the page, so the slider works the same on any paper size.
