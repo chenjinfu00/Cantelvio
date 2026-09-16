@@ -44,3 +44,17 @@ test('the shelf reads a folder before it reads the network, and the app keeps wo
   const manifest=JSON.parse(await fs.readFile(new URL('../docs/cache-manifest.json',import.meta.url),'utf8'));
   assert.ok(manifest.includes('./local-library.js'),'choosing a folder works offline too');
 });
+
+test('a remembered catalogue draws the shelf with no network and asks for the folder only on opening',async()=>{
+  const {rememberedLibrary}=await import('../docs/local-library.js');
+  let asked=0;
+  const source=rememberedLibrary({items:[{id:'a'}]},async()=>{asked+=1;});
+  assert.equal(source.catalog.items.length,1,'the shelf has something to draw');
+  assert.equal(source.url('a'),null,'no file is invented');
+  assert.equal(source.needsFolder,true);
+  assert.equal(asked,0,'restoring alone never opens a picker');
+  await source.reopen();
+  assert.equal(asked,1,'opening a score is what asks for the folder');
+  const library=await fs.readFile(new URL('../docs/library.js',import.meta.url),'utf8');
+  assert.match(library,/localSource\?\.needsFolder\)await localSource\.reopen/,'the shelf asks before it gives up');
+});

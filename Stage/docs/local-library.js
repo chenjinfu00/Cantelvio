@@ -89,6 +89,13 @@ export async function readLibrary(picked){
   };
 }
 
+// A catalogue kept from the last visit: enough to draw the shelf with no network at all,
+// while every file still has to come from a folder the player picks again.
+export const rememberedLibrary=(catalog,reopen)=>({
+  kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,
+  url:()=>null,sourceURL:()=>null,reopen,release(){},
+});
+
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
   const button=document.getElementById('local-folder'),status=document.getElementById('local-folder-status');
   if(!button)return null;
@@ -123,12 +130,16 @@ export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
         if(state==='granted'){
           try{return await use({kind:'handle',handle:saved.handle,entries:await walk(saved.handle)},{save:false});}catch{}
         }
-        say('上次的本地曲谱文件夹需要你再授权一次。');
-        button.textContent='重新连接本地曲谱文件夹';
-        return null;
       }
-      say('上次选过本地曲谱文件夹；重开应用后需要再选一次。');
-      return null;
+      if(!saved.catalog)return null;
+      // Draw the shelf from what was kept, and ask for the folder only when a score is opened.
+      const reopen=async()=>{try{return await use(await openFolder());}catch(error){say(error.message);return null;}};
+      const remembered=rememberedLibrary(saved.catalog,reopen);
+      current?.release();current=remembered;
+      await onLibrary(remembered);
+      say(saved.handle?'上次的本地曲谱文件夹需要再授权一次；打开曲谱时会请你选择。':'已恢复上次的曲谱目录；打开曲谱时需要再选一次文件夹。');
+      button.textContent='重新连接本地曲谱文件夹';
+      return remembered;
     },
   };
 }

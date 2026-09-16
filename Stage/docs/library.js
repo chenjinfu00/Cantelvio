@@ -41,7 +41,11 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       const previous=explicitVersion?null:await preferences.load(work.key);
       const version=explicitVersion||chooseVersion(work,previous);
       if(!version||!version.available)throw new Error(localLibrary?'这首曲目暂无可打开的 PDF。请先下载对应文件，再刷新谱库。':'这首曲目暂无已导入的 PDF。');
+      // A folder remembered only as a catalogue can show the shelf offline but holds no files;
+      // opening a score is the moment to ask for it back.
+      if(localSource?.needsFolder)await localSource.reopen?.();
       const local=localSource?await localSource.url(version.id):null;
+      if(!local&&localSource&&!localSource.needsFolder&&localSource.missing?.includes?.(version.id))throw new Error('本地曲谱文件夹里没有这份 PDF。请检查文件夹，或重新选择。');
       const url=local||new URL(PUBLIC_LIBRARY?'./scores/'+version.id+'.pdf':'./api/files/'+version.id,location.href).href;
       await openPDF({id:version.id,url,workKey:work.key,local:!!local},version.title,null,message=>feedback(statusNode,message));
       let message='已记住此版本，下次打开这首曲目会继续使用。',failed=false;
