@@ -5,6 +5,7 @@ const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
 export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
+  let localSource=null;   // a folder chosen on this device, read instead of the network
   let items=[],works=[],mode='composer',selected='',genre='',loaded=false,metadataRevision='"new"',editing=null,localLibrary=false,refreshTask=null,opening=false,currentWork=null;
   const preferences=versionPreferences(),labels={composer:'曲目分类',style:'风格',era:'年代',category:'原收藏'};
   const feedback=(node,message,error=false)=>{node.hidden=!message;node.textContent=message;node.classList.toggle('error',error);};
@@ -40,7 +41,9 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       const previous=explicitVersion?null:await preferences.load(work.key);
       const version=explicitVersion||chooseVersion(work,previous);
       if(!version||!version.available)throw new Error(localLibrary?'这首曲目暂无可打开的 PDF。请先下载对应文件，再刷新谱库。':'这首曲目暂无已导入的 PDF。');
-      await openPDF({id:version.id,url:new URL(PUBLIC_LIBRARY?'./scores/'+version.id+'.pdf':'./api/files/'+version.id,location.href).href,workKey:work.key},version.title,null,message=>feedback(statusNode,message));
+      const local=localSource?await localSource.url(version.id):null;
+      const url=local||new URL(PUBLIC_LIBRARY?'./scores/'+version.id+'.pdf':'./api/files/'+version.id,location.href).href;
+      await openPDF({id:version.id,url,workKey:work.key,local:!!local},version.title,null,message=>feedback(statusNode,message));
       let message='已记住此版本，下次打开这首曲目会继续使用。',failed=false;
       try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
       setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
@@ -109,9 +112,14 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
     $('library-refresh').disabled=true;$('library-refresh').textContent='正在检查…';
     refreshTask=(async()=>{
       $('library-count').textContent='正在核对曲谱下载状态…';
-      const response=await fetch(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',{cache:'no-store'});
-      if(!response.ok)throw new Error('曲谱库暂时不可用，请检查网络后重试。');
-      const data=await response.json();items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;metadataRevision=data.metadataRevision||'"new"';loaded=true;draw();setCurrent();
+      let data;
+      // A folder chosen on this device answers before the network does.
+      if(localSource)data=localSource.catalog;
+      else{
+        const response=await fetch(PUBLIC_LIBRARY?'./library/catalog.json':'./api/library',{cache:'no-store'});
+        if(!response.ok)throw new Error('曲谱库暂时不可用，请检查网络后重试。');
+        data=await response.json();
+      }items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;metadataRevision=data.metadataRevision||'"new"';loaded=true;draw();setCurrent();
       if(localLibrary)$('account-note').textContent='本地谱库 · 仅在当前局域网提供';
       const pending=items.filter(x=>!x.available).length,ready=items.filter(x=>x.format==='pdf'&&x.available).length;
       $('library-summary').textContent=works.filter(w=>w.versions.some(v=>v.format==='pdf')).length+' 首曲目／合集 · '+ready+' 份 PDF 可打开'+(pending?' · '+pending+' 份暂不可用':'');
@@ -133,5 +141,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null){
       $('metadata-dialog').close();await refresh();toast('资料已保存，分类已更新。');
     }catch(error){$('metadata-status').textContent=error.message;}finally{$('metadata-save').disabled=false;}
   };
-  return {refresh,setCurrent,syncControls,item:id=>items.find(entry=>entry.id===id)||null};
+  return {refresh,setCurrent,syncControls,item:id=>items.find(entry=>entry.id===id)||null,
+    useLocal(source){localSource=source;loaded=false;return refresh();},
+    get local(){return localSource;}};
 }

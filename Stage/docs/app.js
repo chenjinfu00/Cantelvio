@@ -18,6 +18,7 @@ import {ReadingPosition} from './reading-position.js';
 import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
 import {setupMIDI} from './midi-ui.js';
+import {setupLocalFolder} from './local-library.js';
 import {requireCloudLogin,setupCloudAccount} from './cloud-account.js';
 import {setupCloudSync} from './cloud-sync.js';
 import {setupAnnotationBackup} from './annotation-backup.js';
@@ -458,9 +459,16 @@ controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score);
 midi=setupMIDI({
   sources:()=>library?.item(state.score?.id)?.sources||[],
-  url:name=>state.score&&name?new URL('./sources/'+state.score.id+'/'+encodeURIComponent(name),import.meta.url).href:null,
+  // A folder on this device answers first; otherwise the private route serves it.
+  url:name=>{
+    if(!state.score||!name)return null;
+    return library?.local?.sourceURL(state.score.id,name)
+      ||new URL('./sources/'+state.score.id+'/'+encodeURIComponent(name),import.meta.url).href;
+  },
   toast,
 });
+const localFolder=setupLocalFolder({toast,onLibrary:source=>library?.useLocal(source)});
+localFolder?.restore?.().catch(()=>{});
 bookmarks=setupBookmarks({
   score:()=>state.score,page:()=>state.page,
   canJump:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),

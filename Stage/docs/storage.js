@@ -1,5 +1,5 @@
 const DB_NAME='volta-score-library';
-function database(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,4);req.onupgradeneeded=()=>{for(const name of ['scores','inkDrafts','positions','cloudBases'])if(!req.result.objectStoreNames.contains(name))req.result.createObjectStore(name,{keyPath:'id'});};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('请关闭另一页旧版谱架后重试'));req.onsuccess=()=>resolve(req.result);});}
+function database(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,5);req.onupgradeneeded=()=>{for(const name of ['scores','inkDrafts','positions','cloudBases','local'])if(!req.result.objectStoreNames.contains(name))req.result.createObjectStore(name,{keyPath:'id'});};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('请关闭另一页旧版谱架后重试'));req.onsuccess=()=>resolve(req.result);});}
 export async function scoreID(buffer){const hash=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');}
 let writes=Promise.resolve();
 export function saveScore(score){
@@ -36,4 +36,24 @@ export async function saveInkDrafts(rows){
 }
 export async function cloudBase(id,value){
   const db=await database();try{return await new Promise((resolve,reject)=>{const tx=db.transaction('cloudBases',value===undefined?'readonly':'readwrite'),req=value===undefined?tx.objectStore('cloudBases').get(id):tx.objectStore('cloudBases').put({id,data:value});tx.oncomplete=()=>resolve(req.result?.data);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
+}
+
+// The folder a reader chose as its collection: a directory handle where the browser can keep one,
+// and always the catalogue itself, so the shelf is there before any file is read again.
+export async function saveLocalLibrary(value){
+  const db=await database();
+  try{await new Promise((resolve,reject)=>{const tx=db.transaction('local','readwrite');
+    tx.objectStore('local').put({id:'library',savedAt:Date.now(),...value});
+    tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
+}
+export async function loadLocalLibrary(){
+  const db=await database();
+  try{return await new Promise((resolve,reject)=>{const request=db.transaction('local').objectStore('local').get('library');
+    request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error);});}
+  catch{return null;}finally{db.close();}
+}
+export async function forgetLocalLibrary(){
+  const db=await database();
+  try{await new Promise((resolve,reject)=>{const tx=db.transaction('local','readwrite');
+    tx.objectStore('local').delete('library');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}finally{db.close();}
 }
