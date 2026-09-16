@@ -49,7 +49,7 @@ test('a broken file says so instead of playing nonsense',()=>{
 });
 
 test('the real MIDI files in the collection parse',async()=>{
-  const library=new URL('../本地曲谱/曲谱/',import.meta.url);
+  const library=new URL('../../本地曲谱/曲谱/',import.meta.url);
   let found=[];
   const walk=async folder=>{
     for(const entry of await fs.readdir(folder,{withFileTypes:true})){

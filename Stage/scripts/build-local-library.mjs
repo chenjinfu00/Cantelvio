@@ -8,7 +8,8 @@ import {cleanComposer} from './retitle-scores.mjs';
 import {regionFor} from './region-rules.mjs';
 import {classifyLibraryItem,libraryRelativePath} from './library-paths.mjs';
 const sourceDir=path.resolve(process.argv[2]||'../Score_Turner_Web/local_data');
-const output=path.resolve(import.meta.dirname,'../本地曲谱');
+// The builder creates the collection, so it names the place rather than finding it.
+const output=path.resolve(import.meta.dirname,'../../本地曲谱');
 const index=JSON.parse(await fs.readFile(path.join(sourceDir,'library-private-index.json')));
 const imports=JSON.parse(await fs.readFile(path.join(sourceDir,'piascore-import-20260912/pdf-inspection.json')));
 const overrides=JSON.parse(await fs.readFile(path.join(output,'metadata.json')));

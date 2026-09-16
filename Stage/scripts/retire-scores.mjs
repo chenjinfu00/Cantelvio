@@ -3,6 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {libraryRoot} from './library-root.mjs';
 
 export function resolveIds(items,wanted){
   const found=[],missing=[],ambiguous=[];
@@ -26,7 +27,7 @@ export function retirePlan(catalog,manifest,wanted){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const root=path.resolve(import.meta.dirname,'../本地曲谱');
+  const root=libraryRoot();
   const args=process.argv.slice(2),apply=args.includes('--apply');
   const reasonAt=args.indexOf('--reason'),reason=reasonAt>=0?args[reasonAt+1]||'':'';
   const wanted=args.filter((value,index)=>!value.startsWith('--')&&args[index-1]!=='--reason');

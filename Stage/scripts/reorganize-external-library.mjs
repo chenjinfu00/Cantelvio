@@ -5,6 +5,7 @@ import {createReadStream} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {libraryRoot} from './library-root.mjs';
 
 const PDF='.pdf';
 const METADATA='.整理元数据';
@@ -191,7 +192,7 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const rootArgument=argument('--root');
   if(!rootArgument)throw new Error('Usage: node scripts/reorganize-external-library.mjs --root /path/to/曲谱 [--apply]');
   const root=path.resolve(rootArgument),apply=process.argv.includes('--apply');
-  const manifest=JSON.parse(await fs.readFile(path.resolve(import.meta.dirname,'../本地曲谱/manifest.json'),'utf8'));
+  const manifest=JSON.parse(await fs.readFile(path.join(libraryRoot(),'manifest.json'),'utf8'));
   const records=await scanExternalLibrary(root,{onProgress:(done,total)=>console.error(`已核对 ${done}/${total} 份 PDF`)});
   const plan=createExternalPlan(records,manifest.files||{});
   console.log(JSON.stringify(plan.summary,null,2));

@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-const root=path.resolve(import.meta.dirname,'..'),source=path.join(root,'docs/scores'),archive=path.join(root,'本地曲谱/retired-public-scores');
+import {libraryRoot} from './library-root.mjs';
+const root=path.resolve(import.meta.dirname,'..'),source=path.join(root,'docs/scores'),archive=path.join(libraryRoot(),'retired-public-scores');
 // Move the former public release into an ignored archive. Never delete originals
 // or rewrite Git history. Refuse to overwrite a pre-existing archive target.
 const names=(await fs.readdir(source)).filter(name=>/^[a-f0-9]{64}\.pdf$/.test(name));

@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
 import {parseRange} from '../docs/offline-range.js';
+import {libraryRoot} from './library-root.mjs';
 const root=path.resolve(fileURLToPath(new URL('../docs/',import.meta.url)));
 const types={'.mid':'audio/midi','.midi':'audio/midi','.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.pdf':'application/pdf','.svg':'image/svg+xml','.wasm':'application/wasm'};
 export async function createPreviewServer({library=null}={}){
@@ -43,7 +44,7 @@ export async function createPreviewServer({library=null}={}){
   });
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-const library=process.argv.includes('--library')?path.resolve(import.meta.dirname,'../本地曲谱'):null;
+const library=process.argv.includes('--library')?libraryRoot():null;
 const server=await createPreviewServer({library});
 server.listen(Number(process.argv[2]||4318),process.argv.includes('--lan')?'0.0.0.0':'127.0.0.1',()=>{
   const port=process.argv[2]||4318;console.log(`Volta preview: http://localhost:${port}/volta/`);
