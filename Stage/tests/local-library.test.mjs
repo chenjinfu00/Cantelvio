@@ -153,3 +153,18 @@ test('whether markings survive a closed app is answered without being asked',asy
   assert.match(offline,/sayDurability\(\);\n\s*if\(!supported\)/,'it is reported every time the settings open');
   assert.match(offline,/加到主屏幕/,'the iPad is told what actually improves its odds');
 });
+
+test('an empty reader offers the whole collection first, one PDF second',async()=>{
+  const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
+  assert.match(html,/id="empty-folder" class="primary">选择曲谱文件夹/,'the first offer is the folder');
+  assert.match(html,/id="empty-import" class="text-button">只打开一份 PDF/,'a single PDF is still one click away');
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  assert.match(app,/if\(library\?\.local\)\$\('library-button'\)\.click\(\);else localFolder\?\.choose\(\)/,
+    'once a folder is open the same button leads back into the shelf');
+  assert.match(app,/connected\?'打开曲谱库':'选择曲谱文件夹'/);
+  const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
+  assert.match(local,/async function choose\(\)/,'the shelf button and the empty reader run the same routine');
+  assert.match(local,/return \{\n\s*use,choose,/);
+  const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
+  assert.match(css,/\.empty-state small\[hidden\]\{display:none\}/,'the hint can actually be hidden');
+});

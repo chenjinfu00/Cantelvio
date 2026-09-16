@@ -146,14 +146,16 @@ export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){
     button.textContent='更换本地曲谱文件夹';settled();
     return library;
   }
-  button.onclick=async()=>{
+  // The same choice is offered from the shelf and from an empty reader; one routine serves both.
+  async function choose(){
     button.disabled=true;
-    try{say('正在读取文件夹…');await use(await openFolder());}
-    catch(error){say(error.message);if(!/取消/.test(error.message))toast(error.message);}
+    try{say('正在读取文件夹…');return await use(await openFolder());}
+    catch(error){say(error.message);if(!/取消/.test(error.message))toast(error.message);return null;}
     finally{button.disabled=false;}
-  };
+  }
+  button.onclick=choose;
   return {
-    use,
+    use,choose,
     get library(){return current;},
     // A remembered folder needs one click to be readable again; a remembered catalogue is enough
     // to show the shelf, and the files are asked for when a score is opened.

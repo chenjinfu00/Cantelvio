@@ -56,7 +56,7 @@ function controls(){
   $('ink-toolbar').hidden=!loaded||state.phase!=='idle'||performing();
   for(const id of ['ink-pen','ink-erase','ink-undo','ink-redo','score-zoom'])$(id).disabled=!loaded||state.phase!=='idle';
   if(state.phase!=='idle'&&ink.mode!=='read')ink.setMode('read');
-  for(const id of ['import-button','empty-import','demo-button','url-import'])$(id).disabled=locked||learning()||state.phase==='following';
+  for(const id of ['import-button','empty-import','empty-folder','demo-button','url-import'])$(id).disabled=locked||learning()||state.phase==='following';
   $('audio-button').disabled=!loaded||state.phase!=='idle';$('learn-button').disabled=!loaded||state.phase!=='idle';
   $('prev-button').disabled=!loaded||state.page===1||locked;$('next-button').disabled=!loaded||state.page>=state.pdf.numPages||locked;
   $('page-input').disabled=!loaded||locked;$('page-input').value=state.page;
@@ -470,8 +470,21 @@ midi=setupMIDI({
   toast,
 });
 inkFolder=setupInkFolder({ink,library,toast,canRun:()=>state.phase==='idle'&&!performing(),drain:drainInk,showMerged});
-const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();}});
+const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();emptyState();}});
 localFolder?.restore?.().catch(()=>{});
+// The first thing a reader sees should be the thing that fills the shelf. Once it is filled,
+// the same place becomes the way back into it.
+function emptyState(){
+  const connected=!!library?.local;
+  $('empty-folder').textContent=connected?'打开曲谱库':'选择曲谱文件夹';
+  $('empty-folder').append(Object.assign(document.createElement('span'),{ariaHidden:'true',textContent:' ↗'}));
+  $('empty-hint').hidden=connected;
+}
+$('empty-folder').onclick=()=>{
+  if(performing())return;
+  if(library?.local)$('library-button').click();else localFolder?.choose();
+};
+emptyState();
 inkFolder?.describe();
 // Markings are written back at the moments a reader would expect them to be safe: when the
 // score is put down, and when the app goes away.
