@@ -3,6 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {libraryRoot} from './library-root.mjs';
 
 export const SOURCE_TYPES=['.mid','.midi','.sib','.mscz','.musicxml','.mxl','.xml','.cap','.mus'];
 
@@ -78,7 +79,7 @@ export function sourcePlan(files,index){
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const root=path.resolve(import.meta.dirname,'..');
-  const library=path.join(root,'本地曲谱');
+  const library=libraryRoot();
   const argument=name=>{const at=process.argv.indexOf(name);return at>=0?process.argv[at+1]:null;};
   const sources=path.resolve(argument('--from')||path.join(root,'相关源文件'));
   const apply=process.argv.includes('--apply');

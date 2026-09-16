@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {libraryRoot} from './library-root.mjs';
 
 export const PLAYABLE=new Set(['.mid','.midi']);
 export const KEEPABLE=new Set([...PLAYABLE,'.sib','.mscz','.musicxml','.mxl','.xml']);
@@ -21,7 +22,7 @@ export function indexSources(items,files,folderFiles){
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const library=path.resolve(import.meta.dirname,'../本地曲谱'),apply=process.argv.includes('--apply');
+  const library=libraryRoot(),apply=process.argv.includes('--apply');
   const catalog=JSON.parse(await fs.readFile(path.join(library,'catalog.json')));
   const manifest=JSON.parse(await fs.readFile(path.join(library,'manifest.json')));
   const folders=new Map();
