@@ -97,6 +97,7 @@ test('a generated filename is told apart from the name a score arrived with',asy
 
 test('annotations can live beside the music, one file per score',async()=>{
   const {inkPath,INK_DIR,inkFileFor,scoreIds,readFolderInk,writeFolderInk}=await import('../docs/ink-folder.js');
+  const {backupForRows}=await import('../docs/annotation-backup.js');
   const id='a'.repeat(64),other='b'.repeat(64);
   assert.equal(INK_DIR,'曲谱库数据/批注');
   assert.equal(inkPath(id),'曲谱库数据/批注/'+id+'.json');
@@ -110,6 +111,7 @@ test('annotations can live beside the music, one file per score',async()=>{
   assert.deepEqual(file.pages.map(page=>page.id),[id+'/1'],'only pages that carry strokes are written');
   assert.equal(file.scoreId,id);
   assert.equal(inkFileFor('c'.repeat(64),rows),null,'a score with no markings writes no file');
+  assert.deepEqual(backupForRows(rows).pages.map(page=>page.id),[id+'/1',other+'/1'],'one export contains all marked pages');
   const written=[];
   assert.equal(await writeFolderInk({writeJSON:(path,value)=>{written.push(path);return value;}},rows),2);
   assert.deepEqual(written,[inkPath(id),inkPath(other)]);
@@ -145,11 +147,11 @@ test('a newcomer is told what folder to point at, and told only until they have'
   assert.doesNotMatch(readme,/netlify/i,'the README no longer points at a host that is gone');
 });
 
-test('the writing dock carries the only explicit annotation sync action',async()=>{
+test('the writing dock carries the only explicit annotation export action',async()=>{
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="ink-save"/,'saving is where the writing hand already is');
-  assert.match(html,/title="同步批注到本机曲谱库"/);
-  assert.match(html,/<span>同步<\/span>/);
+  assert.match(html,/title="导出批注备份"/);
+  assert.match(html,/<span>导出<\/span>/);
   for(const id of ['ink-folder-save','ink-export','backup-export','backup-import','backup-file'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'),id+' is removed');
   assert.doesNotMatch(html,/画笔设置|橡皮设置/,'the two ··· buttons are gone');
   assert.match(html,/id="pen-options"/);assert.match(html,/id="erase-options"/);
@@ -161,17 +163,18 @@ test('the writing dock carries the only explicit annotation sync action',async()
   const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
   assert.match(css,/\.pencil-dock \.pencil-popover>summary\{display:none\}/);
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
-  assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock owns the sync action');
+  assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock owns the export action');
+  assert.match(folder,/exportBackup/,'the export action creates a backup file');
 });
 
-test('a sync asks for folder write permission only when the browser exposes it',async()=>{
+test('export does not ask for folder write permission',async()=>{
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
-  assert.match(folder,/local\?\.canRequestWrite&&!local\.writable/);
-  assert.match(folder,/await local\.requestWrite\(\)/);
-  assert.match(folder,/当前浏览器无法申请曲谱库写入权限/);
+  assert.match(folder,/exportBackup/);
+  assert.doesNotMatch(folder,/local\?\.canRequestWrite&&!local\.writable/);
+  assert.doesNotMatch(folder,/await local\.requestWrite\(\)/);
   assert.doesNotMatch(folder,/offerInkFile/);
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
-  assert.match(html,/Safari\/iPad 如果不提供网页写入/);
+  assert.match(html,/系统保存面板选择「曲谱库数据／批注」/);
 });
 
 test('whether markings survive a closed app is answered without being asked',async()=>{

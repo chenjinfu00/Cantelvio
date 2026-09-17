@@ -2,7 +2,7 @@
 // 曲谱库数据/批注/<曲谱 id>.json, one file per score, so a folder synced between devices
 // carries the markings as well as the notes.
 import {allInkDrafts,saveInkDrafts} from './storage.js';
-import {parseBackup,mergeBackup} from './annotation-backup.js';
+import {parseBackup,mergeBackup,exportBackup} from './annotation-backup.js';
 import {DATA} from './local-library.js';
 export const INK_DIR=DATA+'/批注';
 export const inkPath=id=>INK_DIR+'/'+id+'.json';
@@ -39,8 +39,7 @@ export async function mergeIntoDevice(pages){
   return merged.length;
 }
 
-// Writing needs a folder handle the browser will let us write to. Safari's directory upload
-// gives the reader files but no writable handle, so the local database remains the fallback there.
+// Kept for the native/Chromium path; Safari uses exportBackup because its directory upload is read-only.
 export async function writeFolderInk(local,rows){
   if(!local?.writeJSON)throw new Error('这个浏览器不能写入文件夹：无法申请曲谱库写入权限。');
   let written=0;
@@ -55,7 +54,7 @@ export async function writeFolderInk(local,rows){
 // put this device's markings back whenever the browser allows it.
 export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,showMerged}){
   const $=id=>document.getElementById(id),status=$('ink-folder-status');
-  // There is one explicit sync action, where the writing hand already is.
+  // There is one explicit export action, where the writing hand already is.
   const dock=$('ink-save');
   let busy=false;
   const source=()=>library?.local||null;
@@ -63,14 +62,14 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   function describe(){
     const local=source();
     if(!local||local.needsFolder){
-      if(dock){dock.disabled=false;dock.title='同步批注到本机曲谱库';dock.querySelector('span').textContent='同步';}
-      return say(local?.needsFolder?'请重新连接本地曲谱文件夹后同步批注。':'请先选择本地曲谱文件夹。');
+      if(dock){dock.disabled=false;dock.title='导出批注备份';dock.querySelector('span').textContent='导出';}
+      return say('批注会自动保存在本机；点击“导出”后可选择保存到「曲谱库数据／批注」。');
     }
-    say(local.writable?'已连接曲谱库，批注会同步到「曲谱库数据／批注」。':local.canRequestWrite?'点击“同步批注到本机”时，系统会请求曲谱库写入权限。':'当前浏览器只能把批注保存在本机数据库，无法申请曲谱库写入权限。');
+    say('批注会自动保存在本机；点击“导出”后，在系统保存面板选择「曲谱库数据／批注」。');
     if(dock){
       dock.disabled=false;
-      dock.title='同步批注到本机曲谱库';
-      dock.querySelector('span').textContent='同步';
+      dock.title='导出批注备份';
+      dock.querySelector('span').textContent='导出';
     }
   }
   // Opening a folder brings in whatever other devices left there.
@@ -84,37 +83,18 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
     await showMerged?.(ink,merged);
     return merged.length;
   }
-  async function save({quiet=false}={}){
-    const local=source();
-    // Safari cannot write beside the PDF, but it can still finish the durable local draft.
-    // Drain before checking the folder so pagehide/visibilitychange never lose the last strokes.
+  async function save(){
+    // Finish the durable local draft before creating the export.
     await drain?.(ink);
-    if(!local||local.needsFolder||!local.writable)return 0;
-    const written=await writeFolderInk(local,await allInkDrafts());
-    if(!quiet&&written)toast(`已把 ${written} 首曲子的批注写进曲谱文件夹。`);
-    return written;
+    return exportBackup(await allInkDrafts());
   }
   async function keep(){
     if(busy||!canRun())return;
     busy=true;if(dock)dock.disabled=true;
     try{
-      await drain?.(ink);
-      const local=source();
-      if(local?.canRequestWrite&&!local.writable&&!local.needsFolder){
-        const granted=await local.requestWrite();
-        if(!granted){
-          const message='没有获得曲谱库写入权限；批注仍已保存在本机数据库。';
-          say(message);toast(message);return;
-        }
-      }
-      if(local?.writable&&!local.needsFolder){
-        const written=await save();
-        say(`已写入 ${written} 首曲子的批注。`);
-        toast(written?'批注已保存到曲谱文件夹。':'还没有批注可以保存。');
-      }else{
-        const message=local?.needsFolder?'请先重新连接本地曲谱文件夹，再同步批注。':'当前浏览器无法申请曲谱库写入权限；批注已保存在本机数据库。';
-        say(message);toast(message);
-      }
+      const result=await save();
+      const message=result.count?`已导出 ${result.count} 页批注；请在系统面板选择「曲谱库数据／批注」。`:'还没有批注可以导出。';
+      say(message);toast(message);
     }catch(error){say(error.message);toast(error.message);}
     finally{busy=false;if(dock)dock.disabled=false;}
   }
@@ -126,7 +106,6 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
       try{
         const count=await adopt();
         if(count)toast(`从曲谱文件夹读入了 ${count} 页批注。`);
-        await save({quiet:true});
       }catch(error){say(error.message);}
     },
   };

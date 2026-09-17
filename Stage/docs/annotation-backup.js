@@ -8,6 +8,24 @@ export function parseBackup(value){
   for(const row of pages){if(!/^[a-f0-9]{64}\/[1-9][0-9]{0,4}$/.test(row?.id)||keys.has(row.id)||!validateInk(row.data))throw Error('批注备份格式不完整，未导入。');keys.add(row.id);}
   return pages;
 }
+export function backupForRows(rows){
+  const pages=(rows||[]).filter(row=>row.data?.strokes?.length).map(({id,data})=>({id,data}));
+  return pages.length?{format:'volta-annotations',version:1,createdAt:new Date().toISOString(),pages}:null;
+}
+export async function exportBackup(rows){
+  const value=backupForRows(rows);
+  if(!value)return {count:0,name:'volta-annotations.json'};
+  const name='volta-annotations.json',text=JSON.stringify(value,null,2),nav=globalThis.navigator;
+  const file=typeof File==='function'?new File([text],name,{type:'application/json'}):null;
+  if(file&&typeof nav?.share==='function'&&typeof nav?.canShare==='function'&&nav.canShare({files:[file]})){
+    await nav.share({title:'Volta 批注备份',files:[file]});
+    return {count:value.pages.length,name,method:'share'};
+  }
+  if(typeof document==='undefined'||typeof globalThis.URL?.createObjectURL!=='function')throw Error('当前环境不支持导出批注文件。');
+  const url=globalThis.URL.createObjectURL(new Blob([text],{type:'application/json'})),link=document.createElement('a');
+  link.href=url;link.download=name;link.click();setTimeout(()=>globalThis.URL.revokeObjectURL(url),0);
+  return {count:value.pages.length,name,method:'download'};
+}
 export function mergeBackup(rows,incoming){
   const existing=new Map(rows.map(row=>[row.id,row]));
   return incoming.map(({id,data})=>{
