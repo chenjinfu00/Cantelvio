@@ -32,6 +32,7 @@ test('a folder answers with the scores the catalogue asks for, and says which ar
   assert.equal(files.get('a').relative,'曲谱/甲/版本一 · a.pdf');
   const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
   assert.match(local,/pathURL:relative=>\{const file=byPath\.get\(relative\)/,'history can resolve its relative path after the folder is selected');
+  assert.match(local,/entry\.path===rootBackup/,'a backup saved beside catalog.json is also readable');
   assert.match(local,/showDirectoryPicker\(\{id:'volta-library',mode:'read'\}\)/,'folder selection does not request write access yet');
   assert.match(local,/requestPermission\(\{mode:'readwrite'\}\)/,'the sync action can request write access later');
 });

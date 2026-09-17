@@ -119,8 +119,9 @@ export async function readLibrary(picked){
     requestWrite,
     path:id=>files.get(id)?.relative||null,
     async inkFiles(){
-      return resolved.filter(entry=>entry.path.startsWith(inkPrefix)&&entry.path.endsWith('.json'))
-        .map(entry=>({id:entry.path.slice(inkPrefix.length,-5),read:()=>readJSON(entry.file)}));
+      const rootBackup=DATA+'/volta-annotations.json';
+      return resolved.filter(entry=>(entry.path.startsWith(inkPrefix)&&entry.path.endsWith('.json'))||entry.path===rootBackup)
+        .map(entry=>({id:entry.path===rootBackup?'volta-annotations':entry.path.slice(inkPrefix.length,-5),read:()=>readJSON(entry.file)}));
     },
     writeJSON:async(relative,value)=>{
       if(!writable)throw new Error('尚未获得曲谱库写入权限。请点击“同步批注到本机”并允许访问。');
