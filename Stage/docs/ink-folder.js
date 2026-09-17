@@ -59,18 +59,18 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   let busy=false;
   const source=()=>library?.local||null;
   const say=text=>{if(status)status.textContent=text;};
+  const markExport=()=>{if(!dock)return;dock.title='导出批注备份';dock.querySelector('span').textContent='导出';const icon=dock.querySelector('svg');if(icon)icon.innerHTML='<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/><path d="M5 21a2 2 0 0 1-2-2v-3M19 21a2 2 0 0 0 2-2v-3"/>';};
   function describe(){
     const local=source();
     if(!local||local.needsFolder){
-      if(dock){dock.disabled=false;dock.title='导出批注备份';dock.querySelector('span').textContent='导出';}
+      if(dock)dock.disabled=false;markExport();
       return say('批注会自动保存在本机；点击“导出”后可选择保存到「曲谱库数据／批注」。');
     }
     say('批注会自动保存在本机；点击“导出”后，在系统保存面板选择「曲谱库数据／批注」。');
     if(dock){
       dock.disabled=false;
-      dock.title='导出批注备份';
-      dock.querySelector('span').textContent='导出';
     }
+    markExport();
   }
   // Opening a folder brings in whatever other devices left there.
   async function adopt(){
