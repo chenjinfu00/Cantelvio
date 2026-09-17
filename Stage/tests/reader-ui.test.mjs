@@ -34,12 +34,13 @@ test('a stroke width from the slider is always one the validator accepts',()=>{
   assert.ok(eraserRadius(10)>eraserRadius(1)&&eraserRadius(1)>0);
 });
 
-test('the pencil dock carries undo and redo, and the backup export moved into settings',()=>{
+test('the pencil dock carries undo, redo and the only annotation sync action',()=>{
   const dock=html.slice(html.indexOf('id="ink-toolbar"'),html.indexOf('id="score-stage"'));
   for(const id of ['ink-undo','ink-redo','ink-width','eraser-width'])assert.ok(dock.includes('id="'+id+'"'),id+' is in the dock');
   assert.ok(dock.includes('data-ink-color'),'colours are swatches, not a dropdown');
   assert.ok(!dock.includes('id="ink-color"'),'the old colour dropdown is gone');
   assert.ok(!dock.includes('id="ink-export"'),'exporting is not a writing tool');
   const settings=html.slice(html.indexOf('id="settings-dialog"'));
-  assert.ok(settings.includes('id="ink-export"'),'it lives in settings now');
+  assert.ok(settings.includes('id="ink-folder-status"'),'settings reports annotation sync status');
+  for(const id of ['ink-folder-save','ink-export','backup-export','backup-import'])assert.ok(!settings.includes('id="'+id+'"'),id+' is removed');
 });

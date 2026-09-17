@@ -15,7 +15,6 @@ export class Ink {
     $('eraser-width').oninput=e=>{this.eraser=eraserRadius(e.target.value);this.preview('eraser-width-preview',this.eraser);};
     this.preview('ink-width-preview',this.width);this.preview('eraser-width-preview',this.eraser);
     $('ink-undo').onclick=()=>this.history(false);$('ink-redo').onclick=()=>this.history(true);
-    $('ink-export').onclick=()=>this.export();
     // A settings panel opened by holding should close the way any popover does.
     document.addEventListener('pointerdown',event=>{
       const dock=$('ink-toolbar');
@@ -128,7 +127,7 @@ export class Ink {
     }
   }
   changed(r){r.dirty=true;r.revision++;this.status('正在保存批注…');this.cache(r);clearTimeout(r.timer);r.timer=setTimeout(()=>this.flush(r),400);}
-  cache(r){return this.draft(r.key,{data:r.data,base:r.base,etag:r.etag,dirty:r.dirty}).catch(()=>this.toast('本机草稿保存失败，请保持页面打开并导出批注备份。'));}
+  cache(r){return this.draft(r.key,{data:r.data,base:r.base,etag:r.etag,dirty:r.dirty}).catch(()=>this.toast('本机草稿保存失败，请保持页面打开并点击“同步”。'));}
   flush(r){
     if(r.savePromise)return r.savePromise;
     r.savePromise=this.flushNow(r).finally(()=>{r.savePromise=null;});return r.savePromise;
@@ -138,7 +137,7 @@ export class Ink {
     try{
       while(r.dirty){const revision=r.revision,sent=copy(r.data);await this.draft(r.key,{data:sent,base:sent,etag:'"local"',dirty:false});r.base=sent;r.dirty=r.revision!==revision;}
       this.status('批注已保存在这台设备上');
-    }catch{this.status('批注保存失败 · 请立即导出备份');this.toast('浏览器存储不可用，请保持页面打开并导出批注备份。');}
+    }catch{this.status('批注保存失败 · 请立即同步');this.toast('浏览器存储不可用，请保持页面打开并点击“同步”。');}
     finally{r.saving=false;}
   }
   // Undo and redo say plainly whether there is anything to undo on the page you last wrote on.
@@ -150,11 +149,5 @@ export class Ink {
     const r=this.records.get(this.scoreId+'/'+this.page);if(!r)return;
     const from=redo?r.redo:r.undo,to=redo?r.undo:r.redo;if(!from.length)return;
     to.push(copy(r.data));if(to.length>25)to.shift();r.data=from.pop();this.changed(r);this.draw(r);this.refreshHistory();
-  }
-  export(){
-    const pages={};for(const [key,r] of this.records)if(key.startsWith(this.scoreId+'/'))pages[key.split('/')[1]]=r.data;
-    const blob=new Blob([JSON.stringify({version:1,scoreId:this.scoreId,pages},null,2)],{type:'application/json'});
-    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='volta-annotations.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
-    this.toast('已导出本次打开过的页面批注备份。');
   }
 }

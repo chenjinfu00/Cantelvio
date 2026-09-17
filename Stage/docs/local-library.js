@@ -43,9 +43,9 @@ export function matchLibrary(catalog,manifest,entries){
 
 export async function openFolder(){
   if(canRemember()){
-    // Asking to write as well is what lets annotations be kept beside the music. A reader who
-    // declines still gets everything else; only writing back is lost.
-    const handle=await window.showDirectoryPicker({id:'volta-library',mode:'readwrite'});
+    // Read access is enough to open the library. The one annotation-sync action asks for
+    // write access later, so choosing a library never surprises the reader with a second prompt.
+    const handle=await window.showDirectoryPicker({id:'volta-library',mode:'read'});
     return {kind:'handle',handle,entries:await walk(handle)};
   }
   return new Promise((resolve,reject)=>{
@@ -100,21 +100,32 @@ export async function readLibrary(picked){
   const byPath=new Map(resolved.map(entry=>[entry.path,entry.file]));
   const fitFile=id=>dataPaths('fit/'+id+'.json').map(path=>byPath.get(path)).find(Boolean)||null;
   const inkPrefix=DATA+'/批注/';
-  const writable=picked.kind==='handle'&&!!picked.handle
+  let writable=picked.kind==='handle'&&!!picked.handle
     &&await picked.handle.queryPermission?.({mode:'readwrite'}).then(state=>state==='granted').catch(()=>false);
   const urls=new Map();
   const address=file=>{const known=urls.get(file);if(known)return known;const made=URL.createObjectURL(file);urls.set(file,made);return made;};
+  const requestWrite=async()=>{
+    if(!picked.handle?.requestPermission)return false;
+    const state=await picked.handle.requestPermission({mode:'readwrite'}).catch(()=> 'denied');
+    writable=state==='granted';
+    return writable;
+  };
   return {
     kind:picked.kind,handle:picked.handle||null,catalog,missing,
     async fit(id){const file=fitFile(id);return file?readJSON(file):null;},
     // Annotations kept beside the music, when the folder holds any.
-    writable,
+    get writable(){return writable;},
+    canRequestWrite:!!picked.handle?.requestPermission,
+    requestWrite,
     path:id=>files.get(id)?.relative||null,
     async inkFiles(){
       return resolved.filter(entry=>entry.path.startsWith(inkPrefix)&&entry.path.endsWith('.json'))
         .map(entry=>({id:entry.path.slice(inkPrefix.length,-5),read:()=>readJSON(entry.file)}));
     },
-    writeJSON:writable?(relative,value)=>writeInto(picked.handle,relative,JSON.stringify(value)):null,
+    writeJSON:async(relative,value)=>{
+      if(!writable)throw new Error('尚未获得曲谱库写入权限。请点击“同步批注到本机”并允许访问。');
+      return writeInto(picked.handle,relative,JSON.stringify(value));
+    },
     get size(){return files.size;},
     url:id=>{const found=files.get(id);return found?address(found.file):null;},
     pathURL:relative=>{const file=byPath.get(relative);return file?address(file):null;},
@@ -126,8 +137,8 @@ export async function readLibrary(picked){
 // A catalogue kept from the last visit: enough to draw the shelf with no network at all,
 // while every file still has to come from a folder the player picks again.
 export const rememberedLibrary=(catalog,reopen)=>({
-  kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,
-  url:()=>null,path:()=>null,pathURL:()=>null,sourceURL:()=>null,fit:async()=>null,writable:false,inkFiles:async()=>[],writeJSON:null,reopen,release(){},
+  kind:'remembered',catalog,missing:[],needsFolder:true,size:0,handle:null,writable:false,canRequestWrite:false,
+  url:()=>null,path:()=>null,pathURL:()=>null,sourceURL:()=>null,fit:async()=>null,inkFiles:async()=>[],writeJSON:null,reopen,release(){},
 });
 
 export function setupLocalFolder({onLibrary=()=>{},toast=()=>{}}={}){

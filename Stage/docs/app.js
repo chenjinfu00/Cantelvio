@@ -18,7 +18,7 @@ import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
 import {setupMIDI} from './midi-ui.js';
 import {setupLocalFolder} from './local-library.js';
-import {setupAnnotationBackup,drainInk,showMerged} from './annotation-backup.js';
+import {drainInk,showMerged} from './annotation-backup.js';
 import {setupInkFolder} from './ink-folder.js';
 import {BUILD_INFO,VERSION_UPDATE} from './build-info.js';
 
@@ -515,7 +515,6 @@ recent=setupRecentScores({
 offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
 const deploy=setupDeploy({toast,onDone:()=>offline?.refresh()});
 $('offline-deploy').onclick=()=>deploy?.open();
-setupAnnotationBackup(ink,toast,()=>state.phase==='idle'&&!performing());
 $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，批注保存在本机';
 // Nothing to sign in to: the reader opens straight into whatever this device already holds.
 (async()=>{

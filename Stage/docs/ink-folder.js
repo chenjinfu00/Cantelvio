@@ -39,9 +39,10 @@ export async function mergeIntoDevice(pages){
   return merged.length;
 }
 
-// Writing needs a folder handle the browser will let us write to, which today means Chromium.
+// Writing needs a folder handle the browser will let us write to. Safari's directory upload
+// gives the reader files but no writable handle, so the local database remains the fallback there.
 export async function writeFolderInk(local,rows){
-  if(!local?.writeJSON)throw new Error('这个浏览器不能写入文件夹。请用「保存批注到曲谱文件夹」把文件存进去。');
+  if(!local?.writeJSON)throw new Error('这个浏览器不能写入文件夹：无法申请曲谱库写入权限。');
   let written=0;
   for(const id of scoreIds(rows)){
     const value=inkFileFor(id,rows);
@@ -50,24 +51,11 @@ export async function writeFolderInk(local,rows){
   return written;
 }
 
-// Where a browser cannot write, the reader can still hand the file to their own Files app.
-export async function offerInkFile(rows,{share=navigator.share?.bind(navigator),canShare=navigator.canShare?.bind(navigator)}={}){
-  const pages=(rows||[]).filter(row=>row.data?.strokes?.length).map(({id,data})=>({id,data}));
-  if(!pages.length)throw new Error('还没有批注可以保存。');
-  const value={format:'volta-annotations',version:1,createdAt:new Date().toISOString(),pages};
-  const name='volta-批注-'+new Date().toISOString().slice(0,10)+'.json';
-  const file=new File([JSON.stringify(value)],name,{type:'application/json'});
-  if(share&&canShare?.({files:[file]})){await share({files:[file],title:'Volta 批注'});return {pages:pages.length,how:'share'};}
-  const url=URL.createObjectURL(file),a=document.createElement('a');
-  a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
-  return {pages:pages.length,how:'download'};
-}
-
 // The settings panel and the folder, joined: read what the folder holds when it is opened, and
 // put this device's markings back whenever the browser allows it.
 export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,showMerged}){
-  const $=id=>document.getElementById(id),button=$('ink-folder-save'),status=$('ink-folder-status');
-  // The same action from two places: the settings panel, and the dock the writing hand is on.
+  const $=id=>document.getElementById(id),status=$('ink-folder-status');
+  // There is one explicit sync action, where the writing hand already is.
   const dock=$('ink-save');
   let busy=false;
   const source=()=>library?.local||null;
@@ -75,18 +63,14 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   function describe(){
     const local=source();
     if(!local||local.needsFolder){
-      // Safari/iPad cannot write to a user-selected Files folder. The ordinary save action
-      // therefore confirms the IndexedDB copy; exporting is kept as an explicit backup action.
-      if(button)button.textContent='确认本机保存';
-      if(dock){dock.disabled=false;dock.title='批注已自动保存到本机';dock.querySelector('span').textContent='已保存';}
-      return say('批注已自动保存在这台设备上，无需另选保存位置。');
+      if(dock){dock.disabled=false;dock.title='同步批注到本机曲谱库';dock.querySelector('span').textContent='同步';}
+      return say(local?.needsFolder?'请重新连接本地曲谱文件夹后同步批注。':'请先选择本地曲谱文件夹。');
     }
-    say(local.writable?'已连接文件夹，批注会自动存进「曲谱库数据／批注」。':'Safari 不能直接写入文件 App 的指定文件夹；批注已自动保存在这台设备上。需要文件时，请使用下面的“导出批注”。');
-    if(button)button.textContent=local.writable?'立即保存批注到曲谱文件夹':'确认本机保存';
+    say(local.writable?'已连接曲谱库，批注会同步到「曲谱库数据／批注」。':local.canRequestWrite?'点击“同步批注到本机”时，系统会请求曲谱库写入权限。':'当前浏览器只能把批注保存在本机数据库，无法申请曲谱库写入权限。');
     if(dock){
       dock.disabled=false;
-      dock.title=local.writable?'保存批注到曲谱文件夹':'批注已自动保存到本机';
-      dock.querySelector('span').textContent=local.writable?'保存':'已保存';
+      dock.title='同步批注到本机曲谱库';
+      dock.querySelector('span').textContent='同步';
     }
   }
   // Opening a folder brings in whatever other devices left there.
@@ -112,25 +96,28 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   }
   async function keep(){
     if(busy||!canRun())return;
-    busy=true;if(button)button.disabled=true;if(dock)dock.disabled=true;
+    busy=true;if(dock)dock.disabled=true;
     try{
       await drain?.(ink);
       const local=source();
+      if(local?.canRequestWrite&&!local.writable&&!local.needsFolder){
+        const granted=await local.requestWrite();
+        if(!granted){
+          const message='没有获得曲谱库写入权限；批注仍已保存在本机数据库。';
+          say(message);toast(message);return;
+        }
+      }
       if(local?.writable&&!local.needsFolder){
         const written=await save();
         say(`已写入 ${written} 首曲子的批注。`);
         toast(written?'批注已保存到曲谱文件夹。':'还没有批注可以保存。');
       }else{
-        // The draft is already written to IndexedDB while drawing. Drain here so the button
-        // still provides a meaningful save checkpoint without opening Safari's file picker.
-        await drain?.(ink);
-        const message='批注已保存到这台设备，无需另选位置。若要放进曲谱文件夹，请使用设置里的“导出这份曲谱的批注”。';
+        const message=local?.needsFolder?'请先重新连接本地曲谱文件夹，再同步批注。':'当前浏览器无法申请曲谱库写入权限；批注已保存在本机数据库。';
         say(message);toast(message);
       }
     }catch(error){say(error.message);toast(error.message);}
-    finally{busy=false;if(button)button.disabled=false;if(dock)dock.disabled=false;}
+    finally{busy=false;if(dock)dock.disabled=false;}
   }
-  if(button)button.onclick=keep;
   if(dock)dock.onclick=keep;
   return {
     describe,save,keep,

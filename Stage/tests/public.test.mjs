@@ -24,7 +24,8 @@ test('app shell has no platform branding or bundled personal records',async()=>{
   const html=await read('index.html');assert.doesNotMatch(html,/仅限本人|PRIVATE LIBRARY|曲谱与批注仅你可见/);
   assert.match(html,/批注保存在本机/);
   assert.match(html,/id="build-version"/);
-  assert.match(html,/确认本机保存/);assert.match(html,/导出全部批注/);
+  assert.match(html,/同步批注到本机曲谱库/);
+  assert.doesNotMatch(html,/导出全部批注|导出这份曲谱的批注|导入批注备份/);
 });
 
 test('entrypoint resources and local module imports resolve beneath the project subpath',async()=>{

@@ -60,7 +60,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
       const used=estimate?.usage?` 本网站已用 ${mb(estimate.usage)}。`:'';
       node.textContent=kept===true?'浏览器已同意长期保留本机数据，关掉应用批注仍在。'+used
         :kept===false?'浏览器尚未保证长期保留。点下面的按钮申请；iPad 上把网页加到主屏幕后更容易获批。'+used
-        :'此浏览器不报告存储状态，重要批注请定期导出备份。';
+        :'此浏览器不报告存储状态，请及时点击“同步”写入曲谱库。';
     }catch{node.textContent='此浏览器暂不支持持久存储申请。';}
   }
   async function refresh(){
@@ -94,7 +94,7 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     finally{const message=$('offline-status').textContent;saving=false;await refresh();if(!message.startsWith('正在')&&!message.startsWith('已下载'))$('offline-status').textContent=message;}
   };
   $('storage-persist').onclick=async()=>{
-    try{const granted=await navigator.storage?.persist?.();const estimate=await navigator.storage?.estimate?.();$('storage-status').textContent=(granted?'浏览器已同意尽量保留本机数据。':'浏览器未保证长期保留；重要批注请另存备份。')+(estimate?.usage?` 本网站已用 ${mb(estimate.usage)}。`:'');}catch{$('storage-status').textContent='此浏览器暂不支持持久存储申请。';}
+    try{const granted=await navigator.storage?.persist?.();const estimate=await navigator.storage?.estimate?.();$('storage-status').textContent=(granted?'浏览器已同意尽量保留本机数据。':'浏览器未保证长期保留；请及时点击“同步”写入曲谱库。')+(estimate?.usage?` 本网站已用 ${mb(estimate.usage)}。`:'');}catch{$('storage-status').textContent='此浏览器暂不支持持久存储申请。';}
   };
   $('settings-dialog').addEventListener('toggle',()=>refresh());
   refresh();return {refresh};

@@ -32,6 +32,8 @@ test('a folder answers with the scores the catalogue asks for, and says which ar
   assert.equal(files.get('a').relative,'曲谱/甲/版本一 · a.pdf');
   const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
   assert.match(local,/pathURL:relative=>\{const file=byPath\.get\(relative\)/,'history can resolve its relative path after the folder is selected');
+  assert.match(local,/showDirectoryPicker\(\{id:'volta-library',mode:'read'\}\)/,'folder selection does not request write access yet');
+  assert.match(local,/requestPermission\(\{mode:'readwrite'\}\)/,'the sync action can request write access later');
 });
 
 test('the shelf reads a folder before it reads the network, and the app keeps working offline',async()=>{
@@ -143,9 +145,12 @@ test('a newcomer is told what folder to point at, and told only until they have'
   assert.doesNotMatch(readme,/netlify/i,'the README no longer points at a host that is gone');
 });
 
-test('the writing dock carries its own save, and a tool button is its own settings button',async()=>{
+test('the writing dock carries the only explicit annotation sync action',async()=>{
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="ink-save"/,'saving is where the writing hand already is');
+  assert.match(html,/title="同步批注到本机曲谱库"/);
+  assert.match(html,/<span>同步<\/span>/);
+  for(const id of ['ink-folder-save','ink-export','backup-export','backup-import','backup-file'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'),id+' is removed');
   assert.doesNotMatch(html,/画笔设置|橡皮设置/,'the two ··· buttons are gone');
   assert.match(html,/id="pen-options"/);assert.match(html,/id="erase-options"/);
   assert.match(html,/长按选颜色和粗细/,'the pen says how to reach its settings');
@@ -156,16 +161,17 @@ test('the writing dock carries its own save, and a tool button is its own settin
   const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
   assert.match(css,/\.pencil-dock \.pencil-popover>summary\{display:none\}/);
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
-  assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock button and the settings button do the same thing');
+  assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock owns the sync action');
 });
 
-test('Safari save confirms the local draft instead of opening a file picker',async()=>{
+test('a sync asks for folder write permission only when the browser exposes it',async()=>{
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
-  assert.match(folder,/批注已自动保存在这台设备上，无需另选保存位置/);
-  assert.match(folder,/const message='批注已保存到这台设备，无需另选位置/);
-  assert.doesNotMatch(folder,/const \{pages,how\}=await offerInkFile\(await allInkDrafts\(\)\)/);
+  assert.match(folder,/local\?\.canRequestWrite&&!local\.writable/);
+  assert.match(folder,/await local\.requestWrite\(\)/);
+  assert.match(folder,/当前浏览器无法申请曲谱库写入权限/);
+  assert.doesNotMatch(folder,/offerInkFile/);
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
-  assert.match(html,/iPad Safari 不允许网页自动选择/);
+  assert.match(html,/Safari\/iPad 如果不提供网页写入/);
 });
 
 test('whether markings survive a closed app is answered without being asked',async()=>{
