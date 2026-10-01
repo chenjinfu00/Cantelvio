@@ -7,6 +7,10 @@ coverage/
 .vite/
 *.tsbuildinfo
 
+# Python (integration scripts)
+__pycache__/
+*.py[cod]
+
 # Test & tool artifacts
 playwright-report/
 test-results/

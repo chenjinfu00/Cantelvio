@@ -1,6 +1,7 @@
 import type { Draft } from 'immer';
 import { midiOf } from '../pitch/pitch';
 import {
+  eventsOverlapping,
   findEvent,
   findEventOfNote,
   hasMeasure,
@@ -10,7 +11,7 @@ import {
   scoreLength,
   tupletsIn,
 } from '../model/query';
-import type { NoteEvent, ScorePosition, TupletSpan } from '../model/types';
+import type { NoteEvent, Provenance, ScorePosition, TupletSpan } from '../model/types';
 import { VOICES_PER_STAFF } from '../model/types';
 import { type Rational, add, cmp, isPositive, le, lt, min, sub } from '../time/rational';
 import {
@@ -307,4 +308,108 @@ export function tupletCreate(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'tuplet.c
   sm.tuplets = [...(sm.tuplets ?? []), tuplet as Draft<TupletSpan>].sort(
     (a, b) => a.voice - b.voice || cmp(a.offset, b.offset),
   );
+}
+
+export function eventsInsert(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'events.insert'>): void {
+  if (!hasStaff(base, cmd.staffId)) fail(cmd, `unknown staff ${cmd.staffId}`);
+  if (!hasMeasure(base, cmd.measureId)) fail(cmd, `unknown measure ${cmd.measureId}`);
+  if (!Number.isInteger(cmd.voice) || cmd.voice < 0 || cmd.voice >= VOICES_PER_STAFF)
+    fail(cmd, `invalid voice ${cmd.voice}`);
+  const info = measureInfo(base, cmd.measureId);
+  const end = scoreLength(base);
+  const seen = new Set<string>();
+  const spans: { start: Rational; end: Rational }[] = [];
+  for (const e of cmd.events) {
+    if (seen.has(e.id) || findEvent(base, e.id)) fail(cmd, `event id ${e.id} already exists`);
+    seen.add(e.id);
+    for (const n of e.notes) {
+      if (seen.has(n.id) || findEventOfNote(base, n.id))
+        fail(cmd, `note id ${n.id} already exists`);
+      seen.add(n.id);
+    }
+    if (e.notes.length === 0) fail(cmd, 'events need at least one note');
+    if (!isPositive(e.duration)) fail(cmd, 'duration must be positive');
+    if (lt(e.offset, { n: 0, d: 1 }) || !lt(e.offset, info.length))
+      fail(cmd, 'offset outside the measure');
+    const s = add(info.start, e.offset);
+    const t = add(s, e.duration);
+    if (cmp(t, end) > 0) fail(cmd, 'event extends past the end of the score');
+    if (eventsOverlapping(base, cmd.staffId, cmd.voice, s, t).length)
+      fail(cmd, 'overlaps an existing event');
+    if (spans.some((x) => lt(x.start, t) && lt(s, x.end)))
+      fail(cmd, 'inserted events overlap each other');
+    spans.push({ start: s, end: t });
+  }
+  for (const e of cmd.events) {
+    insertDraftEvent(draft, cmd.staffId, cmd.measureId, cmd.voice, e);
+    const d = draftEventAt(draft, {
+      staffId: cmd.staffId,
+      measureId: cmd.measureId,
+      voice: cmd.voice,
+      event: e,
+    });
+    if (d) sortNotes(d);
+  }
+}
+
+function fromRun(source: Provenance | undefined, runId: string): boolean {
+  return source?.kind === 'ai' && source.runId === runId;
+}
+
+export function provenanceAccept(
+  draft: DraftDoc,
+  base: ScoreDoc,
+  cmd: Cmd<'provenance.accept'>,
+): void {
+  for (const [staffId, measures] of Object.entries(base.content)) {
+    for (const [measureId, sm] of Object.entries(measures)) {
+      sm.voices.forEach((events, v) => {
+        events.forEach((e, i) => {
+          if (fromRun(e.source, cmd.runId) && e.source?.kind === 'ai' && !e.source.accepted) {
+            draft.content[staffId]![measureId]!.voices[v]![i]!.source = {
+              ...e.source,
+              accepted: true,
+            };
+          }
+        });
+      });
+      (sm.dynamics ?? []).forEach((d, i) => {
+        if (fromRun(d.source, cmd.runId) && d.source?.kind === 'ai')
+          draft.content[staffId]![measureId]!.dynamics![i]!.source = {
+            ...d.source,
+            accepted: true,
+          };
+      });
+    }
+  }
+  base.harmony.forEach((c, i) => {
+    if (fromRun(c.source, cmd.runId) && c.source?.kind === 'ai')
+      draft.harmony[i]!.source = { ...c.source, accepted: true };
+  });
+}
+
+export function provenanceReject(
+  draft: DraftDoc,
+  base: ScoreDoc,
+  cmd: Cmd<'provenance.reject'>,
+): void {
+  const pending = (p: Provenance | undefined) =>
+    fromRun(p, cmd.runId) && p?.kind === 'ai' && !p.accepted;
+  for (const [staffId, measures] of Object.entries(base.content)) {
+    for (const [measureId, sm] of Object.entries(measures)) {
+      const hasEvents = sm.voices.some((evs) => evs.some((e) => pending(e.source)));
+      const hasDyn = (sm.dynamics ?? []).some((d) => pending(d.source));
+      if (!hasEvents && !hasDyn) continue;
+      const dsm = draft.content[staffId]![measureId]!;
+      dsm.voices = dsm.voices.map((evs) =>
+        evs.filter((e) => !pending(e.source as Provenance | undefined)),
+      );
+      if (dsm.dynamics) {
+        dsm.dynamics = dsm.dynamics.filter((d) => !pending(d.source as Provenance | undefined));
+        if (dsm.dynamics.length === 0) delete dsm.dynamics;
+      }
+      pruneEmpty(draft, staffId, measureId);
+    }
+  }
+  draft.harmony = draft.harmony.filter((c) => !pending(c.source as Provenance | undefined));
 }

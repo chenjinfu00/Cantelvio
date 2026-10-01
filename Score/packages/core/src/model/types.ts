@@ -212,6 +212,7 @@ export interface DynamicMark {
   readonly id: ID;
   readonly offset: Rational;
   readonly value: DynamicValue;
+  readonly source?: Provenance;
 }
 
 // ------------------------------------------------------------------------------- harmony

@@ -14,6 +14,7 @@ import type {
   ChordSymbol,
   DynamicMark,
   ID,
+  NoteEvent,
   Part,
   ScoreMeta,
   ScorePosition,
@@ -74,6 +75,14 @@ export type Command =
       readonly tieFromPrevious?: boolean;
     }
   | { readonly type: 'rest.enter'; readonly at: ScorePosition; readonly duration: Rational }
+  /** Insert complete events verbatim (imports, AI results, paste). Fails on overlaps. */
+  | {
+      readonly type: 'events.insert';
+      readonly staffId: ID;
+      readonly measureId: ID;
+      readonly voice: number;
+      readonly events: readonly NoteEvent[];
+    }
   | {
       readonly type: 'note.addToChord';
       readonly eventId: ID;
@@ -144,6 +153,11 @@ export type Command =
       readonly name: string;
       readonly abbreviation: string;
     }
+  // ---- provenance (AI suggestions)
+  /** Mark everything produced by an AI run as accepted (drawn normally, exported as material). */
+  | { readonly type: 'provenance.accept'; readonly runId: string }
+  /** Remove the not-yet-accepted output of an AI run. */
+  | { readonly type: 'provenance.reject'; readonly runId: string }
   // ---- composition
   | { readonly type: 'batch'; readonly label?: string; readonly commands: readonly Command[] };
 
