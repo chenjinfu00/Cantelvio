@@ -1,0 +1,191 @@
+import {
+  SAMPLES,
+  allStaves,
+  applyCommand,
+  createScore,
+  parseRational as r,
+  rat,
+  sequentialIds,
+  textToCommands,
+  toString,
+  type ScoreDoc,
+} from '@ailegro-score/core';
+import { describe, expect, it } from 'vitest';
+import { layoutScore } from './layout/engrave';
+import { buildStaffNotation, type NChord } from './layout/notation';
+import { measureFrame, splitNote, splitRest, tupletFrame } from './layout/rhythm';
+import { renderPageSvg } from './render/svg';
+
+const show = (
+  ps: {
+    start: { n: number; d: number };
+    end: { n: number; d: number };
+    written: { value: string; dots: number };
+  }[],
+) =>
+  ps
+    .map(
+      (p) =>
+        `${toString(p.start)}-${toString(p.end)}:${p.written.value}${'.'.repeat(p.written.dots)}`,
+    )
+    .join(' ');
+
+describe('rhythm splitting', () => {
+  const f44 = measureFrame({ beats: 4, beatType: 4 }, r('1'));
+  const f68 = measureFrame({ beats: 6, beatType: 8 }, r('3/4'));
+
+  it('keeps simple values and common syncopations', () => {
+    expect(show(splitNote(f44, r('0'), r('3/4')))).toBe('0-3/4:half.');
+    expect(show(splitNote(f44, r('1/4'), r('3/4')))).toBe('1/4-3/4:half');
+    expect(show(splitNote(f44, r('1/8'), r('3/8')))).toBe('1/8-3/8:quarter');
+  });
+
+  it('shows the middle of a 4/4 bar', () => {
+    expect(show(splitNote(f44, r('3/8'), r('7/8')))).toBe('3/8-1/2:eighth 1/2-7/8:quarter.');
+    expect(show(splitNote(f44, r('1/4'), r('1')))).toBe('1/4-1/2:quarter 1/2-1:half');
+    expect(show(splitNote(f44, r('0'), r('5/8')))).toBe('0-1/2:half 1/2-5/8:eighth');
+  });
+
+  it('shows beats in compound meters', () => {
+    expect(show(splitNote(f68, r('1/8'), r('3/8')))).toBe('1/8-3/8:quarter');
+    expect(show(splitNote(f68, r('1/4'), r('1/2')))).toBe('1/4-3/8:eighth 3/8-1/2:eighth');
+    expect(show(splitNote(f68, r('0'), r('3/4')))).toBe('0-3/4:half.');
+  });
+
+  it('writes rests on metric units', () => {
+    expect(show(splitRest(f44, r('1/4'), r('3/4')))).toBe('1/4-1/2:quarter 1/2-3/4:quarter');
+    expect(show(splitRest(f44, r('1/2'), r('1')))).toBe('1/2-1:half');
+    expect(show(splitRest(f44, r('0'), r('3/8')))).toBe('0-1/4:quarter 1/4-3/8:eighth');
+    expect(show(splitRest(f68, r('0'), r('3/8')))).toBe('0-3/8:quarter.');
+  });
+
+  it('scales tuplets to written values', () => {
+    const t = tupletFrame(r('0'), r('1/4'), 3, 2);
+    expect(show(splitNote(t, r('0'), r('1/12')))).toBe('0-1/12:eighth');
+    expect(show(splitNote(t, r('0'), r('1/6')))).toBe('0-1/6:quarter');
+  });
+});
+
+function scoreWith(
+  text: string,
+  opts: { measures?: number; keySig?: number; template?: string } = {},
+): ScoreDoc {
+  const ids = sequentialIds();
+  let doc = createScore({
+    template: opts.template ?? 'piano',
+    measures: opts.measures ?? 2,
+    keySig: { fifths: opts.keySig ?? 0 },
+    ids,
+    now: 'T',
+  });
+  const staff = allStaves(doc)[0]!.staff.id;
+  const res = textToCommands(
+    doc,
+    { staffId: staff, voice: 0, measureId: doc.measures[0]!.id, offset: rat(0) },
+    text,
+    { ids },
+  );
+  doc = applyCommand(doc, { type: 'batch', commands: res.commands }).doc;
+  return doc;
+}
+
+describe('notation', () => {
+  it('ties notes across barlines and fills rests', () => {
+    const doc = scoreWith('r2 c1 r2');
+    const [m1, m2] = buildStaffNotation(doc, allStaves(doc)[0]!, { concertPitch: false });
+    const c1 = m1!.voices[0]!.items.find((i): i is NChord => i.kind === 'chord')!;
+    const c2 = m2!.voices[0]!.items.find((i): i is NChord => i.kind === 'chord')!;
+    expect(c1.written.value).toBe('half');
+    expect(c1.notes[0]!.tieToNext).toBe(true);
+    expect(c2.notes[0]!.tiedFromPrev).toBe(true);
+    expect(m1!.voices[0]!.items[0]!.kind).toBe('rest');
+  });
+
+  it('places accidentals once per bar', () => {
+    const doc = scoreWith('f#4 f# fn f');
+    const [m1] = buildStaffNotation(doc, allStaves(doc)[0]!, { concertPitch: false });
+    const accs = m1!.voices[0]!.items.map((i) =>
+      i.kind === 'chord' ? i.notes[0]!.accidental : 'rest',
+    );
+    expect(accs).toEqual(['sharp', null, 'natural', null]);
+  });
+
+  it('beams eighths by half bar and sixteenths by beat in 4/4', () => {
+    const doc = scoreWith('c8 d e f g a b c | c16 d e f g a b c c8 d e f');
+    const [m1, m2] = buildStaffNotation(doc, allStaves(doc)[0]!, { concertPitch: false });
+    const beams = (m: typeof m1) =>
+      m!.voices[0]!.items.map((i) => (i.kind === 'chord' ? i.beam : null));
+    expect(beams(m1)).toEqual([0, 0, 0, 0, 1, 1, 1, 1]);
+    expect(beams(m2)).toEqual([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]);
+  });
+
+  it('shows written pitch for transposing instruments unless concert pitch is on', () => {
+    const ids = sequentialIds();
+    let doc = createScore({ template: 'wind-quintet', measures: 1, ids, now: 'T' });
+    const clarinet = allStaves(doc)[2]!;
+    const res = textToCommands(
+      doc,
+      { staffId: clarinet.staff.id, voice: 0, measureId: doc.measures[0]!.id, offset: rat(0) },
+      'bb1',
+      { ids },
+    );
+    doc = applyCommand(doc, { type: 'batch', commands: res.commands }).doc;
+    const written = buildStaffNotation(doc, clarinet, { concertPitch: false })[0]!;
+    const concert = buildStaffNotation(doc, clarinet, { concertPitch: true })[0]!;
+    const first = (m: typeof written) => (m.voices[0]!.items[0] as NChord).notes[0]!.display;
+    expect(first(concert).step).toBe('B');
+    expect(first(written)).toMatchObject({ step: 'C', alter: 0 });
+    expect(written.key.fifths).toBe(2);
+  });
+});
+
+describe('layout', () => {
+  it('lays out every sample deterministically', () => {
+    for (const s of SAMPLES) {
+      const doc = s.build();
+      const a = layoutScore(doc);
+      const b = layoutScore(doc);
+      const svgA = a.pages.map((p) => renderPageSvg(p, a)).join('');
+      const svgB = b.pages.map((p) => renderPageSvg(p, b)).join('');
+      expect(svgA).toBe(svgB);
+      expect(a.systems.length).toBeGreaterThan(0);
+      // every note of the document is drawn exactly once as a notehead
+      const notes = Object.values(doc.content).flatMap((ms) =>
+        Object.values(ms).flatMap((sm) => sm.voices.flat().flatMap((e) => e.notes)),
+      );
+      const heads = svgA.match(/class="notehead" data-ref="n:/g)?.length ?? 0;
+      expect(heads).toBeGreaterThanOrEqual(notes.length);
+    }
+  });
+
+  it('exposes geometry for hit-testing', () => {
+    const doc = SAMPLES[0]!.build();
+    const layout = layoutScore(doc);
+    const sys = layout.systems[0]!;
+    expect(sys.staves.length).toBe(2);
+    expect(sys.staves[1]!.y).toBeGreaterThan(sys.staves[0]!.y + 4);
+    const m = sys.measures[0]!;
+    expect(m.segments[0]!.x).toBeGreaterThan(m.x);
+    for (let k = 1; k < m.segments.length; k++)
+      expect(m.segments[k]!.x).toBeGreaterThan(m.segments[k - 1]!.x);
+  });
+
+  it('justifies full systems to the page width', () => {
+    const doc = SAMPLES[2]!.build();
+    const layout = layoutScore(doc);
+    const page = layout.pages[0]!;
+    const sys = layout.systems[0]!;
+    const last = sys.measures[sys.measures.length - 1]!;
+    const right = last.x + last.width;
+    const margin = doc.settings.pageMarginsMm.right / layout.staffSpaceMm;
+    expect(Math.abs(page.width - margin - right)).toBeLessThan(0.05);
+  });
+
+  it('supports continuous view', () => {
+    const doc = SAMPLES[1]!.build();
+    const layout = layoutScore(doc, { mode: 'continuous' });
+    expect(layout.pages.length).toBe(1);
+    expect(layout.systems.length).toBe(1);
+    expect(layout.systems[0]!.measures.length).toBe(doc.measures.length);
+  });
+});
