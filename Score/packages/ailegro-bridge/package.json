@@ -1,0 +1,16 @@
+{
+  "name": "@ailegro-score/ailegro-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "AIlegro interchange: score-record export, compose requests and import of generated music. Pure TypeScript, no DOM.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@ailegro-score/core": "0.1.0"
+  }
+}

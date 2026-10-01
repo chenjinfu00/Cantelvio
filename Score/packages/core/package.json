@@ -1,0 +1,16 @@
+{
+  "name": "@ailegro-score/core",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "Score data model, music theory primitives, commands, undo/redo and playback timeline. Pure TypeScript, no DOM.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "dependencies": {
+    "immer": "^11.1.18"
+  }
+}

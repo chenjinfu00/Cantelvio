@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    // Pure packages: no DOM lib on purpose. Code here must run in Node, Web Workers and the browser.
+    "lib": ["ES2023"],
+    "types": []
+  },
+  "include": ["*/src"]
+}

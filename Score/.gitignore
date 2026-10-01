@@ -1,0 +1,29 @@
+# Dependencies & build output
+node_modules/
+node_modules.nosync/
+dist/
+out/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Test & tool artifacts
+playwright-report/
+test-results/
+/tmp/
+*.log
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.DS_Store
+.idea/
+*.swp
+
+# iCloud Drive conflict copies ("index 2", "file 2.ts", ...). Project files never contain spaces,
+# so anything named "<name> <digit>" is a sync duplicate, not source. See docs/dev-setup.md.
+* [2-9]
+* [2-9].*

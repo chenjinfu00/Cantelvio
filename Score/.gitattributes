@@ -1,0 +1,29 @@
+# Normalize line endings for all text files; keep LF in the repository and working tree.
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.pdf binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.flac binary
+*.mid binary
+*.midi binary
+*.otf binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.mxl binary
+
+# Generated sources: hide from diffs/PR stats, regenerate instead of hand-editing.
+*.generated.ts linguist-generated=true -diff
+package-lock.json linguist-generated=true -diff
+
+# Score documents are pretty-printed, stable-ordered JSON so they diff and merge well in git.
+*.ailegro.json text eol=lf linguist-language=JSON

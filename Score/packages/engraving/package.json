@@ -1,0 +1,19 @@
+{
+  "name": "@ailegro-score/engraving",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "Engraving engine: score model -> laid-out pages -> SVG, using SMuFL (Bravura) metrics. Pure TypeScript, no DOM.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@ailegro-score/core": "0.1.0"
+  },
+  "devDependencies": {
+    "@vexflow-fonts/bravura": "^1.0.2"
+  }
+}
