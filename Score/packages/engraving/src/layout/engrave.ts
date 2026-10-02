@@ -438,6 +438,32 @@ function titleBlock(
 
 // ------------------------------------------------------------------------------- one system
 
+/** x of a time position inside a laid-out measure (interpolating between segments). */
+export function offsetToX(measure: MeasureGeometry, t: Rational): number {
+  return xAtOffset(measure.segments, measure.length, measure.x + measure.width, t);
+}
+
+/** Approximate time position (whole notes, float) of an x inside a laid-out measure. */
+export function xToOffset(measure: MeasureGeometry, x: number): number {
+  const segs = measure.segments;
+  const len = toNumber(measure.length);
+  if (!segs.length) return 0;
+  const end = measure.x + measure.width;
+  for (let k = 0; k < segs.length; k++) {
+    const a = segs[k]!;
+    const bx = segs[k + 1]?.x ?? end;
+    const bt = segs[k + 1] ? toNumber(segs[k + 1]!.offset) : len;
+    if (x < bx || k === segs.length - 1) {
+      if (x <= a.x) return toNumber(a.offset);
+      return (
+        toNumber(a.offset) +
+        ((Math.min(x, bx) - a.x) / Math.max(0.001, bx - a.x)) * (bt - toNumber(a.offset))
+      );
+    }
+  }
+  return 0;
+}
+
 function xAtOffset(
   segs: readonly SegmentGeometry[],
   length: Rational,
@@ -734,7 +760,8 @@ function buildSystem(
         text,
         size: STYLE.chordSymbolSize,
         family: 'sans',
-        cls: 'chord-symbol',
+        // unaccepted AI suggestions are drawn like ghost notes
+        cls: c.source?.kind === 'ai' && !c.source.accepted ? 'chord-symbol ghost' : 'chord-symbol',
         ref: `ch:${c.id}`,
       });
     }

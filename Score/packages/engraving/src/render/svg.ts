@@ -18,7 +18,7 @@ export interface SvgOptions {
   readonly idPrefix?: string;
 }
 
-const FONT_STACK: Record<'serif' | 'sans', string> = {
+export const FONT_STACK: Record<'serif' | 'sans', string> = {
   serif: "'Times New Roman', 'Noto Serif', 'Songti SC', 'Noto Serif CJK SC', serif",
   sans: "'Helvetica Neue', Arial, 'PingFang SC', 'Noto Sans CJK SC', sans-serif",
 };

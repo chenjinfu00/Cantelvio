@@ -11,7 +11,7 @@ import {
   type ScoreDoc,
 } from '@ailegro-score/core';
 import { describe, expect, it } from 'vitest';
-import { layoutScore } from './layout/engrave';
+import { layoutScore, offsetToX, xToOffset } from './layout/engrave';
 import { buildStaffNotation, type NChord } from './layout/notation';
 import { measureFrame, splitNote, splitRest, tupletFrame } from './layout/rhythm';
 import { renderPageSvg } from './render/svg';
@@ -168,6 +168,21 @@ describe('layout', () => {
     expect(m.segments[0]!.x).toBeGreaterThan(m.x);
     for (let k = 1; k < m.segments.length; k++)
       expect(m.segments[k]!.x).toBeGreaterThan(m.segments[k - 1]!.x);
+  });
+
+  it('maps time positions to x and back inside a measure', () => {
+    const layout = layoutScore(SAMPLES[0]!.build(), {});
+    const m = layout.pages[0]!.systems[0]!.measures[0]!;
+    expect(m.segments.length).toBeGreaterThan(2);
+    for (const seg of m.segments) {
+      expect(offsetToX(m, seg.offset)).toBeCloseTo(seg.x, 6);
+      expect(xToOffset(m, seg.x)).toBeCloseTo(seg.offset.n / seg.offset.d, 6);
+    }
+    // between two segments the mapping interpolates and stays monotonic
+    const [a, b] = m.segments;
+    const mid = xToOffset(m, (a!.x + b!.x) / 2);
+    expect(mid).toBeGreaterThan(a!.offset.n / a!.offset.d);
+    expect(mid).toBeLessThan(b!.offset.n / b!.offset.d);
   });
 
   it('justifies full systems to the page width', () => {
