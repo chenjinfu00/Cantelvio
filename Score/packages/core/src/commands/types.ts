@@ -131,6 +131,8 @@ export type Command =
       readonly index: number;
       readonly grace: GraceNote;
     }
+  /** Replace the grace note with the same id, in place (its value, slash or notes). */
+  | { readonly type: 'grace.set'; readonly grace: GraceNote }
   | {
       readonly type: 'range.clear';
       readonly staffIds: readonly ID[];

@@ -19,6 +19,7 @@
 import { type Command } from '../commands/types';
 import { type IdGenerator } from '../model/ids';
 import { clefAt, locate, measureInfo, measureInfos, scoreLength, staffInfo } from '../model/query';
+import { spannerTimes } from '../model/spanners';
 import { middleLinePitch } from '../model/clef';
 import type {
   Arpeggio,
@@ -41,6 +42,7 @@ import {
   nearestPitchForStep,
 } from '../pitch/pitch';
 import {
+  NOTE_VALUE_BEAMS,
   type NoteValue,
   type WrittenDuration,
   writtenLength,
@@ -479,7 +481,12 @@ export function parseText(
       const notes = readPitches(at);
       const written = readDuration();
       let tie = false;
-      const marks = readMarks(true, () => (tie = true));
+      let marks = readMarks(true, () => (tie = true));
+      if (marks?.tremolo) {
+        // c8:16 is a 16th tremolo: on an eighth (one flag) that is one stroke through the stem
+        const strokes = marks.tremolo - NOTE_VALUE_BEAMS[written.value];
+        marks = { ...marks, tremolo: Math.max(1, Math.min(4, strokes)) };
+      }
       pushNote({
         kind: 'note',
         notes,
@@ -581,7 +588,6 @@ export function textToCommands(
     const prev = previousPitch(doc, at, t);
     if (prev) reference = prev;
   }
-  staffInfo(doc, at.staffId); // throws for unknown staff
   let pendingTie = false;
   // Lines are collected while walking and added after the notes they refer to.
   const lineCommands: Command[] = [];
@@ -600,13 +606,51 @@ export function textToCommands(
     trill?: Rational;
     ottava?: { octaves: number; start: Rational };
   } = {};
+  // pedal marks belong under the lowest staff of the instrument (as with the keypad)
+  const part = staffInfo(doc, at.staffId).part;
+  const pedalStaff = part.staves[part.staves.length - 1]!.id;
+  // octave lines already on the staff: the new ones replace them where they overlap
+  const ottavas = doc.spanners
+    .filter((sp): sp is Extract<Spanner, { kind: 'ottava' }> => sp.kind === 'ottava')
+    .filter((sp) => sp.staffId === at.staffId)
+    .map((sp) => ({ sp, t: spannerTimes(doc, sp) }))
+    .filter(
+      (
+        o,
+      ): o is { sp: Extract<Spanner, { kind: 'ottava' }>; t: { start: Rational; end: Rational } } =>
+        !!o.t,
+    );
+  const clearOttavas = (from: Rational, to: Rational) => {
+    for (let k = ottavas.length - 1; k >= 0; k--) {
+      const o = ottavas[k]!;
+      if (!lt(o.t.start, to) || !lt(from, o.t.end)) continue;
+      const before = lt(o.t.start, from);
+      const after = lt(to, o.t.end);
+      ottavas.splice(k, 1);
+      if (!before && !after) {
+        lineCommands.push({ type: 'spanners.delete', ids: [o.sp.id] });
+        continue;
+      }
+      if (before) {
+        const head = { ...o.sp, end: endAt(from) };
+        lineCommands.push({ type: 'spanner.set', spanner: head });
+        ottavas.push({ sp: head, t: { start: o.t.start, end: from } });
+      }
+      if (after) {
+        const tail = { ...o.sp, ...(before ? { id: ids.next('sp') } : {}), start: startAt(to) };
+        lineCommands.push({ type: before ? 'spanner.add' : 'spanner.set', spanner: tail });
+        ottavas.push({ sp: tail, t: { start: to, end: o.t.end } });
+      }
+    }
+  };
   const addLine = (from: Rational, to: Rational, line: Record<string, unknown>) => {
     if (!lt(from, to)) return;
+    if (line.kind === 'ottava') clearOttavas(from, to);
     lineCommands.push({
       type: 'spanner.add',
       spanner: {
         id: ids.next('sp'),
-        staffId: at.staffId,
+        staffId: line.kind === 'pedal' ? pedalStaff : at.staffId,
         start: startAt(from),
         end: endAt(to),
         ...line,

@@ -46,6 +46,7 @@ const HANDLERS: HandlerMap = {
   'events.setStem': content.eventsSetStem,
   'events.setProps': marks.eventsSetProps,
   'grace.add': marks.graceAdd,
+  'grace.set': marks.graceSet,
   'spanner.add': spanners.spannerAdd,
   'spanner.set': spanners.spannerSet,
   'spanners.delete': spanners.spannersDelete,

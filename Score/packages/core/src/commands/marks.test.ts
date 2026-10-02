@@ -112,6 +112,57 @@ describe('event marks', () => {
     ).toThrow(/already exists/);
   });
 
+  it('sets the value of a grace note in place', () => {
+    const t = setup();
+    t.write(t.at(0, '0'), '\\acciaccatura d8 c4');
+    const g = events(t.doc(), t.staff, 0)[0]!.graces![0]!;
+    expect(g.slash).toBe(true);
+    const doc = applyCommand(t.doc(), {
+      type: 'grace.set',
+      grace: { id: g.id, value: '16th', notes: g.notes },
+    }).doc;
+    expect(events(doc, t.staff, 0)[0]!.graces).toEqual([
+      { id: g.id, value: '16th', notes: g.notes },
+    ]);
+    expect(() =>
+      applyCommand(t.doc(), { type: 'grace.set', grace: { ...g, id: 'gc_none' } }),
+    ).toThrow(/unknown grace/);
+    expect(() => applyCommand(t.doc(), { type: 'grace.set', grace: { ...g, notes: [] } })).toThrow(
+      /at least one note/,
+    );
+  });
+
+  it('stacks articulations from the note outwards and checks marks of inserted events', () => {
+    const t = setup();
+    const [a] = t.write(t.at(0, '0'), 'c4');
+    const doc = applyCommands(t.doc(), [
+      { type: 'events.setArticulation', eventIds: [a!], articulation: 'accent', on: true },
+      { type: 'events.setArticulation', eventIds: [a!], articulation: 'staccato', on: true },
+    ]);
+    expect(events(doc, t.staff, 0)[0]!.articulations).toEqual(['staccato', 'accent']);
+    const insert = (extra: Partial<NoteEvent>): Command => ({
+      type: 'events.insert',
+      staffId: t.staff,
+      measureId: t.doc().measures[1]!.id,
+      voice: 0,
+      events: [
+        {
+          id: 'e_new',
+          kind: 'note',
+          offset: rat(0),
+          duration: r('1/4'),
+          notes: [{ id: 'n_new', pitch: parsePitch('C5') }],
+          ...extra,
+        } as NoteEvent,
+      ],
+    });
+    expect(() => applyCommand(t.doc(), insert({ tremolo: 9 }))).toThrow(/tremolo/);
+    expect(() =>
+      applyCommand(t.doc(), insert({ graces: [{ id: 'gc_x', value: 'eighth', notes: [] }] })),
+    ).toThrow(/no notes/);
+    expect(validateScore(applyCommand(t.doc(), insert({ ornament: 'turn' })).doc)).toEqual([]);
+  });
+
   it('keeps grace notes and marks in the file', () => {
     const t = setup();
     const [a] = t.write(t.at(0, '0'), 'c4 d e f');
@@ -287,6 +338,44 @@ describe('spanners', () => {
     expect(doc.spanners.map((s) => s.id)).toEqual(['sp_2']);
     doc = applyCommand(doc, { type: 'part.remove', partId: doc.parts[1]!.id }).doc;
     expect(doc.spanners).toEqual([]);
+  });
+
+  it('checks new ids against every element and refuses unknown kinds', () => {
+    const t = withNotes();
+    const slur: Spanner = {
+      id: t.ev[0]!,
+      kind: 'slur',
+      staffId: t.staff,
+      from: t.ev[0]!,
+      to: t.ev[1]!,
+    };
+    expect(() => applyCommand(t.doc(), { type: 'spanner.add', spanner: slur })).toThrow(
+      /already exists/,
+    );
+    const bar = t.doc().measures[0]!.id;
+    expect(() =>
+      applyCommand(t.doc(), { type: 'spanner.add', spanner: { ...slur, id: bar } }),
+    ).toThrow(/already exists/);
+    const doc = applyCommand(t.doc(), {
+      type: 'spanner.add',
+      spanner: { ...slur, id: 'sp_1' },
+    }).doc;
+    expect(() =>
+      applyCommand(doc, {
+        type: 'note.enter',
+        at: t.at(1, '0'),
+        duration: r('1/4'),
+        pitches: [parsePitch('C5')],
+        eventId: 'sp_1',
+        noteIds: ['n_fresh'],
+      }),
+    ).toThrow(/already exists/);
+    expect(() =>
+      applyCommand(t.doc(), {
+        type: 'spanner.add',
+        spanner: { ...slur, id: 'sp_2', kind: 'glissando' } as unknown as Spanner,
+      }),
+    ).toThrow(/kind/);
   });
 
   it('reads version 1 files', () => {

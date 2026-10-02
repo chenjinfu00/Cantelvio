@@ -385,10 +385,42 @@ export function findGrace(
   return index >= 0 ? { loc, grace: loc.event.graces![index]!, index } : null;
 }
 
-/** True if the id is used by any event, note, grace note or grace note's note. */
-export function isContentId(doc: ScoreDoc, id: ID): boolean {
-  const idx = eventIndex(doc);
-  return idx.events.has(id) || idx.notes.has(id) || idx.graces.has(id);
+const idsCache = new WeakMap<object, ReadonlySet<ID>>();
+
+/** Every id of the document, of every kind of element. */
+function idsInUse(doc: ScoreDoc): ReadonlySet<ID> {
+  return cached(idsCache, doc, () => {
+    const idx = eventIndex(doc);
+    const ids = new Set<ID>([
+      doc.id,
+      ...idx.events.keys(),
+      ...idx.notes.keys(),
+      ...idx.graces.keys(),
+    ]);
+    for (const p of doc.parts) {
+      ids.add(p.id);
+      for (const s of p.staves) ids.add(s.id);
+    }
+    for (const g of doc.groups) ids.add(g.id);
+    for (const m of doc.measures) {
+      ids.add(m.id);
+      for (const t of m.tempo ?? []) ids.add(t.id);
+    }
+    for (const bars of Object.values(doc.content))
+      for (const sm of Object.values(bars)) {
+        for (const t of sm.tuplets ?? []) ids.add(t.id);
+        for (const c of sm.clefChanges ?? []) ids.add(c.id);
+        for (const d of sm.dynamics ?? []) ids.add(d.id);
+      }
+    for (const h of doc.harmony) ids.add(h.id);
+    for (const s of doc.spanners) ids.add(s.id);
+    return ids;
+  });
+}
+
+/** True if any element of the document already has this id (new ids must be fresh everywhere). */
+export function isIdInUse(doc: ScoreDoc, id: ID): boolean {
+  return idsInUse(doc).has(id);
 }
 
 /** Concert key at a measure. */

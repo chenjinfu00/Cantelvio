@@ -182,28 +182,31 @@ describe('editing', () => {
 });
 
 describe('validation', () => {
-  it('finds duplicate ids on every kind of element', () => {
+  it('finds duplicate ids on every kind of element; commands refuse them', () => {
     const { doc, staff } = setup(2);
     const m0 = doc.measures[0]!.id;
-    let d = applyCommand(doc, {
-      type: 'batch',
-      commands: [
-        {
-          type: 'dynamic.set',
-          staffId: staff,
-          measureId: m0,
-          mark: { id: 'x_1', offset: r('0'), value: 'p' },
-        },
-        {
-          type: 'measure.setTempo',
-          measureId: doc.measures[1]!.id,
-          tempo: { id: 'x_1', offset: r('0'), bpm: 90 },
-        },
-      ],
+    const withDynamic = applyCommand(doc, {
+      type: 'dynamic.set',
+      staffId: staff,
+      measureId: m0,
+      mark: { id: 'x_1', offset: r('0'), value: 'p' },
     }).doc;
+    const tempo = { id: 'x_1', offset: r('0'), bpm: 90 };
+    expect(() =>
+      applyCommand(withDynamic, {
+        type: 'measure.setTempo',
+        measureId: doc.measures[1]!.id,
+        tempo,
+      }),
+    ).toThrow(/already exists/);
+    // a hand-edited file can still contain them
+    const d: ScoreDoc = {
+      ...withDynamic,
+      measures: withDynamic.measures.map((m, i) => (i === 1 ? { ...m, tempo: [tempo] } : m)),
+    };
     expect(validateScore(d).map((i) => i.message)).toEqual(['duplicate id x_1']);
-    d = applyCommand(d, { type: 'dynamic.delete', ids: ['x_1'] }).doc;
-    expect(validateScore(d)).toEqual([]);
+    const fixed = applyCommand(d, { type: 'dynamic.delete', ids: ['x_1'] }).doc;
+    expect(validateScore(fixed)).toEqual([]);
   });
 });
 
@@ -252,6 +255,24 @@ describe('measures', () => {
     expect(d.measures[0]!.timeSig).toEqual({ beats: 4, beatType: 4 });
     expect(d.measures[1]!.barline).toBe('final');
     expect(view(d, staff)).toBe('0:C5/1 | 0:D5/1');
+    expect(validateScore(d)).toEqual([]);
+  });
+
+  it('cuts a long note at every deleted bar it runs through', () => {
+    const { doc, at, staff } = setup(3);
+    let d = applyCommand(doc, {
+      type: 'note.enter',
+      at: at(0, '0'),
+      duration: r('3'),
+      pitches: [parsePitch('C4')],
+      eventId: 'e_long',
+      noteIds: ['n_long'],
+    }).doc;
+    d = applyCommand(d, {
+      type: 'measures.delete',
+      measureIds: [d.measures[1]!.id, d.measures[2]!.id],
+    }).doc;
+    expect(view(d, staff)).toBe('0:C4/1');
     expect(validateScore(d)).toEqual([]);
   });
 

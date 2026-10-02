@@ -5,6 +5,7 @@ import {
   allStaves,
   hasMeasure,
   hasStaff,
+  isIdInUse,
   measureIndexOf,
   measureInfo,
   measureInfos,
@@ -55,11 +56,12 @@ function truncateAcross(draft: DraftDoc, base: ScoreDoc, t: Rational): void {
       sm.voices.forEach((events, voice) => {
         events.forEach((e, i) => {
           const start = add(m.start, e.offset);
-          if (lt(start, t) && lt(t, add(start, e.duration))) {
-            const d = draft.content[staff.staff.id]![m.measure.id]!.voices[voice]![i]!;
-            d.duration = sub(t, start);
-            for (const n of d.notes) delete n.tieForward;
-          }
+          if (!lt(start, t) || !lt(t, add(start, e.duration))) return;
+          const d = draft.content[staff.staff.id]![m.measure.id]!.voices[voice]![i]!;
+          // read the draft: an earlier cut in the same command may already have shortened it
+          if (!lt(t, add(start, d.duration))) return;
+          d.duration = sub(t, start);
+          for (const n of d.notes) delete n.tieForward;
         });
       });
     }
@@ -71,7 +73,8 @@ export function measuresInsert(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'measur
   if (!Number.isInteger(index) || index < 0 || index > base.measures.length)
     fail(cmd, 'index out of range');
   if (ids.length === 0) return;
-  for (const id of ids) if (hasMeasure(base, id)) fail(cmd, `measure id ${id} already exists`);
+  if (new Set(ids).size !== ids.length) fail(cmd, 'duplicate measure ids');
+  for (const id of ids) if (isIdInUse(base, id)) fail(cmd, `measure id ${id} already exists`);
   const infos = measureInfos(base);
   if (index < base.measures.length) truncateAcross(draft, base, infos[index]!.start);
   const fresh: Measure[] = ids.map((id) => ({ id }));
@@ -187,7 +190,7 @@ export function measureSetTimeSig(
   for (let j = newIds.length, x = 0; j < k; j++, x++) {
     const id = cmd.newMeasureIds[x];
     if (!id) fail(cmd, `needs ${k - oldIds.length} new measure ids`);
-    if (hasMeasure(base, id)) fail(cmd, `measure id ${id} already exists`);
+    if (isIdInUse(base, id) || newIds.includes(id)) fail(cmd, `measure id ${id} already exists`);
     newIds.push(id);
   }
 
@@ -382,6 +385,10 @@ export function measureSetTempo(
     return;
   }
   if (!(cmd.tempo.bpm > 0 && cmd.tempo.bpm < 1000)) fail(cmd, 'bpm out of range');
+  const own = base.measures.some(
+    (x) => x.id === cmd.measureId && x.tempo?.some((t) => t.id === cmd.tempo!.id),
+  );
+  if (!own && isIdInUse(base, cmd.tempo.id)) fail(cmd, `id ${cmd.tempo.id} already exists`);
   const others = (m.tempo ?? []).filter(
     (t) => t.id !== cmd.tempo!.id && cmp(t.offset, cmd.tempo!.offset) !== 0,
   );
@@ -420,6 +427,8 @@ export function clefSet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'clef.set'>): 
     }
     return;
   }
+  const own = base.content[cmd.staffId]?.[cmd.measureId]?.clefChanges?.some((c) => c.id === cmd.id);
+  if (!own && isIdInUse(base, cmd.id)) fail(cmd, `id ${cmd.id} already exists`);
   const sm = draftStaffMeasure(draft, cmd.staffId, cmd.measureId);
   const others = (sm.clefChanges ?? []).filter((c) => cmp(c.offset, cmd.offset) !== 0);
   sm.clefChanges = [...others, { id: cmd.id, offset: cmd.offset, clef: cmd.clef }].sort((a, b) =>
@@ -430,6 +439,11 @@ export function clefSet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'clef.set'>): 
 export function dynamicSet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'dynamic.set'>): void {
   if (!hasStaff(base, cmd.staffId)) fail(cmd, `unknown staff ${cmd.staffId}`);
   if (!hasMeasure(base, cmd.measureId)) fail(cmd, `unknown measure ${cmd.measureId}`);
+  // a new id, or the id of a dynamic of this bar that is replaced
+  const own = base.content[cmd.staffId]?.[cmd.measureId]?.dynamics?.some(
+    (d) => d.id === cmd.mark.id,
+  );
+  if (!own && isIdInUse(base, cmd.mark.id)) fail(cmd, `id ${cmd.mark.id} already exists`);
   const sm = draftStaffMeasure(draft, cmd.staffId, cmd.measureId);
   const others = (sm.dynamics ?? []).filter(
     (d) => d.id !== cmd.mark.id && cmp(d.offset, cmd.mark.offset) !== 0,
@@ -457,6 +471,8 @@ export function harmonySet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'harmony.se
   if (!hasMeasure(base, c.measureId)) fail(cmd, `unknown measure ${c.measureId}`);
   const len = measureInfo(base, c.measureId).length;
   if (lt(c.offset, rat(0)) || !lt(c.offset, len)) fail(cmd, 'offset outside the measure');
+  if (!base.harmony.some((h) => h.id === c.id) && isIdInUse(base, c.id))
+    fail(cmd, `id ${c.id} already exists`);
   const rest = draft.harmony.filter(
     (h) => h.id !== c.id && !(h.measureId === c.measureId && cmp(h.offset, c.offset) === 0),
   );
@@ -475,10 +491,10 @@ export function harmonyDelete(draft: DraftDoc, _base: ScoreDoc, cmd: Cmd<'harmon
 
 export function partAdd(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'part.add'>): void {
   if (cmd.index < 0 || cmd.index > base.parts.length) fail(cmd, 'index out of range');
-  if (base.parts.some((p) => p.id === cmd.part.id))
-    fail(cmd, `part id ${cmd.part.id} already exists`);
-  for (const s of cmd.part.staves)
-    if (hasStaff(base, s.id)) fail(cmd, `staff id ${s.id} already exists`);
+  if (isIdInUse(base, cmd.part.id)) fail(cmd, `part id ${cmd.part.id} already exists`);
+  const staffIds = cmd.part.staves.map((s) => s.id);
+  if (new Set([cmd.part.id, ...staffIds]).size !== staffIds.length + 1) fail(cmd, 'duplicate ids');
+  for (const id of staffIds) if (isIdInUse(base, id)) fail(cmd, `staff id ${id} already exists`);
   draft.parts.splice(cmd.index, 0, cmd.part as Draft<typeof cmd.part>);
   for (const s of cmd.part.staves) draft.content[s.id] = {};
   if (cmd.part.staves.length > 1 && cmd.braceId) {

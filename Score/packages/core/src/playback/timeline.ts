@@ -16,7 +16,7 @@ import {
   midiOf,
   pitchFromDiatonic,
 } from '../pitch/pitch';
-import { NOTE_VALUE_LENGTH } from '../time/duration';
+import { NOTE_VALUE_BEAMS, NOTE_VALUE_LENGTH, writtenFromLength } from '../time/duration';
 import {
   type Rational,
   ZERO,
@@ -176,6 +176,12 @@ export function ornamentPieces(
   }
 }
 
+/** Flags or beams of the value an event is written with (inside a tuplet: its written value). */
+function writtenBeams(duration: Rational, tupletRatio: Rational): number {
+  const w = writtenFromLength(mul(duration, tupletRatio));
+  return w ? NOTE_VALUE_BEAMS[w.value] : 0;
+}
+
 /** Grace note timing: on the beat, taking time from the principal (at most half of it). */
 function graceSchedule(e: NoteEvent): { lengths: Rational[]; total: Rational } {
   const graces = e.graces ?? [];
@@ -321,6 +327,11 @@ export function buildPlayback(doc: ScoreDoc): Playback {
               push(n.id, midiFor(n.pitch), n.velocity ?? velocityAt(marks, gt), gt, len, 0.95);
             gt = add(gt, len);
           });
+          const tuplet = (doc.content[s.staff.id]?.[info.measure.id]?.tuplets ?? []).find(
+            (t) =>
+              t.voice === voice && le(t.offset, e.offset) && lt(e.offset, add(t.offset, t.length)),
+          );
+          const tupletRatio = tuplet ? rat(tuplet.actual, tuplet.normal) : rat(1);
           const at = add(eventStart, graces.total);
           const duration = sub(e.duration, graces.total);
           const ornament = e.ornament ?? (inTrill(eventStart) ? 'trill' : undefined);
@@ -357,7 +368,8 @@ export function buildPlayback(doc: ScoreDoc): Playback {
               return;
             }
             if (e.tremolo) {
-              const unit = rat(1, 2 ** (e.tremolo + 2));
+              // strokes through the stem add to the note's own flags or beams
+              const unit = rat(1, 2 ** (e.tremolo + writtenBeams(e.duration, tupletRatio) + 2));
               let x = ZERO;
               while (lt(x, nLen)) {
                 const len = min(unit, sub(nLen, x));

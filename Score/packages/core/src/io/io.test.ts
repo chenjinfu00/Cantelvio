@@ -167,6 +167,39 @@ describe('text notation v1 marks', () => {
     expect(lines.sort()).toEqual(
       ['hairpin:0-1', 'slur:1/4-1', 'pedal:1-3/2', 'ottava:2-3', 'trill:2-3'].sort(),
     );
+    // pedal marks go under the lowest staff of the piano
+    const lower = allStaves(doc)[1]!.staff.id;
+    expect(doc.spanners.find((sp) => sp.kind === 'pedal')!.staffId).toBe(lower);
+  });
+
+  it('counts tremolo strokes through the stem, besides flags and beams', () => {
+    const { staff, write } = setup();
+    const { doc } = write('c4:16 d8:16 e8:32 f16:32 g4:32');
+    const bar = doc.content[staff]![doc.measures[0]!.id]!.voices[0]!;
+    expect(bar.map((e) => e.tremolo)).toEqual([2, 1, 2, 1, 3]);
+  });
+
+  it('replaces the octave lines it writes over', () => {
+    const ids = sequentialIds();
+    let doc = createScore({ template: 'piano', measures: 2, ids });
+    const staff = allStaves(doc)[0]!.staff.id;
+    const write = (text: string, voice = 0, offset = rat(0)) => {
+      const at = { staffId: staff, voice, measureId: doc.measures[0]!.id, offset };
+      const res = textToCommands(doc, at, text, { ids });
+      doc = applyCommand(doc, { type: 'batch', commands: res.commands }).doc;
+    };
+    const lines = () =>
+      doc.spanners.map((sp) => {
+        const t = spannerTimes(doc, sp)!;
+        return `${sp.kind}:${toString(t.start)}-${toString(t.end)}`;
+      });
+    write("\\8va c''4 d e f | g a b c");
+    expect(lines()).toEqual(['ottava:0-2']);
+    write("\\8va c''4 d e g"); // a wrong note fixed: written again under the line
+    expect(lines().sort()).toEqual(['ottava:0-1', 'ottava:1-2']);
+    write("\\15ma e''2", 1, rat(1, 2)); // another voice, the middle of the bar
+    expect(lines().sort()).toEqual(['ottava:0-1/2', 'ottava:1-2', 'ottava:1/2-1']);
+    expect(validateScore(doc)).toEqual([]);
   });
 });
 
@@ -221,6 +254,8 @@ describe('playback', () => {
     expect(play('c4\\mordent').map((n) => n.midi)).toEqual([72, 71, 72]);
     expect(play('c4\\turn').map((n) => n.midi)).toEqual([74, 72, 71, 72]);
     expect(play('c4:16').length).toBe(4);
+    expect(play('c8:16').length).toBe(2); // one stroke and the flag: 16ths
+    expect(play('c8:32').length).toBe(4);
     const rolled = play('<c e g>2\\arpeggio');
     expect(rolled.map((n) => [n.midi, toString(n.at)])).toEqual([
       [72, '0'],

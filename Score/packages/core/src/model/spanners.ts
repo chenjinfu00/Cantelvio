@@ -110,11 +110,25 @@ export function compareSpanners(doc: ScoreDoc): (a: Spanner, b: Spanner) => numb
   };
 }
 
+/** A measure anchor with a well-formed time (hand-edited files and AI patches may lack one). */
+function isAnchor(a: unknown): a is MeasureAnchor {
+  const x = a as Partial<MeasureAnchor> | null | undefined;
+  const o = x?.offset as Partial<Rational> | undefined;
+  return (
+    typeof x?.measureId === 'string' &&
+    Number.isSafeInteger(o?.n) &&
+    Number.isSafeInteger(o?.d) &&
+    o!.d! > 0
+  );
+}
+
 /**
  * Why a spanner is not valid in this document, or null. Commands refuse invalid spanners;
  * `validateScore` reports them in files.
  */
 export function spannerProblem(doc: ScoreDoc, s: Spanner): string | null {
+  if (!['slur', 'hairpin', 'ottava', 'pedal', 'trill'].includes(s.kind))
+    return `unknown spanner kind ${String((s as { kind?: unknown }).kind)}`;
   if (!hasStaff(doc, s.staffId)) return `unknown staff ${s.staffId}`;
   if (s.kind === 'slur') {
     const a = findEvent(doc, s.from);
@@ -132,6 +146,7 @@ export function spannerProblem(doc: ScoreDoc, s: Spanner): string | null {
     ['start', s.start],
     ['end', s.end],
   ] as const) {
+    if (!isAnchor(a)) return `${name}: missing or malformed anchor`;
     if (!hasMeasure(doc, a.measureId)) return `${name}: unknown measure ${a.measureId}`;
     const len = measureInfo(doc, a.measureId).length;
     if (lt(a.offset, ZERO) || cmp(a.offset, len) > 0) return `${name}: offset outside the measure`;

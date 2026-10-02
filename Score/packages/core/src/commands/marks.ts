@@ -2,7 +2,7 @@
 import type { Draft } from 'immer';
 import { type Pitch, comparePitch } from '../pitch/pitch';
 import { NOTE_VALUES } from '../time/duration';
-import { findEvent, findGrace, findNote, isContentId } from '../model/query';
+import { findEvent, findGrace, findNote, isIdInUse } from '../model/query';
 import { ARPEGGIOS, BREATHS, ORNAMENTS, type GraceNote } from '../model/types';
 import type { ScoreDoc } from '../model/types';
 import { type DraftDoc, draftEventAt } from './draft';
@@ -60,7 +60,7 @@ export function graceAdd(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'grace.add'>)
   if (!NOTE_VALUES.includes(g.value)) fail(cmd, 'unknown note value');
   const ids = [g.id, ...g.notes.map((n) => n.id)];
   if (new Set(ids).size !== ids.length) fail(cmd, 'duplicate ids');
-  for (const id of ids) if (isContentId(base, id)) fail(cmd, `id ${id} already exists`);
+  for (const id of ids) if (isIdInUse(base, id)) fail(cmd, `id ${id} already exists`);
   const count = loc.event.graces?.length ?? 0;
   if (!Number.isInteger(cmd.index) || cmd.index < 0 || cmd.index > count)
     fail(cmd, 'grace index out of range');
@@ -74,6 +74,26 @@ export function graceAdd(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'grace.add'>)
   const list = (d.graces ??= []);
   list.splice(cmd.index, 0, grace as Draft<GraceNote>);
   sortGraceNotes(list[cmd.index]!);
+}
+
+export function graceSet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'grace.set'>): void {
+  const g = cmd.grace;
+  const found = findGrace(base, g.id) ?? fail(cmd, `unknown grace note ${g.id}`);
+  if (g.notes.length === 0) fail(cmd, 'a grace note needs at least one note');
+  if (!NOTE_VALUES.includes(g.value)) fail(cmd, 'unknown note value');
+  const own = new Set(found.grace.notes.map((n) => n.id));
+  const ids = g.notes.map((n) => n.id);
+  if (new Set(ids).size !== ids.length) fail(cmd, 'duplicate ids');
+  for (const id of ids)
+    if (!own.has(id) && isIdInUse(base, id)) fail(cmd, `id ${id} already exists`);
+  const list = draftEventAt(draft, found.loc)!.graces!;
+  list[found.index] = {
+    id: g.id,
+    ...(g.slash ? { slash: true } : {}),
+    value: g.value,
+    notes: g.notes.map((n) => ({ id: n.id, pitch: n.pitch })),
+  } as Draft<GraceNote>;
+  sortGraceNotes(list[found.index]!);
 }
 
 /** Remove one note of a grace chord (the grace goes when its last note goes). */

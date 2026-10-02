@@ -1,6 +1,6 @@
 /** Commands for slurs and lines, and their upkeep when bars are deleted or re-barred. */
 import type { Draft } from 'immer';
-import { measureInfos } from '../model/query';
+import { isIdInUse, measureInfos } from '../model/query';
 import {
   compareSpanners,
   normalizeEndAnchor,
@@ -37,20 +37,17 @@ function store(draft: DraftDoc, base: ScoreDoc, list: Spanner[]): void {
 }
 
 export function spannerAdd(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'spanner.add'>): void {
-  if (base.spanners.some((s) => s.id === cmd.spanner.id))
-    fail(cmd, `spanner id ${cmd.spanner.id} already exists`);
-  const s = normalized(base, cmd.spanner);
-  check(cmd, base, s);
-  store(draft, base, [...base.spanners, s]);
+  if (isIdInUse(base, cmd.spanner.id)) fail(cmd, `id ${cmd.spanner.id} already exists`);
+  check(cmd, base, cmd.spanner);
+  store(draft, base, [...base.spanners, normalized(base, cmd.spanner)]);
 }
 
 export function spannerSet(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'spanner.set'>): void {
   const i = base.spanners.findIndex((s) => s.id === cmd.spanner.id);
   if (i < 0) fail(cmd, `unknown spanner ${cmd.spanner.id}`);
-  const s = normalized(base, cmd.spanner);
-  check(cmd, base, s);
+  check(cmd, base, cmd.spanner);
   const list = [...base.spanners];
-  list[i] = s;
+  list[i] = normalized(base, cmd.spanner);
   store(draft, base, list);
 }
 

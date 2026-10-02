@@ -6,15 +6,22 @@ import {
   findEventOfNote,
   hasMeasure,
   hasStaff,
-  isContentId,
+  isIdInUse,
   measureInfo,
   measureInfos,
   scoreLength,
   tupletsIn,
 } from '../model/query';
 import { spannerTimes } from '../model/spanners';
-import type { NoteEvent, Provenance, ScorePosition, TupletSpan } from '../model/types';
-import { VOICES_PER_STAFF } from '../model/types';
+import type {
+  Articulation,
+  NoteEvent,
+  Provenance,
+  ScorePosition,
+  TupletSpan,
+} from '../model/types';
+import { ARTICULATIONS, VOICES_PER_STAFF } from '../model/types';
+import { eventMarkProblems } from '../model/validate';
 import { type Rational, add, cmp, isPositive, le, lt, min, rat, sub } from '../time/rational';
 import {
   type DraftDoc,
@@ -125,7 +132,7 @@ export function noteEnter(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.enter'
   if (cmd.pitches.length === 0 || cmd.pitches.length !== cmd.noteIds.length)
     fail(cmd, 'pitches and noteIds must match');
   for (const id of [cmd.eventId, ...cmd.noteIds])
-    if (isContentId(base, id)) fail(cmd, `id ${id} already exists`);
+    if (isIdInUse(base, id)) fail(cmd, `id ${id} already exists`);
   if (new Set(cmd.noteIds).size !== cmd.noteIds.length) fail(cmd, 'duplicate note ids');
   const end = inputEnd(base, at, cmd.duration);
   const [clearFrom, clearTo] = dissolveIntersectedTuplets(draft, base, at, start, end);
@@ -164,7 +171,7 @@ export function restEnter(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'rest.enter'
 }
 
 export function noteAddToChord(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.addToChord'>): void {
-  if (isContentId(base, cmd.noteId)) fail(cmd, `note id ${cmd.noteId} already exists`);
+  if (isIdInUse(base, cmd.noteId)) fail(cmd, `note id ${cmd.noteId} already exists`);
   // `eventId` may name a grace note: the note joins the grace chord
   if (addToGraceChord(draft, base, cmd.eventId, { id: cmd.noteId, pitch: cmd.pitch })) return;
   const loc = findEvent(base, cmd.eventId) ?? fail(cmd, `unknown event ${cmd.eventId}`);
@@ -247,12 +254,18 @@ export function eventsSetArticulation(
     const loc = findEvent(base, id);
     if (!loc) continue;
     const d = draftEventAt(draft, loc)!;
+    if (!ARTICULATIONS.includes(cmd.articulation)) fail(cmd, 'unknown articulation');
     const set = new Set(d.articulations ?? []);
     if (cmd.on) set.add(cmd.articulation);
     else set.delete(cmd.articulation);
-    if (set.size) d.articulations = [...set].sort();
+    if (set.size) d.articulations = stackingOrder(set);
     else delete d.articulations;
   }
+}
+
+/** Articulations without duplicates, in stacking order (the marks closest to the notes first). */
+function stackingOrder(list: Iterable<Articulation>): Articulation[] {
+  return [...new Set(list)].sort((a, b) => ARTICULATIONS.indexOf(a) - ARTICULATIONS.indexOf(b));
 }
 
 export function eventsSetStem(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'events.setStem'>): void {
@@ -314,6 +327,7 @@ export function tupletCreate(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'tuplet.c
   const { at } = cmd;
   const { start } = checkPosition(cmd, base, at);
   const info = measureInfo(base, at.measureId);
+  if (isIdInUse(base, cmd.id)) fail(cmd, `id ${cmd.id} already exists`);
   if (!isPositive(cmd.length)) fail(cmd, 'tuplet length must be positive');
   if (
     !Number.isInteger(cmd.actual) ||
@@ -356,14 +370,16 @@ export function eventsInsert(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'events.i
   const seen = new Set<string>();
   const spans: { start: Rational; end: Rational }[] = [];
   for (const e of cmd.events) {
-    if (seen.has(e.id) || isContentId(base, e.id)) fail(cmd, `event id ${e.id} already exists`);
+    if (seen.has(e.id) || isIdInUse(base, e.id)) fail(cmd, `event id ${e.id} already exists`);
     seen.add(e.id);
     const inner = [...e.notes, ...(e.graces ?? []).flatMap((g) => [g, ...g.notes])];
     for (const n of inner) {
-      if (seen.has(n.id) || isContentId(base, n.id)) fail(cmd, `note id ${n.id} already exists`);
+      if (seen.has(n.id) || isIdInUse(base, n.id)) fail(cmd, `note id ${n.id} already exists`);
       seen.add(n.id);
     }
     if (e.notes.length === 0) fail(cmd, 'events need at least one note');
+    const marks = eventMarkProblems(e);
+    if (marks.length) fail(cmd, marks[0]!);
     if (!isPositive(e.duration)) fail(cmd, 'duration must be positive');
     if (lt(e.offset, { n: 0, d: 1 }) || !lt(e.offset, info.length))
       fail(cmd, 'offset outside the measure');
@@ -384,7 +400,9 @@ export function eventsInsert(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'events.i
       voice: cmd.voice,
       event: e,
     });
-    if (d) sortNotes(d);
+    if (!d) continue;
+    sortNotes(d);
+    if (d.articulations) d.articulations = stackingOrder(d.articulations);
   }
 }
 

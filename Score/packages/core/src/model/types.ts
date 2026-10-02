@@ -169,7 +169,7 @@ export interface NoteEvent {
   readonly duration: Rational;
   /** One or more notes sharing a stem, ascending by pitch. */
   readonly notes: readonly Note[];
-  /** Sorted, no duplicates. */
+  /** In stacking order (`ARTICULATIONS`), no duplicates. */
   readonly articulations?: readonly Articulation[];
   /** Ornament sign (trill, mordents, turns). */
   readonly ornament?: Ornament;
