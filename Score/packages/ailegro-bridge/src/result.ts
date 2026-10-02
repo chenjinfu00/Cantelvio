@@ -97,6 +97,8 @@ function snapQuarter(value: Rational): Rational {
 interface Placed {
   readonly staff: StaffInfo;
   readonly voice: number;
+  /** Generated voice slot (`group:voice`) the note came from. */
+  readonly slot: string;
   readonly start: Rational; // whole notes, absolute
   readonly end: Rational;
   readonly midi: number | null;
@@ -164,7 +166,8 @@ export function planComposeImport(
     }
   }
   const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)] ?? 60;
-  const slotTarget = new Map<string, { partId: string; voice: number }>();
+  // Slots of a group go round-robin to its parts, highest slot first.
+  const slotTarget = new Map<string, { partId: string; rank: number }>();
   for (const g of AILEGRO_GROUPS) {
     const parts = groupParts.get(g) ?? [];
     const slots = [...slotPitches.keys()]
@@ -172,10 +175,7 @@ export function planComposeImport(
       .sort((a, b) => median(slotPitches.get(b)!) - median(slotPitches.get(a)!));
     slots.forEach((slot, i) => {
       if (!parts.length) return;
-      slotTarget.set(slot, {
-        partId: parts[i % parts.length]!,
-        voice: Math.min(3, Math.floor(i / parts.length)),
-      });
+      slotTarget.set(slot, { partId: parts[i % parts.length]!, rank: i });
     });
   }
   const staffFor = (partId: string, midi: number | null): StaffInfo => {
@@ -228,7 +228,8 @@ export function planComposeImport(
       }
       placed.push({
         staff: staffFor(target.partId, n.pitch),
-        voice: target.voice,
+        voice: 0, // assigned per staff below
+        slot: `${n.group}:${n.voice}`,
         start,
         end,
         midi: n.pitch,
@@ -241,6 +242,29 @@ export function planComposeImport(
     warnings.push(
       `${skipped} generated note(s) had no target part or fell outside the bars and were skipped`,
     );
+
+  // ---- voices: rank the slots that landed on each staff, highest first (a piano's left-hand
+  // slot is voice 1 of its part's slots but voice 1 of the bass staff would be wrong)
+  const staffSlots = new Map<string, Map<string, number[]>>();
+  for (const p of placed) {
+    const slots = staffSlots.get(p.staff.staff.id) ?? new Map<string, number[]>();
+    staffSlots.set(p.staff.staff.id, slots);
+    const pitches = slots.get(p.slot) ?? [];
+    pitches.push(p.midi ?? 60);
+    slots.set(p.slot, pitches);
+  }
+  const voiceOf = new Map<string, number>();
+  for (const [staffId, slots] of staffSlots) {
+    [...slots.entries()]
+      .sort(
+        (a, b) =>
+          median(b[1]) - median(a[1]) || slotTarget.get(a[0])!.rank - slotTarget.get(b[0])!.rank,
+      )
+      .forEach(([slot], i) => voiceOf.set(`${staffId}|${slot}`, Math.min(3, i)));
+  }
+  placed.forEach((p, i) => {
+    placed[i] = { ...p, voice: voiceOf.get(`${p.staff.staff.id}|${p.slot}`) ?? 0 };
+  });
 
   // ---- clear targets (existing bars only; appended bars are empty)
   const sortedBars = [...touchedBars].sort((a, b) => a - b);

@@ -332,6 +332,51 @@ describe('compose result import', () => {
     expect(validateScore(rejected)).toEqual([]);
   });
 
+  it('puts a keyboard bass slot in voice 1 of the lower staff, not voice 2', () => {
+    const doc = SAMPLES[0]!.build(); // piano
+    const note = (onset: string, duration: string, voice: number, pitch: number) => ({
+      onset,
+      duration,
+      group: 'keys' as const,
+      voice,
+      pitch,
+      drum: null,
+      velocity: 70,
+      dynamic: null,
+      accent: 0,
+      wedge: null,
+    });
+    const piano: ComposeResult = {
+      schema: 'ailegro.compose-result/1',
+      requestId: 'run-piano',
+      model: { name: 'mock' },
+      startBar: doc.measures.length,
+      bars: [
+        {
+          bar: 0,
+          length: '4',
+          meter: [4, 4],
+          key: { tonic: 7, mode: 0 },
+          chords: [],
+          notes: [note('0', '2', 0, 74), note('2', '2', 0, 71), note('0', '4', 1, 43)],
+        },
+      ],
+    };
+    const plan = planComposeImport(doc, piano, { ids: sequentialIds(9500) });
+    const next = applyCommand(doc, { type: 'batch', commands: plan.commands }).doc;
+    expect(validateScore(next)).toEqual([]);
+    const [upper, lower] = allStaves(next).map((s) => s.staff.id);
+    const bar = next.measures[next.measures.length - 1]!.id;
+    expect(voiceEvents(next, upper!, bar, 0).map((e) => pitchName(e.notes[0]!.pitch))).toEqual([
+      'D5',
+      'B4',
+    ]);
+    expect(voiceEvents(next, lower!, bar, 0).map((e) => pitchName(e.notes[0]!.pitch))).toEqual([
+      'G2',
+    ]);
+    expect(voiceEvents(next, lower!, bar, 1)).toEqual([]);
+  });
+
   it('detects triplet spans', () => {
     const e = (on: [number, number], dur: [number, number]) => ({
       id: 'x',
