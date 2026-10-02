@@ -8,8 +8,10 @@ import { type TimeSignature, barLength } from '../time/meter';
 import { type Rational, add, cmp, lt, sub, ZERO } from '../time/rational';
 import { type ClefType } from './clef';
 import type {
+  GraceNote,
   ID,
   Measure,
+  Note,
   NoteEvent,
   Part,
   ScoreDoc,
@@ -283,26 +285,42 @@ interface EventIndexEntry {
   readonly voice: number;
 }
 
-const eventIndexCache = new WeakMap<
-  object,
-  { events: Map<ID, EventIndexEntry>; notes: Map<ID, ID> }
->();
+interface EventIndex {
+  readonly events: Map<ID, EventIndexEntry>;
+  /** Note id (principal and grace notes) -> event id. */
+  readonly notes: Map<ID, ID>;
+  /** Grace id -> event id. */
+  readonly graces: Map<ID, ID>;
+  /** Grace note id -> grace id. */
+  readonly graceNotes: Map<ID, ID>;
+}
 
-function eventIndex(doc: ScoreDoc) {
+const eventIndexCache = new WeakMap<object, EventIndex>();
+
+function eventIndex(doc: ScoreDoc): EventIndex {
   return cached(eventIndexCache, doc.content, () => {
     const events = new Map<ID, EventIndexEntry>();
     const notes = new Map<ID, ID>();
+    const graces = new Map<ID, ID>();
+    const graceNotes = new Map<ID, ID>();
     for (const [staffId, measures] of Object.entries(doc.content)) {
       for (const [measureId, sm] of Object.entries(measures)) {
         sm.voices.forEach((list, voice) => {
           for (const e of list) {
             events.set(e.id, { staffId, measureId, voice });
             for (const n of e.notes) notes.set(n.id, e.id);
+            for (const g of e.graces ?? []) {
+              graces.set(g.id, e.id);
+              for (const n of g.notes) {
+                notes.set(n.id, e.id);
+                graceNotes.set(n.id, g.id);
+              }
+            }
           }
         });
       }
     }
-    return { events, notes };
+    return { events, notes, graces, graceNotes };
   });
 }
 
@@ -325,9 +343,52 @@ export function findEvent(doc: ScoreDoc, eventId: ID): LocatedEvent | null {
   };
 }
 
+/** The event a note belongs to (for a grace note: the event the grace note leads into). */
 export function findEventOfNote(doc: ScoreDoc, noteId: ID): LocatedEvent | null {
   const eventId = eventIndex(doc).notes.get(noteId);
   return eventId ? findEvent(doc, eventId) : null;
+}
+
+export interface LocatedNote {
+  readonly loc: LocatedEvent;
+  readonly note: Note;
+  /** The grace note holding it, or null for a note of the event itself. */
+  readonly grace: GraceNote | null;
+  readonly graceIndex: number;
+}
+
+/** A principal or grace note with its event. */
+export function findNote(doc: ScoreDoc, noteId: ID): LocatedNote | null {
+  const loc = findEventOfNote(doc, noteId);
+  if (!loc) return null;
+  const graceId = eventIndex(doc).graceNotes.get(noteId);
+  if (graceId === undefined) {
+    const note = loc.event.notes.find((n) => n.id === noteId);
+    return note ? { loc, note, grace: null, graceIndex: -1 } : null;
+  }
+  const graces = loc.event.graces ?? [];
+  const graceIndex = graces.findIndex((g) => g.id === graceId);
+  const grace = graces[graceIndex];
+  const note = grace?.notes.find((n) => n.id === noteId);
+  return grace && note ? { loc, note, grace, graceIndex } : null;
+}
+
+/** A grace note (chord) by id, with the event it belongs to. */
+export function findGrace(
+  doc: ScoreDoc,
+  graceId: ID,
+): { loc: LocatedEvent; grace: GraceNote; index: number } | null {
+  const eventId = eventIndex(doc).graces.get(graceId);
+  const loc = eventId ? findEvent(doc, eventId) : null;
+  if (!loc) return null;
+  const index = (loc.event.graces ?? []).findIndex((g) => g.id === graceId);
+  return index >= 0 ? { loc, grace: loc.event.graces![index]!, index } : null;
+}
+
+/** True if the id is used by any event, note, grace note or grace note's note. */
+export function isContentId(doc: ScoreDoc, id: ID): boolean {
+  const idx = eventIndex(doc);
+  return idx.events.has(id) || idx.notes.has(id) || idx.graces.has(id);
 }
 
 /** Concert key at a measure. */

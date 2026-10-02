@@ -177,5 +177,6 @@ export function createScore(options: CreateScoreOptions = {}): ScoreDoc {
     measures,
     content,
     harmony: [],
+    spanners: [],
   };
 }

@@ -75,6 +75,20 @@ describe('score record', () => {
     expect(cl[0]!.group).toBe('woodwinds');
   });
 
+  it('exports grace notes with zero duration and hairpins as wedges', () => {
+    const ids = sequentialIds();
+    let doc = createScore({ template: 'piano', measures: 1, ids, now: 'T' });
+    doc = write(doc, 0, '\\acciaccatura d8 c4\\< d e f\\!');
+    const rec = buildScoreRecord(doc);
+    expect(rec.notes.map((n) => [n.on, n.dur, n.pitch, n.grace, n.wedge])).toEqual([
+      ['0', '1', 72, false, 'crescendo'],
+      ['0', '0', 74, true, 'crescendo'],
+      ['1', '1', 74, false, 'crescendo'],
+      ['2', '1', 76, false, 'crescendo'],
+      ['3', '1', 77, false, null],
+    ]);
+  });
+
   it('skips unaccepted AI suggestions by default', () => {
     const ids = sequentialIds();
     const doc = createScore({ template: 'piano', measures: 1, ids, now: 'T' });
@@ -330,6 +344,52 @@ describe('compose result import', () => {
     const rejected = applyCommand(next, { type: 'provenance.reject', runId: 'run-42' }).doc;
     expect(voiceEvents(rejected, vln1, rejected.measures[8]!.id, 0).length).toBe(0);
     expect(validateScore(rejected)).toEqual([]);
+  });
+
+  it('turns runs of generated wedges into hairpins', () => {
+    const doc = SAMPLES[0]!.build(); // piano
+    const note = (onset: string, pitch: number, wedge: string | null) => ({
+      onset,
+      duration: '1',
+      group: 'keys' as const,
+      voice: 0,
+      pitch,
+      drum: null,
+      velocity: 70,
+      dynamic: null,
+      accent: 0,
+      wedge,
+    });
+    const res: ComposeResult = {
+      schema: 'ailegro.compose-result/1',
+      requestId: 'run-wedge',
+      model: { name: 'mock' },
+      startBar: doc.measures.length,
+      bars: [
+        {
+          bar: 0,
+          length: '4',
+          meter: [4, 4],
+          key: { tonic: 7, mode: 0 },
+          chords: [],
+          notes: [
+            note('0', 74, 'crescendo'),
+            note('1', 76, 'crescendo'),
+            note('2', 78, 'diminuendo'),
+            note('3', 79, null),
+          ],
+        },
+      ],
+    };
+    const plan = planComposeImport(doc, res, { ids: sequentialIds(9700) });
+    const next = applyCommand(doc, { type: 'batch', commands: plan.commands }).doc;
+    expect(validateScore(next)).toEqual([]);
+    expect(next.spanners.map((s) => (s.kind === 'hairpin' ? s.direction : s.kind))).toEqual([
+      'crescendo',
+      'diminuendo',
+    ]);
+    const rejected = applyCommand(next, { type: 'provenance.reject', runId: 'run-wedge' }).doc;
+    expect(rejected.spanners).toEqual([]);
   });
 
   it('puts a keyboard bass slot in voice 1 of the lower staff, not voice 2', () => {

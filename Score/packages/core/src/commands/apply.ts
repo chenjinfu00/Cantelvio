@@ -2,6 +2,8 @@ import { type Patch, applyPatches, enablePatches, produceWithPatches } from 'imm
 import type { ScoreDoc } from '../model/types';
 import * as content from './content';
 import type { DraftDoc } from './draft';
+import * as marks from './marks';
+import * as spanners from './spanners';
 import * as structure from './structure';
 import { type Command, CommandError } from './types';
 
@@ -42,6 +44,11 @@ const HANDLERS: HandlerMap = {
   'notes.setTie': content.notesSetTie,
   'events.setArticulation': content.eventsSetArticulation,
   'events.setStem': content.eventsSetStem,
+  'events.setProps': marks.eventsSetProps,
+  'grace.add': marks.graceAdd,
+  'spanner.add': spanners.spannerAdd,
+  'spanner.set': spanners.spannerSet,
+  'spanners.delete': spanners.spannersDelete,
   'range.clear': content.rangeClear,
   'tuplet.create': content.tupletCreate,
   'clef.set': structure.clefSet,
@@ -85,7 +92,19 @@ export function applyCommand(doc: ScoreDoc, cmd: Command): ApplyResult {
   const [next, patches, inverse] = produceWithPatches(doc, (draft) => {
     handler(draft as DraftDoc, doc, cmd);
   });
-  return { doc: next, patches, inverse };
+  // Slurs whose notes are gone (and lines whose bars or staves are gone) go too, in the same step.
+  const unchanged =
+    next.spanners === doc.spanners &&
+    next.content === doc.content &&
+    next.measures === doc.measures &&
+    next.parts === doc.parts;
+  const dangling = unchanged ? [] : spanners.danglingSpanners(next);
+  if (!dangling.length) return { doc: next, patches, inverse };
+  const doomed = new Set(dangling);
+  const [pruned, p2, i2] = produceWithPatches(next, (draft) => {
+    draft.spanners = draft.spanners.filter((s) => !doomed.has(s.id));
+  });
+  return { doc: pruned, patches: [...patches, ...p2], inverse: [...i2, ...inverse] };
 }
 
 /** Apply many commands in order (convenience for scripts and tests). */

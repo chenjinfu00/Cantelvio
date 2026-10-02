@@ -9,6 +9,7 @@ export * from './model/types';
 export * from './model/clef';
 export * from './model/ids';
 export * from './model/query';
+export * from './model/spanners';
 export * from './model/create';
 export * from './model/validate';
 // Instruments

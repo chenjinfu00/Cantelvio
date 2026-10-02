@@ -7,10 +7,13 @@ import type { ID } from './types';
  *
  * Format: `<prefix>_<12 base36 chars>`; prefixes make ids self-describing in diffs and logs:
  *   sc score, pt part, st staff, gr group, m measure, e event, n note, tu tuplet,
- *   cl clef change, dy dynamic, tm tempo, ch chord symbol, ai AIlegro request / run.
+ *   cl clef change, dy dynamic, tm tempo, ch chord symbol, gc grace note (chord), sp spanner,
+ *   ai AIlegro request / run.
  */
+// prettier-ignore
 export type IdPrefix =
-  'sc' | 'pt' | 'st' | 'gr' | 'm' | 'e' | 'n' | 'tu' | 'cl' | 'dy' | 'tm' | 'ch' | 'ai';
+  | 'sc' | 'pt' | 'st' | 'gr' | 'm' | 'e' | 'n' | 'tu' | 'cl' | 'dy' | 'tm' | 'ch' | 'gc' | 'sp'
+  | 'ai';
 
 export interface IdGenerator {
   next(prefix: IdPrefix): ID;

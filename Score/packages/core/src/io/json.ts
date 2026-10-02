@@ -19,6 +19,15 @@ const KEY_ORDER = [
   'id',
   'kind',
   'type',
+  'staffId',
+  'from',
+  'to',
+  'start',
+  'end',
+  'direction',
+  'octaves',
+  'style',
+  'placement',
   'title',
   'subtitle',
   'composer',
@@ -40,11 +49,15 @@ const KEY_ORDER = [
   'measures',
   'content',
   'harmony',
+  'spanners',
   'measureId',
   'voice',
   'offset',
   'duration',
   'length',
+  'slash',
+  'value',
+  'graces',
   'notes',
   'pitch',
   'root',
@@ -129,13 +142,14 @@ function canonicalContent(doc: ScoreDoc): ScoreDoc['content'] {
 }
 
 // Paths at which objects are written on one line: events, tuplets, clef changes, dynamics,
-// harmony entries, tempo marks, staves and groups.
+// harmony entries, spanners, tempo marks, staves and groups.
 function inlineAt(path: readonly string[]): boolean {
   const n = path.length;
   if (n >= 6 && path[0] === 'content' && path[3] === 'voices') return n === 6; // content.st.m.voices.v.i
   if (n === 5 && path[0] === 'content' && ['tuplets', 'clefChanges', 'dynamics'].includes(path[3]!))
     return true;
-  if (n === 2 && (path[0] === 'harmony' || path[0] === 'groups')) return true;
+  if (n === 2 && (path[0] === 'harmony' || path[0] === 'groups' || path[0] === 'spanners'))
+    return true;
   if (n === 4 && path[0] === 'parts' && path[2] === 'staves') return true;
   if (n === 4 && path[0] === 'measures' && path[2] === 'tempo') return true;
   return false;
@@ -170,6 +184,16 @@ export class ScoreFormatError extends Error {
   override name = 'ScoreFormatError';
 }
 
+/**
+ * Bring a decoded document of an older version up to SCORE_FORMAT_VERSION.
+ * v1 -> v2: event marks and grace notes are new optional fields; `spanners` is a new list.
+ */
+function migrate(raw: Record<string, unknown>): Record<string, unknown> {
+  let doc = raw;
+  if (doc.version === 1) doc = { ...doc, version: 2, spanners: doc.spanners ?? [] };
+  return doc;
+}
+
 export function parseScore(text: string): ScoreDoc {
   let raw: unknown;
   try {
@@ -186,8 +210,10 @@ export function parseScore(text: string): ScoreDoc {
       `unsupported version ${String(r.version)} (this app reads up to ${SCORE_FORMAT_VERSION})`,
     );
   }
-  const doc = decode(r) as ScoreDoc;
-  for (const key of ['parts', 'measures', 'groups', 'harmony'] as const) {
+  if (!Number.isInteger(r.version) || (r.version as number) < 1)
+    throw new ScoreFormatError(`invalid version ${String(r.version)}`);
+  const doc = migrate(decode(r) as Record<string, unknown>) as unknown as ScoreDoc;
+  for (const key of ['parts', 'measures', 'groups', 'harmony', 'spanners'] as const) {
     if (!Array.isArray(doc[key])) throw new ScoreFormatError(`missing ${key}`);
   }
   if (!doc.content || typeof doc.content !== 'object')

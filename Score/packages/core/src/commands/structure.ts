@@ -18,11 +18,13 @@ import type {
   Measure,
   NoteEvent,
   ScoreDoc,
+  Spanner,
   StaffMeasure,
   TempoMark,
   TupletSpan,
 } from '../model/types';
 import { type DraftDoc, draftStaffMeasure, pruneEmpty } from './draft';
+import { spannersAfterMeasureDelete, spannersAfterRebar } from './spanners';
 import { type Command, CommandError } from './types';
 
 type Cmd<T extends Command['type']> = Extract<Command, { type: T }>;
@@ -146,6 +148,8 @@ export function measuresDelete(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'measur
     for (const id of doomed) delete draft.content[staffId]![id];
   }
   draft.harmony = draft.harmony.filter((c) => !doomed.has(c.measureId));
+  if (base.spanners.length)
+    draft.spanners = spannersAfterMeasureDelete(base, doomed) as Draft<Spanner>[];
 }
 
 // ------------------------------------------------------------------------------- signatures
@@ -319,6 +323,15 @@ export function measureSetTimeSig(
     const p = place(t);
     draft.harmony.push({ ...item, measureId: p.id, offset: p.offset } as Draft<ChordSymbol>);
   }
+  if (base.spanners.length) {
+    const before = i0 > 0 ? infos[i0 - 1]! : null;
+    draft.spanners = spannersAfterRebar(
+      base,
+      new Set(oldIds),
+      newIds.map((id, j) => ({ id, start: add(regionStart, mulInt(L, j)), length: L })),
+      before ? { id: before.measure.id, start: before.start, length: before.length } : null,
+    ) as Draft<Spanner>[];
+  }
 }
 
 export function measureSetKeySig(
@@ -487,6 +500,7 @@ export function partRemove(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'part.remov
   const order = allStaves(base).map((s) => s.staff.id);
   draft.parts.splice(index, 1);
   for (const id of removed) delete draft.content[id];
+  draft.spanners = draft.spanners.filter((s) => !removed.has(s.staffId));
   // Shrink or drop groups that referenced removed staves.
   draft.groups = draft.groups.flatMap((g) => {
     const a = order.indexOf(g.firstStaff);

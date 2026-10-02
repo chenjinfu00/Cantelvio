@@ -9,25 +9,35 @@
  */
 import type { ClefType } from '../model/clef';
 import type {
+  Arpeggio,
   Articulation,
   BarlineStyle,
+  Breath,
   ChordSymbol,
   DynamicMark,
+  GraceNote,
   ID,
+  MeasureAnchor,
   NoteEvent,
+  Ornament,
   Part,
   ScoreMeta,
   ScorePosition,
   ScoreSettings,
+  Spanner,
   TempoMark,
 } from '../model/types';
 import type { KeySignature, Pitch } from '../pitch/pitch';
 import type { TimeSignature } from '../time/meter';
 import type { Rational } from '../time/rational';
 
-export interface MeasureAnchor {
-  readonly measureId: ID;
-  readonly offset: Rational;
+/** Event marks set by `events.setProps`: a value sets the mark, null (or cue: false) removes it. */
+export interface EventProps {
+  readonly ornament?: Ornament | null;
+  readonly tremolo?: number | null;
+  readonly arpeggio?: Arpeggio | null;
+  readonly cue?: boolean;
+  readonly breath?: Breath | null;
 }
 
 export type Command =
@@ -106,6 +116,22 @@ export type Command =
       readonly stem: 'up' | 'down' | null;
     }
   | {
+      readonly type: 'events.setProps';
+      readonly eventIds: readonly ID[];
+      readonly props: EventProps;
+    }
+  /**
+   * Add a grace note before an event. `index` is its place among the event's grace notes in
+   * playing order (0 = first; the number of graces = right before the principal note). Grace
+   * notes are removed with `notes.delete` and re-pitched with `note.setPitch` like other notes.
+   */
+  | {
+      readonly type: 'grace.add';
+      readonly eventId: ID;
+      readonly index: number;
+      readonly grace: GraceNote;
+    }
+  | {
       readonly type: 'range.clear';
       readonly staffIds: readonly ID[];
       readonly from: MeasureAnchor;
@@ -136,6 +162,12 @@ export type Command =
       readonly mark: DynamicMark;
     }
   | { readonly type: 'dynamic.delete'; readonly ids: readonly ID[] }
+  // ---- spanners (slurs and lines)
+  /** Add a spanner. Octave lines may not overlap another octave line of the staff. */
+  | { readonly type: 'spanner.add'; readonly spanner: Spanner }
+  /** Replace the spanner with the same id (e.g. extend a line while entering notes). */
+  | { readonly type: 'spanner.set'; readonly spanner: Spanner }
+  | { readonly type: 'spanners.delete'; readonly ids: readonly ID[] }
   // ---- harmony
   | { readonly type: 'harmony.set'; readonly chord: ChordSymbol }
   | { readonly type: 'harmony.delete'; readonly ids: readonly ID[] }

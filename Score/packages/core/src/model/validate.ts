@@ -1,6 +1,39 @@
+import { NOTE_VALUES } from '../time/duration';
 import { add, cmp, isPositive, le, lt } from '../time/rational';
 import { allStaves, measureInfos, scoreLength } from './query';
-import { SCORE_FORMAT, VOICES_PER_STAFF, type ScoreDoc } from './types';
+import { overlappingOttavas, spannerProblem } from './spanners';
+import {
+  ARPEGGIOS,
+  ARTICULATIONS,
+  BREATHS,
+  ORNAMENTS,
+  SCORE_FORMAT,
+  VOICES_PER_STAFF,
+  type NoteEvent,
+  type ScoreDoc,
+} from './types';
+
+/** Problems with an event's marks and grace notes (ids are checked separately). */
+export function eventMarkProblems(e: NoteEvent): string[] {
+  const out: string[] = [];
+  for (const a of e.articulations ?? [])
+    if (!(ARTICULATIONS as readonly string[]).includes(a)) out.push(`unknown articulation ${a}`);
+  if (e.ornament !== undefined && !(ORNAMENTS as readonly string[]).includes(e.ornament))
+    out.push(`unknown ornament ${e.ornament}`);
+  if (e.tremolo !== undefined && !(Number.isInteger(e.tremolo) && e.tremolo >= 1 && e.tremolo <= 4))
+    out.push('tremolo needs 1–4 strokes');
+  if (e.arpeggio !== undefined && !(ARPEGGIOS as readonly string[]).includes(e.arpeggio))
+    out.push(`unknown arpeggio ${e.arpeggio}`);
+  if (e.breath !== undefined && !(BREATHS as readonly string[]).includes(e.breath))
+    out.push(`unknown breath mark ${e.breath}`);
+  if (e.cue !== undefined && e.cue !== true) out.push('cue is either true or absent');
+  for (const g of e.graces ?? []) {
+    if (g.notes.length === 0) out.push(`grace ${g.id} has no notes`);
+    if (!(NOTE_VALUES as readonly string[]).includes(g.value))
+      out.push(`grace ${g.id} has an unknown value`);
+  }
+  return out;
+}
 
 export interface ValidationIssue {
   readonly path: string;
@@ -68,6 +101,11 @@ export function validateScore(doc: ScoreDoc): ValidationIssue[] {
           const path = `content.${staffId}.${info.measure.id}.voices.${v}.${k}`;
           unique(e.id, path);
           e.notes.forEach((n) => unique(n.id, `${path}.notes`));
+          for (const g of e.graces ?? []) {
+            unique(g.id, `${path}.graces`);
+            g.notes.forEach((n) => unique(n.id, `${path}.graces.notes`));
+          }
+          for (const m of eventMarkProblems(e)) issue(path, m);
           if (e.notes.length === 0) issue(path, 'event without notes');
           if (!isPositive(e.duration)) issue(path, 'non-positive duration');
           if (lt(e.offset, { n: 0, d: 1 }) || !lt(e.offset, info.length))
@@ -104,5 +142,14 @@ export function validateScore(doc: ScoreDoc): ValidationIssue[] {
     else if (!le({ n: 0, d: 1 }, c.offset) || !lt(c.offset, m.length))
       issue(`harmony.${i}`, 'offset outside measure');
   });
+  if (!Array.isArray(doc.spanners)) issue('spanners', 'missing spanner list');
+  else
+    doc.spanners.forEach((sp, i) => {
+      unique(sp.id, `spanners.${i}`);
+      const problem = spannerProblem(doc, sp);
+      if (problem) issue(`spanners.${i}`, problem);
+      else if (overlappingOttavas(doc, sp).length)
+        issue(`spanners.${i}`, 'overlaps another octave line');
+    });
   return issues;
 }

@@ -19,6 +19,7 @@ import {
   eq,
   getInstrument,
   isDyadic,
+  le,
   lt,
   measureInfos,
   parseRational,
@@ -334,12 +335,32 @@ export function planComposeImport(
   let noteCount = 0;
   let eventCount = 0;
   const lastDynamic = new Map<string, string>();
+  // hairpins: runs of voice-1 notes that carry the same generated wedge
+  const hairpins: {
+    staffId: string;
+    wedge: 'crescendo' | 'diminuendo';
+    start: Rational;
+    end: Rational;
+  }[] = [];
   for (const [key, lane] of lanes) {
     const [staffId, voiceText] = key.split(':') as [string, string];
     const voice = Number(voiceText);
     lane.sort((a, b) => cmp(a.start, b.start));
     const byMeasure = new Map<number, NoteEvent[]>();
+    let run: (typeof hairpins)[number] | null = null;
+    const flush = () => {
+      if (run) hairpins.push(run);
+      run = null;
+    };
     for (const e of lane) {
+      const wedge = e.notes[0]!.note.wedge;
+      if (voice === 0 && (wedge === 'crescendo' || wedge === 'diminuendo')) {
+        if (run && run.wedge === wedge) run.end = e.end;
+        else {
+          flush();
+          run = { staffId, wedge, start: e.start, end: e.end };
+        }
+      } else if (voice === 0) flush();
       // locate measure
       let mi = 0;
       while (mi + 1 < starts.length && cmp(starts[mi + 1]!, e.start) <= 0) mi++;
@@ -405,6 +426,29 @@ export function planComposeImport(
       }
       commands.push({ type: 'events.insert', staffId, measureId: measureIds[mi]!, voice, events });
     }
+    flush();
+  }
+  const barAt = (t: Rational, asEnd: boolean): number => {
+    let mi = 0;
+    while (mi + 1 < starts.length && (asEnd ? lt(starts[mi + 1]!, t) : le(starts[mi + 1]!, t)))
+      mi++;
+    return mi;
+  };
+  for (const h of hairpins) {
+    const a = barAt(h.start, false);
+    const b = barAt(h.end, true);
+    commands.push({
+      type: 'spanner.add',
+      spanner: {
+        id: ids.next('sp'),
+        kind: 'hairpin',
+        staffId: h.staffId,
+        direction: h.wedge,
+        start: { measureId: measureIds[a]!, offset: sub(h.start, starts[a]!) },
+        end: { measureId: measureIds[b]!, offset: sub(h.end, starts[b]!) },
+        source: provenance,
+      },
+    });
   }
 
   let chordCount = 0;

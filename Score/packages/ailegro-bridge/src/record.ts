@@ -22,6 +22,7 @@ import {
   stepSemitone,
   sub,
   toString as ratString,
+  spannerTimes,
   tempoMap,
   transpose,
   invertInterval,
@@ -170,6 +171,15 @@ export function buildScoreRecord(doc: ScoreDoc, options: RecordOptions = {}): Sc
       for (const m of marks) if (le(m.at, t)) v = m.value;
       return v;
     };
+    // hairpins of this staff: a note starting inside one carries its direction
+    const wedges: { start: Rational; end: Rational; wedge: string }[] = [];
+    for (const sp of doc.spanners) {
+      if (sp.kind !== 'hairpin' || sp.staffId !== s.staff.id) continue;
+      const t = spannerTimes(doc, sp);
+      if (t) wedges.push({ ...t, wedge: sp.direction });
+    }
+    const wedgeAt = (t: Rational): string | null =>
+      wedges.find((w) => le(w.start, t) && lt(t, w.end))?.wedge ?? null;
     for (let voice = 0; voice < 4; voice++) {
       // gather the voice timeline, merging explicit ties into single sounding notes
       type Pending = RecordNote & { startT: Rational; endT: Rational };
@@ -189,6 +199,41 @@ export function buildScoreRecord(doc: ScoreDoc, options: RecordOptions = {}): Sc
           const arts = new Set(e.articulations ?? []);
           const accent = arts.has('marcato') ? 2 : arts.has('accent') ? 1 : 0;
           const nextOpen = new Map<number, Pending>();
+          // grace notes: zero duration at the principal's onset (as AIlegro reads MusicXML)
+          for (const g of e.graces ?? []) {
+            for (const n of g.notes) {
+              const midi = midiOf(n.pitch);
+              emit.push({
+                part: s.part.id,
+                staff: String(s.staffIndex + 1),
+                voice: String(voice + 1),
+                bar: info.index,
+                on: q(start),
+                dur: '0',
+                pitch: unpitched ? null : midi,
+                writtenPitch: unpitched
+                  ? null
+                  : toWritten
+                    ? midiOf(transpose(n.pitch, toWritten))
+                    : midi,
+                group: def?.ailegroGroup ?? null,
+                role: options.roles?.[s.part.id] ?? null,
+                tuplet: null,
+                dynamic: dynamicAt(start),
+                wedge: wedgeAt(start),
+                accent: 0,
+                grace: true,
+                unpitched,
+                ...(unpitched ? { drum: def?.range[0] ?? null } : {}),
+                id: n.id,
+                ...(e.source
+                  ? { source: e.source.kind === 'ai' ? `ai:${e.source.runId}` : e.source.kind }
+                  : {}),
+                startT: start,
+                endT: start,
+              });
+            }
+          }
           for (const n of e.notes) {
             const midi = midiOf(n.pitch);
             const prev = open.get(midi);
@@ -213,7 +258,7 @@ export function buildScoreRecord(doc: ScoreDoc, options: RecordOptions = {}): Sc
               role: options.roles?.[s.part.id] ?? null,
               tuplet: tuplet ? `${tuplet.actual}:${tuplet.normal}` : null,
               dynamic: dynamicAt(start),
-              wedge: null,
+              wedge: wedgeAt(start),
               accent,
               grace: false,
               unpitched,

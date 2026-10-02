@@ -6,11 +6,13 @@ import {
   findEventOfNote,
   hasMeasure,
   hasStaff,
+  isContentId,
   measureInfo,
   measureInfos,
   scoreLength,
   tupletsIn,
 } from '../model/query';
+import { spannerTimes } from '../model/spanners';
 import type { NoteEvent, Provenance, ScorePosition, TupletSpan } from '../model/types';
 import { VOICES_PER_STAFF } from '../model/types';
 import { type Rational, add, cmp, isPositive, le, lt, min, rat, sub } from '../time/rational';
@@ -25,6 +27,7 @@ import {
   removeDraftEvent,
   sortNotes,
 } from './draft';
+import { addToGraceChord, removeGraceNote, setGracePitch } from './marks';
 import { type Command, CommandError } from './types';
 import type { ScoreDoc } from '../model/types';
 
@@ -121,7 +124,9 @@ export function noteEnter(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.enter'
   if (!isPositive(cmd.duration)) fail(cmd, 'duration must be positive');
   if (cmd.pitches.length === 0 || cmd.pitches.length !== cmd.noteIds.length)
     fail(cmd, 'pitches and noteIds must match');
-  if (findEvent(base, cmd.eventId)) fail(cmd, `event id ${cmd.eventId} already exists`);
+  for (const id of [cmd.eventId, ...cmd.noteIds])
+    if (isContentId(base, id)) fail(cmd, `id ${id} already exists`);
+  if (new Set(cmd.noteIds).size !== cmd.noteIds.length) fail(cmd, 'duplicate note ids');
   const end = inputEnd(base, at, cmd.duration);
   const [clearFrom, clearTo] = dissolveIntersectedTuplets(draft, base, at, start, end);
   for (const voice of [at.voice])
@@ -159,8 +164,10 @@ export function restEnter(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'rest.enter'
 }
 
 export function noteAddToChord(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.addToChord'>): void {
+  if (isContentId(base, cmd.noteId)) fail(cmd, `note id ${cmd.noteId} already exists`);
+  // `eventId` may name a grace note: the note joins the grace chord
+  if (addToGraceChord(draft, base, cmd.eventId, { id: cmd.noteId, pitch: cmd.pitch })) return;
   const loc = findEvent(base, cmd.eventId) ?? fail(cmd, `unknown event ${cmd.eventId}`);
-  if (findEventOfNote(base, cmd.noteId)) fail(cmd, `note id ${cmd.noteId} already exists`);
   if (
     loc.event.notes.some(
       (n) => midiOf(n.pitch) === midiOf(cmd.pitch) && n.pitch.step === cmd.pitch.step,
@@ -174,6 +181,7 @@ export function noteAddToChord(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.a
 
 export function noteSetPitch(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.setPitch'>): void {
   const loc = findEventOfNote(base, cmd.noteId) ?? fail(cmd, `unknown note ${cmd.noteId}`);
+  if (setGracePitch(draft, base, cmd.noteId, cmd.pitch)) return;
   const d = draftEventAt(draft, loc)!;
   const note = d.notes.find((n) => n.id === cmd.noteId)!;
   note.pitch = cmd.pitch;
@@ -182,6 +190,7 @@ export function noteSetPitch(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'note.set
 
 export function notesDelete(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'notes.delete'>): void {
   for (const noteId of cmd.noteIds) {
+    if (removeGraceNote(draft, base, noteId)) continue;
     const loc = findEventOfNote(base, noteId);
     if (!loc) continue;
     const d = draftEventAt(draft, loc);
@@ -288,6 +297,17 @@ export function rangeClear(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'range.clea
       pruneEmpty(draft, staffId, m.measure.id);
     }
   }
+  // Lines lying inside the range go with it (slurs follow their notes).
+  const staves = new Set(cmd.staffIds);
+  const inside = base.spanners.filter((sp) => {
+    if (sp.kind === 'slur' || !staves.has(sp.staffId)) return false;
+    const t = spannerTimes(base, sp);
+    return !!t && le(from, t.start) && le(t.end, to);
+  });
+  if (inside.length) {
+    const doomed = new Set(inside.map((sp) => sp.id));
+    draft.spanners = draft.spanners.filter((sp) => !doomed.has(sp.id));
+  }
 }
 
 export function tupletCreate(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'tuplet.create'>): void {
@@ -336,11 +356,11 @@ export function eventsInsert(draft: DraftDoc, base: ScoreDoc, cmd: Cmd<'events.i
   const seen = new Set<string>();
   const spans: { start: Rational; end: Rational }[] = [];
   for (const e of cmd.events) {
-    if (seen.has(e.id) || findEvent(base, e.id)) fail(cmd, `event id ${e.id} already exists`);
+    if (seen.has(e.id) || isContentId(base, e.id)) fail(cmd, `event id ${e.id} already exists`);
     seen.add(e.id);
-    for (const n of e.notes) {
-      if (seen.has(n.id) || findEventOfNote(base, n.id))
-        fail(cmd, `note id ${n.id} already exists`);
+    const inner = [...e.notes, ...(e.graces ?? []).flatMap((g) => [g, ...g.notes])];
+    for (const n of inner) {
+      if (seen.has(n.id) || isContentId(base, n.id)) fail(cmd, `note id ${n.id} already exists`);
       seen.add(n.id);
     }
     if (e.notes.length === 0) fail(cmd, 'events need at least one note');
@@ -402,6 +422,10 @@ export function provenanceAccept(
     if (fromRun(c.source, cmd.runId) && c.source?.kind === 'ai')
       draft.harmony[i]!.source = { ...c.source, accepted: true };
   });
+  base.spanners.forEach((sp, i) => {
+    if (fromRun(sp.source, cmd.runId) && sp.source?.kind === 'ai')
+      draft.spanners[i]!.source = { ...sp.source, accepted: true };
+  });
 }
 
 export function provenanceReject(
@@ -428,4 +452,5 @@ export function provenanceReject(
     }
   }
   draft.harmony = draft.harmony.filter((c) => !pending(c.source as Provenance | undefined));
+  draft.spanners = draft.spanners.filter((sp) => !pending(sp.source as Provenance | undefined));
 }
