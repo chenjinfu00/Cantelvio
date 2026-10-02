@@ -1,6 +1,5 @@
 # Dependencies & build output
 node_modules/
-node_modules.nosync/
 dist/
 out/
 coverage/
