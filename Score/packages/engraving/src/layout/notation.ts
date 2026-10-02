@@ -4,13 +4,17 @@
  * accidentals and display (written) pitches. No geometry here.
  */
 import {
+  type Arpeggio,
   type Articulation,
+  type Breath,
   type ClefType,
   type DynamicMark,
   type Interval,
   type KeySignature,
   type LocatedEvent,
   type MeasureInfo,
+  type NoteValue,
+  type Ornament,
   type Pitch,
   type Rational,
   type ScoreDoc,
@@ -35,6 +39,7 @@ import {
   measureInfos,
   midiOf,
   min,
+  ottavaRanges,
   staffPosition,
   sub,
   transpose,
@@ -62,6 +67,14 @@ export interface NNote {
   tiedFromPrev: boolean;
 }
 
+/** A grace note (chord) drawn small before its principal chord. */
+export interface NGrace {
+  readonly graceId: string;
+  readonly slash: boolean;
+  readonly value: NoteValue;
+  readonly notes: NNote[];
+}
+
 export interface NChord {
   readonly kind: 'chord';
   /** Unique within the score: eventId or eventId#piece. */
@@ -75,6 +88,17 @@ export interface NChord {
   readonly tuplet: TupletSpan | null;
   readonly notes: NNote[];
   readonly articulations: readonly Articulation[];
+  /** Marks of the event: ornaments and arpeggios on its first piece, breath after its last. */
+  readonly ornament: Ornament | null;
+  readonly tremolo: number;
+  readonly arpeggio: Arpeggio | null;
+  readonly breath: Breath | null;
+  /** Cue-size (small) notes. */
+  readonly cue: boolean;
+  /** Grace notes before the chord (first piece only), in playing order. */
+  readonly graces: readonly NGrace[];
+  /** Octave line shift of the displayed notes (8va = 1). */
+  readonly ottava: number;
   stem: 'up' | 'down';
   readonly stemForced: boolean;
   /** Beam group id (unique within the measure) or null when unbeamed. */
@@ -151,6 +175,10 @@ export function buildStaffNotation(
   const staffId = staff.staff.id;
   const disp = displayInterval(staff, opts.concertPitch);
   const shift = (p: Pitch) => (isUnison(disp) ? p : transpose(p, disp));
+  // octave lines move the written notes down (8va) or up (8vb)
+  const ottavas = ottavaRanges(doc, staffId);
+  const ottavaAt = (t: Rational) =>
+    ottavas.find((o) => le(o.start, t) && lt(t, o.end))?.octaves ?? 0;
   const timelines = [0, 1, 2, 3].map((v) => voiceTimeline(doc, staffId, v));
   const cursors = [0, 0, 0, 0];
   // Explicit ties waiting for the next event of a voice: midi numbers.
@@ -189,6 +217,7 @@ export function buildStaffNotation(
         voiceEvents[v]!,
         tuplets.filter((t) => t.voice === v),
         shift,
+        ottavaAt,
         clef,
         pendingTies[v]!,
         opts,
@@ -257,6 +286,7 @@ function buildVoice(
   events: readonly LocatedEvent[],
   tuplets: readonly TupletSpan[],
   shift: (p: Pitch) => Pitch,
+  ottavaAt: (t: Rational) => number,
   clef: ClefType,
   pendingTies: Set<number>,
   opts: NotationOptions,
@@ -311,11 +341,34 @@ function buildVoice(
     const pieces = spans.flatMap((span) =>
       splitNote(span.frame, span.s, span.e).map((p) => ({ ...p, tuplet: span.tuplet })),
     );
+    const octaves = ottavaAt(e.start);
+    const displayOf = (p: Pitch) => {
+      const d = shift(p);
+      return octaves ? { ...d, octave: d.octave - octaves } : d;
+    };
+    const graces: NGrace[] = (startsHere ? (e.event.graces ?? []) : []).map((g) => ({
+      graceId: g.id,
+      slash: !!g.slash,
+      value: g.value,
+      notes: g.notes.map((n) => {
+        const display = displayOf(n.pitch);
+        return {
+          noteId: n.id,
+          concert: n.pitch,
+          display,
+          position: staffPosition(display, clef),
+          accidental: null,
+          cautionary: false,
+          tieToNext: false,
+          tiedFromPrev: false,
+        };
+      }),
+    }));
     pieces.forEach((p, k) => {
       const first = k === 0;
       const last = k === pieces.length - 1;
       const notes: NNote[] = e.event.notes.map((n) => {
-        const display = shift(n.pitch);
+        const display = displayOf(n.pitch);
         const midi = midiOf(n.pitch);
         return {
           noteId: n.id,
@@ -328,6 +381,7 @@ function buildVoice(
           tiedFromPrev: !first || !startsHere || (first && startsHere && !!tiedIn?.has(midi)),
         };
       });
+      const head = first && startsHere;
       items.push({
         kind: 'chord',
         key: pieces.length === 1 && startsHere ? e.event.id : `${e.event.id}#${info.index}.${k}`,
@@ -339,7 +393,14 @@ function buildVoice(
         approx: p.approx,
         tuplet: p.tuplet,
         notes,
-        articulations: first && startsHere ? (e.event.articulations ?? []) : [],
+        articulations: head ? (e.event.articulations ?? []) : [],
+        ornament: head ? (e.event.ornament ?? null) : null,
+        tremolo: e.event.tremolo ?? 0,
+        arpeggio: head ? (e.event.arpeggio ?? null) : null,
+        breath: last && endsHere ? (e.event.breath ?? null) : null,
+        cue: !!e.event.cue,
+        graces: head ? graces : [],
+        ottava: octaves,
         stem: e.event.stem ?? 'up',
         stemForced: !!e.event.stem,
         beam: null,
@@ -453,14 +514,20 @@ function directionFor(chords: readonly NChord[]): 'up' | 'down' {
 }
 
 function assignAccidentals(voices: NVoice[], key: KeySignature): void {
-  const entries: { offset: Rational; voice: number; note: NNote }[] = [];
+  // grace notes come before the notes at the same offset (order: graces in playing order)
+  const entries: { offset: Rational; order: number; voice: number; note: NNote }[] = [];
   for (const v of voices) {
     for (const item of v.items) {
       if (item.kind !== 'chord') continue;
-      for (const note of item.notes) entries.push({ offset: item.offset, voice: v.voice, note });
+      item.graces.forEach((g, k) => {
+        for (const note of g.notes)
+          entries.push({ offset: item.offset, order: k, voice: v.voice, note });
+      });
+      for (const note of item.notes)
+        entries.push({ offset: item.offset, order: 1000, voice: v.voice, note });
     }
   }
-  entries.sort((a, b) => cmp(a.offset, b.offset) || a.voice - b.voice);
+  entries.sort((a, b) => cmp(a.offset, b.offset) || a.order - b.order || a.voice - b.voice);
   const state = new Map<number, number>();
   const current = (p: Pitch) => state.get(diatonicOf(p)) ?? keyAlter(key.fifths, p.step);
   for (const { note } of entries) {

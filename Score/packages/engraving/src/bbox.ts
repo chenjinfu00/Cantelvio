@@ -31,6 +31,22 @@ export function extentOf(gs: readonly Graphic[], into: Extent = emptyExtent()): 
         const s = g.scale ?? 1;
         const b = glyphBox(g.name, s);
         const sy = g.scaleY ?? 1;
+        if (g.rotate) {
+          const a = (g.rotate * Math.PI) / 180;
+          const cos = Math.cos(a);
+          const sin = Math.sin(a);
+          for (const [px, py] of [
+            [b.left, b.top * sy],
+            [b.right, b.top * sy],
+            [b.left, b.bottom * sy],
+            [b.right, b.bottom * sy],
+          ] as const) {
+            const x = g.x + px * cos - py * sin;
+            const y = g.y + px * sin + py * cos;
+            grow(into, x, y, x, y);
+          }
+          break;
+        }
         grow(into, g.x + b.left, g.y + b.top * sy, g.x + b.right, g.y + b.bottom * sy);
         break;
       }

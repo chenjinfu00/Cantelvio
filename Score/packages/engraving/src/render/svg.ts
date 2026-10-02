@@ -53,11 +53,13 @@ function renderOne(g: Graphic, prefix: string, out: string[]): void {
     case 'glyph': {
       const sx = g.scale ?? 1;
       const sy = (g.scaleY ?? 1) * sx;
-      if (sx === 1 && sy === 1) {
+      if (sx === 1 && sy === 1 && !g.rotate) {
         out.push(`<use href="#${prefix}${g.name}" x="${fmt(g.x)}" y="${fmt(g.y)}"${attrs(g)}/>`);
       } else {
+        const rot = g.rotate ? ` rotate(${fmt(g.rotate)})` : '';
+        const scale = sx === 1 && sy === 1 ? '' : ` scale(${fmt(sx)} ${fmt(sy)})`;
         out.push(
-          `<use href="#${prefix}${g.name}" transform="translate(${fmt(g.x)} ${fmt(g.y)}) scale(${fmt(sx)} ${fmt(sy)})"${attrs(g)}/>`,
+          `<use href="#${prefix}${g.name}" transform="translate(${fmt(g.x)} ${fmt(g.y)})${rot}${scale}"${attrs(g)}/>`,
         );
       }
       break;

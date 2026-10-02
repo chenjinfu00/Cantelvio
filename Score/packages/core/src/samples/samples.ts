@@ -120,6 +120,32 @@ export function sampleOrchestra(lang: 'en' | 'zh' = 'en'): ScoreDoc {
   );
 }
 
+/** Ornaments, grace notes, slurs, hairpins, octave lines, trill lines, pedal and tremolo. */
+export function sampleOrnaments(lang: 'en' | 'zh' = 'en'): ScoreDoc {
+  return build(
+    {
+      template: 'piano',
+      lang,
+      title: lang === 'zh' ? '装饰音与线条' : 'Ornaments and Lines',
+      composer: 'AIlegro Score demo',
+      measures: 8,
+      timeSig: { beats: 4, beatType: 4 },
+      keySig: { fifths: 0, mode: 'major' },
+      tempo: 72,
+    },
+    {
+      0:
+        'c4\\p\\<( e g c) | d2\\f\\trill c4-. b-. | \\appoggiatura b8 a4( g f e) | ' +
+        "d2\\fermata r4 \\acciaccatura f8 g4 | \\8va c'4\\mp( d e f) | " +
+        'g2\\startTrillSpan g4\\stopTrillSpan \\loco r4 | <c,,, e g c>2\\arpeggio\\> <b d g>2 | ' +
+        '<c e g c>1\\pp\\fermata\\arpeggioUp',
+      1:
+        "c1\\sustainOn | g2\\sustainOff\\sustainOn g'2 | f2\\sustainOff\\sustainOn c2 | " +
+        "g2:16\\sustainOff r2 | <c g'>1 | <b g'>1 | c2 g2 | \\8vb c,1\\sustainOn",
+    },
+  );
+}
+
 export const SAMPLES: readonly SampleInfo[] = [
   {
     id: 'piano',
@@ -135,5 +161,10 @@ export const SAMPLES: readonly SampleInfo[] = [
     id: 'orchestra',
     title: { en: 'Overture Fragment (orchestra)', zh: '序曲片段（管弦乐）' },
     build: sampleOrchestra,
+  },
+  {
+    id: 'ornaments',
+    title: { en: 'Ornaments and Lines (piano)', zh: '装饰音与线条（钢琴）' },
+    build: sampleOrnaments,
   },
 ];

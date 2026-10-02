@@ -8,30 +8,28 @@ import {
   type Rational,
   type ScoreDoc,
   type StaffInfo,
+  add,
   allStaves,
-  cmp,
   findInstrument,
   keyTonic,
   lt,
   measureInfos,
-  sub,
-  toNumber,
 } from '@ailegro-score/core';
 import { extentOf } from '../bbox';
 import { type Graphic, translate } from '../graphics';
 import { type LayoutOptions, STYLE, defaultOptions } from '../options';
 import { glyphBox, glyphWidth } from '../smufl/glyphs';
 import { type Column, buildColumn, columnWidth, segmentPositions } from './columns';
+import { type PlacedChord, beamGroup, drawChord, drawRest, drawTie, drawTupletMark } from './draw';
 import {
-  type PlacedChord,
-  beamGroup,
-  drawChord,
-  drawDynamic,
-  drawRest,
-  drawTie,
-  drawTupletMark,
-} from './draw';
+  type MeasureGeometry,
+  type SegmentGeometry,
+  offsetToX,
+  xAtOffset,
+  xToOffset,
+} from './geometry';
 import { type NMeasure, buildStaffNotation } from './notation';
+import { type SystemChord, type SystemDynamic, drawSystemSpanners } from './spanners';
 import {
   CHANGE_CLEF_SCALE,
   clefWidth,
@@ -43,29 +41,14 @@ import {
   timeSignatureWidth,
 } from './signatures';
 
+export { type MeasureGeometry, type SegmentGeometry, offsetToX, xAtOffset, xToOffset };
+
 export interface StaffGeometry {
   readonly staffId: string;
   readonly partId: string;
   /** y of the top staff line (page coordinates, sp). */
   readonly y: number;
   readonly lines: number;
-}
-
-export interface SegmentGeometry {
-  readonly offset: Rational;
-  readonly x: number;
-}
-
-export interface MeasureGeometry {
-  readonly measureId: string;
-  readonly index: number;
-  /** Start barline x. */
-  readonly x: number;
-  readonly width: number;
-  /** x where the content (first segment area) starts. */
-  readonly contentX: number;
-  readonly segments: readonly SegmentGeometry[];
-  readonly length: Rational;
 }
 
 export interface SystemGeometry {
@@ -444,50 +427,6 @@ function titleBlock(
 
 // ------------------------------------------------------------------------------- one system
 
-/** x of a time position inside a laid-out measure (interpolating between segments). */
-export function offsetToX(measure: MeasureGeometry, t: Rational): number {
-  return xAtOffset(measure.segments, measure.length, measure.x + measure.width, t);
-}
-
-/** Approximate time position (whole notes, float) of an x inside a laid-out measure. */
-export function xToOffset(measure: MeasureGeometry, x: number): number {
-  const segs = measure.segments;
-  const len = toNumber(measure.length);
-  if (!segs.length) return 0;
-  const end = measure.x + measure.width;
-  for (let k = 0; k < segs.length; k++) {
-    const a = segs[k]!;
-    const bx = segs[k + 1]?.x ?? end;
-    const bt = segs[k + 1] ? toNumber(segs[k + 1]!.offset) : len;
-    if (x < bx || k === segs.length - 1) {
-      if (x <= a.x) return toNumber(a.offset);
-      return (
-        toNumber(a.offset) +
-        ((Math.min(x, bx) - a.x) / Math.max(0.001, bx - a.x)) * (bt - toNumber(a.offset))
-      );
-    }
-  }
-  return 0;
-}
-
-function xAtOffset(
-  segs: readonly SegmentGeometry[],
-  length: Rational,
-  endX: number,
-  t: Rational,
-): number {
-  if (segs.length === 0) return endX;
-  let k = 0;
-  while (k + 1 < segs.length && cmp(segs[k + 1]!.offset, t) <= 0) k++;
-  const a = segs[k]!;
-  if (cmp(a.offset, t) === 0) return a.x;
-  const nextOffset = segs[k + 1]?.offset ?? length;
-  const nextX = segs[k + 1]?.x ?? endX;
-  const span = toNumber(sub(nextOffset, a.offset));
-  const frac = span > 0 ? toNumber(sub(t, a.offset)) / span : 0;
-  return a.x + (nextX - a.x) * frac;
-}
-
 const CHORD_SUFFIX: Record<string, string> = {
   maj: '',
   min: 'm',
@@ -580,6 +519,14 @@ function buildSystem(
 
   // measures
   let x = sysX + header;
+  const sysChords: SystemChord[] = [];
+  const sysDynamics: SystemDynamic[] = [];
+  const measureCtx: {
+    info: (typeof infos)[number];
+    segs: SegmentGeometry[];
+    startX: number;
+    endX: number;
+  }[] = [];
   const pendingTies: Map<string, { x: number; y: number; dir: 1 | -1 }>[] = staves.map(
     () => new Map(),
   );
@@ -698,7 +645,7 @@ function buildSystem(
         }
       });
     }
-    // skyline of what has been drawn in this measure, per staff
+    // skyline of what has been drawn in this measure, per staff (for tuplets)
     const boxes = staffGraphics.map((gs, k) => gs.slice(firstGraphic[k]).map((g) => extentOf([g])));
     const topAt = (k: number, x0: number, x1: number, base: number) => {
       let y = base;
@@ -742,24 +689,71 @@ function buildSystem(
         }
         staffGraphics[k]!.push(...drawTupletMark(t.actual, x1, x2, yy, up, !beamed));
       }
-      // dynamics below the staff, clear of low notes
+      // dynamics are placed with the hairpins once the whole system is known
       for (const d of nm.dynamics) {
-        const dx = xAtOffset(segs, info.length, endX, d.offset);
-        const dy = Math.max(7.2, bottomAt(k, dx - 0.5, dx + 3, 4) + 2.4);
-        staffGraphics[k]!.push(drawDynamic(d.value, dx, dy, `dy:${d.id}`));
+        sysDynamics.push({
+          staff: k,
+          x: xAtOffset(segs, info.length, endX, d.offset),
+          t: add(info.start, d.offset),
+          mark: d,
+        });
       }
     });
-    // texts above the top staff, stacked clear of the notes: chord symbols, then tempo/rehearsal
-    const top = staffGraphics[0]!;
+    for (const pc of placedChords)
+      sysChords.push({ ...pc, t: add(info.start, pc.p.chord.offset), measure: i });
+    measureCtx.push({ info, segs, startX, endX });
+    x = endX;
+  }
+  const systemEnd = x;
+  // unresolved ties run to the end of the system
+  pendingTies.forEach((map, k) => {
+    for (const t of map.values())
+      staffGraphics[k]!.push(drawTie(t.x, t.y, Math.max(t.x + 1.5, systemEnd - 0.3), t.y, t.dir));
+  });
+
+  // ---- system-wide skyline, spanners, dynamics, texts
+  const sky = staffGraphics.map((gs) => gs.map((g) => ({ g, e: extentOf([g]) })));
+  const push = (k: number, g: Graphic) => {
+    staffGraphics[k]!.push(g);
+    sky[k]!.push({ g, e: extentOf([g]) });
+  };
+  const skyTop = (k: number, x0: number, x1: number, base: number) => {
+    let yy = base;
+    for (const { e } of sky[k]!) if (e.maxX >= x0 && e.minX <= x1 && e.minY < yy) yy = e.minY;
+    return yy;
+  };
+  const skyBottom = (k: number, x0: number, x1: number, base: number) => {
+    let yy = base;
+    for (const { e } of sky[k]!) if (e.maxX >= x0 && e.minX <= x1 && e.maxY > yy) yy = e.maxY;
+    return yy;
+  };
+  drawSystemSpanners({
+    doc,
+    staves,
+    notation,
+    infos,
+    measures,
+    chords: sysChords,
+    dynamics: sysDynamics,
+    systemEnd,
+    push,
+    skyTop,
+    skyBottom,
+    sky,
+  });
+
+  // texts above the top staff, stacked clear of the notes: chord symbols, then tempo/rehearsal
+  for (const { info, segs, startX, endX } of measureCtx) {
+    const top = (g: Graphic) => push(0, g);
     let ceiling = 0;
     for (const c of doc.harmony) {
       if (c.measureId !== info.measure.id) continue;
       const cx = xAtOffset(segs, info.length, endX, c.offset);
       const text = chordSymbolText(c.root, c.quality, c.bass);
       const w = opts.measureText(text, STYLE.chordSymbolSize, 'sans');
-      const baseline = Math.min(-1.6, topAt(0, cx - 0.3, cx + w, 0) - 0.9);
+      const baseline = Math.min(-1.6, skyTop(0, cx - 0.3, cx + w, 0) - 0.9);
       ceiling = Math.min(ceiling, baseline - STYLE.chordSymbolSize * 0.8);
-      top.push({
+      top({
         kind: 'text',
         x: cx,
         y: baseline,
@@ -774,8 +768,8 @@ function buildSystem(
     for (const t of info.measure.tempo ?? []) {
       const tx = xAtOffset(segs, info.length, endX, t.offset);
       const label = `= ${t.bpm}`;
-      const ty = Math.min(-2.6, topAt(0, tx - 0.5, tx + 7, 0) - 1.2, ceiling - 0.6);
-      top.push({
+      const ty = Math.min(-2.6, skyTop(0, tx - 0.5, tx + 7, 0) - 1.2, ceiling - 0.6);
+      top({
         kind: 'glyph',
         name: 'metNoteQuarterUp',
         x: tx,
@@ -783,7 +777,7 @@ function buildSystem(
         scale: 0.75,
         cls: 'tempo',
       });
-      top.push({
+      top({
         kind: 'text',
         x: tx + 1.35,
         y: ty,
@@ -793,7 +787,7 @@ function buildSystem(
         cls: 'tempo',
       });
       if (t.text) {
-        top.push({
+        top({
           kind: 'text',
           x: tx,
           y: ty - 2.6,
@@ -808,8 +802,8 @@ function buildSystem(
     if (info.measure.rehearsalMark) {
       const text = info.measure.rehearsalMark;
       const w = opts.measureText(text, 2.0, 'sans', 'bold') + 0.8;
-      const boxBottom = Math.min(-1.2, topAt(0, startX - 0.2, startX + w, 0) - 0.8, ceiling - 0.4);
-      top.push({
+      const boxBottom = Math.min(-1.2, skyTop(0, startX - 0.2, startX + w, 0) - 0.8, ceiling - 0.4);
+      top({
         kind: 'rect',
         x: startX - 0.2,
         y: boxBottom - 2.6,
@@ -818,7 +812,7 @@ function buildSystem(
         stroke: 0.16,
         cls: 'rehearsal-box',
       });
-      top.push({
+      top({
         kind: 'text',
         x: startX - 0.2 + w / 2,
         y: boxBottom - 0.65,
@@ -830,14 +824,7 @@ function buildSystem(
         cls: 'rehearsal',
       });
     }
-    x = endX;
   }
-  const systemEnd = x;
-  // unresolved ties run to the end of the system
-  pendingTies.forEach((map, k) => {
-    for (const t of map.values())
-      staffGraphics[k]!.push(drawTie(t.x, t.y, Math.max(t.x + 1.5, systemEnd - 0.3), t.y, t.dir));
-  });
   // staff lines
   staves.forEach((s, k) => {
     const lines = s.staff.lines;

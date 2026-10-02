@@ -139,6 +139,73 @@ describe('notation', () => {
   });
 });
 
+describe('marks and lines', () => {
+  const svgOf = (doc: ScoreDoc, opts = {}) => {
+    const layout = layoutScore(doc, opts);
+    return layout.pages.map((p) => renderPageSvg(p, layout)).join('');
+  };
+
+  it('writes notes under an octave line an octave lower, without changing pitch', () => {
+    const doc = scoreWith("\\8va c'4 d e f \\loco g");
+    const [m1, m2] = buildStaffNotation(doc, allStaves(doc)[0]!, { concertPitch: false });
+    const first = m1!.voices[0]!.items[0] as NChord;
+    expect(first.notes[0]!.concert).toMatchObject({ step: 'C', octave: 6 });
+    expect(first.notes[0]!.display).toMatchObject({ step: 'C', octave: 5 });
+    expect(first.ottava).toBe(1);
+    const after = m2!.voices[0]!.items[0] as NChord;
+    expect(after.ottava).toBe(0);
+  });
+
+  it('draws every kind of spanner and mark of the demo', () => {
+    const doc = SAMPLES.find((s) => s.id === 'ornaments')!.build();
+    const svg = svgOf(doc);
+    for (const sp of doc.spanners) expect(svg).toContain(`data-ref="sp:${sp.id}"`);
+    for (const cls of [
+      'slur',
+      'hairpin',
+      'ottava',
+      'pedal',
+      'trill-line',
+      'grace',
+      'arpeggio',
+      'tremolo',
+      'dynamic',
+    ])
+      expect(svg).toContain(`class="${cls}`);
+    // grace noteheads are drawn small and selectable
+    const grace =
+      doc.content[allStaves(doc)[0]!.staff.id]![doc.measures[2]!.id]!.voices[0]![0]!.graces![0]!;
+    expect(svg).toContain(`data-ref="gc:${grace.id}"`);
+    expect(svg).toContain(`data-ref="n:${grace.notes[0]!.id}"`);
+  });
+
+  it('splits a slur at a system break', () => {
+    let doc = scoreWith('c4( d e f | g a b c)');
+    doc = applyCommand(doc, {
+      type: 'measure.setBreak',
+      measureId: doc.measures[0]!.id,
+      breakAfter: 'system',
+    }).doc;
+    const svg = svgOf(doc);
+    const id = doc.spanners[0]!.id;
+    expect(svg.split(`data-ref="sp:${id}"`).length - 1).toBe(2);
+  });
+
+  it('draws cue notes smaller', () => {
+    let doc = scoreWith('c4 d e f');
+    const staff = allStaves(doc)[0]!.staff.id;
+    const ev = doc.content[staff]![doc.measures[0]!.id]!.voices[0]!.map((e) => e.id);
+    doc = applyCommand(doc, {
+      type: 'events.setProps',
+      eventIds: [ev[0]!],
+      props: { cue: true },
+    }).doc;
+    const svg = svgOf(doc);
+    expect(svg).toMatch(/class="chord cue"/);
+    expect(svg).toMatch(/scale\(0\.7 0\.7\)"[^>]*class="notehead"/);
+  });
+});
+
 describe('layout', () => {
   it('lays out every sample deterministically', () => {
     for (const s of SAMPLES) {

@@ -26,6 +26,8 @@ export interface GlyphGraphic extends Base {
   readonly scale?: number;
   /** Additional vertical scale (braces). */
   readonly scaleY?: number;
+  /** Rotation in degrees around the glyph origin, clockwise on the page (arpeggios). */
+  readonly rotate?: number;
 }
 
 export interface LineGraphic extends Base {

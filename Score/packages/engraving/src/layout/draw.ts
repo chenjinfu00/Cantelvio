@@ -3,7 +3,7 @@ import { NOTE_VALUE_BEAMS, type DynamicValue } from '@ailegro-score/core';
 import { type Graphic, fmt, group } from '../graphics';
 import { STYLE } from '../options';
 import { type GlyphName, TUPLET_DIGITS, glyphWidth } from '../smufl/glyphs';
-import type { ChordGeom, RestGeom } from './chord';
+import { type ChordGeom, type GraceGeom, type RestGeom, arpeggioGlyphs, placeMarks } from './chord';
 import type { NChord, NRest } from './notation';
 
 export interface PlacedChord {
@@ -12,9 +12,81 @@ export interface PlacedChord {
   readonly x: number;
 }
 
+const glyphAt = (
+  g: { glyph: GlyphName; x: number; y: number; scale?: number; rotate?: number },
+  x: number,
+  cls: string,
+): Graphic => ({
+  kind: 'glyph',
+  name: g.glyph,
+  x: x + g.x,
+  y: g.y,
+  ...(g.scale !== undefined && g.scale !== 1 ? { scale: g.scale } : {}),
+  ...(g.rotate ? { rotate: g.rotate } : {}),
+  cls,
+});
+
+function drawGrace(g: GraceGeom, x: number): Graphic {
+  const children: Graphic[] = [];
+  const scale = g.noteheads[0]?.scale ?? 1;
+  for (const l of g.ledgers)
+    children.push({
+      kind: 'line',
+      x1: x + l.x1,
+      y1: l.y,
+      x2: x + l.x2,
+      y2: l.y,
+      width: STYLE.ledgerLineWidth * 0.8,
+      cls: 'ledger',
+    });
+  if (g.stem)
+    children.push({
+      kind: 'line',
+      x1: x + g.stem.x,
+      y1: g.stem.yBase,
+      x2: x + g.stem.x,
+      y2: g.stem.yTip,
+      width: STYLE.stemWidth * scale,
+      cls: 'stem',
+    });
+  if (g.flag) children.push(glyphAt(g.flag, x, 'flag'));
+  if (g.slash)
+    children.push({
+      kind: 'line',
+      x1: x + g.slash.x1,
+      y1: g.slash.y1,
+      x2: x + g.slash.x2,
+      y2: g.slash.y2,
+      width: STYLE.stemWidth * 1.1,
+      cls: 'grace-slash',
+    });
+  for (const a of g.accidentals) children.push(glyphAt(a, x, 'accidental'));
+  for (const h of g.noteheads)
+    children.push({
+      kind: 'glyph',
+      name: h.glyph,
+      x: x + h.x,
+      y: h.y,
+      scale: h.scale,
+      cls: 'notehead',
+      ref: `n:${h.noteId}`,
+    });
+  return group(children, 'grace', `gc:${g.graceId}`);
+}
+
 export function drawChord(p: PlacedChord, extraCls = ''): Graphic {
   const { chord, geom, x } = p;
+  const mag = geom.mag;
   const children: Graphic[] = [];
+  for (const g of geom.graces) children.push(drawGrace(g, x));
+  for (const points of geom.graceBeams)
+    children.push({
+      kind: 'polygon',
+      points: points.map((v, i) => (i % 2 === 0 ? v + x : v)),
+      cls: 'beam',
+    });
+  if (geom.arpeggio)
+    for (const g of arpeggioGlyphs(geom.arpeggio, x)) children.push(glyphAt(g, 0, 'arpeggio'));
   for (const l of geom.ledgers) {
     children.push({
       kind: 'line',
@@ -33,36 +105,37 @@ export function drawChord(p: PlacedChord, extraCls = ''): Graphic {
       y1: geom.stem.yBase,
       x2: x + geom.stem.x,
       y2: geom.stem.yTip,
-      width: STYLE.stemWidth,
+      width: STYLE.stemWidth * mag,
       cls: 'stem',
     });
   }
   if (geom.flag && geom.stem) {
-    children.push({
-      kind: 'glyph',
-      name: geom.flag.glyph,
-      x: x + geom.flag.x,
-      y: geom.stem.yTip,
-      cls: 'flag',
-    });
+    children.push(glyphAt({ ...geom.flag, y: geom.stem.yTip }, x, 'flag'));
   }
-  for (const a of geom.accidentals)
-    children.push({ kind: 'glyph', name: a.glyph, x: x + a.x, y: a.y, cls: 'accidental' });
+  for (const a of geom.accidentals) children.push(glyphAt(a, x, 'accidental'));
   for (const h of geom.noteheads) {
     children.push({
       kind: 'glyph',
       name: h.glyph,
       x: x + h.x,
       y: h.y,
+      ...(h.scale !== 1 ? { scale: h.scale } : {}),
       cls: 'notehead',
       ref: `n:${h.noteId}`,
     });
   }
   for (const d of geom.dots)
-    children.push({ kind: 'glyph', name: 'augmentationDot', x: x + d.x, y: d.y, cls: 'dot' });
-  for (const a of geom.articulations)
-    children.push({ kind: 'glyph', name: a.glyph, x: x + a.x, y: a.y, cls: 'articulation' });
-  const cls = ['chord', chord.ghost ? 'ghost' : '', chord.approx ? 'approx' : '', extraCls]
+    children.push(glyphAt({ glyph: 'augmentationDot', x: d.x, y: d.y, scale: mag }, x, 'dot'));
+  for (const m of placeMarks(chord, geom))
+    children.push(glyphAt(m, x, m.glyph.startsWith('tremolo') ? 'tremolo' : 'articulation'));
+  if (geom.breath) children.push(glyphAt(geom.breath, x, 'breath'));
+  const cls = [
+    'chord',
+    chord.ghost ? 'ghost' : '',
+    chord.approx ? 'approx' : '',
+    chord.cue ? 'cue' : '',
+    extraCls,
+  ]
     .filter(Boolean)
     .join(' ');
   return group(children, cls, `e:${chord.eventId}`);
@@ -111,6 +184,8 @@ export function beamGroup(chords: PlacedChord[]): Graphic[] {
   );
   const levels = valid.map((c) => NOTE_VALUE_BEAMS[c.chord.written.value]);
   const maxLevel = Math.max(...levels);
+  // cue-size groups get thinner, closer beams and shorter stems
+  const mag = Math.max(...valid.map((c) => c.geom.mag));
   const x0 = stemX[0]!;
   const x1 = stemX[stemX.length - 1]!;
   const yF = near[0]!;
@@ -126,24 +201,24 @@ export function beamGroup(chords: PlacedChord[]): Graphic[] {
   }
   const span = Math.max(0.001, x1 - x0);
   const slope = rise / span;
-  const stemMin = 3.0 + (maxLevel - 1) * (STYLE.beamThickness + STYLE.beamSpacing);
+  const stemMin = (3.0 + (maxLevel - 1) * (STYLE.beamThickness + STYLE.beamSpacing)) * mag;
   // beam line y(x) = b + slope (x - x0) is the OUTER edge of the primary beam
   let b = up ? Infinity : -Infinity;
-  valid.forEach((_c, i) => {
-    const need = near[i]! + dir * stemMin - slope * (stemX[i]! - x0);
+  valid.forEach((c, i) => {
+    const need = near[i]! + dir * Math.max(stemMin, c.geom.minStem) - slope * (stemX[i]! - x0);
     b = up ? Math.min(b, need) : Math.max(b, need);
   });
   // groups far outside the staff: centre of the beam reaches the middle line
   const centerY = b + slope * (span / 2);
-  if (up && centerY > 2) b -= centerY - 2;
-  if (!up && centerY < 2) b += 2 - centerY;
+  if (mag === 1 && up && centerY > 2) b -= centerY - 2;
+  if (mag === 1 && !up && centerY < 2) b += 2 - centerY;
   const beamY = (x: number) => b + slope * (x - x0);
   valid.forEach((c, i) => {
     c.geom.stem!.yTip = beamY(stemX[i]!);
   });
-  const T = STYLE.beamThickness;
-  const step = T + STYLE.beamSpacing;
-  const half = STYLE.stemWidth / 2;
+  const T = STYLE.beamThickness * mag;
+  const step = T + STYLE.beamSpacing * mag;
+  const half = (STYLE.stemWidth * mag) / 2;
   const poly = (xa: number, xb: number, level: number): Graphic => {
     const off = -dir * (level - 1) * step; // towards the noteheads
     const ya = beamY(xa) + off;
@@ -251,7 +326,13 @@ const DYNAMIC_LETTERS: Record<string, GlyphName> = {
   n: 'dynamicNiente',
 };
 
-export function drawDynamic(value: DynamicValue, x: number, y: number, ref?: string): Graphic {
+export function drawDynamic(
+  value: DynamicValue,
+  x: number,
+  y: number,
+  ref?: string,
+  extraCls = '',
+): Graphic {
   const children: Graphic[] = [];
   let cx = x;
   for (const ch of value) {
@@ -260,5 +341,15 @@ export function drawDynamic(value: DynamicValue, x: number, y: number, ref?: str
     children.push({ kind: 'glyph', name: g, x: cx, y });
     cx += glyphWidth(g) * 0.92;
   }
-  return group(children, 'dynamic', ref);
+  return group(children, `dynamic${extraCls}`, ref);
+}
+
+/** Width of a dynamic mark as drawn by `drawDynamic`. */
+export function dynamicWidth(value: DynamicValue): number {
+  let w = 0;
+  for (const ch of value) {
+    const g = DYNAMIC_LETTERS[ch];
+    if (g) w += glyphWidth(g) * 0.92;
+  }
+  return w;
 }
