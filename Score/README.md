@@ -20,6 +20,19 @@ npm run check      # 代码检查 + 类型检查 + 单元测试
 npm run render -- --sample orchestra --out out/   # 无界面渲染示例乐谱为 SVG/PNG
 ```
 
+## 和 AIlegro 一起用
+
+```sh
+# 在 AIlegro 文件夹里启动适配服务器（模型只加载一次）
+cd "../AIlegro"
+.venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+  --serve --checkpoint training/runs/<run>/weights.pt
+```
+
+然后在编辑器右侧 **AIlegro** 面板点“连接”→“直接生成”：生成的音乐以蓝色建议音符出现，
+按批次接受或拒绝。不开服务器也可以导出请求文件、运行脚本、再导入结果；没有模型时用
+`--mock` 测试整个流程。详见 [docs/ailegro-integration.md](docs/ailegro-integration.md)。
+
 ## 项目结构
 
 | 目录 | 内容 |
@@ -49,5 +62,8 @@ AI 编程助手（Codex、Claude）请先读 [AGENTS.md](AGENTS.md)。
 
 ## 许可
 
-尚未选择开源许可证（`UNLICENSED`，保留所有权利）。第三方资源：Bravura 字体（SIL Open Font
-License 1.1，© Steinberg Media Technologies GmbH）。
+尚未选择开源许可证（`UNLICENSED`，保留所有权利）。第三方资源：
+
+- Bravura 字体字形（SIL Open Font License 1.1，© Steinberg Media Technologies GmbH）。
+- Salamander Grand Piano 采样（Alexander Holm；CC-BY 3.0，作者后来声明进入公有领域），
+  见 `apps/web/public/audio/salamander/NOTICE.txt`。
