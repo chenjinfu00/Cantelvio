@@ -55,16 +55,18 @@ export function handleKeyDown(e: KeyboardEvent): void {
     actions.appendMeasures(e.shiftKey ? 4 : 1);
     return;
   }
-  if (mod && key === '3') {
+  // e.code, not e.key: Option/Alt changes the character on macOS ("¡" for Option+1).
+  if (mod && e.altKey && /^Digit[1-4]$/.test(e.code)) {
     e.preventDefault();
-    actions.createTriplet();
-    return;
-  }
-  if (mod && e.altKey && /^[1-4]$/.test(key)) {
-    e.preventDefault();
-    const voice = Number(key) - 1;
+    const voice = Number(e.code.slice(5)) - 1;
     s.setInput({ voice });
     if (s.cursor) store.setState({ cursor: { ...s.cursor, voice } });
+    return;
+  }
+  // Ctrl+3 (Control on macOS: the browser keeps ⌘3 for switching tabs)
+  if (mod && !e.altKey && (key === '3' || e.code === 'Digit3')) {
+    e.preventDefault();
+    actions.createTriplet();
     return;
   }
   if (key === ' ') {

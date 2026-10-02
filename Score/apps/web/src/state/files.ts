@@ -1,5 +1,5 @@
 /** File handling: open/save .ailegro.json, downloads, autosave to this browser. */
-import { type ScoreDoc, parseScore, serializeScore } from '@ailegro-score/core';
+import { type ScoreDoc, parseScore, serializeScore, validateScore } from '@ailegro-score/core';
 import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
 import { getStore } from './store';
 
@@ -49,6 +49,17 @@ export async function openScore(): Promise<void> {
   const s = getStore().getState();
   try {
     const doc = parseScore(await file.text());
+    // Hand-edited or foreign files must keep the model's invariants before they are opened.
+    const issues = validateScore(doc);
+    if (issues.length) {
+      console.warn('[open] invalid score', issues);
+      const first = issues[0]!;
+      s.notify(
+        `${file.name}: ${first.path} — ${first.message}${issues.length > 1 ? ` (+${issues.length - 1})` : ''}`,
+        'error',
+      );
+      return;
+    }
     s.load(doc, file.name);
     s.notify(`✓ ${file.name}`);
   } catch (e) {
@@ -79,7 +90,8 @@ export function autosave(doc: ScoreDoc): void {
 export function restoreAutosave(): ScoreDoc | null {
   try {
     const text = localStorage.getItem(AUTOSAVE_KEY);
-    return text ? parseScore(text) : null;
+    const doc = text ? parseScore(text) : null;
+    return doc && validateScore(doc).length === 0 ? doc : null;
   } catch {
     return null;
   }
