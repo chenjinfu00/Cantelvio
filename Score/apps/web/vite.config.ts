@@ -7,5 +7,6 @@ export default defineConfig({
   base: './',
   server: { port: 5178, host: '127.0.0.1' },
   preview: { port: 5179, host: '127.0.0.1' },
-  build: { target: 'es2022', sourcemap: true },
+  // The bundle carries the SMuFL glyph outlines (~250 kB), so allow a larger single chunk.
+  build: { target: 'es2022', sourcemap: true, chunkSizeWarningLimit: 1500 },
 });
