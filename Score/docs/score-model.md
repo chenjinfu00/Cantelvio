@@ -21,7 +21,7 @@
 
 ```text
 ScoreDoc
-├─ format: "ailegro-score", version: 1, id
+├─ format: "ailegro-score", version: 2, id
 ├─ meta        标题、副标题、作曲、编曲、作词、版权、createdAt / modifiedAt
 ├─ settings    谱表间距 staffSpaceMm、纸张与页边距、默认是否显示实际音高、默认速度
 ├─ parts[]     乐器（总谱顺序，从上到下）
@@ -31,7 +31,8 @@ ScoreDoc
 │   └─ timeSig? keySig? actualLength? barline? repeatStart/End? rehearsalMark? tempo[]? breakAfter?
 ├─ content     staffId → measureId → StaffMeasure（缺省 = 空小节）
 │   └─ voices[0..3]（事件列表）、tuplets?、clefChanges?、dynamics?
-└─ harmony[]   和弦记号（也是 AIlegro 的和声条件）
+├─ harmony[]   和弦记号（也是 AIlegro 的和声条件）
+└─ spanners[]  连线与线条：连线（slur）、渐强渐弱、八度记号、踏板、颤音线（v2）
 ```
 
 ## 时间
@@ -90,7 +91,7 @@ ScoreDoc
 ```
 
 - **NoteEvent**：`id`、`offset`、`duration`（发声长度）、`notes`（同一符干的音，按音高升序）、
-  `articulations?`（staccato、staccatissimo、accent、tenuto、marcato、fermata）、`stem?`、`source?`。
+  `stem?`、`source?`，以及事件上的记号（v2，全部可选，见下一节）。
 - **Note**：`id`、`pitch`、`tieForward?`、`accidental?`（auto / show / cautionary / hide，排版尚未读取，路线图 `M2-ENG-06`）、
   `velocity?`。
 - 一个声部内事件按 offset 排序、**互不重叠**；空隙即休止符。
@@ -98,6 +99,47 @@ ScoreDoc
   `actual:normal` 是比例（三连音 3:2）。里面事件的时值是实际值（三连音八分 = `1/12`）。
   连音组不能跨小节线。
 - 谱号变化、力度记号挂在谱表的小节上（`clefChanges`、`dynamics`）。
+
+## 事件上的记号（v2）
+
+都挂在 `NoteEvent` 上，缺省 = 没有。命令 `events.setArticulation`、`events.setProps` 修改它们。
+
+| 字段 | 取值 | 说明 |
+| --- | --- | --- |
+| `articulations` | `staccato` `staccatissimo` `tenuto` `accent` `marcato` `harmonic` `stopped` `open` `snapPizzicato` `upBow` `downBow` `fermata` `fermataShort` `fermataLong` | 按 `ARTICULATIONS` 的**叠放顺序**存（越靠前越贴近符头），不重复。延长记号三选一、上下弓二选一、闭音/开音二选一由编辑器保证 |
+| `ornament` | `trill` `shortTrill`（顺波音）`mordent`（逆波音）`turn` `invertedTurn` | 一个事件最多一个装饰记号 |
+| `tremolo` | 1–4 | 单音震音：**穿过符干的道数**，不算符尾/符杠。八分音符 1 道 = 十六分音符的震音 |
+| `arpeggio` | `normal` `up` `down` | 琶音（只用于和弦，单音会被忽略） |
+| `cue` | `true` | 小音符（提示音大小）；只改大小，回放不变 |
+| `breath` | `breath` `caesura` | 事件之后的换气记号 / 停顿号 |
+| `graces` | `GraceNote[]` | 事件之前的倚音，按演奏顺序 |
+
+**倚音** `GraceNote = { id, slash?, value, notes[] }`：`slash: true` 是带斜线的短倚音（acciaccatura），
+否则是长倚音（appoggiatura）；`value` 是记写时值（通常八分或十六分，没有附点）；`notes` 和事件的
+`notes` 一样是同一符干上的音（`Note`，按音高升序）。倚音**不占小节时间**；回放时“在拍上”演奏，
+从主音借时间（短倚音 1/32，长倚音按记写时值，最多主音的一半）。倚音的音符 id 与普通音符一样
+全局唯一，选择、改音高、删除都用同一组命令（`note.setPitch`、`note.addToChord`、`notes.delete`）；
+`grace.add` 插入、`grace.set` 改时值/斜线/音。
+
+## 连线与线条（spanners，v2）
+
+`doc.spanners` 是一个全局列表，每个元素有 `id`、`kind`、`staffId`：
+
+- **连线（slur）** `{ kind: "slur", from, to, placement? }`：`from`、`to` 是**事件 id**，同一谱表、同一声部，
+  `to` 在 `from` 之后。连线跟着音符走：音符改时值、移动、被覆盖都不用改连线；端点事件被删除时，
+  连线在**同一个撤销步骤**里被删掉（`applyCommand` 的“悬空线条清理”）。
+- **时间线条**按时间锚定，覆盖 `[start, end)`：`start`、`end` 是 `MeasureAnchor = { measureId, offset }`。
+  `end` 是线条停下的地方（它覆盖的最后一个音的结尾），**总是存在包含最后被覆盖时刻的那个小节里**
+  （所以在小节线处结束的线条，`end` 是前一小节的 `offset = 小节长度`；命令会规范化）。
+  - `hairpin`：`direction: "crescendo" | "diminuendo"`。
+  - `ottava`：`octaves: 1 | 2 | -1 | -2`（8va、15ma、8vb、15mb）。**只影响显示**：音高仍存发声音高，
+    排版把线内的音写低（高）一个或两个八度，同一谱表上的八度线不能重叠。
+  - `pedal`：延音踏板，`style` 缺省为“Ped. … *”，`"line"` 是括线。编辑器把踏板放在乐器的**最下面一个谱表**。
+  - `trill`：“tr” 加波浪线（长颤音）。
+
+线条随结构变化自动维护：删除小节时线条缩短（完全落在被删小节里的线条消失），改拍号重新划分小节时
+按绝对时间重新锚定，`range.clear` 删除范围内的时间线条，删除乐器时删除它的线条。
+同一乐谱保存两次字节相同：`spanners` 按谱表顺序、起点时间、id 排序，每个线条一行。
 
 ## 和弦记号（harmony）
 
@@ -122,15 +164,20 @@ AIlegro 的和声条件。
 ## id
 
 - 格式 `<前缀>_<12 位 base36>`：`sc` 乐谱、`pt` 乐器、`st` 谱表、`gr` 括号、`m` 小节、`e` 事件、
-  `n` 音符、`tu` 连音、`cl` 谱号变化、`dy` 力度、`tm` 速度、`ch` 和弦、`ai` AIlegro 请求/运行。
+  `n` 音符、`gc` 倚音、`tu` 连音、`cl` 谱号变化、`dy` 力度、`tm` 速度、`ch` 和弦、`sp` 线条、
+  `ai` AIlegro 请求/运行。
+- 新 id 要和文档里**所有**元素的 id 都不同（不只是同类元素），命令会检查。
 - **由调用方生成并放进命令里**（编辑器用随机 id，测试用 `sequentialIds()` 得到 `e_1`、`n_1`）。
   这是命令可重放、可协作的前提。
 
 ## 结构校验
 
 `validateScore(doc)` 返回问题列表（空 = 合法）：格式标记、至少一个小节和一个乐器、第一小节有
-拍号和调号、所有 id（乐器、谱表、括号、小节、速度、事件、音符、连音、谱号变化、力度、和弦）不重复、括号引用合法且有序、声部数 ≤ 4、事件非空且时值为正、offset 在小节内、
-事件有序且不重叠、不超出乐谱末尾、连音不跨小节线、和弦记号位置合法。
+拍号和调号、所有 id（乐器、谱表、括号、小节、速度、事件、音符、倚音、连音、谱号变化、力度、和弦、
+线条）不重复、括号引用合法且有序、声部数 ≤ 4、事件非空且时值为正、offset 在小节内、
+事件有序且不重叠、不超出乐谱末尾、连音不跨小节线、和弦记号位置合法、事件上的记号取值合法
+（`eventMarkProblems`）、倚音至少有一个音、线条合法（`spannerProblem`：类型、谱表、连线端点、
+锚点在小节内且 `end` 晚于 `start`）、同一谱表的八度线不重叠。
 **命令保证这些不变量**；导入的文件、AI 生成的文档要先校验。
 
 ## 文件格式 `.ailegro.json`
@@ -139,8 +186,11 @@ AIlegro 的和声条件。
 - 有理数写成字符串（`"1/4"`），音高写成名字（`"C#4"`）。
 - **每个事件一行**（还有连音、力度、谱号变化、和弦、速度、谱表、括号各一行），
   所以 `git diff` 能逐个音符显示修改。`.gitattributes` 把 `*.ailegro.json` 设为 LF 文本。
-- `version: 1`。**任何字段的增删改都要**：升版本号、在 `io/json.ts` 写从旧版本的迁移、
+- `version: 2`。**任何字段的增删改都要**：升版本号、在 `io/json.ts` 写从旧版本的迁移、
   加测试、更新本文档。读取更新版本的文件时报错，而不是猜。
+- 版本历史：v1（2026-10-01）初版；v2（2026-10-02）加入事件上的记号、倚音和 `spanners`。
+  v1 文件打开时自动迁移（新字段都是可选的，`spanners` 补为空列表），保存时写成 v2。
+  决策见 [ADR 0007](adr/0007-marks-graces-spanners.md)。
 
 ## 例子
 
@@ -155,8 +205,18 @@ AIlegro 的和声条件。
 4/4 第 4 拍开始、跨小节线的二分音符：一个事件 `offset "3/4"`、`duration "1/2"`，
 排版画成“四分音符 ⁀ 四分音符”。
 
+带倚音、断音、连线和渐强的一小节（文字记谱 `\acciaccatura d8 c4-.\<( d e f)\!`）：
+
+```jsonc
+// content 里 C5 这个事件（其余三个音略）
+{"id":"e_1","kind":"note","offset":"0","duration":"1/4","graces":[{"id":"gc_1","slash":true,"value":"eighth","notes":[{"id":"n_2","pitch":"D5"}]}],"notes":[{"id":"n_1","pitch":"C5"}],"articulations":["staccato"]}
+// spanners：连线从 C 到 F；渐强从 C 开始，停在 F 的起点
+{"id":"sp_1","kind":"slur","staffId":"st_1","from":"e_1","to":"e_4"}
+{"id":"sp_2","kind":"hairpin","staffId":"st_1","start":{"measureId":"m_1","offset":"0"},"end":{"measureId":"m_1","offset":"3/4"},"direction":"crescendo"}
+```
+
 ## 尚未建模（路线图）
 
-连线（slur）、渐强渐弱（hairpin）、歌词、装饰音（grace note）、装饰记号、反复房子（volta）、
-D.C./D.S.、八度记号、踏板、打击乐映射、声部（parts）提取的版面、小节内的显式休止符隐藏/移动。
+歌词、反复房子（volta）、D.C./D.S.、滑音（glissando）、跨谱表符杠、打击乐映射、
+声部（parts）提取的版面、小节内的显式休止符隐藏/移动、和弦里单个音的装饰。
 加任何一个都要遵守上面的版本规则。

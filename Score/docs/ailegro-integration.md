@@ -94,6 +94,16 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 
 已用 AIlegro 的 `score_events_v2.ScoreEvents.from_candidate` 读取过三个示例导出（钢琴、弦乐四重奏、管弦乐）。
 
+记号怎么进入记录（乐谱格式 v2 起）：
+
+- **倚音**：每个倚音音符是一条 `grace: true`、`dur: "0"` 的音，`on` 等于主音的起点（与 AIlegro 读 MusicXML
+  的方式一致；同一时刻的音照常按音高排序）；主音本身 `grace: false`、时值不变。
+- **渐强渐弱**：起点落在某个渐强 / 渐弱线条内的音带 `wedge: "crescendo"` / `"diminuendo"`（同一谱表），
+  其余为 `null`。
+- **重音**：`accent` 1 = 重音，2 = 强重音（marcato）。
+- 连线、踏板、装饰记号、震音、琶音、小音符目前**不进入记录**（AIlegro 的事件格式没有这些字段）。
+  八度记号只影响显示，记录里的 `pitch` 本来就是发声音高。
+
 ## 契约 2：`ailegro.compose-request/1`
 
 `buildComposeRequest(doc, spec, { requestId, createdAt, appVersion })`
@@ -174,7 +184,7 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
    `exact` 保留原值。检测三连音区间并建立连音组。
 5. 同一声部重叠时先换到空闲声部，实在不行截短前一个音（并给出警告）。
 6. 音高按结果的调和当时的和弦拼写；`accent` → accent / marcato；力度变化时加力度记号；
-   和弦写进和弦记号轨。
+   声部 1 里连续带同一 `wedge` 的音变成一个渐强 / 渐弱线条；和弦写进和弦记号轨。
 7. 默认先清空目标谱表在这些小节里的内容（`clearTargets`）。
 8. 所有内容带 `source: { kind: 'ai', model, runId, accepted: false }`，整个导入是**一个撤销步骤**。
    面板里“接受”= `provenance.accept`，“拒绝”= `provenance.reject`（删除未接受的内容）。

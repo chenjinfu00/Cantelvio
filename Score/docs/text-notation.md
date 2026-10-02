@@ -1,4 +1,4 @@
-# 文字记谱输入（AIlegro text notation v0）
+# 文字记谱输入（AIlegro text notation v1）
 
 代码：`packages/core/src/io/text.ts`（`parseText`、`textToCommands`）。编辑器：侧栏“文字输入”。
 灵感来自 LilyPond 的相对音高模式，但更简单，并且**默认按调号解释音名**（像键盘输入一样）。
@@ -13,6 +13,10 @@ c4 d e f | g2 g | a4 a a a | g1          % 小星星的开头（% 后是注释�
 c'4 d, e8. f16 g4~ g8 r8 <c e g>2 R      % 八度记号、附点、延音线、休止、和弦、休止到小节线
 3{ c8 d e } f#4 bb4 en4                  % 三连音；升 F、降 B、还原 E
 5:4{ c16 d e f g } a4                    % 五连音，显式比例
+c4-. d-> e-- f-^ g\fermata a\trill       % 演奏法与装饰记号（v1）
+c4\p\< d( e f) | g1\f                    % 力度、渐强、连线
+\acciaccatura d8 c4 \grace { e16 f } g4   % 倚音
+\8va c'4 d e f \loco g c,\sustainOn d e\sustainOff   % 八度记号、踏板
 ```
 
 ## 语法
@@ -35,6 +39,39 @@ c'4 d, e8. f16 g4~ g8 r8 <c e g>2 R      % 八度记号、附点、延音线、�
 | `\|` | 小节检查（可选）：位置不在小节线上时给出警告 |
 | `% …` | 注释到行尾 |
 
+## 记号与线条（v1）
+
+写在音符（或和弦）**后面**，可以连着写多个：`c4-.->\p(`。和 LilyPond 一致。
+
+| 写法 | 含义 |
+| --- | --- |
+| `-.` `-!` `--` `->` `-^` `-_` `-+` | 断音、顿音（楔形）、保持音、重音、强重音、半断音（保持音 + 断音）、闭音 |
+| `\staccato` `\tenuto` `\accent` `\marcato` `\staccatissimo` | 同上的长写法 |
+| `\fermata` `\shortfermata` `\longfermata` | 延长记号 |
+| `\upbow` `\downbow` `\flageolet`（`\harmonic`）`\stopped` `\open` `\snappizzicato` | 弦乐与铜管记号 |
+| `\trill` `\prall` `\mordent` `\turn` `\reverseturn` | 装饰记号：颤音、顺波音、逆波音、回音、逆回音 |
+| `:16` `:32` …（`c4:16`） | 单音震音，按 LilyPond 的意思：写的是**演奏出来的时值**。四分音符 `:16` 画 2 道，八分音符 `:16` 画 1 道（加上符尾就是十六分） |
+| `\arpeggio` `\arpeggioUp` `\arpeggioDown` | 琶音（和弦） |
+| `\breathe` `\caesura` | 换气记号、停顿号（在这个音之后） |
+| `\p` `\mf` `\ff` `\sfz` `\fp` …（`pppp`…`ffff`、`sf` `sffz` `fz` `sfp` `rf` `rfz`） | 力度（也可以写在休止符后） |
+| `\<` `\>` `\!` | 渐强、渐弱从这个音开始；`\!` 或下一个力度记号在那个音的起点结束；没写完的到文字末尾结束 |
+| `(` `)` | 连线：`(` 写在第一个音后，`)` 写在最后一个音后，可以嵌套 |
+| `\sustainOn` `\sustainOff` | 延音踏板（放在乐器最下面的谱表，钢琴就是左手） |
+| `\startTrillSpan` `\stopTrillSpan` | 带波浪线的长颤音 |
+
+写在音符**前面**的：
+
+| 写法 | 含义 |
+| --- | --- |
+| `\acciaccatura d8 c4` | 短倚音（带斜线）；后面必须跟一个音 |
+| `\appoggiatura d8 c2` | 长倚音 |
+| `\grace { c16 d }` / `\grace <c e>8` | 一个或几个倚音（几个时都不带斜线） |
+| `\8va` `\8vb` `\15ma` `\15mb`（或 `\ottava #1` `#-1` `#2` `#-2`） | 八度记号从这里开始；`\loco`（`\ottava #0`）结束，没结束的到文字末尾 |
+
+- 八度记号只改变显示：写 `\8va c'4` 存的仍是你写的发声音高 C6，谱上画成 C5 加 “8va”。
+- 在已有八度记号的地方再写八度记号，新的会替换重叠的部分（例如改错音时重写一遍）。
+- 倚音的时值默认八分音符，八度参照和普通音符一样连续计算。
+
 ## 八度怎么定
 
 - 第一个音：靠近**光标处这个声部的前一个音**；没有前一个音时，靠近谱号的中线
@@ -54,11 +91,18 @@ c'4 d, e8. f16 g4~ g8 r8 <c e g>2 R      % 八度记号、附点、延音线、�
 ## 错误与警告
 
 - 语法错误抛出 `TextNotationError`，消息里带字符位置：`unexpected "x" (at character 12)`、
-  `unterminated chord`、`a dot needs an explicit duration (e.g. 4.)`、`nested tuplets are not supported yet`。
-- 警告（不阻止写入）：小节检查失败、超出乐谱被截断、连音跨小节线。
+  `unterminated chord`、`a dot needs an explicit duration (e.g. 4.)`、`nested tuplets are not supported yet`、
+  `\p must follow a note`（力度写在音符后面）、`grace notes need a following note`。
+- 警告（不阻止写入）：小节检查失败、超出乐谱被截断、连音跨小节线、连线只有 `(` 没有 `)`。
+
+## 版本
+
+- v0（2026-10-01）：音符、和弦、休止、连音、延音线、小节检查。
+- v1（2026-10-02）：演奏法、装饰记号、震音、琶音、换气、力度、渐强渐弱、连线、踏板、颤音线、
+  倚音、八度记号。v0 的文字在 v1 里意思不变。
 
 ## 将来
 
-- 声部切换（`\voice 2` 之类）、力度和演奏法（`c4-. d->`）、连线 slur、歌词。
+- 声部切换（`\voice 2` 之类）、歌词。
 - 绝对八度模式（给语言模型用更稳）。
 - 从乐谱导出为文字记谱（往返），用于 AI 对话里的“把这几小节给我看”。

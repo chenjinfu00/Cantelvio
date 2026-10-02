@@ -94,6 +94,6 @@ graph LR
 | --- | --- |
 | 新的编辑操作 | `core/src/commands/types.ts` 加命令类型 → `content.ts` 或 `structure.ts` 写处理函数 → `apply.ts` 注册 → `commands.test.ts` 加测试 → `apps/web/src/state/actions.ts` 调用 → 快捷键/按钮 → 中英文字符串 |
 | 新的排版规则 | `engraving/src/layout/*` 改规则 → `engraving.test.ts` 加测试 → `npm run render -- --all --out out/` 看图 |
-| 新的记谱元素（如连音线 slur） | 模型字段（`score-model.md`、文件格式版本）→ 命令 → 排版 → 编辑器 → AIlegro 记录是否导出 |
+| 新的记谱元素（如歌词） | 模型字段（`score-model.md`、文件格式版本）→ 命令 → 排版 → 编辑器 → AIlegro 记录是否导出。连线、线条、倚音是现成的例子（[ADR 0007](adr/0007-marks-graces-spanners.md)） |
 | 新的 AIlegro 任务 | `bridge` 的 `ComposeTask` 和请求构建 → 契约文档 → 适配器支持 → 面板选项 |
 | 新的界面面板 | `apps/web/src/panels/` 新组件 → `SidePanel.tsx` 注册 → `i18n` 中英文 |
