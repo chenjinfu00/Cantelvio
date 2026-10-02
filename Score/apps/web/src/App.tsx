@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useT } from './i18n';
 import { handleKeyDown } from './keyboard/shortcuts';
+import { stopPlayback } from './playback/player';
+import { ConfirmDialog } from './panels/ConfirmDialog';
+import { Keypad } from './panels/Keypad';
 import { NewScoreDialog } from './panels/NewScoreDialog';
 import { Palette } from './panels/Palette';
 import { SidePanel } from './panels/SidePanel';
@@ -7,29 +11,92 @@ import { StatusBar } from './panels/StatusBar';
 import { Toast } from './panels/Toast';
 import { TopBar } from './panels/TopBar';
 import { ScoreView } from './score/ScoreView';
-import { autosave, saveScore } from './state/files';
-import { getStore, useEditor } from './state/store';
+import {
+  autosave,
+  hasFileHandle,
+  openDropped,
+  openScore,
+  saveScore,
+  saveScoreAs,
+} from './state/files';
+import { getStore, isDirty, useEditor } from './state/store';
 
 const AUTOSAVE_DELAY_MS = 800;
 
 export function App() {
+  const t = useT();
   const dialog = useEditor((s) => s.dialog);
   const lang = useEditor((s) => s.view.lang);
   const title = useEditor((s) => s.doc.meta.title);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [dropping, setDropping] = useState(false);
 
   // Global shortcuts (ignored while a dialog is open or while typing in a field).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (getStore().getState().dialog) return;
+      const s = getStore().getState();
+      if (s.dialog || s.confirm) return;
       handleKeyDown(e);
     };
     const onSave = () => void saveScore();
+    const onSaveAs = () => void saveScoreAs();
+    const onOpen = () => {
+      stopPlayback();
+      void openScore();
+    };
     window.addEventListener('keydown', onKey);
     window.addEventListener('ailegro:save', onSave);
+    window.addEventListener('ailegro:save-as', onSaveAs);
+    window.addEventListener('ailegro:open', onOpen);
     return () => {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('ailegro:save', onSave);
+      window.removeEventListener('ailegro:save-as', onSaveAs);
+      window.removeEventListener('ailegro:open', onOpen);
+    };
+  }, []);
+
+  // Leaving with changes that are not in the opened file asks first (new scores live in autosave).
+  useEffect(() => {
+    const onLeave = (e: BeforeUnloadEvent) => {
+      const s = getStore().getState();
+      if (!isDirty(s) || (!s.fileName && !hasFileHandle())) return;
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onLeave);
+    return () => window.removeEventListener('beforeunload', onLeave);
+  }, []);
+
+  // Drop a .ailegro.json file anywhere to open it.
+  useEffect(() => {
+    const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
+    const over = (e: DragEvent) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      setDropping(true);
+    };
+    const leave = (e: DragEvent) => {
+      if (e.relatedTarget === null) setDropping(false);
+    };
+    const drop = (e: DragEvent) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      setDropping(false);
+      const item = e.dataTransfer?.items?.[0] ?? null;
+      const file = e.dataTransfer?.files?.[0];
+      if (file) {
+        stopPlayback();
+        void openDropped(item, file);
+      }
+    };
+    window.addEventListener('dragover', over);
+    window.addEventListener('dragleave', leave);
+    window.addEventListener('drop', drop);
+    return () => {
+      window.removeEventListener('dragover', over);
+      window.removeEventListener('dragleave', leave);
+      window.removeEventListener('drop', drop);
     };
   }, []);
 
@@ -66,7 +133,14 @@ export function App() {
         <SidePanel />
       </main>
       <StatusBar savedAt={savedAt} />
+      <Keypad />
       {dialog === 'new' && <NewScoreDialog />}
+      <ConfirmDialog />
+      {dropping && (
+        <div className="drop-overlay" aria-hidden>
+          <span>{t('files.dropHint')}</span>
+        </div>
+      )}
       <Toast />
     </div>
   );

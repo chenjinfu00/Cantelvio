@@ -9,6 +9,8 @@ import {
   type ScorePosition,
   allStaves,
   findEventOfNote,
+  findGrace,
+  findNote,
   lengthOf,
   measureInfos,
   midiOf,
@@ -99,6 +101,11 @@ function snapOffset(hit: Hit): Rational {
 }
 
 function selectedRefs(doc: ScoreDoc, selection: Selection): string[] {
+  if (selection.kind === 'marks')
+    return [
+      ...selection.spanners.map((id) => `sp:${id}`),
+      ...selection.dynamics.map((id) => `dy:${id}`),
+    ];
   if (selection.kind === 'notes') {
     const refs = selection.noteIds.map((id) => `n:${id}`);
     const events = new Set<string>();
@@ -189,15 +196,37 @@ export function ScoreView() {
     }
     if (ref.startsWith('n:')) {
       actions.selectNote(ref.slice(2), extend);
-      const loc = findEventOfNote(store.doc, ref.slice(2));
-      const note = loc?.event.notes.find((n) => n.id === ref.slice(2));
-      if (note && loc)
-        void previewMidi([midiOf(note.pitch)], actions.programOf(store.doc, loc.staffId));
+      const found = findNote(store.doc, ref.slice(2));
+      if (found)
+        void previewMidi(
+          [midiOf(found.note.pitch)],
+          actions.programOf(store.doc, found.loc.staffId),
+        );
       return;
     }
     if (ref.startsWith('e:')) {
       const loc = store.doc && findEventByRef(store.doc, ref.slice(2));
       if (loc) store.select({ kind: 'notes', noteIds: loc });
+      return;
+    }
+    if (ref.startsWith('gc:')) {
+      const grace = findGrace(store.doc, ref.slice(3));
+      if (grace) store.select({ kind: 'notes', noteIds: grace.grace.notes.map((n) => n.id) });
+      return;
+    }
+    if (ref.startsWith('sp:') || ref.startsWith('dy:')) {
+      const id = ref.slice(3);
+      const isLine = ref.startsWith('sp:');
+      const sel = store.selection;
+      const prev =
+        extend && sel.kind === 'marks'
+          ? sel
+          : { kind: 'marks' as const, spanners: [], dynamics: [] };
+      store.select({
+        kind: 'marks',
+        spanners: isLine ? [...new Set([...prev.spanners, id])] : prev.spanners,
+        dynamics: isLine ? prev.dynamics : [...new Set([...prev.dynamics, id])],
+      });
       return;
     }
     if (ref.startsWith('rest:')) {

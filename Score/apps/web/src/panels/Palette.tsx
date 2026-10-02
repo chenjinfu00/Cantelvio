@@ -1,4 +1,4 @@
-import type { Articulation, NoteValue } from '@ailegro-score/core';
+import type { NoteValue } from '@ailegro-score/core';
 import type { GlyphName } from '@ailegro-score/engraving';
 import { Glyph } from '../components/Glyph';
 import { type MessageKey, useT } from '../i18n';
@@ -13,14 +13,6 @@ const DURATIONS: { value: NoteValue; glyph: GlyphName; key: string }[] = [
   { value: 'quarter', glyph: 'metNoteQuarterUp', key: '5' },
   { value: 'half', glyph: 'metNoteHalfUp', key: '6' },
   { value: 'whole', glyph: 'metNoteWhole', key: '7' },
-];
-
-const ARTICULATIONS: { a: Articulation; glyph: GlyphName; key: string }[] = [
-  { a: 'staccato', glyph: 'articStaccatoAbove', key: 'Shift+S' },
-  { a: 'accent', glyph: 'articAccentAbove', key: 'Shift+V' },
-  { a: 'tenuto', glyph: 'articTenutoAbove', key: 'Shift+N' },
-  { a: 'marcato', glyph: 'articMarcatoAbove', key: 'Shift+O' },
-  { a: 'fermata', glyph: 'fermataAbove', key: 'Shift+H' },
 ];
 
 export function Palette() {
@@ -95,18 +87,6 @@ export function Palette() {
         <button className="icon" onClick={() => actions.setAccidental(1)} title={t('input.sharp')}>
           <Glyph name="accidentalSharp" size={20} />
         </button>
-      </div>
-      <div className="group">
-        {ARTICULATIONS.map((x) => (
-          <button
-            key={x.a}
-            className="icon"
-            onClick={() => actions.toggleArticulation(x.a)}
-            title={`${t(`art.${x.a}` as MessageKey)} (${x.key})`}
-          >
-            <Glyph name={x.glyph} size={18} />
-          </button>
-        ))}
       </div>
       <div className="group voices" aria-label={t('input.voice')}>
         {[0, 1, 2, 3].map((v) => (

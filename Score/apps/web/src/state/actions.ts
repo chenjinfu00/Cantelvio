@@ -4,7 +4,6 @@
  * undoable step.
  */
 import {
-  type Articulation,
   type Command,
   type NoteEvent,
   type Pitch,
@@ -19,6 +18,7 @@ import {
   findEvent,
   findEventOfNote,
   findInstrument,
+  findNote,
   inputDurationAt,
   interval,
   invertInterval,
@@ -32,6 +32,7 @@ import {
   midiOf,
   moveBySemitone,
   nearestPitchForStep,
+  ottavaAt,
   pitchAtPosition,
   pitchBefore,
   rat,
@@ -45,7 +46,10 @@ import {
   voiceEvents,
 } from '@ailegro-score/core';
 import { type Selection, getStore } from './store';
+import { endPendingLine, extendPendingLine } from './marks';
 import { previewMidi } from '../playback/player';
+
+export { toggleArticulation } from './marks';
 
 const st = () => getStore().getState();
 
@@ -139,7 +143,10 @@ export function pitchForPosition(
   const clef = clefAt(doc, at.staffId, info.index, at.offset);
   const concertKey = keyAt(doc, info.index);
   const transposition = concertView ? null : transpositionOf(doc, at.staffId);
-  const natural = pitchAtPosition(position, clef);
+  const written = pitchAtPosition(position, clef);
+  // under an octave line the staff shows notes an octave (or two) away from their sound
+  const shift = ottavaAt(doc, at.staffId, absTime(doc, at));
+  const natural = shift ? { ...written, octave: written.octave + shift } : written;
   if (transposition) {
     const key = transposeKey(concertKey, invertInterval(transposition));
     return transpose({ ...natural, alter: keyAlter(key.fifths, natural.step) }, transposition);
@@ -196,7 +203,7 @@ function advanceCursor(at: ScorePosition, end: Rational): void {
 export function toggleNoteInput(): void {
   const s = st();
   if (s.input.active) {
-    s.setInput({ active: false });
+    s.setInput({ active: false, pendingLine: null });
     s.setCursor(null);
     return;
   }
@@ -269,7 +276,10 @@ export function enterPitches(
       ...(tieFromPrevious ? { tieFromPrevious: true } : {}),
     },
   ];
-  if (!s.apply(cmds, 'enter note')) return null;
+  // a line started during input grows over the new note (same undo step)
+  const line = extendPendingLine(cmds, { eventId, staffId: at.staffId, start, duration });
+  if (!s.apply([...cmds, ...line.commands], 'enter note')) return null;
+  if (line.commands.length) st().setInput({ pendingLine: line.next });
   const loc = findEvent(st().doc, eventId);
   getStore().setState({ selection: { kind: 'notes', noteIds }, lastEntered: eventId });
   advanceCursor(at, loc?.end ?? add(start, duration));
@@ -283,7 +293,10 @@ export function enterRest(): void {
   const duration = actualLength(doc, at);
   const start = absTime(doc, at);
   const grow = tupletContaining(doc, at) ? [] : growFor(doc, add(start, duration), true);
-  if (!s.apply([...grow, { type: 'rest.enter', at, duration }], 'enter rest')) return;
+  const cmds: Command[] = [...grow, { type: 'rest.enter', at, duration }];
+  const line = extendPendingLine(cmds, { eventId: null, staffId: at.staffId, start, duration });
+  if (!s.apply([...cmds, ...line.commands], 'enter rest')) return;
+  if (line.commands.length) st().setInput({ pendingLine: line.next });
   getStore().setState({ lastEntered: null, selection: { kind: 'rest', at } });
   const clipped = inputDurationAt(st().doc, at, duration);
   advanceCursor(at, add(start, clipped));
@@ -312,23 +325,40 @@ export function tie(): void {
   s.apply({ type: 'notes.setTie', noteIds, tie: anyUntied }, 'tie');
 }
 
-export function createTriplet(): void {
+/** MuseScore's ratios for Ctrl+2 … Ctrl+9: `actual` notes of the current value in the time of `normal`. */
+export const TUPLET_RATIOS: Readonly<Record<number, number>> = {
+  2: 3,
+  3: 2,
+  4: 3,
+  5: 4,
+  6: 4,
+  7: 4,
+  8: 6,
+  9: 8,
+};
+
+/** A tuplet of the current input value at the cursor (or the selected note). */
+export function createTuplet(actual: number, normal = TUPLET_RATIOS[actual] ?? 2): void {
   const at = ensureCursor();
   const s = st();
   const written = writtenLength();
-  // A triplet of the current value spans two of them: three eighths in the time of two.
+  // e.g. a triplet of eighths: three eighths in the time of two
   s.apply(
     {
       type: 'tuplet.create',
       at,
-      length: rat(written.n * 2, written.d),
-      actual: 3,
-      normal: 2,
+      length: rat(written.n * normal, written.d),
+      actual,
+      normal,
       id: s.ids.next('tu'),
     },
-    'triplet',
+    actual === 3 ? 'triplet' : 'tuplet',
     { cursor: at },
   );
+}
+
+export function createTriplet(): void {
+  createTuplet(3, 2);
 }
 
 // ------------------------------------------------------------------------------- selection editing
@@ -349,9 +379,9 @@ export function transposeSelection(semitones: number): void {
   if (!ids.length) return;
   const cmds: Command[] = [];
   for (const id of ids) {
-    const loc = findEventOfNote(s.doc, id);
-    const note = loc?.event.notes.find((n) => n.id === id);
-    if (!loc || !note) continue;
+    const found = findNote(s.doc, id);
+    if (!found) continue;
+    const { loc, note } = found;
     let p = note.pitch;
     if (Math.abs(semitones) === 12) p = transpose(p, interval(semitones > 0 ? 7 : -7, semitones));
     else p = moveBySemitone(p, semitones > 0 ? 1 : -1, keyAt(s.doc, loc.measureIndex));
@@ -365,28 +395,12 @@ export function setAccidental(alter: number): void {
   const ids = selectedNoteIds();
   const cmds: Command[] = [];
   for (const id of ids) {
-    const note = findEventOfNote(s.doc, id)?.event.notes.find((n) => n.id === id);
+    const note = findNote(s.doc, id)?.note;
     if (!note) continue;
     const target = note.pitch.alter === alter ? 0 : alter;
     cmds.push({ type: 'note.setPitch', noteId: id, pitch: { ...note.pitch, alter: target } });
   }
   if (cmds.length) s.apply(cmds, 'accidental', { selection: { kind: 'notes', noteIds: ids } });
-}
-
-export function toggleArticulation(articulation: Articulation): void {
-  const s = st();
-  const eventIds = [
-    ...new Set(
-      selectedNoteIds()
-        .map((id) => findEventOfNote(s.doc, id)?.event.id)
-        .filter((x): x is string => !!x),
-    ),
-  ];
-  if (!eventIds.length) return;
-  const on = eventIds.some(
-    (id) => !findEvent(s.doc, id)?.event.articulations?.includes(articulation),
-  );
-  s.apply({ type: 'events.setArticulation', eventIds, articulation, on }, 'articulation');
 }
 
 export function setSelectedDuration(): void {
@@ -411,6 +425,13 @@ export function setSelectedDuration(): void {
 export function deleteSelection(): void {
   const s = st();
   const sel = s.selection;
+  if (sel.kind === 'marks') {
+    const cmds: Command[] = [];
+    if (sel.spanners.length) cmds.push({ type: 'spanners.delete', ids: sel.spanners });
+    if (sel.dynamics.length) cmds.push({ type: 'dynamic.delete', ids: sel.dynamics });
+    if (cmds.length) s.apply(cmds, 'delete', { selection: { kind: 'none' } });
+    return;
+  }
   if (sel.kind === 'notes') {
     s.apply({ type: 'notes.delete', noteIds: sel.noteIds }, 'delete', {
       selection: { kind: 'none' },
@@ -475,6 +496,32 @@ export function moveSelection(direction: 1 | -1): void {
   const next = list[i + direction];
   if (next) s.select({ kind: 'notes', noteIds: next.notes.map((n) => n.id) });
 }
+
+/** A letter with grace notes selected (outside note input) re-pitches them, nearest octave. */
+export function repitchSelection(step: Step): boolean {
+  const s = st();
+  if (s.selection.kind !== 'notes') return false;
+  const cmds: Command[] = [];
+  for (const id of s.selection.noteIds) {
+    const found = findNote(s.doc, id);
+    if (!found?.grace) return false;
+    const key = keyAt(s.doc, found.loc.measureIndex);
+    cmds.push({
+      type: 'note.setPitch',
+      noteId: id,
+      pitch: nearestPitchForStep(step, found.note.pitch, key),
+    });
+  }
+  if (!cmds.length) return false;
+  if (s.apply(cmds, 're-pitch', { selection: s.selection })) {
+    const p = (cmds[0] as Extract<Command, { type: 'note.setPitch' }>).pitch;
+    const loc = findEventOfNote(st().doc, s.selection.noteIds[0]!);
+    if (loc) void previewMidi([midiOf(p)], programOf(st().doc, loc.staffId));
+  }
+  return true;
+}
+
+export { endPendingLine };
 
 // ------------------------------------------------------------------------------- measures
 

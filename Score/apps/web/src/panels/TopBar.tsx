@@ -1,11 +1,44 @@
 import { SAMPLES } from '@ailegro-score/core';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BrandText } from '../components/BrandText';
 import { IN_ARTIFACT } from '../host';
 import { useT } from '../i18n';
 import { stopPlayback, togglePlayback } from '../playback/player';
-import { exportSvg, openScore, saveScore } from '../state/files';
-import { getStore, useEditor } from '../state/store';
+import {
+  CAN_PICK,
+  type RecentFile,
+  confirmDiscard,
+  exportSvg,
+  loadNew,
+  openRecent,
+  openScore,
+  recentFiles,
+  saveScore,
+  saveScoreAs,
+} from '../state/files';
+import { getStore, isDirty, useEditor } from '../state/store';
+
+/** A dropdown that closes on outside clicks and Escape. */
+function useDropdown() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: Event) => {
+      if (
+        e instanceof KeyboardEvent ? e.key === 'Escape' : !ref.current?.contains(e.target as Node)
+      )
+        setOpen(false);
+    };
+    window.addEventListener('pointerdown', close);
+    window.addEventListener('keydown', close);
+    return () => {
+      window.removeEventListener('pointerdown', close);
+      window.removeEventListener('keydown', close);
+    };
+  }, [open]);
+  return { open, setOpen, ref };
+}
 
 export function TopBar() {
   const t = useT();
@@ -14,8 +47,17 @@ export function TopBar() {
   const canRedo = useEditor((s) => s.session.canRedo);
   const playing = useEditor((s) => s.playing);
   const title = useEditor((s) => s.doc.meta.title);
-  const [demoOpen, setDemoOpen] = useState(false);
+  const dirty = useEditor((s) => isDirty(s));
+  const keypadOpen = useEditor((s) => s.keypad.open);
+  const demo = useDropdown();
+  const recent = useDropdown();
+  const [recentList, setRecentList] = useState<RecentFile[]>([]);
   const store = getStore().getState;
+
+  const showRecent = async () => {
+    setRecentList(await recentFiles());
+    recent.setOpen(!recent.open);
+  };
 
   return (
     <header className="topbar">
@@ -27,29 +69,77 @@ export function TopBar() {
           <BrandText text="AIlegro Score" />
         </strong>
         <span className="doc-title" title={title}>
+          {dirty && <span className="dirty-dot" aria-label={t('status.dirty')} />}
           {title}
         </span>
       </div>
-      <nav className="menu" aria-label="file">
-        <button onClick={() => store().setDialog('new')}>{t('menu.new')}</button>
-        <button onClick={() => void openScore()}>{t('menu.open')}</button>
+      <nav className="menu" aria-label={t('menu.file')}>
+        <button
+          onClick={async () => {
+            if (await confirmDiscard()) store().setDialog('new');
+          }}
+        >
+          {t('menu.new')}
+        </button>
+        <div className="split" ref={recent.ref}>
+          <button onClick={() => void openScore()} title="Ctrl+O">
+            {t('menu.open')}
+          </button>
+          {CAN_PICK && (
+            <button
+              className="split-arrow"
+              onClick={() => void showRecent()}
+              aria-expanded={recent.open}
+              aria-label={t('menu.recent')}
+              title={t('menu.recent')}
+            >
+              ▾
+            </button>
+          )}
+          {recent.open && (
+            <div className="dropdown-menu">
+              <div className="dropdown-title">{t('menu.recent')}</div>
+              {recentList.length === 0 && (
+                <div className="dropdown-empty">{t('menu.recentEmpty')}</div>
+              )}
+              {recentList.map((r) => (
+                <button
+                  key={r.id}
+                  onClick={() => {
+                    recent.setOpen(false);
+                    stopPlayback();
+                    void openRecent(r);
+                  }}
+                  title={r.name}
+                >
+                  <span>{r.title || r.name}</span>
+                  <small>{r.name}</small>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <button onClick={() => void saveScore()} title="Ctrl+S">
           {t('menu.save')}
         </button>
-        <div className="dropdown">
-          <button onClick={() => setDemoOpen(!demoOpen)} aria-expanded={demoOpen}>
+        <button onClick={() => void saveScoreAs()} title="Ctrl+Shift+S">
+          {t('menu.saveAs')}
+        </button>
+        <div className="dropdown" ref={demo.ref}>
+          <button onClick={() => demo.setOpen(!demo.open)} aria-expanded={demo.open}>
             {t('menu.demo')} ▾
           </button>
-          {demoOpen && (
-            <div className="dropdown-menu" onMouseLeave={() => setDemoOpen(false)}>
+          {demo.open && (
+            <div className="dropdown-menu">
               {SAMPLES.map((s) => (
                 <button
                   key={s.id}
-                  onClick={() => {
+                  onClick={async () => {
+                    demo.setOpen(false);
+                    if (!(await confirmDiscard())) return;
                     stopPlayback();
                     // examples are built with fixed ids; give each opened copy its own identity
-                    store().load({ ...s.build(view.lang), id: store().ids.next('sc') });
-                    setDemoOpen(false);
+                    loadNew({ ...s.build(view.lang), id: store().ids.next('sc') });
                   }}
                 >
                   {s.title[view.lang]}
@@ -86,6 +176,15 @@ export function TopBar() {
           title="Space"
         >
           {playing ? `■ ${t('play.stop')}` : `▶ ${t('play.play')}`}
+        </button>
+        <span className="sep" />
+        <button
+          className={keypadOpen ? 'on' : ''}
+          onClick={() => store().setKeypad({ open: !keypadOpen, collapsed: false })}
+          aria-pressed={keypadOpen}
+          title={`${t('keypad.toggle')} (K)`}
+        >
+          ⌨ {t('keypad.toggle')}
         </button>
         <span className="sep" />
         <label className="toggle">

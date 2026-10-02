@@ -1,13 +1,25 @@
 /**
  * Keyboard shortcuts, following MuseScore conventions where they exist:
  * N input mode · 1–8 durations · . dot · A–G notes · Shift+A–G add to chord · 0 rest ·
- * ↑/↓ semitone · Ctrl+↑/↓ octave · ←/→ move · Delete · + tie · Ctrl+3 triplet ·
- * Ctrl+Alt+1–4 voice · Ctrl+B add measure · Space play · Ctrl+Z / Ctrl+Y undo/redo · Esc.
+ * ↑/↓ semitone · Ctrl+↑/↓ octave · ←/→ move · Delete · + tie · Ctrl+2–9 tuplets ·
+ * Ctrl+Alt+1–4 voice · S slur · < > hairpins · / acciaccatura · X flip stem ·
+ * Ctrl+Alt+O 8va (Shift: 8vb) · K keypad (Alt+1–6 its tabs) · Ctrl+B add measure · Space play ·
+ * Ctrl+Z / Ctrl+Y undo/redo · Ctrl+S save (Shift: save as) · Ctrl+O open · Esc.
  */
 import type { NoteValue, Step } from '@ailegro-score/core';
 import * as actions from '../state/actions';
-import { getStore } from '../state/store';
+import * as marks from '../state/marks';
+import { type KeypadTab, getStore } from '../state/store';
 import { togglePlayback } from '../playback/player';
+
+const KEYPAD_TABS: readonly KeypadTab[] = [
+  'notes',
+  'more',
+  'articulations',
+  'ornaments',
+  'lines',
+  'dynamics',
+];
 
 const DURATION_KEYS: Record<string, NoteValue> = {
   '1': '64th',
@@ -47,7 +59,18 @@ export function handleKeyDown(e: KeyboardEvent): void {
   }
   if (mod && key.toLowerCase() === 's') {
     e.preventDefault();
-    window.dispatchEvent(new CustomEvent('ailegro:save'));
+    window.dispatchEvent(new CustomEvent(e.shiftKey ? 'ailegro:save-as' : 'ailegro:save'));
+    return;
+  }
+  if (mod && !e.shiftKey && !e.altKey && key.toLowerCase() === 'o') {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('ailegro:open'));
+    return;
+  }
+  // Ctrl+Alt+O 8va, Ctrl+Alt+Shift+O 8vb (MuseScore)
+  if (mod && e.altKey && e.code === 'KeyO') {
+    e.preventDefault();
+    marks.addLine(e.shiftKey ? '8vb' : '8va');
     return;
   }
   if (mod && key.toLowerCase() === 'b') {
@@ -63,10 +86,16 @@ export function handleKeyDown(e: KeyboardEvent): void {
     if (s.cursor) store.setState({ cursor: { ...s.cursor, voice } });
     return;
   }
-  // Ctrl+3 (Control on macOS: the browser keeps ⌘3 for switching tabs)
-  if (mod && !e.altKey && (key === '3' || e.code === 'Digit3')) {
+  // Ctrl+2–9 tuplets (Control on macOS: the browser keeps ⌘ + digit for switching tabs)
+  if (mod && !e.altKey && /^Digit[2-9]$/.test(e.code)) {
     e.preventDefault();
-    actions.createTriplet();
+    actions.createTuplet(Number(e.code.slice(5)));
+    return;
+  }
+  // Alt+1–6: keypad tabs (e.code: Option changes the character on macOS)
+  if (e.altKey && !mod && /^Digit[1-6]$/.test(e.code)) {
+    e.preventDefault();
+    s.setKeypad({ open: true, collapsed: false, tab: KEYPAD_TABS[Number(e.code.slice(5)) - 1]! });
     return;
   }
   if (key === ' ') {
@@ -75,8 +104,34 @@ export function handleKeyDown(e: KeyboardEvent): void {
     return;
   }
   if (key === 'Escape') {
-    if (s.input.active) actions.toggleNoteInput();
+    if (s.input.pendingLine) marks.endPendingLine();
+    else if (s.input.active) actions.toggleNoteInput();
     else s.select({ kind: 'none' });
+    return;
+  }
+  if (!mod && !e.altKey && (key === 'k' || key === 'K') && !e.shiftKey) {
+    e.preventDefault();
+    s.setKeypad({ open: !s.keypad.open, collapsed: false });
+    return;
+  }
+  if (!mod && !e.altKey && (key === 's' || key === 'S') && !e.shiftKey) {
+    e.preventDefault();
+    marks.addLine('slur');
+    return;
+  }
+  if (!mod && (key === '<' || key === '>')) {
+    e.preventDefault();
+    marks.addLine(key === '<' ? 'crescendo' : 'diminuendo');
+    return;
+  }
+  if (!mod && key === '/') {
+    e.preventDefault();
+    marks.addGrace(e.altKey ? 'appoggiatura' : 'acciaccatura');
+    return;
+  }
+  if (!mod && !e.altKey && (key === 'x' || key === 'X') && !e.shiftKey) {
+    e.preventDefault();
+    marks.flipStem();
     return;
   }
   if (!mod && (key === 'n' || key === 'N') && !e.shiftKey) {
@@ -102,6 +157,11 @@ export function handleKeyDown(e: KeyboardEvent): void {
     return;
   }
   if (!mod && /^[a-gA-G]$/.test(key)) {
+    // grace notes selected: the letter re-pitches them
+    if (!s.input.active && !e.shiftKey && actions.repitchSelection(key.toUpperCase() as Step)) {
+      e.preventDefault();
+      return;
+    }
     if (!s.input.active && !(e.shiftKey && s.lastEntered)) {
       // like MuseScore, typing a letter outside input mode starts input at the selection
       actions.toggleNoteInput();

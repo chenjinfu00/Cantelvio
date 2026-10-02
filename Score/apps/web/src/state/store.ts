@@ -5,11 +5,13 @@
 import {
   type Command,
   CommandError,
+  type HistoryEntry,
   type IdGenerator,
   type NoteValue,
   type ScoreDoc,
   type ScorePosition,
   Session,
+  type Spanner,
   randomIds,
 } from '@ailegro-score/core';
 import { create } from 'zustand';
@@ -25,13 +27,53 @@ export type Selection =
       readonly staffTo: number;
       readonly measureFrom: number;
       readonly measureTo: number;
+    }
+  /** Lines (spanners) and dynamics picked on the page. */
+  | {
+      readonly kind: 'marks';
+      readonly spanners: readonly string[];
+      readonly dynamics: readonly string[];
     };
+
+/**
+ * A line started during note input: it grows with every note entered until it is ended
+ * (the same key again, Esc, or leaving note input).
+ */
+export interface PendingLine {
+  /** The spanner as it is (or will be) in the document. */
+  readonly spanner: Spanner;
+  /** False until the document holds it (a slur needs a second note first). */
+  readonly created: boolean;
+  readonly voice: number;
+}
 
 export interface InputState {
   readonly active: boolean;
   readonly value: NoteValue;
   readonly dots: number;
   readonly voice: number;
+  readonly pendingLine: PendingLine | null;
+}
+
+export type KeypadTab = 'notes' | 'more' | 'articulations' | 'ornaments' | 'lines' | 'dynamics';
+
+export interface KeypadState {
+  readonly open: boolean;
+  readonly collapsed: boolean;
+  readonly tab: KeypadTab;
+  /** Position of the floating window (px from the top-left of the viewport). */
+  readonly x: number;
+  readonly y: number;
+}
+
+export interface ConfirmRequest {
+  readonly message: string;
+  readonly actions: readonly {
+    readonly id: string;
+    readonly label: string;
+    readonly primary?: boolean;
+  }[];
+  readonly resolve: (id: string) => void;
 }
 
 export interface ViewState {
@@ -66,6 +108,10 @@ export interface EditorState extends EditorUiState {
     readonly at: number;
   } | null;
   readonly fileName: string | null;
+  /** Newest history entry when the document was last saved or opened (dirty = it differs). */
+  readonly cleanEntry: HistoryEntry | null;
+  readonly keypad: KeypadState;
+  readonly confirm: ConfirmRequest | null;
   readonly changedAt: number;
   /** Incremented whenever another document is loaded (panels reset their local state). */
   readonly generation: number;
@@ -88,6 +134,54 @@ export interface EditorState extends EditorUiState {
   setPlaying(playing: boolean, playhead?: number | null): void;
   setPlayhead(playhead: number | null): void;
   notify(text: string, kind?: 'info' | 'error'): void;
+  setKeypad(patch: Partial<KeypadState>): void;
+  /** The document now matches the file (after saving). */
+  markSaved(fileName?: string | null): void;
+  /** Ask the user to pick one of the actions; resolves with its id. */
+  ask(message: string, actions: ConfirmRequest['actions']): Promise<string>;
+}
+
+/** True when the document has changes that are not in its file. */
+export function isDirty(s: Pick<EditorState, 'session' | 'cleanEntry'>): boolean {
+  const past = s.session.history.past;
+  return (past[past.length - 1] ?? null) !== s.cleanEntry;
+}
+
+const KEYPAD_KEY = 'ailegro-score:keypad';
+const KEYPAD_TABS: readonly KeypadTab[] = [
+  'notes',
+  'more',
+  'articulations',
+  'ornaments',
+  'lines',
+  'dynamics',
+];
+
+/** The keypad as the user left it; open on wide screens on a first visit. */
+function initialKeypad(): KeypadState {
+  const wide = typeof window === 'undefined' || window.innerWidth >= 760;
+  const fallback: KeypadState = {
+    open: wide,
+    collapsed: false,
+    tab: 'notes',
+    x: 16,
+    y: typeof window === 'undefined' ? 200 : Math.max(120, window.innerHeight - 440),
+  };
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(KEYPAD_KEY) ?? 'null',
+    ) as Partial<KeypadState> | null;
+    if (!saved) return fallback;
+    return {
+      open: typeof saved.open === 'boolean' ? saved.open : fallback.open,
+      collapsed: !!saved.collapsed,
+      tab: KEYPAD_TABS.includes(saved.tab as KeypadTab) ? (saved.tab as KeypadTab) : 'notes',
+      x: Number.isFinite(saved.x) ? saved.x! : fallback.x,
+      y: Number.isFinite(saved.y) ? saved.y! : fallback.y,
+    };
+  } catch {
+    return fallback;
+  }
 }
 
 /** UI language: the saved choice, else Chinese (the owner's language; English is one click away). */
@@ -114,7 +208,7 @@ export function createEditorStore(doc: ScoreDoc) {
     selection: { kind: 'none' },
     cursor: null,
     lastEntered: null,
-    input: { active: false, value: 'quarter', dots: 0, voice: 0 },
+    input: { active: false, value: 'quarter', dots: 0, voice: 0, pendingLine: null },
     view: {
       zoom: initialZoom(),
       concertPitch: doc.settings.concertPitch,
@@ -128,6 +222,9 @@ export function createEditorStore(doc: ScoreDoc) {
     dialog: null,
     toast: null,
     fileName: null,
+    cleanEntry: null,
+    keypad: initialKeypad(),
+    confirm: null,
     changedAt: 0,
     generation: 0,
     ids: randomIds(),
@@ -181,8 +278,9 @@ export function createEditorStore(doc: ScoreDoc) {
         selection: { kind: 'none' },
         cursor: null,
         lastEntered: null,
-        input: { ...get().input, active: false },
+        input: { ...get().input, active: false, pendingLine: null },
         fileName,
+        cleanEntry: null,
         changedAt: Date.now(),
         generation: get().generation + 1,
         view: { ...get().view, concertPitch: next.settings.concertPitch },
@@ -222,6 +320,36 @@ export function createEditorStore(doc: ScoreDoc) {
     },
     notify(text, kind = 'info') {
       set({ toast: { text, kind, at: Date.now() } });
+    },
+    setKeypad(patch) {
+      const keypad = { ...get().keypad, ...patch };
+      try {
+        localStorage.setItem(KEYPAD_KEY, JSON.stringify(keypad));
+      } catch {
+        /* ignore */
+      }
+      set({ keypad });
+    },
+    markSaved(fileName) {
+      const past = get().session.history.past;
+      set({
+        cleanEntry: past[past.length - 1] ?? null,
+        ...(fileName !== undefined ? { fileName } : {}),
+      });
+    },
+    ask(message, actions) {
+      return new Promise<string>((resolve) => {
+        set({
+          confirm: {
+            message,
+            actions,
+            resolve: (id) => {
+              set({ confirm: null });
+              resolve(id);
+            },
+          },
+        });
+      });
     },
   }));
 }

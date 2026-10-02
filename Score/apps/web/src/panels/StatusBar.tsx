@@ -6,7 +6,7 @@ import {
 } from '@ailegro-score/core';
 import { useState } from 'react';
 import { type MessageKey, useT } from '../i18n';
-import { type Selection, useEditor } from '../state/store';
+import { type Selection, isDirty, useEditor } from '../state/store';
 
 function describePosition(doc: ScoreDoc, at: ScorePosition): { bar: number; beat: string } {
   const info = measureInfo(doc, at.measureId);
@@ -54,7 +54,9 @@ export function StatusBar({ savedAt }: { savedAt: number | null }) {
   if (selection.kind === 'notes' && selection.noteIds.length > 1)
     where += ` · ${t('status.notes', { n: selection.noteIds.length })}`;
   const duration = `${input.dots ? t('status.dotted') : ''}${t(`dur.${input.value}` as MessageKey)}`;
-  const saved = savedAt !== null && savedAt >= changedAt;
+  const autosaved = savedAt !== null && savedAt >= changedAt;
+  const dirty = useEditor((s) => isDirty(s));
+  const fileName = useEditor((s) => s.fileName);
 
   return (
     <footer className="statusbar">
@@ -69,8 +71,12 @@ export function StatusBar({ savedAt }: { savedAt: number | null }) {
       <span className="parts">
         {t('status.summary', { p: doc.parts.length, m: doc.measures.length })}
       </span>
-      <span className={saved ? 'saved' : 'unsaved'}>
-        {saved ? t('status.saved') : t('status.unsaved')}
+      <span
+        className={`file-state ${dirty ? 'unsaved' : 'saved'}`}
+        title={autosaved ? t('status.autosaved') : undefined}
+      >
+        {fileName ? `${fileName} · ` : ''}
+        {dirty ? t('status.dirty') : fileName ? t('status.clean') : t('status.newFile')}
       </span>
       <button className="link" onClick={() => setHelp(!help)} aria-expanded={help}>
         {t('status.shortcuts')}

@@ -2,6 +2,7 @@ import { type NoteValue, TEMPLATES, createScore, lengthOf } from '@ailegro-score
 import { useEffect, useRef, useState } from 'react';
 import { type MessageKey, useT } from '../i18n';
 import { stopPlayback } from '../playback/player';
+import { loadNew } from '../state/files';
 import { getStore, useEditor } from '../state/store';
 
 const MAJOR = ['C♭', 'G♭', 'D♭', 'A♭', 'E♭', 'B♭', 'F', 'C', 'G', 'D', 'A', 'E', 'B', 'F♯', 'C♯'];
@@ -68,9 +69,8 @@ export function NewScoreDialog() {
       now: new Date().toISOString(),
     });
     stopPlayback();
-    const s = getStore().getState();
-    s.load(doc);
-    s.setDialog(null);
+    loadNew(doc);
+    getStore().getState().setDialog(null);
   };
 
   return (
