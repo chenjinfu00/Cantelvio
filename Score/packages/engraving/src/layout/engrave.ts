@@ -625,7 +625,8 @@ function buildSystem(
         if (sorted.length === 1)
           dir = nm.multiVoice ? (p.chord.voice % 2 === 0 ? -1 : 1) : p.chord.stem === 'up' ? 1 : -1;
         else dir = idx < sorted.length / 2 ? -1 : 1;
-        const key = `${p.chord.voice}:${note.display.step}${note.display.alter}${note.display.octave}`;
+        // sounding pitch: a tie into or out of an octave line joins notes written an octave apart
+        const key = `${p.chord.voice}:${note.concert.step}${note.concert.alter}${note.concert.octave}`;
         const nx = p.x + h.x;
         const nw = p.geom.noteheadWidth;
         if (note.tiedFromPrev) {

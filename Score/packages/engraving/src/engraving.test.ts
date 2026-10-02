@@ -11,6 +11,7 @@ import {
   type ScoreDoc,
 } from '@ailegro-score/core';
 import { describe, expect, it } from 'vitest';
+import type { GlyphGraphic, Graphic } from './graphics';
 import { layoutScore, offsetToX, xToOffset } from './layout/engrave';
 import { buildStaffNotation, type NChord } from './layout/notation';
 import { measureFrame, splitNote, splitRest, tupletFrame } from './layout/rhythm';
@@ -154,6 +155,39 @@ describe('marks and lines', () => {
     expect(first.ottava).toBe(1);
     const after = m2!.voices[0]!.items[0] as NChord;
     expect(after.ottava).toBe(0);
+  });
+
+  it('ties a note into an octave line with one tie', () => {
+    const doc = scoreWith("c''4~ \\8va c4 d e \\loco");
+    const svg = svgOf(doc);
+    expect(svg.split('class="tie"').length - 1).toBe(1);
+    const [m1] = buildStaffNotation(doc, allStaves(doc)[0]!, { concertPitch: false });
+    const [a, b] = m1!.voices[0]!.items as NChord[];
+    expect(a!.notes[0]!.tieToNext).toBe(true);
+    expect(b!.notes[0]!.tiedFromPrev).toBe(true);
+  });
+
+  it('stacks staccato next to the notehead and the accent outside it', () => {
+    // whatever order a file lists them in
+    const doc0 = scoreWith('g4 a b c');
+    const staff = allStaves(doc0)[0]!.staff.id;
+    const m = doc0.measures[0]!.id;
+    const bar = doc0.content[staff]![m]!;
+    const [first, ...rest] = bar.voices[0]!;
+    const marked = { ...first!, articulations: ['accent', 'staccato'] as const };
+    const doc: ScoreDoc = {
+      ...doc0,
+      content: {
+        ...doc0.content,
+        [staff]: { ...doc0.content[staff]!, [m]: { ...bar, voices: [[marked, ...rest]] } },
+      },
+    };
+    const glyphs = (gs: readonly Graphic[]): GlyphGraphic[] =>
+      gs.flatMap((g) => (g.kind === 'glyph' ? [g] : g.kind === 'group' ? glyphs(g.children) : []));
+    const all = glyphs(layoutScore(doc).pages[0]!.graphics);
+    const yOf = (name: string) => all.find((g) => g.name === name)!.y;
+    // g4 has its stem up: the marks go below, the staccato nearer the notehead (higher)
+    expect(yOf('articStaccatoBelow')).toBeLessThan(yOf('articAccentBelow'));
   });
 
   it('draws every kind of spanner and mark of the demo', () => {

@@ -9,6 +9,7 @@
  * (`placeMarks`).
  */
 import {
+  ARTICULATIONS,
   type Arpeggio,
   type Articulation,
   NOTE_VALUE_BEAMS,
@@ -362,11 +363,17 @@ export function chordGeometry(chord: NChord, multiVoice: boolean, staffLines = 5
     // clear of the principal's ledger lines and a stem on its left
     let edge = left - 0.65;
     const built: GraceGeom[] = [];
+    const levels = chord.graces.map((g) => NOTE_VALUE_BEAMS[g.value]);
+    const beamable =
+      chord.graces.length > 1 && chord.graces.every((g, k) => hasStem(g.value) && levels[k]! > 0);
     for (let k = chord.graces.length - 1; k >= 0; k--) {
       const g = chord.graces[k]!;
       const gh = NOTEHEAD[g.value];
       const gw = glyphWidth(gh, gm);
       const gStemmed = hasStem(g.value);
+      // a flag on an up-stem sticks out to the right of the notehead
+      if (!beamable && graceUp && gStemmed && levels[k]! > 0)
+        edge -= glyphWidth(FLAG_UP[Math.min(levels[k]!, 5) - 1]!, gm) * 0.75;
       // provisional heads at x = 0, then shifted so the chord ends at `edge`
       const heads0 = noteheadsFor(g.notes, gh, graceUp, gStemmed, gm);
       const width = Math.max(...heads0.map((h) => h.x + gw)) - Math.min(...heads0.map((h) => h.x));
@@ -406,8 +413,6 @@ export function chordGeometry(chord: NChord, multiVoice: boolean, staffLines = 5
       edge = Math.min(gLeft, ...accs.map((a) => a.x)) - 0.25;
     }
     // flags or beams, and the acciaccatura stroke
-    const levels = chord.graces.map((g) => NOTE_VALUE_BEAMS[g.value]);
-    const beamable = built.length > 1 && built.every((g, k) => g.stem && levels[k]! > 0);
     const dir = graceUp ? -1 : 1;
     if (beamable) {
       const tipY = graceUp
@@ -533,7 +538,10 @@ export function placeMarks(chord: NChord, geom: ChordGeom): PlacedGlyph[] {
   const sideAbove = stemSide ? up : !up;
   let cursor = sideAbove ? topY - 0.75 : bottomY + 0.75;
   if (stemSide && stem) cursor = sideAbove ? stem.yTip - 0.5 : stem.yTip + 0.5;
-  const arts = chord.articulations;
+  // stacking order, whatever order a file lists them in
+  const arts = [...chord.articulations].sort(
+    (a, b) => ARTICULATIONS.indexOf(a) - ARTICULATIONS.indexOf(b),
+  );
   for (const a of arts) {
     if (!NOTE_SIDE.has(a)) continue;
     const g = ARTICULATION_GLYPH[a][sideAbove ? 0 : 1];
