@@ -124,7 +124,8 @@ export function handleKeyDown(e: KeyboardEvent): void {
     marks.addLine(key === '<' ? 'crescendo' : 'diminuendo');
     return;
   }
-  if (!mod && key === '/') {
+  // e.code for Alt+/: Option turns "/" into "÷" on macOS
+  if (!mod && (key === '/' || (e.altKey && e.code === 'Slash'))) {
     e.preventDefault();
     marks.addGrace(e.altKey ? 'appoggiatura' : 'acciaccatura');
     return;

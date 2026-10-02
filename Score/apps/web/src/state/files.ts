@@ -10,7 +10,7 @@ import { type ScoreDoc, parseScore, serializeScore, validateScore } from '@aileg
 import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
 import { IN_ARTIFACT, artifactDownloads } from '../host';
 import { translate } from '../i18n';
-import { getStore, isDirty } from './store';
+import { currentEntry, getStore, isDirty } from './store';
 
 const AUTOSAVE_KEY = 'ailegro-score:autosave';
 
@@ -209,21 +209,39 @@ function fileText(doc: ScoreDoc): string {
   return serializeScore({ ...doc, meta: { ...doc.meta, modifiedAt: new Date().toISOString() } });
 }
 
-function savedAs(name: string, downloaded = false): void {
+/** The document together with the history entry it was taken at. */
+interface Snapshot {
+  readonly doc: ScoreDoc;
+  readonly entry: ReturnType<typeof currentEntry>;
+}
+
+function snapshot(): Snapshot {
   const s = getStore().getState();
-  s.markSaved(name);
+  return { doc: s.doc, entry: currentEntry(s) };
+}
+
+/** Write the document as it is now; edits made while the file is written stay unsaved. */
+async function writeSnapshot(h: FileHandleLike): Promise<Snapshot> {
+  const snap = snapshot();
+  await writeTo(h, fileText(snap.doc));
+  return snap;
+}
+
+function savedAs(name: string, snap: Snapshot, downloaded = false): void {
+  const s = getStore().getState();
+  s.markSaved(name, snap.entry);
   s.notify(translate(s.view.lang, downloaded ? 'files.downloaded' : 'files.saved', { f: name }));
 }
 
 /** Save to the file the score came from; the first time, ask where (Save As). */
 export async function saveScore(): Promise<boolean> {
-  const s = getStore().getState();
   if (current && CAN_PICK) {
+    const h = current;
     try {
-      if (await permitted(current, 'readwrite')) {
-        await writeTo(current, fileText(s.doc));
-        savedAs(current.name);
-        void remember(current, s.doc.meta.title);
+      if (await permitted(h, 'readwrite')) {
+        const snap = await writeSnapshot(h);
+        savedAs(h.name, snap);
+        void remember(h, snap.doc.meta.title);
         return true;
       }
     } catch (e) {
@@ -244,18 +262,19 @@ export async function saveScoreAs(): Promise<boolean> {
         suggestedName: name,
         ...(current ? { startIn: current } : {}),
       });
-      await writeTo(h, fileText(getStore().getState().doc));
+      const snap = await writeSnapshot(h);
       current = h;
-      savedAs(h.name);
-      void remember(h, s.doc.meta.title);
+      savedAs(h.name, snap);
+      void remember(h, snap.doc.meta.title);
       return true;
     } catch (e) {
       if (isAbort(e)) return false;
       console.warn('[files] save dialog failed, downloading instead', e);
     }
   }
-  const ok = await download(name, fileText(s.doc));
-  if (ok) savedAs(name, !IN_ARTIFACT);
+  const snap = snapshot();
+  const ok = await download(name, fileText(snap.doc));
+  if (ok) savedAs(name, snap, !IN_ARTIFACT);
   return ok;
 }
 
@@ -271,11 +290,20 @@ export function pickFile(accept: string): Promise<File | null> {
   });
 }
 
+/** The page may open a dialog now (a click happened moments ago and was not used up). */
+function hasUserActivation(): boolean {
+  const ua = (globalThis.navigator as { userActivation?: { isActive: boolean } } | undefined)
+    ?.userActivation;
+  return ua?.isActive ?? false;
+}
+
 /**
  * Before replacing the document: offer to save unsaved changes. Resolves false when the user
- * cancels (or saving failed).
+ * cancels (or saving failed). `thenDialog`: the caller opens a file dialog or permission prompt
+ * next, which browsers allow only right after a click; a save dialog uses that click up, so the
+ * user is asked once more (and that click opens the dialog).
  */
-export async function confirmDiscard(): Promise<boolean> {
+export async function confirmDiscard(opts: { thenDialog?: boolean } = {}): Promise<boolean> {
   const s = getStore().getState();
   if (!isDirty(s)) return true;
   const lang = s.view.lang;
@@ -284,8 +312,14 @@ export async function confirmDiscard(): Promise<boolean> {
     { id: 'discard', label: translate(lang, 'files.discard') },
     { id: 'cancel', label: translate(lang, 'files.cancel') },
   ]);
-  if (choice === 'save') return saveScore();
-  return choice === 'discard';
+  if (choice !== 'save') return choice === 'discard';
+  if (!(await saveScore())) return false;
+  if (!opts.thenDialog || hasUserActivation()) return true;
+  const go = await s.ask(translate(lang, 'files.savedContinue'), [
+    { id: 'go', label: translate(lang, 'files.continue'), primary: true },
+    { id: 'cancel', label: translate(lang, 'files.cancel') },
+  ]);
+  return go === 'go';
 }
 
 /** Open a score file; `handle` (when known) lets Save write back to it. */
@@ -316,7 +350,7 @@ export async function openFile(file: File, handle: FileHandleLike | null = null)
 }
 
 export async function openScore(): Promise<void> {
-  if (!(await confirmDiscard())) return;
+  if (!(await confirmDiscard({ thenDialog: true }))) return;
   if (CAN_PICK) {
     try {
       const [h] = await window.showOpenFilePicker!({ ...PICKER, multiple: false });
@@ -333,7 +367,7 @@ export async function openScore(): Promise<void> {
 
 export async function openRecent(entry: RecentFile): Promise<void> {
   const s = getStore().getState();
-  if (!(await confirmDiscard())) return;
+  if (!(await confirmDiscard({ thenDialog: true }))) return;
   try {
     if (!(await permitted(entry.handle, 'readwrite'))) return;
     await openFile(await entry.handle.getFile(), entry.handle);
@@ -344,26 +378,30 @@ export async function openRecent(entry: RecentFile): Promise<void> {
   }
 }
 
-/** A file dropped on the window (with its handle where the browser provides one). */
+/**
+ * A file dropped on the window (with its handle where the browser provides one). Call it from
+ * the drop event itself: the dropped data can only be read while the event is handled.
+ */
 export async function openDropped(item: DataTransferItem | null, file: File): Promise<void> {
   const s = getStore().getState();
   if (!/\.json$/i.test(file.name)) {
     s.notify(translate(s.view.lang, 'files.notScore', { f: file.name }), 'error');
     return;
   }
-  if (!(await confirmDiscard())) return;
-  let handle: FileHandleLike | null = null;
+  // ask for the handle before anything is awaited (no handle: Save will ask where to save)
   const withHandle = item as
     (DataTransferItem & { getAsFileSystemHandle?: () => Promise<unknown> }) | null;
-  if (CAN_PICK && withHandle?.getAsFileSystemHandle) {
-    try {
-      const h = (await withHandle.getAsFileSystemHandle()) as FileHandleLike | null;
-      if (h?.kind === 'file') handle = h;
-    } catch {
-      /* no handle: Save will ask where to save */
-    }
-  }
-  await openFile(file, handle);
+  const pending: Promise<FileHandleLike | null> =
+    CAN_PICK && withHandle?.getAsFileSystemHandle
+      ? withHandle
+          .getAsFileSystemHandle()
+          .then((h) =>
+            (h as FileHandleLike | null)?.kind === 'file' ? (h as FileHandleLike) : null,
+          )
+          .catch(() => null)
+      : Promise.resolve(null);
+  if (!(await confirmDiscard())) return;
+  await openFile(file, await pending);
 }
 
 /** Replace the document by a new or example score (not tied to a file). */

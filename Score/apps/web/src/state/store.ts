@@ -12,6 +12,10 @@ import {
   type ScorePosition,
   Session,
   type Spanner,
+  ZERO,
+  allStaves,
+  hasMeasure,
+  hasStaff,
   randomIds,
 } from '@ailegro-score/core';
 import { create } from 'zustand';
@@ -135,16 +139,24 @@ export interface EditorState extends EditorUiState {
   setPlayhead(playhead: number | null): void;
   notify(text: string, kind?: 'info' | 'error'): void;
   setKeypad(patch: Partial<KeypadState>): void;
-  /** The document now matches the file (after saving). */
-  markSaved(fileName?: string | null): void;
+  /**
+   * The document now matches the file (after saving). `entry` is the history entry the saved
+   * document was taken at (default: the newest), so edits made while saving stay unsaved.
+   */
+  markSaved(fileName?: string | null, entry?: HistoryEntry | null): void;
   /** Ask the user to pick one of the actions; resolves with its id. */
   ask(message: string, actions: ConfirmRequest['actions']): Promise<string>;
 }
 
+/** The newest history entry (null at the start of the history): identifies the document. */
+export function currentEntry(s: Pick<EditorState, 'session'>): HistoryEntry | null {
+  const past = s.session.history.past;
+  return past[past.length - 1] ?? null;
+}
+
 /** True when the document has changes that are not in its file. */
 export function isDirty(s: Pick<EditorState, 'session' | 'cleanEntry'>): boolean {
-  const past = s.session.history.past;
-  return (past[past.length - 1] ?? null) !== s.cleanEntry;
+  return currentEntry(s) !== s.cleanEntry;
 }
 
 const KEYPAD_KEY = 'ailegro-score:keypad';
@@ -201,6 +213,36 @@ function initialZoom(): number {
   return Math.max(0.4, Math.round(((window.innerWidth - 110) / 794) * 20) / 20);
 }
 
+/**
+ * UI state that still points into `doc`: the last change may have removed bars or staves (the
+ * cursor then moves to the bar now in that place).
+ */
+function keepValid(doc: ScoreDoc, prev: ScoreDoc, ui: EditorUiState): EditorUiState {
+  let { cursor, selection } = ui;
+  const exists = (at: ScorePosition) => hasStaff(doc, at.staffId) && hasMeasure(doc, at.measureId);
+  if (cursor && !exists(cursor)) {
+    const index = prev.measures.findIndex((m) => m.id === cursor!.measureId);
+    const bar = doc.measures[Math.max(0, Math.min(index, doc.measures.length - 1))];
+    cursor =
+      bar && hasStaff(doc, cursor.staffId) ? { ...cursor, measureId: bar.id, offset: ZERO } : null;
+  }
+  if (selection.kind === 'rest' && !exists(selection.at)) selection = { kind: 'none' };
+  if (
+    selection.kind === 'range' &&
+    (selection.measureTo >= doc.measures.length || selection.staffTo >= allStaves(doc).length)
+  )
+    selection = { kind: 'none' };
+  return cursor === ui.cursor && selection === ui.selection ? ui : { ...ui, cursor, selection };
+}
+
+/**
+ * Undo and redo end a line being drawn in note input: what it covered may have changed, and a line
+ * the user took back should not come back with the next note.
+ */
+function endLine(s: EditorState): Partial<EditorState> {
+  return s.input.pendingLine ? { input: { ...s.input, pendingLine: null } } : {};
+}
+
 export function createEditorStore(doc: ScoreDoc) {
   return create<EditorState>()((set, get) => ({
     session: Session.start(doc),
@@ -237,11 +279,14 @@ export function createEditorStore(doc: ScoreDoc) {
         lastEntered: state.lastEntered,
       };
       try {
-        const next = state.session.dispatch(commands, label, {
-          before,
-          after: { ...before, ...after },
+        const ui: EditorUiState = { ...before, ...after };
+        const next = state.session.dispatch(commands, label, { before, after: ui });
+        set({
+          session: next,
+          doc: next.doc,
+          changedAt: Date.now(),
+          ...keepValid(next.doc, state.doc, ui),
         });
-        set({ session: next, doc: next.doc, changedAt: Date.now(), ...(after ?? {}) });
         return true;
       } catch (e) {
         const message = e instanceof CommandError ? e.message : String(e);
@@ -258,7 +303,13 @@ export function createEditorStore(doc: ScoreDoc) {
         cursor: null,
         lastEntered: null,
       };
-      set({ session, doc: session.doc, changedAt: Date.now(), ...ui });
+      set({
+        session,
+        doc: session.doc,
+        changedAt: Date.now(),
+        ...keepValid(session.doc, get().doc, ui),
+        ...endLine(get()),
+      });
     },
     redo() {
       const { session, entry } = get().session.redo();
@@ -268,7 +319,13 @@ export function createEditorStore(doc: ScoreDoc) {
         cursor: null,
         lastEntered: null,
       };
-      set({ session, doc: session.doc, changedAt: Date.now(), ...ui });
+      set({
+        session,
+        doc: session.doc,
+        changedAt: Date.now(),
+        ...keepValid(session.doc, get().doc, ui),
+        ...endLine(get()),
+      });
     },
     load(next, fileName = null) {
       const session = Session.start(next);
@@ -330,10 +387,9 @@ export function createEditorStore(doc: ScoreDoc) {
       }
       set({ keypad });
     },
-    markSaved(fileName) {
-      const past = get().session.history.past;
+    markSaved(fileName, entry) {
       set({
-        cleanEntry: past[past.length - 1] ?? null,
+        cleanEntry: entry !== undefined ? entry : currentEntry(get()),
         ...(fileName !== undefined ? { fileName } : {}),
       });
     },

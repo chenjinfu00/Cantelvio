@@ -19,6 +19,7 @@ import {
   type ScoreDoc,
   type Spanner,
   type TimeSpan,
+  absoluteTime,
   add,
   allStaves,
   applyCommands,
@@ -27,6 +28,7 @@ import {
   eventsOverlapping,
   findEvent,
   findNote,
+  hasStaff,
   le,
   lt,
   measureInfos,
@@ -205,6 +207,8 @@ export function addGrace(kind: GraceKind): void {
     }
   }
   if (!targets.length) return nothingSelected();
+  // later places first, so that each insertion leaves the indices of the others valid
+  targets.sort((a, b) => b.index - a.index);
   const noteIds: string[] = [];
   const cmds: Command[] = targets.map((t) => {
     const noteId = s.ids.next('n');
@@ -457,10 +461,19 @@ export function endPendingLine(): void {
   if (st().input.pendingLine) st().setInput({ pendingLine: null });
 }
 
+/** What happens to the pending line with an entry: the commands growing it, and its next state. */
+export interface PendingStep {
+  readonly commands: Command[];
+  /** The pending line after the entry; null when the entry ended it. */
+  readonly next: PendingLine | null;
+}
+
 /**
  * Commands that extend the pending line over an entry about to be made: `cmds` enter a note
  * (`eventId`) or a rest (`eventId` null) at `start` lasting `duration`. Computed on a preview of
- * the document after the entry, so the line can reach bars the entry appends.
+ * the document after the entry, so the line can reach bars the entry appends. The entry always
+ * wins: when the line cannot follow it (the cursor went back before the line, the line would run
+ * into another line of its kind, its notes or staff are gone), the line ends instead.
  */
 export function extendPendingLine(
   cmds: readonly Command[],
@@ -470,45 +483,77 @@ export function extendPendingLine(
     readonly start: Rational;
     readonly duration: Rational;
   },
-): { commands: Command[]; next: PendingLine | null } {
+): PendingStep {
   const s = st();
   const pending = s.input.pendingLine;
   if (!pending) return { commands: [], next: null };
-  const keep = { commands: [] as Command[], next: pending };
+  const keep: PendingStep = { commands: [], next: pending };
+  const stop: PendingStep = { commands: [], next: null };
   let preview: ScoreDoc;
   try {
     preview = applyCommands(s.doc, cmds);
   } catch {
-    return keep;
+    return keep; // the entry itself is refused; the caller reports why
   }
-  const sp = pending.spanner;
+  if (!hasStaff(preview, pending.spanner.staffId)) return stop;
+  // the line as the document has it (bars may have been re-barred since it was started)
+  const sp = preview.spanners.find((x) => x.id === pending.spanner.id) ?? pending.spanner;
+  let next: Spanner;
   if (sp.kind === 'slur') {
+    const from = findEvent(preview, sp.from);
+    if (!from) {
+      // the first note was entered again: the slur starts on the new note
+      const old = findEvent(s.doc, sp.from);
+      const again =
+        !!entry.eventId &&
+        !!old &&
+        entry.staffId === sp.staffId &&
+        findEvent(preview, entry.eventId)?.voice === pending.voice &&
+        cmp(old.start, entry.start) === 0;
+      if (!again) return stop;
+      const restart: Spanner = { ...sp, from: entry.eventId!, to: entry.eventId! };
+      return { commands: [], next: { ...pending, spanner: restart, created: false } };
+    }
     // slurs join notes of their own staff and voice (rests are skipped)
     if (!entry.eventId || sp.staffId !== entry.staffId) return keep;
     const loc = findEvent(preview, entry.eventId);
-    if (!loc || loc.voice !== pending.voice || !findEvent(preview, sp.from)) return keep;
-    const next: Spanner = { ...sp, to: entry.eventId };
-    return {
-      commands: [{ type: pending.created ? 'spanner.set' : 'spanner.add', spanner: next }],
-      next: { ...pending, spanner: next, created: true },
-    };
+    if (!loc || loc.voice !== pending.voice) return keep;
+    if (!lt(from.start, loc.start)) return stop; // entered before the slur: it cannot follow
+    next = { ...sp, to: entry.eventId };
+  } else {
+    // time lines grow with notes and rests of the same instrument
+    if (!hasStaff(preview, entry.staffId)) return keep;
+    if (staffInfo(preview, sp.staffId).part.id !== staffInfo(preview, entry.staffId).part.id)
+      return keep;
+    const t = spannerTimes(preview, sp);
+    if (!t || lt(entry.start, t.start)) return stop;
+    const loc = entry.eventId ? findEvent(preview, entry.eventId) : null;
+    const until = loc ? loc.end : min(add(entry.start, entry.duration), scoreLength(preview));
+    if (le(until, t.end) && inDoc(preview, sp.id)) return keep;
+    // it ends where the next line of its kind on the staff begins (a hairpin at the next one…)
+    const blocked = preview.spanners.some((o) => {
+      if (o.id === sp.id || o.kind !== sp.kind || o.staffId !== sp.staffId) return false;
+      const ot = spannerTimes(preview, o);
+      return !!ot && lt(ot.start, until) && lt(t.start, ot.end);
+    });
+    const anchor = endAnchor(preview, until);
+    if (blocked || !anchor) return stop;
+    next = { ...(sp as TimeSpan), end: anchor } as Spanner;
   }
-  // time lines grow with notes and rests of the same instrument
-  if (staffInfo(preview, sp.staffId).part.id !== staffInfo(preview, entry.staffId).part.id)
-    return keep;
-  const loc = entry.eventId ? findEvent(preview, entry.eventId) : null;
-  const total = scoreLength(preview);
-  const end = loc ? loc.end : min(add(entry.start, entry.duration), total);
-  const t = spannerTimes(preview, sp);
-  if (!t || !lt(t.start, end) || le(end, t.end)) return keep;
-  const anchor = endAnchor(preview, end);
-  if (!anchor) return keep;
-  const next = { ...(sp as TimeSpan), end: anchor } as Spanner;
-  return {
-    commands: [{ type: 'spanner.set', spanner: next }],
-    next: { ...pending, spanner: next },
+  // (re)create it when it is not in the document (a slur's second note, or after a prune)
+  const command: Command = {
+    type: inDoc(preview, sp.id) ? 'spanner.set' : 'spanner.add',
+    spanner: next,
   };
+  try {
+    applyCommands(preview, [command]);
+  } catch {
+    return stop;
+  }
+  return { commands: [command], next: { ...pending, spanner: next, created: true } };
 }
+
+const inDoc = (doc: ScoreDoc, id: string) => doc.spanners.some((x) => x.id === id);
 
 // ------------------------------------------------------------------------------- dynamics
 
@@ -540,11 +585,26 @@ export function addDynamic(value: DynamicValue): void {
       mark: { id, offset: p.offset, value },
     };
   });
-  s.apply(
+  // a hairpin being drawn in note input ends at the dynamic (on the note just entered)
+  const pending = s.input.active ? s.input.pendingLine : null;
+  const hairpin =
+    pending?.spanner.kind === 'hairpin'
+      ? doc.spanners.find((x) => x.id === pending.spanner.id)
+      : undefined;
+  const p = hairpin && at.get(hairpin.staffId);
+  const span = hairpin && spannerTimes(doc, hairpin);
+  if (hairpin && p && span) {
+    const t = absoluteTime(doc, p.measureId, p.offset);
+    const end = endAnchor(doc, t);
+    if (end && lt(span.start, t) && lt(t, span.end))
+      cmds.push({ type: 'spanner.set', spanner: { ...(hairpin as TimeSpan), end } as Spanner });
+  }
+  const ok = s.apply(
     cmds,
     'dynamic',
     s.input.active ? undefined : { selection: { kind: 'marks', spanners: [], dynamics: ids } },
   );
+  if (ok && pending?.spanner.kind === 'hairpin') endPendingLine();
 }
 
 // ------------------------------------------------------------------------------- state for the keypad
@@ -587,10 +647,12 @@ export function marksState(
   });
   let alter: number | null = null;
   let graces = false;
+  let graceValue: NoteValue | null = null;
   if (selection.kind === 'notes') {
     const notes = selection.noteIds.map((id) => findNote(doc, id)).filter((n) => !!n);
     alter = common(notes.map((n) => n!.note.pitch.alter));
     graces = notes.length > 0 && notes.every((n) => !!n!.grace);
+    if (graces) graceValue = common(notes.map((n) => n!.grace!.value));
   }
   return {
     events: events.length,
@@ -601,9 +663,14 @@ export function marksState(
     breath: all((e) => e.breath ?? null),
     cue: events.length > 0 && events.every((l) => !!l.event.cue),
     stem: all((e) => e.stem ?? null),
-    written: written
-      ? { value: written.split(':')[0] as NoteValue, dots: Number(written.split(':')[1]) }
-      : null,
+    // grace notes show their own value, not the value of the note they lead to
+    written: graces
+      ? graceValue
+        ? { value: graceValue, dots: 0 }
+        : null
+      : written
+        ? { value: written.split(':')[0] as NoteValue, dots: Number(written.split(':')[1]) }
+        : null,
     alter,
     graces,
   };

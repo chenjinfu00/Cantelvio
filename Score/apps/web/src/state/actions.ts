@@ -5,6 +5,7 @@
  */
 import {
   type Command,
+  type GraceNote,
   type NoteEvent,
   type Pitch,
   type Rational,
@@ -19,6 +20,8 @@ import {
   findEventOfNote,
   findInstrument,
   findNote,
+  hasMeasure,
+  hasStaff,
   inputDurationAt,
   interval,
   invertInterval,
@@ -86,17 +89,55 @@ export function cursorFromSelection(
         offset: loc.event.offset,
       };
   }
-  if (selection.kind === 'rest') return selection.at;
+  if (
+    selection.kind === 'rest' &&
+    hasStaff(doc, selection.at.staffId) &&
+    hasMeasure(doc, selection.at.measureId)
+  )
+    return selection.at;
+  if (selection.kind === 'marks') {
+    const at = marksPosition(doc, selection, voice);
+    if (at) return at;
+  }
   const staves = allStaves(doc);
   if (selection.kind === 'range') {
     return {
-      staffId: staves[selection.staffFrom]!.staff.id,
+      staffId: staves[Math.min(selection.staffFrom, staves.length - 1)]!.staff.id,
       voice,
-      measureId: doc.measures[selection.measureFrom]!.id,
+      measureId: doc.measures[Math.min(selection.measureFrom, doc.measures.length - 1)]!.id,
       offset: rat(0),
     };
   }
   return { staffId: staves[0]!.staff.id, voice, measureId: doc.measures[0]!.id, offset: rat(0) };
+}
+
+/** Where the first picked line or dynamic starts. */
+function marksPosition(
+  doc: ScoreDoc,
+  selection: Extract<Selection, { kind: 'marks' }>,
+  voice: number,
+): ScorePosition | null {
+  for (const id of selection.spanners) {
+    const sp = doc.spanners.find((x) => x.id === id);
+    if (!sp) continue;
+    if (sp.kind !== 'slur')
+      return { staffId: sp.staffId, voice, measureId: sp.start.measureId, offset: sp.start.offset };
+    const loc = findEvent(doc, sp.from);
+    if (loc)
+      return {
+        staffId: loc.staffId,
+        voice: loc.voice,
+        measureId: loc.measureId,
+        offset: loc.event.offset,
+      };
+  }
+  for (const id of selection.dynamics)
+    for (const [staffId, bars] of Object.entries(doc.content))
+      for (const [measureId, bar] of Object.entries(bars)) {
+        const mark = bar.dynamics?.find((d) => d.id === id);
+        if (mark) return { staffId, voice, measureId, offset: mark.offset };
+      }
+  return null;
 }
 
 // ------------------------------------------------------------------------------- written pitch
@@ -279,7 +320,7 @@ export function enterPitches(
   // a line started during input grows over the new note (same undo step)
   const line = extendPendingLine(cmds, { eventId, staffId: at.staffId, start, duration });
   if (!s.apply([...cmds, ...line.commands], 'enter note')) return null;
-  if (line.commands.length) st().setInput({ pendingLine: line.next });
+  if (line.next !== s.input.pendingLine) st().setInput({ pendingLine: line.next });
   const loc = findEvent(st().doc, eventId);
   getStore().setState({ selection: { kind: 'notes', noteIds }, lastEntered: eventId });
   advanceCursor(at, loc?.end ?? add(start, duration));
@@ -296,7 +337,7 @@ export function enterRest(): void {
   const cmds: Command[] = [...grow, { type: 'rest.enter', at, duration }];
   const line = extendPendingLine(cmds, { eventId: null, staffId: at.staffId, start, duration });
   if (!s.apply([...cmds, ...line.commands], 'enter rest')) return;
-  if (line.commands.length) st().setInput({ pendingLine: line.next });
+  if (line.next !== s.input.pendingLine) st().setInput({ pendingLine: line.next });
   getStore().setState({ lastEntered: null, selection: { kind: 'rest', at } });
   const clipped = inputDurationAt(st().doc, at, duration);
   advanceCursor(at, add(start, clipped));
@@ -403,22 +444,31 @@ export function setAccidental(alter: number): void {
   if (cmds.length) s.apply(cmds, 'accidental', { selection: { kind: 'notes', noteIds: ids } });
 }
 
+/**
+ * Selecting a duration with notes selected (not in input mode) changes their duration; selected
+ * grace notes take the value instead (they have no dots and take no time of their own).
+ */
 export function setSelectedDuration(): void {
-  // Selecting a duration with notes selected (not in input mode) changes their duration.
   const s = st();
   if (s.input.active || s.selection.kind !== 'notes') return;
-  const eventIds = [
-    ...new Set(
-      s.selection.noteIds
-        .map((id) => findEventOfNote(s.doc, id)?.event.id)
-        .filter((x): x is string => !!x),
-    ),
+  const eventIds = new Set<string>();
+  const graces = new Map<string, GraceNote>();
+  for (const id of s.selection.noteIds) {
+    const found = findNote(s.doc, id);
+    if (!found) continue;
+    if (found.grace) graces.set(found.grace.id, found.grace);
+    else eventIds.add(found.loc.event.id);
+  }
+  const cmds: Command[] = [
+    ...[...graces.values()]
+      .filter((g) => g.value !== s.input.value)
+      .map((grace): Command => ({ type: 'grace.set', grace: { ...grace, value: s.input.value } })),
+    ...[...eventIds].map((eventId): Command => ({
+      type: 'event.setDuration',
+      eventId,
+      duration: writtenLength(),
+    })),
   ];
-  const cmds: Command[] = eventIds.map((eventId) => ({
-    type: 'event.setDuration',
-    eventId,
-    duration: writtenLength(),
-  }));
   if (cmds.length) s.apply(cmds, 'duration');
 }
 

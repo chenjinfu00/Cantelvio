@@ -36,4 +36,19 @@ describe('note input actions', () => {
     expect(st().doc.measures.length).toBe(1);
     expect(st().session.canUndo).toBe(false);
   });
+
+  it('keeps the input cursor in the score when its bar is deleted', () => {
+    actions.appendMeasures(2);
+    actions.toggleNoteInput();
+    st().setInput({ value: 'whole', dots: 0 });
+    actions.enterLetter('C', false);
+    actions.enterLetter('D', false); // the cursor is now in bar 3
+    expect(st().cursor?.measureId).toBe(st().doc.measures[2]!.id);
+    st().select({ kind: 'range', staffFrom: 0, staffTo: 1, measureFrom: 1, measureTo: 2 });
+    actions.deleteSelectedMeasures();
+    expect(st().doc.measures.length).toBe(1);
+    expect(st().cursor?.measureId).toBe(st().doc.measures[0]!.id);
+    expect(() => actions.enterLetter('E', false)).not.toThrow();
+    expect(st().toast).toBeNull();
+  });
 });
