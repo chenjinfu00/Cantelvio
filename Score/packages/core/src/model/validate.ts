@@ -32,7 +32,10 @@ export function validateScore(doc: ScoreDoc): ValidationIssue[] {
     if (p.staves.length === 0) issue(`parts.${i}`, 'part has no staves');
     p.staves.forEach((s, j) => unique(s.id, `parts.${i}.staves.${j}`));
   });
-  doc.measures.forEach((m, i) => unique(m.id, `measures.${i}`));
+  doc.measures.forEach((m, i) => {
+    unique(m.id, `measures.${i}`);
+    m.tempo?.forEach((t, k) => unique(t.id, `measures.${i}.tempo.${k}`));
+  });
   doc.groups.forEach((g, i) => unique(g.id, `groups.${i}`));
 
   const staffIds = allStaves(doc).map((s) => s.staff.id);
@@ -80,6 +83,10 @@ export function validateScore(doc: ScoreDoc): ValidationIssue[] {
           if (cmp(stop, end) > 0) issue(path, 'extends past the end of the score');
         });
       });
+      for (const c of sm.clefChanges ?? [])
+        unique(c.id, `content.${staffId}.${info.measure.id}.clefChanges`);
+      for (const d of sm.dynamics ?? [])
+        unique(d.id, `content.${staffId}.${info.measure.id}.dynamics`);
       for (const t of sm.tuplets ?? []) {
         unique(t.id, `content.${staffId}.${info.measure.id}.tuplets`);
         if (cmp(add(t.offset, t.length), info.length) > 0)

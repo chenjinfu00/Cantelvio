@@ -4,6 +4,7 @@
  *
  *   c d e f | g2 g2 | a4 a a a | g1          relative octaves, durations carry over
  *   c'4 d, e8. f16 g4~ g8 r8 <c e g>2 R     ' up an octave, , down; ~ tie; r rest; R rest to barline
+ *                                            (rests overwrite like notes)
  *   3{ c8 d e } f#4 bb4 en4                  tuplets; # ## b bb accidentals, n forces a natural
  *
  * Pitches are chosen like LilyPond's relative mode: each note goes to the octave closest to the
@@ -323,8 +324,19 @@ export function textToCommands(
       continue;
     }
     if (item.kind === 'measureRest') {
+      // Rest to the next barline (a whole bar at a barline). Like every rest it overwrites.
+      if (!ensure(add(t, rat(1, 1024)))) {
+        warnings.push('text runs past the end of the score; truncated');
+        break;
+      }
       const p = position(t);
-      t = add(starts[p.index]!, lengths[p.index]!);
+      const end = add(starts[p.index]!, lengths[p.index]!);
+      commands.push({
+        type: 'rest.enter',
+        at: { staffId: at.staffId, voice: at.voice, measureId: p.measureId, offset: p.offset },
+        duration: sub(end, t),
+      });
+      t = end;
       pendingTie = false;
       continue;
     }

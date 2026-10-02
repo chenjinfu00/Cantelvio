@@ -181,6 +181,32 @@ describe('editing', () => {
   });
 });
 
+describe('validation', () => {
+  it('finds duplicate ids on every kind of element', () => {
+    const { doc, staff } = setup(2);
+    const m0 = doc.measures[0]!.id;
+    let d = applyCommand(doc, {
+      type: 'batch',
+      commands: [
+        {
+          type: 'dynamic.set',
+          staffId: staff,
+          measureId: m0,
+          mark: { id: 'x_1', offset: r('0'), value: 'p' },
+        },
+        {
+          type: 'measure.setTempo',
+          measureId: doc.measures[1]!.id,
+          tempo: { id: 'x_1', offset: r('0'), bpm: 90 },
+        },
+      ],
+    }).doc;
+    expect(validateScore(d).map((i) => i.message)).toEqual(['duplicate id x_1']);
+    d = applyCommand(d, { type: 'dynamic.delete', ids: ['x_1'] }).doc;
+    expect(validateScore(d)).toEqual([]);
+  });
+});
+
 describe('input helpers', () => {
   it('scales written durations inside tuplets and clips at the score end', () => {
     const { doc, at } = setup(1);

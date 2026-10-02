@@ -90,6 +90,26 @@ describe('text notation', () => {
     const next = applyCommand(doc, { type: 'batch', commands: res.commands }).doc;
     expect(next.measures.length).toBe(2);
   });
+
+  it('R rests to the barline and overwrites what was there', () => {
+    const ids = sequentialIds();
+    const doc = createScore({ template: 'piano', measures: 2, ids });
+    const staff = allStaves(doc)[0]!.staff.id;
+    const at = { staffId: staff, voice: 0, measureId: doc.measures[0]!.id, offset: rat(0) };
+    const write = (d: typeof doc, text: string) =>
+      applyCommand(d, { type: 'batch', commands: textToCommands(d, at, text, { ids }).commands })
+        .doc;
+    const filled = write(doc, 'e4 f g a | b1');
+    const next = write(filled, 'c4 R | R');
+    const bar = (i: number) =>
+      next.content[staff]?.[next.measures[i]!.id]?.voices[0]?.map((e) =>
+        e.notes.map((n) => pitchName(n.pitch)).join('+'),
+      ) ?? [];
+    expect(bar(0)).toEqual(['C5']);
+    expect(bar(1)).toEqual([]);
+    expect(next.measures.length).toBe(2);
+    expect(validateScore(next)).toEqual([]);
+  });
 });
 
 describe('playback', () => {
