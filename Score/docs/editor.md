@@ -2,6 +2,15 @@
 
 代码：`apps/web`。启动：`npm run dev` → http://127.0.0.1:5178/
 
+## 两种用法
+
+- **本机运行**（完整功能）：`npm install && npm run dev`，打开 http://127.0.0.1:5178/ 。
+- **claude.ai 上的托管版**（免安装试用，作者私有的 artifact 链接）：同一份构建产物发布成 claude.ai artifact。
+  在那里：保存 / 导出由查看器弹出确认后下载；不能打印；**连不到本机的 AIlegro 服务**（浏览器沙盒禁止），
+  所以“直接生成”只在本机运行时可用，文件交换（导出请求 → 运行脚本 → 导入结果）两边都能用。
+  自动保存只存在于这个浏览器里。发布方式：`npm run build` 后把 `apps/web/dist` 的页面、`assets/` 和
+  `audio/` 作为 artifact 的文件发布（`src/host.ts` 负责识别查看器环境）。
+
 ## 界面
 
 ```text
