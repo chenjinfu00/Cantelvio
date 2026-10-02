@@ -154,14 +154,20 @@ function writtenLength(): Rational {
   return lengthOf(value, dots);
 }
 
-/** Commands appending measures so that a note ending at `end` fits in the score. */
-function growFor(doc: ScoreDoc, end: Rational): Command[] {
+/**
+ * Commands appending measures so that a note ending at `end` fits in the score. With
+ * `roomAfter`, a note that ends exactly at the end also gets a fresh bar after it, in the same
+ * undo step, so that note input can continue there.
+ */
+function growFor(doc: ScoreDoc, end: Rational, roomAfter = false): Command[] {
   const total = scoreLength(doc);
-  if (cmp(end, total) <= 0) return [];
+  const c = cmp(end, total);
+  if (c < 0 || (c === 0 && !roomAfter)) return [];
   const infos = measureInfos(doc);
   const lastLength = infos[infos.length - 1]!.length;
   const missing = sub(end, total);
-  const count = Math.min(64, Math.ceil((missing.n * lastLength.d) / (missing.d * lastLength.n)));
+  const bars = (missing.n * lastLength.d) / (missing.d * lastLength.n);
+  const count = Math.min(64, roomAfter ? Math.floor(bars) + 1 : Math.ceil(bars));
   const ids = Array.from({ length: count }, () => st().ids.next('m'));
   return [{ type: 'measures.insert', index: doc.measures.length, ids }];
 }
@@ -248,7 +254,7 @@ export function enterPitches(
   const doc = s.doc;
   const duration = actualLength(doc, at);
   const start = absTime(doc, at);
-  const grow = tupletContaining(doc, at) ? [] : growFor(doc, add(start, duration));
+  const grow = tupletContaining(doc, at) ? [] : growFor(doc, add(start, duration), true);
   const eventId = s.ids.next('e');
   const noteIds = pitches.map(() => s.ids.next('n'));
   const cmds: Command[] = [
@@ -276,7 +282,7 @@ export function enterRest(): void {
   const doc = s.doc;
   const duration = actualLength(doc, at);
   const start = absTime(doc, at);
-  const grow = tupletContaining(doc, at) ? [] : growFor(doc, add(start, duration));
+  const grow = tupletContaining(doc, at) ? [] : growFor(doc, add(start, duration), true);
   if (!s.apply([...grow, { type: 'rest.enter', at, duration }], 'enter rest')) return;
   getStore().setState({ lastEntered: null, selection: { kind: 'rest', at } });
   const clipped = inputDurationAt(st().doc, at, duration);

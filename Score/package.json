@@ -13,9 +13,9 @@
     "node": ">=22.12"
   },
   "scripts": {
-    "dev": "npm run dev -w @ailegro-score/web",
-    "build": "npm run build -w @ailegro-score/web",
-    "preview": "npm run preview -w @ailegro-score/web",
+    "dev": "npm run dev -w @ailegro-score/web --",
+    "build": "npm run build -w @ailegro-score/web --",
+    "preview": "npm run preview -w @ailegro-score/web --",
     "typecheck": "tsc -p tsconfig.json && tsc -p packages/tsconfig.json && tsc -p tools/tsconfig.json && tsc -p apps/web/tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write .",

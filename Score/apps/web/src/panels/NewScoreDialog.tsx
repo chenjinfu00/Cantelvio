@@ -60,7 +60,7 @@ export function NewScoreDialog() {
       ...(composer.trim() ? { composer: composer.trim() } : {}),
       measures,
       timeSig: { beats, beatType },
-      keySig: { fifths, ...(minor ? { mode: 'minor' as const } : {}) },
+      keySig: { fifths, mode: minor ? 'minor' : 'major' },
       tempo,
       ...(pick ? { pickup: pick } : {}),
       lang,
