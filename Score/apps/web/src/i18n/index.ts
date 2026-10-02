@@ -198,6 +198,9 @@ const zh = {
   'new.parts': '{n} 件乐器',
   'new.majorKey': '{k} 大调',
   'new.minorKey': '{k} 小调',
+  'files.saveFailed': '没能保存 {f}（{m}）',
+  'ai.serviceUnavailable':
+    '在 claude.ai 上打开时连不到你电脑上的 AIlegro 服务。要一键生成，请在本机运行编辑器（npm run dev）；下面的文件方式在这里也能用。',
 } as const;
 
 type Key = keyof typeof zh;
@@ -398,6 +401,9 @@ const en: Record<Key, string> = {
   'new.parts': '{n} instruments',
   'new.majorKey': '{k} major',
   'new.minorKey': '{k} minor',
+  'files.saveFailed': 'Could not save {f} ({m})',
+  'ai.serviceUnavailable':
+    'Opened on claude.ai, the editor cannot reach the AIlegro service on your computer. For one-click generation run the editor locally (npm run dev); the file exchange below works here too.',
 };
 
 const DICTS: Record<Lang, Record<Key, string>> = { zh, en };

@@ -2,6 +2,7 @@ import { AILEGRO_GROUPS, type AilegroGroup } from '@ailegro-score/core';
 import type { ComposeRequest, ComposeTask } from '@ailegro-score/ailegro-bridge';
 import { useEffect, useMemo, useState } from 'react';
 import { BrandText } from '../components/BrandText';
+import { IN_ARTIFACT } from '../host';
 import { type MessageKey, useT } from '../i18n';
 import {
   ADAPTER_TASKS,
@@ -281,30 +282,41 @@ export function AilegroPanel() {
         <h4>
           <BrandText text={t('ai.viaService')} />
         </h4>
-        <div className="row tight">
-          <input
-            className="grow"
-            value={serviceUrl}
-            onChange={(e) => setServiceUrl(e.target.value)}
-            aria-label={t('ai.service')}
-            spellCheck={false}
-          />
-          <button onClick={() => void onPing()}>{t('ai.ping')}</button>
-        </div>
-        {service && (
-          <p className={`status-line ${service === 'offline' ? 'bad' : 'good'}`}>
-            {service === 'offline'
-              ? t('ai.offline')
-              : t('ai.online', { m: `${service.model ?? '?'}${service.mock ? ' (mock)' : ''}` })}
+        {IN_ARTIFACT ? (
+          // A page on claude.ai cannot reach a server on this computer; files work everywhere.
+          <p className="hint">
+            <BrandText text={t('ai.serviceUnavailable')} />
           </p>
+        ) : (
+          <>
+            <div className="row tight">
+              <input
+                className="grow"
+                value={serviceUrl}
+                onChange={(e) => setServiceUrl(e.target.value)}
+                aria-label={t('ai.service')}
+                spellCheck={false}
+              />
+              <button onClick={() => void onPing()}>{t('ai.ping')}</button>
+            </div>
+            {service && (
+              <p className={`status-line ${service === 'offline' ? 'bad' : 'good'}`}>
+                {service === 'offline'
+                  ? t('ai.offline')
+                  : t('ai.online', {
+                      m: `${service.model ?? '?'}${service.mock ? ' (mock)' : ''}`,
+                    })}
+              </p>
+            )}
+            <button
+              className="primary wide"
+              disabled={busy || spec.groups.length === 0}
+              onClick={() => void onGenerate()}
+            >
+              {busy ? t('ai.generating') : `✦ ${t('ai.generate')}`}
+            </button>
+          </>
         )}
-        <button
-          className="primary wide"
-          disabled={busy || spec.groups.length === 0}
-          onClick={() => void onGenerate()}
-        >
-          {busy ? t('ai.generating') : `✦ ${t('ai.generate')}`}
-        </button>
 
         <h4>{t('ai.viaFiles')}</h4>
         <div className="row tight wrap">
@@ -322,9 +334,10 @@ export function AilegroPanel() {
             <pre>{adapterCommand(lastRequest, 'file')}</pre>
             <button
               className="small"
-              onClick={() =>
-                void navigator.clipboard?.writeText(adapterCommand(lastRequest, 'file'))
-              }
+              onClick={() => {
+                // some views refuse clipboard writes; the command stays selectable in the box
+                navigator.clipboard?.writeText(adapterCommand(lastRequest, 'file')).catch(() => {});
+              }}
             >
               {t('ai.copy')}
             </button>

@@ -1,6 +1,7 @@
 import { SAMPLES } from '@ailegro-score/core';
 import { useState } from 'react';
 import { BrandText } from '../components/BrandText';
+import { IN_ARTIFACT } from '../host';
 import { useT } from '../i18n';
 import { stopPlayback, togglePlayback } from '../playback/player';
 import { exportSvg, openScore, saveScore } from '../state/files';
@@ -32,7 +33,7 @@ export function TopBar() {
       <nav className="menu" aria-label="file">
         <button onClick={() => store().setDialog('new')}>{t('menu.new')}</button>
         <button onClick={() => void openScore()}>{t('menu.open')}</button>
-        <button onClick={() => saveScore()} title="Ctrl+S">
+        <button onClick={() => void saveScore()} title="Ctrl+S">
           {t('menu.save')}
         </button>
         <div className="dropdown">
@@ -57,8 +58,9 @@ export function TopBar() {
             </div>
           )}
         </div>
-        <button onClick={() => exportSvg()}>{t('menu.exportSvg')}</button>
-        <button onClick={() => window.print()}>{t('menu.print')}</button>
+        <button onClick={() => void exportSvg()}>{t('menu.exportSvg')}</button>
+        {/* the artifact viewer cannot open the print dialog */}
+        {!IN_ARTIFACT && <button onClick={() => window.print()}>{t('menu.print')}</button>}
       </nav>
       <div className="tools">
         <button

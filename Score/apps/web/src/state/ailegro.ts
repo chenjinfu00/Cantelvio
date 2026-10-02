@@ -173,14 +173,17 @@ export function resultFileName(request: ComposeRequest): string {
 /** Download the request; returns it so the panel can show the adapter command. */
 export function exportRequest(spec: PanelSpec): ComposeRequest {
   const request = newRequest(spec);
-  download(requestFileName(request), JSON.stringify(request, null, 1));
+  void download(requestFileName(request), JSON.stringify(request, null, 1));
   return request;
 }
 
 export function exportRecord(): void {
   const s = getStore().getState();
   const record = buildScoreRecord(s.doc, { exportedAt: new Date().toISOString() });
-  download(safeFileName(s.doc.meta.title, '.score-record.json'), JSON.stringify(record, null, 1));
+  void download(
+    safeFileName(s.doc.meta.title, '.score-record.json'),
+    JSON.stringify(record, null, 1),
+  );
 }
 
 /** Shell command for the reference adapter, run from the AIlegro project root. */

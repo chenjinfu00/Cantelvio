@@ -101,6 +101,12 @@ export function initialLang(): Lang {
   return 'zh';
 }
 
+/** Fit an A4 page to narrow screens (phones); 100% elsewhere. */
+function initialZoom(): number {
+  if (typeof window === 'undefined' || window.innerWidth >= 760) return 1;
+  return Math.max(0.4, Math.round(((window.innerWidth - 110) / 794) * 20) / 20);
+}
+
 export function createEditorStore(doc: ScoreDoc) {
   return create<EditorState>()((set, get) => ({
     session: Session.start(doc),
@@ -109,10 +115,16 @@ export function createEditorStore(doc: ScoreDoc) {
     cursor: null,
     lastEntered: null,
     input: { active: false, value: 'quarter', dots: 0, voice: 0 },
-    view: { zoom: 1, concertPitch: doc.settings.concertPitch, mode: 'page', lang: initialLang() },
+    view: {
+      zoom: initialZoom(),
+      concertPitch: doc.settings.concertPitch,
+      mode: 'page',
+      lang: initialLang(),
+    },
     playing: false,
     playhead: null,
-    panel: 'ailegro',
+    // narrow screens start with the score; the panels are one tap away
+    panel: typeof window !== 'undefined' && window.innerWidth < 760 ? null : 'ailegro',
     dialog: null,
     toast: null,
     fileName: null,

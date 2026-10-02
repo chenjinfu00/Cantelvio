@@ -1,11 +1,36 @@
 /** File handling: open/save .ailegro.json, downloads, autosave to this browser. */
 import { type ScoreDoc, parseScore, serializeScore, validateScore } from '@ailegro-score/core';
 import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
+import { artifactDownloads } from '../host';
+import { translate } from '../i18n';
 import { getStore } from './store';
 
 const AUTOSAVE_KEY = 'ailegro-score:autosave';
 
-export function download(name: string, text: string, type = 'application/json'): void {
+/**
+ * Offer a file to the user. Inside a claude.ai artifact the viewer's `downloads` capability shows a
+ * confirmation (plain links are inert there); locally a regular browser download starts.
+ * Resolves false when nothing was saved.
+ */
+export async function download(
+  name: string,
+  text: string,
+  type = 'application/json',
+): Promise<boolean> {
+  const viewer = await artifactDownloads();
+  if (viewer) {
+    try {
+      await viewer.save({ filename: name, data: text });
+      return true;
+    } catch (e) {
+      const code = (e as { code?: string }).code ?? String(e);
+      if (code !== 'declined') {
+        const s = getStore().getState();
+        s.notify(translate(s.view.lang, 'files.saveFailed', { f: name, m: code }), 'error');
+      }
+      return false;
+    }
+  }
   const blob = new Blob([text], { type });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -15,6 +40,7 @@ export function download(name: string, text: string, type = 'application/json'):
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return true;
 }
 
 export function safeFileName(title: string, suffix: string): string {
@@ -26,11 +52,11 @@ export function safeFileName(title: string, suffix: string): string {
   return `${base}${suffix}`;
 }
 
-export function saveScore(): void {
+export function saveScore(): Promise<boolean> {
   const s = getStore().getState();
   const doc: ScoreDoc = { ...s.doc, meta: { ...s.doc.meta, modifiedAt: new Date().toISOString() } };
   const name = s.fileName ?? safeFileName(doc.meta.title, '.ailegro.json');
-  download(name, serializeScore(doc));
+  return download(name, serializeScore(doc));
 }
 
 export function pickFile(accept: string): Promise<File | null> {
@@ -67,16 +93,18 @@ export async function openScore(): Promise<void> {
   }
 }
 
-export function exportSvg(): void {
+/** One SVG per page, offered one after another (the artifact viewer confirms each file). */
+export async function exportSvg(): Promise<void> {
   const s = getStore().getState();
   const layout = layoutScore(s.doc, { concertPitch: s.view.concertPitch });
-  layout.pages.forEach((p) => {
-    download(
+  for (const p of layout.pages) {
+    const ok = await download(
       safeFileName(s.doc.meta.title, `-p${p.index + 1}.svg`),
       renderPageSvg(p, layout, { size: 'mm' }),
       'image/svg+xml',
     );
-  });
+    if (!ok) return;
+  }
 }
 
 export function autosave(doc: ScoreDoc): void {

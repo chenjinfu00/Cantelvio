@@ -24,7 +24,7 @@ export function App() {
       if (getStore().getState().dialog) return;
       handleKeyDown(e);
     };
-    const onSave = () => saveScore();
+    const onSave = () => void saveScore();
     window.addEventListener('keydown', onKey);
     window.addEventListener('ailegro:save', onSave);
     return () => {
