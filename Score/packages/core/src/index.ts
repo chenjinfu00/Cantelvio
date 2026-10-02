@@ -23,7 +23,7 @@ export {
   type ApplyResult,
   type Patch,
 } from './commands/apply';
-export { inputEnd } from './commands/content';
+export { inputDurationAt, inputEnd, tupletContaining } from './commands/content';
 export * from './commands/history';
 // IO
 export * from './io/json';

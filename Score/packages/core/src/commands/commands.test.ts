@@ -1,13 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { createScore } from '../model/create';
 import { sequentialIds } from '../model/ids';
-import { allStaves, findEvent, measureInfos, scoreLength, voiceEvents } from '../model/query';
+import {
+  allStaves,
+  findEvent,
+  measureInfos,
+  pitchBefore,
+  scoreLength,
+  voiceEvents,
+} from '../model/query';
 import type { ScoreDoc, ScorePosition } from '../model/types';
 import { validateScore } from '../model/validate';
 import { parsePitch, pitchName } from '../pitch/pitch';
 import { parseRational as r, toString } from '../time/rational';
 import { textToCommands } from '../io/text';
 import { applyCommand } from './apply';
+import { inputDurationAt, tupletContaining } from './content';
 import { Session } from './history';
 import { CommandError } from './types';
 
@@ -170,6 +178,36 @@ describe('editing', () => {
     expect(d.content[staff]![d.measures[0]!.id]!.tuplets).toEqual([
       { id: 'tu_100', voice: 0, offset: r('0'), length: r('1/4'), actual: 3, normal: 2 },
     ]);
+  });
+});
+
+describe('input helpers', () => {
+  it('scales written durations inside tuplets and clips at the score end', () => {
+    const { doc, at } = setup(1);
+    const d = applyCommand(doc, {
+      type: 'tuplet.create',
+      at: at(0, '0'),
+      length: r('1/4'),
+      actual: 3,
+      normal: 2,
+      id: 'tu_1',
+    }).doc;
+    expect(tupletContaining(d, at(0, '1/12'))).toMatchObject({ actual: 3, normal: 2 });
+    expect(tupletContaining(d, at(0, '1/4'))).toBeUndefined();
+    expect(toString(inputDurationAt(d, at(0, '0'), r('1/8')))).toBe('1/12');
+    expect(toString(inputDurationAt(d, at(0, '1/2'), r('1/4')))).toBe('1/4');
+    // a whole note from beat 3 of the last bar only has half a bar left
+    expect(toString(inputDurationAt(d, at(0, '1/2'), r('1')))).toBe('1/2');
+  });
+
+  it('finds the previous pitch across barlines for octave reference', () => {
+    const { doc, at, staff } = setup(2);
+    const d = write(doc, at(0, '0'), 'c4 <e g> r2 | r1');
+    const startOf = (m: number) => measureInfos(d)[m]!.start;
+    expect(pitchBefore(d, staff, 0, startOf(0))).toBeNull();
+    expect(pitchName(pitchBefore(d, staff, 0, r('1/4'))!)).toBe('C5');
+    expect(pitchName(pitchBefore(d, staff, 0, startOf(1))!)).toBe('E5');
+    expect(pitchBefore(d, staff, 1, startOf(1))).toBeNull();
   });
 });
 

@@ -13,7 +13,7 @@ import {
 } from '../model/query';
 import type { NoteEvent, Provenance, ScorePosition, TupletSpan } from '../model/types';
 import { VOICES_PER_STAFF } from '../model/types';
-import { type Rational, add, cmp, isPositive, le, lt, min, sub } from '../time/rational';
+import { type Rational, add, cmp, isPositive, le, lt, min, rat, sub } from '../time/rational';
 import {
   type DraftDoc,
   clearVoiceRange,
@@ -67,6 +67,22 @@ export function inputEnd(base: ScoreDoc, at: ScorePosition, duration: Rational):
   const tuplet = tupletAt(base, at);
   if (tuplet) end = min(end, add(info.start, add(tuplet.offset, tuplet.length)));
   return end;
+}
+
+/**
+ * Actual duration for entering a WRITTEN duration at `at`: scaled by the ratio of the tuplet that
+ * contains the position (a written eighth in a triplet lasts 1/12), clipped like `inputEnd`.
+ */
+export function inputDurationAt(base: ScoreDoc, at: ScorePosition, written: Rational): Rational {
+  const tuplet = tupletAt(base, at);
+  const actual = tuplet ? rat(written.n * tuplet.normal, written.d * tuplet.actual) : written;
+  const info = measureInfo(base, at.measureId);
+  return sub(inputEnd(base, at, actual), add(info.start, at.offset));
+}
+
+/** The tuplet span (if any) of this voice that contains the position. */
+export function tupletContaining(base: ScoreDoc, at: ScorePosition): TupletSpan | undefined {
+  return tupletAt(base, at);
 }
 
 /** Remove tuplet spans of a voice that partially intersect [from, to), plus their events. */

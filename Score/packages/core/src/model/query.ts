@@ -3,7 +3,7 @@
  * immutable sub-object (documents are never mutated in place), so repeated queries during
  * layout or input handling are cheap.
  */
-import { type KeySignature } from '../pitch/pitch';
+import { type KeySignature, type Pitch } from '../pitch/pitch';
 import { type TimeSignature, barLength } from '../time/meter';
 import { type Rational, add, cmp, lt, sub, ZERO } from '../time/rational';
 import { type ClefType } from './clef';
@@ -333,4 +333,22 @@ export function findEventOfNote(doc: ScoreDoc, noteId: ID): LocatedEvent | null 
 /** Concert key at a measure. */
 export function keyAt(doc: ScoreDoc, measureIndex: number): KeySignature {
   return measureInfos(doc)[measureIndex]?.keySig ?? { fifths: 0 };
+}
+
+/**
+ * Pitch of the last note (lowest note of a chord) in a voice that starts before absolute time t.
+ * Note input uses it as the octave reference, like MuseScore and LilyPond's relative mode.
+ */
+export function pitchBefore(doc: ScoreDoc, staffId: ID, voice: number, t: Rational): Pitch | null {
+  const infos = measureInfos(doc);
+  for (let i = infos.length - 1; i >= 0; i--) {
+    const info = infos[i]!;
+    if (cmp(info.start, t) >= 0) continue;
+    const events = doc.content[staffId]?.[info.measure.id]?.voices[voice] ?? [];
+    for (let k = events.length - 1; k >= 0; k--) {
+      const e = events[k]!;
+      if (cmp(add(info.start, e.offset), t) < 0) return e.notes[0]!.pitch;
+    }
+  }
+  return null;
 }
