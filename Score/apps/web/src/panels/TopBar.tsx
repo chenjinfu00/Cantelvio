@@ -69,9 +69,16 @@ export function TopBar() {
           <BrandText text="AIlegro Score" />
         </strong>
         <span className="doc-title" title={title}>
-          {dirty && <span className="dirty-dot" aria-label={t('status.dirty')} />}
           {title}
         </span>
+        {dirty && (
+          <span
+            className="dirty-dot"
+            role="img"
+            aria-label={t('status.dirty')}
+            title={t('status.dirty')}
+          />
+        )}
       </div>
       <nav className="menu" aria-label={t('menu.file')}>
         <button

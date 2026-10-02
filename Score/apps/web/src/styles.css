@@ -242,6 +242,7 @@ kbd {
 .brand strong {
   font-size: 14px;
   letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
 /* "AIlegro": capital I and lowercase l look alike in sans fonts, so the AI is set apart. */
@@ -384,13 +385,18 @@ kbd {
 }
 
 .dirty-dot {
-  display: inline-block;
+  flex: none;
   width: 7px;
   height: 7px;
-  margin-right: 6px;
   border-radius: 50%;
   background: var(--warn);
-  vertical-align: 1px;
+}
+
+/* the title is on the page too: give the menus the room on medium screens */
+@media (max-width: 1360px) {
+  .doc-title {
+    display: none;
+  }
 }
 
 /* ------------------------------------------------------------------ palette */
