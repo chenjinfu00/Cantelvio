@@ -185,6 +185,26 @@ describe('layout', () => {
     expect(mid).toBeLessThan(b!.offset.n / b!.offset.d);
   });
 
+  it('honours system and page breaks', () => {
+    const ids = sequentialIds();
+    let doc = createScore({ template: 'piano', measures: 8, ids, now: 'T' });
+    doc = applyCommand(doc, {
+      type: 'batch',
+      commands: [
+        { type: 'measure.setBreak', measureId: doc.measures[1]!.id, breakAfter: 'system' },
+        { type: 'measure.setBreak', measureId: doc.measures[3]!.id, breakAfter: 'page' },
+      ],
+    }).doc;
+    const layout = layoutScore(doc, {});
+    expect(layout.pages.length).toBe(2);
+    const first = layout.pages[0]!.systems.map((s) => s.measures.map((m) => m.index));
+    expect(first).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
+    expect(layout.pages[1]!.systems[0]!.measures[0]!.index).toBe(4);
+  });
+
   it('justifies full systems to the page width', () => {
     const doc = SAMPLES[2]!.build();
     const layout = layoutScore(doc);

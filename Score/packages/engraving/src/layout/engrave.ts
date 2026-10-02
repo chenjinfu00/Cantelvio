@@ -286,14 +286,14 @@ export function layoutScore(doc: ScoreDoc, overrides: Partial<LayoutOptions> = {
   });
 
   // ---- pages
-  const pages: { systems: { p: Placed; y: number }[] }[] = [];
+  const pages: { systems: { p: Placed; y: number }[]; forced?: boolean }[] = [];
   const titleHeight = titleBlockHeight(doc);
   if (opts.mode === 'continuous') {
     const p = placed[0]!;
     const y = margin.top + titleHeight - p.top;
     pages.push({ systems: [{ p, y }] });
   } else {
-    let page: { systems: { p: Placed; y: number }[] } = { systems: [] };
+    let page: { systems: { p: Placed; y: number }[]; forced?: boolean } = { systems: [] };
     let cursor = margin.top + titleHeight;
     for (const p of placed) {
       const height = p.bottom - p.top;
@@ -304,11 +304,17 @@ export function layoutScore(doc: ScoreDoc, overrides: Partial<LayoutOptions> = {
       }
       page.systems.push({ p, y: cursor - p.top });
       cursor += height + STYLE.systemGap;
+      // a page break after the system's last measure starts a new page
+      if (infos[p.plan.last]!.measure.breakAfter === 'page' && p !== placed[placed.length - 1]) {
+        pages.push({ ...page, forced: true });
+        page = { systems: [] };
+        cursor = margin.top;
+      }
     }
     pages.push(page);
-    // vertical justification of full pages
+    // vertical justification of full pages (not of pages ended early by a page break)
     pages.forEach((pg, pi) => {
-      if (pi === pages.length - 1 || pg.systems.length < 2) return;
+      if (pi === pages.length - 1 || pg.systems.length < 2 || pg.forced) return;
       const last = pg.systems[pg.systems.length - 1]!;
       const used = last.y + last.p.bottom;
       const spare = pageH - margin.bottom - used;
