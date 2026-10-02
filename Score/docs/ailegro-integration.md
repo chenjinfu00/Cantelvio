@@ -86,7 +86,7 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 | `schema`, `scoreId`, `source` | 固定 schema 名、乐谱 id、来源（`ailegro-score`） |
 | `composer`, `work`, `movement`, `compositionKey`, `scoreSha256` | 元数据（未知为 null） |
 | `parts[]` | `id`、`name`、`sound`（MusicXML 乐器音色 id，如 `strings.violin`）、`group`、`program`（GM，1 起）、`mapping`、`instrument`、`staves` |
-| `measures[]` | `number`（1 起）、`on`、`dur`、`meter: [4, 4]`、`key: { fifths, mode }`（实际音高调号）、`irregular`（弱起等） |
+| `measures[]` | `number`（1 起）、`on`、`dur`、`meter: [4, 4]`、`key: { fifths, mode }`（实际音高调号）、`irregular`（实际长度**大于**拍号长度，如华彩段；与 AIlegro `prepare_classical_scores.py` 的定义一致，弱起小节不算） |
 | `notes[]` | `part`、`staff`、`voice`、`bar`（0 起）、`on`、`dur`、`pitch`、`writtenPitch`、`group`、`role`、`tuplet`、`dynamic`、`wedge`、`accent`、`grace`、`unpitched`；扩展：`drum`、`velocity`、`id`（音符 id，便于回指）、`source` |
 | `harmony[]` | `bar`、`on`、`root`、`rootName`、`quality`、`bass`、`id`（扩展，供作曲请求使用） |
 | `tempo[]` | `on`、`qpm`（每分钟四分音符数）、`text` |
@@ -169,8 +169,9 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
    按中位音高从高到低轮流分给该组的乐器。
 3. 键盘类多谱表乐器按中央 C 分上下谱表；**声部号在每个谱表内重新排名**（所以钢琴左手是下谱表的
    声部 1，而不是声部 2）。
-4. 量化（默认 `notation`）：二进制时值保持；接近 1/12 四分音符网格的视为三连音；其余对齐到
-   1/32 音符。`exact` 保留原值。检测三连音区间并建立连音组。
+4. 量化（默认 `notation`）：已落在 32 分音符网格上的时值保持（以四分音符为单位分母 ≤ 8）；接近
+   1/12 四分音符网格的视为三连音；其余对齐到 32 分音符网格（所以 64 分音符会被并到 32 分音符）。
+   `exact` 保留原值。检测三连音区间并建立连音组。
 5. 同一声部重叠时先换到空闲声部，实在不行截短前一个音（并给出警告）。
 6. 音高按结果的调和当时的和弦拼写；`accent` → accent / marcato；力度变化时加力度记号；
    和弦写进和弦记号轨。

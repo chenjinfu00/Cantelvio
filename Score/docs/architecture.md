@@ -56,7 +56,7 @@ graph LR
 1. `keyboard/shortcuts.ts` 把 `d` 映射到 `actions.enterLetter('D')`。
 2. `actions.ts` 根据光标位置、上一个音（`pitchBefore`）、调号、谱号、是否移调乐器
    算出音高（`pitchForLetter`），生成 `note.enter` 命令（事件 id、音符 id 由 `store.ids` 生成）；
-   如果写到了乐谱末尾，同一批命令里加 `measures.insert`。
+   如果音符超出或刚好写满乐谱末尾，同一批命令里加 `measures.insert`（光标才有地方继续）。
 3. `store.apply()` → `Session.dispatch()`：一个撤销步骤；记录撤销前后的选择与光标。
 4. React 重新渲染：`ScoreView` 重新排版（`useMemo` 以文档为键）、生成每页 SVG；
    未变化的页面字符串相同，DOM 不更新。

@@ -51,7 +51,8 @@ ScoreDoc
 - 存**发声音高**。移调乐器（单簧管、圆号、小号、短笛、低音提琴……）的 `transposition`
   是“记谱 → 发声”的音程 `{ diatonic, chromatic }`：降 B 调单簧管是 `{-1, -2}`（发声比记谱低大二度）。
   不写则用乐器目录里的默认值。
-- 调号 `keySig = { fifths, mode? }` 是**实际音高的调号**；移调乐器的记谱调号由推导得到。
+- 调号 `keySig = { fifths, mode? }` 是**实际音高的调号**；`mode` 缺省按大调处理（新建乐谱总是写明）。
+  移调乐器的记谱调号由推导得到。
 - 拼写很重要：AIlegro 返回的 MIDI 音高在导入时按调号和和弦拼写（`bridge/spelling.ts`）。
 
 ## 乐器、谱表、括号
@@ -90,7 +91,7 @@ ScoreDoc
 
 - **NoteEvent**：`id`、`offset`、`duration`（发声长度）、`notes`（同一符干的音，按音高升序）、
   `articulations?`（staccato、staccatissimo、accent、tenuto、marcato、fermata）、`stem?`、`source?`。
-- **Note**：`id`、`pitch`、`tieForward?`、`accidental?`（auto / show / cautionary / hide，尚未全部生效）、
+- **Note**：`id`、`pitch`、`tieForward?`、`accidental?`（auto / show / cautionary / hide，排版尚未读取，路线图 `M2-ENG-06`）、
   `velocity?`。
 - 一个声部内事件按 offset 排序、**互不重叠**；空隙即休止符。
 - **连音（tuplet）**：`TupletSpan` 记在声部上，`length` 是整个连音组的**实际**长度，
@@ -128,7 +129,7 @@ AIlegro 的和声条件。
 ## 结构校验
 
 `validateScore(doc)` 返回问题列表（空 = 合法）：格式标记、至少一个小节和一个乐器、第一小节有
-拍号和调号、id 不重复、括号引用合法且有序、声部数 ≤ 4、事件非空且时值为正、offset 在小节内、
+拍号和调号、所有 id（乐器、谱表、括号、小节、速度、事件、音符、连音、谱号变化、力度、和弦）不重复、括号引用合法且有序、声部数 ≤ 4、事件非空且时值为正、offset 在小节内、
 事件有序且不重叠、不超出乐谱末尾、连音不跨小节线、和弦记号位置合法。
 **命令保证这些不变量**；导入的文件、AI 生成的文档要先校验。
 
