@@ -5,11 +5,11 @@
 
 ## 一次性设置：GitHub 远程仓库（强烈推荐）
 
-工作目录在 iCloud Drive 里，iCloud 不是版本控制，偶尔会产生冲突副本，甚至损坏 `.git`。
-**以 GitHub 私有仓库作为唯一的事实来源**，iCloud 里的只是一个工作副本。
+工作副本在本机（`~/software develop/AIlegro Score`）。**以 GitHub 私有仓库作为唯一的事实来源**：
+备份、换电脑、和 Codex 云端协作都经过它。
 
 ```sh
-cd "~/Library/Mobile Documents/com~apple~CloudDocs/software develop/AIlegro Score"
+cd ~/"software develop/AIlegro Score"
 git config user.name "你的名字"
 git config user.email "你的邮箱"
 
@@ -87,8 +87,7 @@ gh pr create --fill               # 按 PR 模板填写：做了什么、怎么�
 
 - **云端**（chatgpt.com/codex）：连接 GitHub 仓库后按任务开分支、跑 `npm run check`、开 PR。
   适合独立、边界清楚的任务（一个命令、一个排版规则、一个面板）。
-- **CLI**（在本机仓库目录运行 `codex`）：适合需要你在旁边看的任务。注意 iCloud 文件夹的注意事项
-  （[dev-setup.md](dev-setup.md)）。
+- **CLI**（在本机仓库目录运行 `codex`）：适合需要你在旁边看的任务。
 
 ### Claude（Claude Code / Cowork）
 
@@ -101,14 +100,14 @@ gh pr create --fill               # 按 PR 模板填写：做了什么、怎么�
   GitHub Release（从提交历史生成变更说明）。
 - 文件格式版本（`.ailegro.json` 的 `version`）和 AIlegro schema 版本独立于应用版本。
 
-## iCloud 冲突副本
+## 同步冲突副本
 
-iCloud 同步冲突会生成 `name 2.ext` 这样的副本。`.gitignore` 忽略了这类名字（项目文件名不含空格），
-它们不会被提交——但**要处理**：比较内容，保留正确的版本，删除副本。
+iCloud、Dropbox 等同步盘冲突时会生成 `name 2.ext` 这样的副本。仓库现在不在同步盘里，但 `.gitignore`
+仍然忽略这类名字（项目文件名不含空格），以防万一——遇到时**要处理**：比较内容，保留正确的版本，删除副本。
 
 ```sh
 find . -path ./node_modules -prune -o -name "* [2-9]*" -print     # 找出冲突副本
 git status --ignored --short | grep " [2-9]"                         # 同上（git 视角）
 ```
 
-同级的 AIlegro 文件夹里就出现过这种副本（例如音频采样目录里的 `Fs2 2.mp3`）。
+同级的 AIlegro 文件夹从 iCloud 带过来了一些这样的副本（例如 `frontend/media/piano/Fs2 2.mp3`）。

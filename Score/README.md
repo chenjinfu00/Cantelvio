@@ -55,7 +55,7 @@ cd "../AIlegro"
 - [版本历史、对比与实时协作](docs/collaboration-and-history.md)
 - [文字记谱输入](docs/text-notation.md)
 - [Git 工作流（与 Codex / Claude 协作）](docs/git-workflow.md)
-- [开发环境与 iCloud 注意事项](docs/dev-setup.md)
+- [开发环境](docs/dev-setup.md)
 - [路线图](docs/roadmap.md)
 
 AI 编程助手（Codex、Claude）请先读 [AGENTS.md](AGENTS.md)。

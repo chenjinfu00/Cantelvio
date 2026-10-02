@@ -86,9 +86,10 @@ npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/g
 
 ## Environment notes
 
-- The working copy lives in iCloud Drive. Never create file names containing spaces. iCloud sync
-  conflicts appear as `name 2.ext`; they are git-ignored — report them, do not commit or delete
-  them silently. GitHub (the remote) is the source of truth; `npm install` artifacts stay local.
+- The working copy is a local folder (`~/software develop/AIlegro Score`, not in a synced drive),
+  next to `../AIlegro`. GitHub (the remote) is the source of truth; `npm install` artifacts stay
+  local. Never create file names containing spaces: names like `name 2.ext` are sync-conflict
+  copies (git-ignored) — report them, do not commit or delete them silently.
 - Install dependencies on the machine that runs them. Never run `npm install` for this folder from
   a Linux VM or sandbox: esbuild, rollup and sharp ship platform-specific binaries.
 - The sibling `../AIlegro` project has its own `AGENTS.md`. Do not modify it from this repository;

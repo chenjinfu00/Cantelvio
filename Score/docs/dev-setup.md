@@ -1,4 +1,4 @@
-# 开发环境与 iCloud 注意事项
+# 开发环境
 
 ## 需要什么
 
@@ -14,7 +14,7 @@
 ## 第一次运行
 
 ```sh
-cd "~/Library/Mobile Documents/com~apple~CloudDocs/software develop/AIlegro Score"
+cd ~/"software develop/AIlegro Score"
 
 npm install           # 在 Mac 本机运行（不要在 Linux 虚拟机里装，见下文）
 
@@ -38,28 +38,19 @@ VS Code 推荐插件：ESLint、Prettier、Vitest（`.vscode/extensions.json`）
 | `npm run render -- …` | `tools/render-score.ts`：`--sample <id>`、`--all`、`--file x.ailegro.json`、`--out dir`、`--concert`、`--continuous`、`--svg-only`、`--zh`、`--scale` |
 | `npm run gen:smufl` | 重新生成 Bravura 字形数据（只在改字形表时） |
 
-## iCloud Drive 注意事项（重要）
+## 项目位置与同步（重要）
 
-工作目录在 iCloud Drive 里。iCloud 不是版本控制系统，需要注意：
-
-1. **依赖目录会被同步**。`npm install` 生成的 `node_modules` 约 220 MB、6 千多个文件，第一次会被 iCloud
-   上传。常见的 “`node_modules.nosync` + 符号链接” 办法**对 npm 无效**（实测 npm 会删掉符号链接、
-   重新建真实目录）。如果介意同步，就用下面“更稳妥的做法”。`node_modules`、`apps/web/dist`、`out/`
-   都被 git 忽略，可以随时删除重建。
-2. **不要在 Linux 虚拟机 / 沙盒里对这个文件夹运行 `npm install`**（包括 Claude Cowork 的电脑端
-   虚拟机）。esbuild、rollup、sharp 等带有平台相关的二进制文件，Linux 装的在 macOS 上不能用。
-   依赖总是在 Mac 本机安装。
-3. **不要在两台电脑上同时打开同一个工作副本**。iCloud 同时同步 `.git` 目录可能损坏仓库。
-   在多台电脑之间切换时，用 `git push` / `git pull` 经过 GitHub，而不是依赖 iCloud 同步。
-4. **“优化 Mac 存储空间”** 可能把 `.git` 里的对象移到云端，git 会变慢或报错。建议在 Finder 里对
-   `AIlegro Score` 文件夹选择“始终保留下载”（Keep Downloaded），或关闭该选项。
-5. **冲突副本** `name 2.ext`：`.gitignore` 忽略它们（项目文件名不含空格），但要人工处理。
-   查找：`find . -path ./node_modules -prune -o -name "* [2-9]*" -print`。
-6. 文件名不要含空格（这样冲突副本才好识别）。
-
-**更稳妥的做法（推荐给日常开发）**：在 iCloud 之外再克隆一份用于开发（例如
-`git clone git@github.com:<你>/ailegro-score.git ~/Developer/ailegro-score`），依赖装在那里；
-iCloud 里的这份作为“家”，通过 `git pull` 保持最新。两份之间只通过 GitHub 同步，不要互相拷贝文件。
+1. **工作副本在本地**：`~/software develop/AIlegro Score`，和 `~/software develop/AIlegro` 并排——
+   适配器命令里的 `../AIlegro`、`../AIlegro Score` 相对路径依赖这个位置关系。
+   （2026-10-02 从 iCloud Drive 移出：同步盘会同步约 220 MB 的 `node_modules`，`.nosync` 符号链接对
+   npm 无效，两台电脑同时打开还可能损坏 `.git`。）
+2. **GitHub 是唯一的事实来源**：备份、换电脑都用 `git push` / `git pull`，不要把仓库放回 iCloud、
+   Dropbox 之类的同步盘，也不要在两份副本之间直接拷贝文件。
+3. **依赖在 Mac 本机安装**：不要在 Linux 虚拟机 / 沙盒里对这个文件夹运行 `npm install`（包括 Claude
+   Cowork 的电脑端虚拟机）。esbuild、rollup、sharp 等带有平台相关的二进制文件，Linux 装的在 macOS 上
+   不能用。`node_modules`、`apps/web/dist`、`out/` 都被 git 忽略，可以随时删除重建。
+4. **文件名不要含空格**。`name 2.ext` 这样的文件是同步冲突副本（`.gitignore` 忽略它们），要人工处理：
+   `find . -path ./node_modules -prune -o -name "* [2-9]*" -print`。
 
 ## AIlegro 适配器的环境
 

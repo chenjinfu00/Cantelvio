@@ -26,7 +26,7 @@ test-results/
 .idea/
 *.swp
 
-# iCloud Drive conflict copies ("index 2", "file 2.ts", ...). Project files never contain spaces,
-# so anything named "<name> <digit>" is a sync duplicate, not source. See docs/dev-setup.md.
+# Sync-conflict copies (iCloud, Dropbox: "index 2", "file 2.ts", ...). Project files never contain
+# spaces, so anything named "<name> <digit>" is a duplicate, not source. See docs/dev-setup.md.
 * [2-9]
 * [2-9].*
