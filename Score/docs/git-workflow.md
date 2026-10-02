@@ -11,7 +11,7 @@
 ```sh
 cd "~/Library/Mobile Documents/com~apple~CloudDocs/software develop/AIlegro Score"
 git config user.name "你的名字"
-git config user.email "jinfuchen@lorentz.leidenuniv.nl"
+git config user.email "你的邮箱"
 
 # 方式一：GitHub CLI（brew install gh；gh auth login）
 gh repo create ailegro-score --private --source . --remote origin --push
