@@ -110,4 +110,4 @@ find . -path ./node_modules -prune -o -name "* [2-9]*" -print     # 找出冲突
 git status --ignored --short | grep " [2-9]"                         # 同上（git 视角）
 ```
 
-同级的 AIlegro 文件夹从 iCloud 带过来了一些这样的副本（例如 `frontend/media/piano/Fs2 2.mp3`）。
+2026-10-02 已清理同级 AIlegro 文件夹从 iCloud 带来的 25 个副本（如 `frontend/media/piano/Fs2 2.mp3`，都与原文件相同）。
