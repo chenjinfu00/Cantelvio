@@ -33,7 +33,8 @@ npm run dev               # 终端 2：编辑器 → 浏览器打开 http://127.
 常用选项（写在 `npm run ailegro:serve --` 后面；第二个 `--` 之后的参数原样交给适配器）：
 
 ```sh
-npm run ailegro:serve -- --checkpoint training/runs/four-pillar-v31-step45225/weights.pt   # 指定权重
+npm run ailegro:serve -- --checkpoint training/runs/four-pillar-v31-step101129/weights.pt   # 指定权重（续训前另存的一份）
+npm run ailegro:serve -- --checkpoint training/runs/old-models-tmp/four-pillar-v31-step45225/weights.pt   # 旧模型
 npm run ailegro:serve -- -- --audiveris /Applications/Audiveris.app/Contents/MacOS/Audiveris
 npm run ailegro:serve -- -- --muscriptor-python ~/…/MuScriptor-large-1.3B/.venv-py312/bin/python
 npm run ailegro:serve -- --mock           # 不用模型，占位音乐（只试界面）

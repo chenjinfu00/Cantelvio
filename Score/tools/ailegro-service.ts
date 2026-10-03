@@ -5,7 +5,7 @@
  * and Open reads PDFs / scanned pages (Audiveris) and recordings (MuScriptor + AIlegro).
  *
  *   npm run ailegro:serve                                   # ../AIlegro, newest v3.1 weights, port 8765
- *   npm run ailegro:serve -- --checkpoint training/runs/four-pillar-v31-step45225/weights.pt
+ *   npm run ailegro:serve -- --checkpoint training/runs/four-pillar-v31-step101129/weights.pt
  *   npm run ailegro:serve -- --ailegro ~/AIlegro --port 8766 -- --threads 2 --candidates 8
  *   npm run ailegro:serve -- --mock                         # placeholder music, no AIlegro model needed
  *
