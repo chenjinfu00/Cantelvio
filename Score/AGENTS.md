@@ -21,7 +21,7 @@ commit messages and this file are English.
 
 | Path | What it is |
 | --- | --- |
-| `packages/core` | Score model, rational time, pitch spelling, instruments/templates, **commands** + undo/redo, JSON file format, text notation, playback timeline. Pure TS. |
+| `packages/core` | Score model, rational time, pitch spelling, instruments/templates, **commands** + undo/redo, JSON file format, text notation, MusicXML import, playback timeline. Pure TS. |
 | `packages/engraving` | Layout engine: ScoreDoc → pages of positioned graphics → SVG, using SMuFL/Bravura metrics. Pure TS. |
 | `packages/ailegro-bridge` | AIlegro interchange: score-record export, compose requests, import of generated music. Pure TS. |
 | `apps/web` | React + Vite editor UI (store, keyboard input, palettes, playback). |

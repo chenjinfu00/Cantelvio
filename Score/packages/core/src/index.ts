@@ -29,6 +29,9 @@ export * from './commands/history';
 // IO
 export * from './io/json';
 export * from './io/text';
+export * from './io/xml';
+export * from './io/zip';
+export * from './io/musicxml';
 // Playback
 export * from './playback/timeline';
 // Samples

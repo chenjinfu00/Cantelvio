@@ -37,7 +37,7 @@ cd "../AIlegro"
 
 | 目录 | 内容 |
 | --- | --- |
-| `packages/core` | 乐谱数据模型、精确有理数时值、音高拼写、乐器与模板、编辑命令与撤销/重做、文件格式、文字输入、回放时间线 |
+| `packages/core` | 乐谱数据模型、精确有理数时值、音高拼写、乐器与模板、编辑命令与撤销/重做、文件格式、文字输入、MusicXML 导入、回放时间线 |
 | `packages/engraving` | 自研排版引擎：数据模型 → 分行分页 → SVG（SMuFL / Bravura 字形） |
 | `packages/ailegro-bridge` | 与 AIlegro 的数据交换：导出乐谱记录、生成作曲请求、导入生成结果 |
 | `apps/web` | 网页编辑器（React + Vite） |

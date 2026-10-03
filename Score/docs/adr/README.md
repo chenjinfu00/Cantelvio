@@ -12,6 +12,7 @@
 | [0005](0005-ailegro-contract.md) | 与 AIlegro 只通过版本化 JSON 契约交互，AI 结果作为可审阅的建议 | 已接受 |
 | [0006](0006-file-format.md) | `.ailegro.json`：规范化、逐事件一行、适合 git 的 JSON | 已接受 |
 | [0007](0007-marks-graces-spanners.md) | 记号挂在事件上，倚音属于主音，线条放在全局 `spanners` 列表（格式 v2） | 已接受 |
+| [0011](0011-musicxml-import.md) | MusicXML 导入：自写 XML 解析器，整和弦连音线合并成一个事件，调号取不移调声部 | 已接受 |
 
 ## 模板
 

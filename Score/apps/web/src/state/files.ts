@@ -1,12 +1,21 @@
 /**
- * Files: open and save `.ailegro.json`, recent files, downloads, autosave to this browser.
+ * Files: open and save `.ailegro.json`, import MusicXML (`.musicxml`, `.xml`, `.mxl`), recent
+ * files, downloads, autosave to this browser.
  *
  * Where the browser offers the File System Access API (Chrome, Edge; a top-level page), Save
  * writes straight back to the file the score came from, Save As picks a place, and recent files
  * are remembered (their handles live in IndexedDB). Elsewhere — Safari, Firefox, and the
  * claude.ai artifact viewer — Save downloads the file and Open uses the file chooser.
  */
-import { type ScoreDoc, parseScore, serializeScore, validateScore } from '@ailegro-score/core';
+import {
+  MUSICXML_FILE_PATTERN,
+  type ScoreDoc,
+  importMusicXml,
+  musicXmlFromBytes,
+  parseScore,
+  serializeScore,
+  validateScore,
+} from '@ailegro-score/core';
 import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
 import { IN_ARTIFACT, artifactDownloads } from '../host';
 import { translate } from '../i18n';
@@ -62,6 +71,23 @@ const PICKER: PickerOptions = {
   id: 'ailegro-score',
   types: [{ description: 'AIlegro Score', accept: { 'application/json': ['.json'] } }],
 };
+
+/** Open also offers MusicXML, which is imported (Save then writes an .ailegro.json). */
+const OPEN_PICKER: PickerOptions = {
+  id: 'ailegro-score',
+  types: [
+    {
+      description: 'AIlegro Score, MusicXML',
+      accept: {
+        'application/json': ['.json'],
+        'application/vnd.recordare.musicxml+xml': ['.musicxml', '.xml'],
+        'application/vnd.recordare.musicxml': ['.mxl'],
+      },
+    },
+  ],
+};
+
+const OPEN_ACCEPT = '.json,.ailegro.json,application/json,.musicxml,.xml,.mxl';
 
 /** The file the current document was opened from or last saved to. */
 let current: FileHandleLike | null = null;
@@ -322,11 +348,38 @@ export async function confirmDiscard(opts: { thenDialog?: boolean } = {}): Promi
   return go === 'go';
 }
 
-/** Open a score file; `handle` (when known) lets Save write back to it. */
+/** Raw DEFLATE with the browser's DecompressionStream (for `.mxl` archives). */
+async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
+  const stream = new Blob([data as Uint8Array<ArrayBuffer>])
+    .stream()
+    .pipeThrough(new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+/** A MusicXML file (by name): imported rather than opened. */
+export const isMusicXmlFile = (name: string): boolean => MUSICXML_FILE_PATTERN.test(name);
+
+/**
+ * Open a score file; `handle` (when known) lets Save write back to it. MusicXML is imported into
+ * a new, unsaved document: Save asks where to write the `.ailegro.json`, never over the MusicXML.
+ */
 export async function openFile(file: File, handle: FileHandleLike | null = null): Promise<boolean> {
   const s = getStore().getState();
+  const lang = s.view.lang;
   try {
-    const doc = parseScore(await file.text());
+    let doc: ScoreDoc;
+    let imported: readonly string[] | null = null;
+    if (isMusicXmlFile(file.name)) {
+      const { xml } = await musicXmlFromBytes(new Uint8Array(await file.arrayBuffer()), inflateRaw);
+      const result = importMusicXml(xml, {
+        ids: s.ids,
+        now: new Date().toISOString(),
+        fileName: file.name,
+        lang,
+      });
+      doc = result.doc;
+      imported = result.warnings;
+    } else doc = parseScore(await file.text());
     // Hand-edited or foreign files must keep the model's invariants before they are opened.
     const issues = validateScore(doc);
     if (issues.length) {
@@ -338,10 +391,23 @@ export async function openFile(file: File, handle: FileHandleLike | null = null)
       );
       return false;
     }
+    if (imported) {
+      s.load(doc, null);
+      current = null;
+      const shown = imported.slice(0, 2).join('; ');
+      const more = imported.length > 2 ? ` (+${imported.length - 2})` : '';
+      s.notify(
+        imported.length
+          ? translate(lang, 'files.importedWarnings', { f: file.name, w: shown + more })
+          : translate(lang, 'files.imported', { f: file.name }),
+      );
+      for (const warning of imported) console.info('[MusicXML]', warning);
+      return true;
+    }
     s.load(doc, file.name);
     current = handle;
     if (handle) void remember(handle, doc.meta.title);
-    s.notify(translate(s.view.lang, 'toast.opened', { f: file.name }));
+    s.notify(translate(lang, 'toast.opened', { f: file.name }));
     return true;
   } catch (e) {
     s.notify(`${file.name}: ${String((e as Error).message ?? e)}`, 'error');
@@ -353,7 +419,7 @@ export async function openScore(): Promise<void> {
   if (!(await confirmDiscard({ thenDialog: true }))) return;
   if (CAN_PICK) {
     try {
-      const [h] = await window.showOpenFilePicker!({ ...PICKER, multiple: false });
+      const [h] = await window.showOpenFilePicker!({ ...OPEN_PICKER, multiple: false });
       if (h) await openFile(await h.getFile(), h);
       return;
     } catch (e) {
@@ -361,7 +427,7 @@ export async function openScore(): Promise<void> {
       console.warn('[files] open dialog failed, using the file chooser', e);
     }
   }
-  const file = await pickFile('.json,.ailegro.json,application/json');
+  const file = await pickFile(OPEN_ACCEPT);
   if (file) await openFile(file);
 }
 
@@ -384,7 +450,7 @@ export async function openRecent(entry: RecentFile): Promise<void> {
  */
 export async function openDropped(item: DataTransferItem | null, file: File): Promise<void> {
   const s = getStore().getState();
-  if (!/\.json$/i.test(file.name)) {
+  if (!/\.json$/i.test(file.name) && !isMusicXmlFile(file.name)) {
     s.notify(translate(s.view.lang, 'files.notScore', { f: file.name }), 'error');
     return;
   }

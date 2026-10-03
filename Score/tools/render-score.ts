@@ -5,12 +5,20 @@
  *   npm run render -- --sample orchestra --out out/
  *   npm run render -- --all --out out/renders --svg-only
  *   npm run render -- --file my-score.ailegro.json --concert --continuous
+ *   npm run render -- --file score.mxl            # MusicXML is imported first
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { parseArgs } from 'node:util';
-import { SAMPLES, type ScoreDoc, parseScore } from '@ailegro-score/core';
+import {
+  MUSICXML_FILE_PATTERN,
+  SAMPLES,
+  type ScoreDoc,
+  parseScore,
+  randomIds,
+} from '@ailegro-score/core';
 import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
+import { importMusicXmlFile } from './musicxml-file';
 
 const { values } = parseArgs({
   options: {
@@ -31,11 +39,17 @@ const lang = values.zh ? 'zh' : 'en';
 for (const s of SAMPLES) {
   if (values.all || values.sample?.includes(s.id)) jobs.push({ name: s.id, doc: s.build(lang) });
 }
-for (const f of values.file ?? [])
-  jobs.push({
-    name: basename(f).replace(/\.ailegro\.json$|\.json$/, ''),
-    doc: parseScore(readFileSync(f, 'utf8')),
-  });
+for (const f of values.file ?? []) {
+  if (MUSICXML_FILE_PATTERN.test(f)) {
+    const { doc, warnings } = await importMusicXmlFile(f, { ids: randomIds() });
+    for (const w of warnings) console.warn(`${basename(f)}: ${w}`);
+    jobs.push({ name: basename(f).replace(MUSICXML_FILE_PATTERN, ''), doc });
+  } else
+    jobs.push({
+      name: basename(f).replace(/\.ailegro\.json$|\.json$/, ''),
+      doc: parseScore(readFileSync(f, 'utf8')),
+    });
+}
 if (jobs.length === 0) {
   console.error(
     `nothing to render. Use --sample <${SAMPLES.map((s) => s.id).join('|')}>, --all or --file <path>`,
