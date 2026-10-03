@@ -18,6 +18,8 @@ npm install
 npm run dev        # 打开 http://127.0.0.1:5178/
 npm run check      # 代码检查 + 类型检查 + 单元测试
 npm run render -- --sample orchestra --out out/   # 无界面渲染示例乐谱为 SVG/PNG
+npm run import:musicxml -- score.mxl --out out/score.ailegro.json   # MusicXML → .ailegro.json
+npm run import:pdf -- score.pdf   # PDF / 图片识谱（需要 Audiveris，见 docs/pdf-import.md）
 ```
 
 ## 和 AIlegro 一起用

@@ -21,10 +21,10 @@
   回放（钢琴采样 + 合成音色）、保存（写回原文件）/ 另存为 / 打开 / 最近文件 / 拖放打开 / 自动保存、
   SVG 导出、打印。
 - MusicXML 导入（`.musicxml`、`.xml`、`.mxl`）：音符、连音、倚音、记号、线条、和弦记号、移调乐器，
-  模型里没有的内容计数提示。
+  模型里没有的内容计数提示。PDF / 图片识谱：命令行调用 Audiveris 后导入（`npm run import:pdf`）。
 - AIlegro：乐谱记录、作曲请求、结果导入为可审阅建议；本机适配服务器（`--serve`）与文件交换；
   `--mock` 往返测试。
-- 中英文界面，140 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
+- 中英文界面，143 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
 
 最需要先做的：**`M3-AI-01`（用真实权重跑一次适配器）**、`M2-ENG-01`（增量排版）、
 `M2-ENG-02`（多声部碰撞）。
@@ -64,6 +64,7 @@
 | M2-CORE-04 | MusicXML 导入（导入的内容带 `source: import`） | ✅ `.musicxml` / `.xml` / `.mxl`，编辑器打开或拖入、`npm run import:musicxml`（[musicxml-import.md](musicxml-import.md)、[ADR 0011](adr/0011-musicxml-import.md)） | claude |
 | M2-CORE-05 | MusicXML、MIDI 导出 | ⏳ | |
 | M2-CORE-06 | 文件格式 v2（事件记号、倚音、`spanners`，v1 迁移）、文字记谱 v1 | ✅ | claude |
+| M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器里直接打开 PDF 需要本机服务 | claude |
 | M2-WEB-01 | 复制粘贴界面；范围移调、范围改时值 | ⏳ | |
 | M2-WEB-02 | 快速插入面板：力度、谱号、调号、拍号、演奏法 | 🚧 小键盘已有力度、演奏法、装饰、线条；谱号、调号、拍号还在属性面板 | |
 | M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ⏳ | |

@@ -117,6 +117,24 @@ export interface MusicXmlImportOptions {
   readonly fileName?: string;
   /** Language of catalog instrument names used for unnamed parts (default 'en'). */
   readonly lang?: Lang;
+  /**
+   * Catalog instrument ids of the parts, in order (null or missing: guessed from the file). For files
+   * whose part names are missing or wrong, e.g. after optical music recognition.
+   */
+  readonly instruments?: readonly (string | null | undefined)[];
+  /**
+   * Read the notes of transposing instruments that have no `<transpose>` as written pitch (default
+   * false: MusicXML without `<transpose>` is concert pitch). Optical music recognition reads what is
+   * printed, which for a clarinet or a horn part is the written pitch.
+   */
+  readonly writtenPitch?: boolean;
+  /**
+   * Interior bars whose content is shorter than the time signature in every part are filled up to
+   * it (default false: they keep their actual length). For optical music recognition, where a short
+   * bar usually means a missed rest or dot; pickups, the last bar and bars that pair up with a
+   * neighbour into one full bar keep their length.
+   */
+  readonly trustTimeSignatures?: boolean;
 }
 
 export interface MusicXmlImportResult {
@@ -488,7 +506,7 @@ interface Pos {
 }
 
 interface RawNote {
-  readonly pitch: Pitch;
+  pitch: Pitch;
   /** Tied (MusicXML tie or tied start) to the next note of the same pitch. */
   tie: boolean;
   readonly cautionary: boolean;
@@ -732,7 +750,9 @@ function readMeta(
     }
   }
   const baseName = fileName
-    ? fileName.replace(/^.*[\\/]/, '').replace(MUSICXML_FILE_PATTERN, '')
+    ? fileName
+        .replace(/^.*[\\/]/, '')
+        .replace(/\.(musicxml|mxl|xml|pdf|png|jpe?g|tiff?|gif|bmp|webp)$/i, '')
     : '';
   let title =
     workTitle ||
@@ -1894,6 +1914,52 @@ export function importMusicXml(xml: string, options: MusicXmlImportOptions): Mus
     return parsePart(body ?? { name: 'part', attributes: {}, children: [] }, i, ctx);
   });
 
+  // -------------------------------------------------------------- instruments
+  const identities: PartIdentity[] = partInfos.map((info, i) => {
+    const p = parsed[i]!;
+    return {
+      names: [info.name, ...info.instrumentNames, info.abbreviation].filter(Boolean),
+      sounds: info.sounds,
+      program: info.program,
+      percussion: info.percussionChannel || p.percussionClef || p.unpitched,
+      staves: p.staves,
+      clefs: Array.from({ length: p.staves }, (_, s) => p.firstClefs[s] ?? 'treble'),
+      hasLyrics: p.hasLyrics,
+    };
+  });
+  const guesses = guessInstruments(identities).map((guess, i) => {
+    const wanted = options.instruments?.[i];
+    if (!wanted) return guess;
+    if (findInstrument(wanted)) return { instrument: wanted, by: 'name' as const };
+    log.add(`Unknown instrument "${wanted}" for part ${i + 1}; it was guessed from the file`);
+    return guess;
+  });
+  const defs: InstrumentDef[] = guesses.map(
+    (g) => findInstrument(g.instrument) ?? getInstrument('piano'),
+  );
+  if (options.writtenPitch && !ctx.concertScore) {
+    parsed.forEach((p, i) => {
+      const t = defs[i]!.transposition;
+      if (!t || isUnison(t) || p.transposition) return;
+      const sounding = (q: Pitch) => normalizeSpelling(transpose(q, t));
+      for (const e of p.events) for (const n of e.notes) n.pitch = sounding(n.pitch);
+      for (const g of p.graces) for (const n of g.notes) n.pitch = sounding(n.pitch);
+      for (const h of p.harmony) {
+        const spell = (x: { step: Step; alter: number }) => {
+          const q = sounding({ ...x, octave: 4 });
+          return { step: q.step, alter: q.alter };
+        };
+        h.root = spell(h.root);
+        if (h.bass) h.bass = spell(h.bass);
+      }
+      for (const k of p.keys) {
+        k.key = transposeKey(k.key, t);
+        k.transposing = true;
+      }
+      log.add(`Part ${i + 1} (${defs[i]!.name.en}) was read as written pitch and transposed`);
+    });
+  }
+
   // -------------------------------------------------------------- bars
   const measureCount = Math.max(1, ...parsed.map((p) => p.measures.length));
   if (parsed.some((p) => p.measures.length !== measureCount && p.measures.length > 0))
@@ -1934,15 +2000,59 @@ export function importMusicXml(xml: string, options: MusicXmlImportOptions): Mus
   }
   const lengths: Rational[] = [];
   const nominals: Rational[] = [];
+  const overflowing = new Set<number>();
   {
     let ts: TimeSignature = timeAt.get(0) ?? { beats: 4, beatType: 4 };
     for (let m = 0; m < measureCount; m++) {
       ts = timeAt.get(m) ?? ts;
       const nominal = barLength(ts);
       const content = contentEnd[m]!;
-      lengths.push(isPositive(content) ? content : nominal);
+      // When one part fills the bar exactly, longer content in another part is that part's mistake
+      // (frequent after optical music recognition), not a longer bar.
+      const fits = parsed.some((p) => p.measures[m]?.hasNotes && eq(p.measures[m]!.end, nominal));
+      if (fits && lt(nominal, content)) {
+        lengths.push(nominal);
+        overflowing.add(m);
+      } else lengths.push(isPositive(content) ? content : nominal);
       nominals.push(nominal);
     }
+    if (options.trustTimeSignatures) {
+      let filled = 0;
+      let first = -1;
+      const full = (a: number, b: number) =>
+        a >= 0 &&
+        b < measureCount &&
+        eq(nominals[a]!, nominals[b]!) &&
+        eq(add(lengths[a]!, lengths[b]!), nominals[a]!);
+      for (let m = 1; m + 1 < measureCount; m++) {
+        if (!lt(lengths[m]!, nominals[m]!) || parsed.some((p) => p.measures[m]?.implicit)) continue;
+        if (full(m - 1, m) || full(m, m + 1)) continue;
+        lengths[m] = nominals[m]!;
+        filled++;
+        if (first < 0) first = m;
+      }
+      if (filled)
+        log.add('Bars shorter than their time signature were filled up to it', first + 1, filled);
+    }
+  }
+  if (overflowing.size) {
+    // notes past the end of such a bar are dropped, notes across it end at the barline (unless tied)
+    for (const p of parsed)
+      for (let k = p.events.length - 1; k >= 0; k--) {
+        const e = p.events[k]!;
+        if (!overflowing.has(e.measure)) continue;
+        const length = lengths[e.measure]!;
+        if (!lt(e.offset, length)) {
+          e.dropped = true;
+          p.events.splice(k, 1);
+        } else if (lt(length, add(e.offset, e.duration)) && !e.notes.some((n) => n.tie))
+          e.duration = sub(length, e.offset);
+      }
+    log.add(
+      'Bars where a part runs past the time signature keep its length (the extra notes were cut)',
+      Math.min(...overflowing) + 1,
+      overflowing.size,
+    );
   }
   const starts: Rational[] = [];
   let total = ZERO;
@@ -2012,26 +2122,13 @@ export function importMusicXml(xml: string, options: MusicXmlImportOptions): Mus
   }
 
   // -------------------------------------------------------------- parts, staves, groups
-  const identities: PartIdentity[] = partInfos.map((info, i) => {
-    const p = parsed[i]!;
-    return {
-      names: [info.name, ...info.instrumentNames, info.abbreviation].filter(Boolean),
-      sounds: info.sounds,
-      program: info.program,
-      percussion: info.percussionChannel || p.percussionClef || p.unpitched,
-      staves: p.staves,
-      clefs: Array.from({ length: p.staves }, (_, s) => p.firstClefs[s] ?? 'treble'),
-      hasLyrics: p.hasLyrics,
-    };
-  });
-  const guesses = guessInstruments(identities);
   const lang = options.lang ?? 'en';
   const staffOffset: number[] = [];
   const staffIds: ID[] = [];
   const parts: Part[] = partInfos.map((info, i) => {
     const p = parsed[i]!;
     const guess = guesses[i]!;
-    const def: InstrumentDef = findInstrument(guess.instrument) ?? getInstrument('piano');
+    const def = defs[i]!;
     if (guess.by === 'fallback')
       log.add(`Part "${info.name || info.id}": instrument not recognized, using ${def.name.en}`);
     staffOffset.push(staffIds.length);
@@ -2050,9 +2147,11 @@ export function importMusicXml(xml: string, options: MusicXmlImportOptions): Mus
       own && (own.diatonic !== catalog.diatonic || own.chromatic !== catalog.chromatic)
         ? own
         : null;
-    const name = info.name && !isGenericName(info.name) ? info.name : def.name[lang];
+    // an instrument given by the caller also names the part (the file's names were not trusted)
+    const given = !!options.instruments?.[i] && options.instruments[i] === def.id;
+    const name = info.name && !given && !isGenericName(info.name) ? info.name : def.name[lang];
     const abbreviation =
-      info.abbreviation && !isGenericName(info.abbreviation)
+      info.abbreviation && !given && !isGenericName(info.abbreviation)
         ? info.abbreviation
         : def.abbreviation[lang];
     return {

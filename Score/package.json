@@ -25,6 +25,7 @@
     "check": "npm run lint && npm run typecheck && npm run test",
     "render": "tsx tools/render-score.ts",
     "import:musicxml": "tsx tools/import-musicxml.ts",
+    "import:pdf": "tsx tools/pdf-to-score.ts",
     "gen:smufl": "node packages/engraving/scripts/gen-smufl.mjs"
   },
   "devDependencies": {

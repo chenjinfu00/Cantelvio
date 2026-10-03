@@ -247,6 +247,84 @@ describe('MusicXML import', () => {
     expect(alone.doc.measures[0]!.keySig).toEqual({ fifths: -2 });
   });
 
+  it('reads unmarked transposing parts as written pitch when asked (optical music recognition)', () => {
+    const clarinet = attributes({ fifths: -1, time: [4, 4] }) + note('G4', 4, 'whole');
+    const piano = attributes({ fifths: -3, time: [4, 4] }) + note('F4', 4, 'whole');
+    const xml = partwise(
+      `<part id="P1"><measure number="1">${clarinet}</measure></part>` +
+        `<part id="P2"><measure number="1">${piano}</measure></part>`,
+      scorePart('P1', 'Voice') + scorePart('P2', 'Piano'),
+    );
+    const plain = load(xml);
+    expect(plain.doc.parts[0]!.instrument).toBe('soprano');
+    expect(show(events(plain.doc, 0, 0))).toEqual(['G4@0:1']);
+    const omr = importMusicXml(xml, {
+      ids: sequentialIds(),
+      now: NOW,
+      instruments: ['clarinet-bb', null],
+      writtenPitch: true,
+    });
+    expect(validateScore(omr.doc)).toEqual([]);
+    expect(omr.doc.parts.map((p) => p.instrument)).toEqual(['clarinet-bb', 'piano']);
+    expect(show(events(omr.doc, 0, 0))).toEqual(['F4@0:1']); // written G4 sounds F4
+    expect(omr.doc.measures[0]!.keySig).toEqual({ fifths: -3 }); // concert E-flat, no disagreement
+    expect(omr.warnings).toEqual([
+      'Part 1 (Clarinet in B♭) was read as written pitch and transposed',
+    ]);
+    const unknown = importMusicXml(xml, { ids: sequentialIds(), now: NOW, instruments: ['kazoo'] });
+    expect(unknown.warnings.join(' ')).toMatch(/Unknown instrument "kazoo"/);
+  });
+
+  it('keeps the time signature when one part runs past it and another fills the bar', () => {
+    const xml = partwise(
+      `<part id="P1"><measure number="1">${attributes({ fifths: 0, time: [2, 4] })}` +
+        `${note('C5', 1, 'quarter')}${note('D5', 1, 'quarter')}${note('E5', 1, 'quarter')}</measure>` +
+        `<measure number="2">${note('F5', 2, 'half')}</measure></part>` +
+        `<part id="P2"><measure number="1">${attributes({ fifths: 0, time: [2, 4], clefs: ['F4'] })}` +
+        `${note('C3', 2, 'half')}</measure><measure number="2">${note('G2', 2, 'half')}</measure></part>`,
+      scorePart('P1', 'Violin') + scorePart('P2', 'Cello'),
+    );
+    const { doc, warnings } = load(xml);
+    expect(doc.measures[0]!.actualLength).toBeUndefined();
+    expect(show(events(doc, 0, 0))).toEqual(['C5@0:1/4', 'D5@1/4:1/4']);
+    expect(show(events(doc, 0, 1))).toEqual(['F5@0:1/2']);
+    expect(warnings).toEqual([
+      'Bars where a part runs past the time signature keep its length (the extra notes were cut) (bar 1)',
+    ]);
+  });
+
+  it('can trust the time signature for short interior bars', () => {
+    const bars = [
+      note('G4', 1, 'quarter'),
+      note('C5', 2, 'half'),
+      note('D5', 1, 'quarter'), // a missed rest: one beat short
+      note('E5', 2, 'half'),
+      note('C5', 1, 'quarter'),
+    ];
+    const xml = partwise(
+      `<part id="P1">${bars
+        .map(
+          (b, i) =>
+            `<measure number="${i}">${i === 0 ? attributes({ fifths: 0, time: [2, 4] }) : ''}${b}</measure>`,
+        )
+        .join('')}</part>`,
+      scorePart('P1', 'Flute'),
+    );
+    const lengths = (doc: ScoreDoc) =>
+      doc.measures.map((m) => (m.actualLength ? toString(m.actualLength) : '-'));
+    expect(lengths(load(xml).doc)).toEqual(['1/4', '-', '1/4', '-', '1/4']);
+    const trusted = importMusicXml(xml, {
+      ids: sequentialIds(),
+      now: NOW,
+      trustTimeSignatures: true,
+    });
+    expect(validateScore(trusted.doc)).toEqual([]);
+    expect(lengths(trusted.doc)).toEqual(['1/4', '-', '-', '-', '1/4']); // pickup and last bar stay short
+    expect(trusted.warnings).toEqual([
+      'Bars shorter than their time signature were filled up to it (bar 3)',
+    ]);
+  });
+
   it('reads key, time and clef changes', () => {
     const xml = partwise(
       `<part id="P1"><measure number="1">${attributes({ fifths: 0, time: [4, 4], clefs: ['F4'] })}${note('C3', 4, 'whole')}</measure>` +

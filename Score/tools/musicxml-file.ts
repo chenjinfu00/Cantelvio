@@ -7,6 +7,7 @@ import { basename } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import {
   type IdGenerator,
+  type MusicXmlImportOptions,
   type MusicXmlImportResult,
   importMusicXml,
   musicXmlFromBytes,
@@ -19,14 +20,14 @@ export async function readMusicXmlText(path: string): Promise<string> {
   return (await musicXmlFromBytes(new Uint8Array(readFileSync(path)), inflateRaw)).xml;
 }
 
-/** Read and import a MusicXML file. */
+/** Read and import a MusicXML file (`fileName` defaults to the file's name). */
 export async function importMusicXmlFile(
   path: string,
-  options: { ids: IdGenerator; now?: string },
+  options: { ids: IdGenerator; now?: string } & Partial<Omit<MusicXmlImportOptions, 'ids' | 'now'>>,
 ): Promise<MusicXmlImportResult> {
   return importMusicXml(await readMusicXmlText(path), {
-    ids: options.ids,
-    now: options.now ?? new Date().toISOString(),
     fileName: basename(path),
+    ...options,
+    now: options.now ?? new Date().toISOString(),
   });
 }
