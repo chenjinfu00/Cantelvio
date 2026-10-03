@@ -22,7 +22,7 @@ graph LR
 
 | 包 | 职责 | 允许的依赖 |
 | --- | --- | --- |
-| `@ailegro-score/core` | 数据模型、有理数时值、音高拼写、乐器目录与模板、**命令**与撤销/重做（`Session`）、`.ailegro.json` 读写、文字记谱、回放时间线、示例乐谱 | 仅 `immer` |
+| `@ailegro-score/core` | 数据模型、有理数时值、音高拼写、乐器目录与模板、**命令**与撤销/重做（`Session`）、`.ailegro.json` 读写、文字记谱、MusicXML 导入（自带 XML / ZIP 读取，解压由平台提供）、回放时间线、示例乐谱 | 仅 `immer` |
 | `@ailegro-score/engraving` | `ScoreDoc` → 分行分页的图形 → SVG；输出命中测试用的几何信息 | `core` |
 | `@ailegro-score/ailegro-bridge` | 三个版本化契约：乐谱记录、作曲请求、生成结果导入 | `core` |
 | `@ailegro-score/web` | 编辑器界面：状态（zustand）、键盘/鼠标输入、面板、回放（Web Audio）、文件 | 以上全部 + React |

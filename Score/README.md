@@ -18,6 +18,8 @@ npm install
 npm run dev        # 打开 http://127.0.0.1:5178/
 npm run check      # 代码检查 + 类型检查 + 单元测试
 npm run render -- --sample orchestra --out out/   # 无界面渲染示例乐谱为 SVG/PNG
+npm run import:musicxml -- score.mxl --out out/score.ailegro.json   # MusicXML → .ailegro.json
+npm run import:pdf -- score.pdf   # PDF / 图片识谱（需要 Audiveris，见 docs/pdf-import.md）
 ```
 
 ## 和 AIlegro 一起用
@@ -37,7 +39,7 @@ cd "../AIlegro"
 
 | 目录 | 内容 |
 | --- | --- |
-| `packages/core` | 乐谱数据模型、精确有理数时值、音高拼写、乐器与模板、编辑命令与撤销/重做、文件格式、文字输入、回放时间线 |
+| `packages/core` | 乐谱数据模型、精确有理数时值、音高拼写、乐器与模板、编辑命令与撤销/重做、文件格式、文字输入、MusicXML 导入、回放时间线 |
 | `packages/engraving` | 自研排版引擎：数据模型 → 分行分页 → SVG（SMuFL / Bravura 字形） |
 | `packages/ailegro-bridge` | 与 AIlegro 的数据交换：导出乐谱记录、生成作曲请求、导入生成结果 |
 | `apps/web` | 网页编辑器（React + Vite） |

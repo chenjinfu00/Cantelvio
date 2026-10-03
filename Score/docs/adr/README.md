@@ -15,6 +15,8 @@
 | [0008](0008-locked-material-by-decoding.md) | 生成区间内的给定材料（配伴奏、配器、动机发展）用 AIlegro 的解码约束实现，不重训 | 已接受 |
 | [0009](0009-harmonizer-model.md) | 配伴奏的和弦由单独训练的配和声模型（旋律 → 和弦）给出，v3.1 只写伴奏 | 已接受 |
 | [0010](0010-harmonic-analysis-contract.md) | 和声分析用单独的契约（analysis-request/1 → analysis-result/1），结果作为可审阅的和弦记号 | 已接受 |
+| [0011](0011-musicxml-import.md) | MusicXML 导入：自写 XML 解析器，整和弦连音线合并成一个事件，调号取不移调声部 | 已接受 |
+| [0012](0012-pdf-import-audiveris.md) | PDF / 图片识谱：调用外部的 Audiveris（AGPL，单独安装），再走 MusicXML 导入 | 已接受 |
 
 ## 模板
 

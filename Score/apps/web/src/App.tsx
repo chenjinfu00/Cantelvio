@@ -68,7 +68,7 @@ export function App() {
     return () => window.removeEventListener('beforeunload', onLeave);
   }, []);
 
-  // Drop a .ailegro.json file anywhere to open it.
+  // Drop a .ailegro.json or MusicXML file anywhere to open (import) it.
   useEffect(() => {
     const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
     const over = (e: DragEvent) => {
