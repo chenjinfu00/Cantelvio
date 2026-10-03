@@ -13,7 +13,6 @@ import { type MessageKey, useT } from '../i18n';
 import {
   ADAPTER_TASKS,
   ALL_TASKS,
-  DEFAULT_SERVICE_URL,
   MATERIAL_TASKS,
   type PanelSpec,
   type ServiceInfo,
@@ -30,19 +29,22 @@ import {
   pendingRuns,
   pingService,
   rejectRun,
+  SERVICE_KEY,
+  serviceUrl as storedServiceUrl,
 } from '../state/ailegro';
 import { pickFile } from '../state/files';
+import {
+  AUDIO_ACCEPT,
+  AUDIO_GROUPS,
+  type ImportKind,
+  type ImportOptions,
+  METRES,
+  PDF_ACCEPT,
+  importViaService,
+  loadImportOptions,
+  saveImportOptions,
+} from '../state/service-import';
 import { getStore, useEditor } from '../state/store';
-
-const SERVICE_KEY = 'ailegro-score:service-url';
-
-function loadServiceUrl(): string {
-  try {
-    return localStorage.getItem(SERVICE_KEY) || DEFAULT_SERVICE_URL;
-  } catch {
-    return DEFAULT_SERVICE_URL;
-  }
-}
 
 export function AilegroPanel() {
   const t = useT();
@@ -50,9 +52,10 @@ export function AilegroPanel() {
   const selection = useEditor((s) => s.selection);
   const [spec, setSpec] = useState<PanelSpec>(() => defaultSpec(doc, selection));
   const [lastRequest, setLastRequest] = useState<ComposeRequest | AnalysisRequest | null>(null);
-  const [serviceUrl, setServiceUrl] = useState(loadServiceUrl);
+  const [serviceUrl, setServiceUrl] = useState(storedServiceUrl);
   const [service, setService] = useState<ServiceInfo | 'offline' | null>(null);
   const [busy, setBusy] = useState(false);
+  const [importOptions, setImportOptions] = useState<ImportOptions>(loadImportOptions);
   const runs = useMemo(() => pendingRuns(doc), [doc]);
 
   // Another document was opened: start from its defaults.
@@ -147,6 +150,23 @@ export function AilegroPanel() {
     } finally {
       setBusy(false);
     }
+  };
+  const changeImport = (patch: Partial<ImportOptions>) => {
+    setImportOptions((o) => {
+      const next = { ...o, ...patch };
+      saveImportOptions(next);
+      return next;
+    });
+  };
+  const toggleInstrument = (g: string) =>
+    changeImport({
+      instruments: importOptions.instruments.includes(g)
+        ? importOptions.instruments.filter((x) => x !== g)
+        : [...importOptions.instruments, g],
+    });
+  const onOpenForImport = async (kind: ImportKind) => {
+    const file = await pickFile(kind === 'pdf' ? PDF_ACCEPT : AUDIO_ACCEPT);
+    if (file) await importViaService(file, kind, importOptions);
   };
   const onExportAnalysis = () => {
     try {
@@ -354,6 +374,18 @@ export function AilegroPanel() {
                     })}
               </p>
             )}
+            {service && service !== 'offline' && service.imports && (
+              <p className="status-line">
+                {t('import.serviceCan', {
+                  p: service.imports.pdf
+                    ? t('import.yes')
+                    : t('import.no', { w: service.imports.why?.pdf ?? '?' }),
+                  a: service.imports.audio
+                    ? t('import.yes')
+                    : t('import.no', { w: service.imports.why?.audio ?? '?' }),
+                })}
+              </p>
+            )}
             <button
               className="primary wide"
               disabled={busy || spec.groups.length === 0}
@@ -388,6 +420,84 @@ export function AilegroPanel() {
               {t('ai.copy')}
             </button>
           </div>
+        )}
+      </section>
+
+      <section className="ai-import">
+        <h4>{t('import.title')}</h4>
+        {IN_ARTIFACT ? (
+          <p className="hint">
+            <BrandText text={t('import.unavailable')} />
+          </p>
+        ) : (
+          <>
+            <p className="hint">
+              <BrandText text={t('import.hint')} />
+            </p>
+            <div className="row tight wrap">
+              <button onClick={() => void onOpenForImport('pdf')}>{t('import.openPdf')}</button>
+              <button onClick={() => void onOpenForImport('audio')}>{t('import.openAudio')}</button>
+            </div>
+            <details className="advanced">
+              <summary>{t('import.options')}</summary>
+              <fieldset>
+                <legend>{t('import.instruments')}</legend>
+                <div className="checks">
+                  {AUDIO_GROUPS.map((g) => (
+                    <label key={g} className="check">
+                      <input
+                        type="checkbox"
+                        checked={importOptions.instruments.includes(g)}
+                        onChange={() => toggleInstrument(g)}
+                      />
+                      {t(`import.group.${g}` as MessageKey)}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <div className="row tight wrap">
+                <label className="field">
+                  <span>{t('import.metre')}</span>
+                  <select
+                    value={importOptions.metre}
+                    onChange={(e) => changeImport({ metre: e.target.value })}
+                  >
+                    <option value="">{t('import.metreAuto')}</option>
+                    {METRES.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={importOptions.piano}
+                    onChange={(e) => changeImport({ piano: e.target.checked })}
+                  />
+                  {t('import.piano')}
+                </label>
+              </div>
+              <label className="field">
+                <span>{t('import.sheets')}</span>
+                <input
+                  value={importOptions.sheets}
+                  placeholder="1 3-4"
+                  spellCheck={false}
+                  onChange={(e) => changeImport({ sheets: e.target.value })}
+                />
+              </label>
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={importOptions.concert}
+                  onChange={(e) => changeImport({ concert: e.target.checked })}
+                />
+                {t('import.concert')}
+              </label>
+            </details>
+          </>
         )}
       </section>
 

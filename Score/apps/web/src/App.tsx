@@ -3,6 +3,7 @@ import { useT } from './i18n';
 import { handleKeyDown } from './keyboard/shortcuts';
 import { stopPlayback } from './playback/player';
 import { ConfirmDialog } from './panels/ConfirmDialog';
+import { ImportStatus } from './panels/ImportStatus';
 import { Keypad } from './panels/Keypad';
 import { NewScoreDialog } from './panels/NewScoreDialog';
 import { Palette } from './panels/Palette';
@@ -68,7 +69,8 @@ export function App() {
     return () => window.removeEventListener('beforeunload', onLeave);
   }, []);
 
-  // Drop a .ailegro.json or MusicXML file anywhere to open (import) it.
+  // Drop a .ailegro.json or MusicXML file anywhere to open (import) it; PDFs, scanned pages and
+  // recordings go to the local AIlegro service.
   useEffect(() => {
     const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
     const over = (e: DragEvent) => {
@@ -141,6 +143,7 @@ export function App() {
           <span>{t('files.dropHint')}</span>
         </div>
       )}
+      <ImportStatus />
       <Toast />
     </div>
   );

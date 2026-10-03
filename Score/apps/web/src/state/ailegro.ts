@@ -343,15 +343,34 @@ export async function importResultFile(file: File): Promise<boolean> {
 // ------------------------------------------------------------------------------- local adapter server
 
 export const DEFAULT_SERVICE_URL = 'http://127.0.0.1:8765';
+export const SERVICE_KEY = 'ailegro-score:service-url';
+
+/** The adapter server the editor talks to (set and remembered in the AIlegro panel). */
+export function serviceUrl(): string {
+  try {
+    return localStorage.getItem(SERVICE_KEY) || DEFAULT_SERVICE_URL;
+  } catch {
+    return DEFAULT_SERVICE_URL;
+  }
+}
+
+/** What the service can open (PDF / images through Audiveris, recordings through MuScriptor). */
+export interface ServiceImports {
+  readonly pdf: boolean;
+  readonly audio: boolean;
+  readonly why?: { readonly pdf?: string; readonly audio?: string };
+  readonly instruments?: readonly string[];
+}
 
 export interface ServiceInfo {
   readonly ok: boolean;
   readonly model?: string;
   readonly mock?: boolean;
   readonly tasks?: readonly string[];
+  readonly imports?: ServiceImports | null;
 }
 
-function endpoint(base: string, path: string): string {
+export function endpoint(base: string, path: string): string {
   return `${base.trim().replace(/\/+$/, '')}${path}`;
 }
 

@@ -993,6 +993,7 @@ details.advanced .row + .row {
 }
 
 .ai-actions,
+.ai-import,
 .ai-review {
   display: flex;
   flex-direction: column;
@@ -1280,6 +1281,79 @@ textarea.code {
 
 .toast.error {
   background: #8f1d14;
+}
+
+/* PDF / recording job on the local AIlegro service (bottom left, above the status bar) */
+.import-status {
+  position: fixed;
+  left: 16px;
+  bottom: 44px;
+  z-index: 59;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(460px, calc(100vw - 32px));
+  padding: 9px 10px 9px 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ai);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.import-status.failed {
+  border-left-color: var(--bad);
+}
+
+.import-status.ready {
+  border-left-color: var(--good);
+}
+
+.import-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.import-text strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.import-text span {
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.import-status.failed .import-text span {
+  color: var(--bad);
+}
+
+.import-spinner {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--line);
+  border-top-color: var(--ai);
+  border-radius: 50%;
+  animation: import-spin 0.9s linear infinite;
+}
+
+@keyframes import-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .import-spinner {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ narrow screens */
