@@ -69,7 +69,7 @@
 | M2-CORE-05 | MusicXML、MIDI 导出 | ⏳ | |
 | M2-CORE-06 | 文件格式 v2（事件记号、倚音、`spanners`，v1 迁移）、文字记谱 v1 | ✅ | claude |
 | M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器经本机服务打开 PDF 见 `M3-AI-10` | claude |
-| M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，编辑器经本机服务打开录音（`M3-AI-10`）；模拟评估逐音 F1 86–88%（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
+| M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，编辑器经本机服务打开录音（`M3-AI-10`）；模拟评估逐音 F1 88–90%，跑动单独定网格（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
 | M2-WEB-01 | 复制粘贴界面；范围移调、范围改时值 | ⏳ | |
 | M2-WEB-02 | 快速插入面板：力度、谱号、调号、拍号、演奏法 | 🚧 小键盘已有力度、演奏法、装饰、线条；谱号、调号、拍号还在属性面板 | |
 | M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ⏳ | |
