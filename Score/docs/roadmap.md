@@ -22,8 +22,9 @@
   SVG 导出、打印。
 - AIlegro：乐谱记录、作曲请求、结果导入为可审阅建议；本机适配服务器（`--serve`）与文件交换；
   `--mock` 往返测试。五项任务都能用训练好的 v3.1 运行（续写、依和弦写旋律、为旋律配伴奏、动机发展、配器），
-  `npm run ailegro:examples` 写出示例请求并检查导入结果；为旋律配伴奏时和弦由 AIlegro 的配和声模型给出。
-- 中英文界面，116 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
+  `npm run ailegro:examples` 写出示例请求并检查导入结果；为旋律配伴奏时和弦由 AIlegro 的配和声模型给出，
+  可以指定换和弦频率；和声分析给已有的音乐自动标和弦记号。
+- 中英文界面，121 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
 
 最需要先做的：在 Mac 上用真实权重跑一遍 `M3-AI-01` 的检查清单并试听、`M2-ENG-01`（增量排版）、
 `M2-ENG-02`（多声部碰撞）。
@@ -85,6 +86,7 @@
 | M3-AI-06 | 部分接受：按小节 / 按乐器接受 AI 建议 | ⏳ | |
 | M3-AI-07 | 配和声：AIlegro 侧“旋律 → 和弦”小模型，先出和弦记号给用户改，再锁定和弦写伴奏 | ✅ 配和声模型 v1 + 适配器 `--harmonizer`（[ADR 0009](adr/0009-harmonizer-model.md)）；和弦随结果导入为和弦记号 | claude |
 | M3-AI-08 | 动机发展的变形方式（重复、模进、倒影、增值、截取）在面板里逐小节选择 → `compose-request/2` | ⏳ | |
+| M3-AI-09 | 和声分析：给已有的音乐自动标和弦记号（所选小节或全曲）；换和弦频率（分析与配伴奏） | ✅ 契约 `analysis-request/1` → `analysis-result/1`、`POST /analyze`、AIlegro 和声分析模型 v2（[ADR 0010](adr/0010-harmonic-analysis-contract.md)）；意图标签 `harmonic-rhythm:<…>` | claude |
 | M3-HIST-01 | 命名版本：IndexedDB、自动版本、时间线面板 | ⏳ | |
 | M3-HIST-02 | `diffScores` 语义对比（core）+ 测试 | ⏳ | |
 | M3-HIST-03 | 对比界面（叠加 / 并排） | ⏳ | |

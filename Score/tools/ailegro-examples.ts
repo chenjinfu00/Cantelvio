@@ -29,8 +29,13 @@ import {
   type ScoreDoc,
 } from '@ailegro-score/core';
 import {
+  ANALYSIS_RESULT_SCHEMA,
+  buildAnalysisRequest,
   buildComposeRequest,
+  planAnalysisImport,
   planComposeImport,
+  type AnalysisResult,
+  type AnalysisSpec,
   type ComposeRequest,
   type ComposeResult,
   type ComposeSpec,
@@ -205,6 +210,49 @@ const EXAMPLES: readonly Example[] = [
   },
 ];
 
+interface AnalysisExample {
+  readonly name: string;
+  readonly about: string;
+  readonly doc: () => ScoreDoc;
+  readonly spec: (doc: ScoreDoc) => AnalysisSpec;
+}
+
+/** Harmonic analysis (ailegro.analysis-request/1): label the chords of existing music. */
+const ANALYSIS_EXAMPLES: readonly AnalysisExample[] = [
+  {
+    name: 'analyze-chorale',
+    about: 'string quartet chorale (F major), all bars, harmonic rhythm as analysed',
+    doc: () =>
+      score(
+        {
+          template: 'string-quartet',
+          measures: 8,
+          timeSig: { beats: 4, beatType: 4 },
+          keySig: { fifths: -1, mode: 'major' },
+          tempo: 72,
+        },
+        CHORALE,
+      ),
+    spec: () => ({ from: 0, count: 8 }),
+  },
+  {
+    name: 'analyze-study-by-bar',
+    about: 'piano study (G major), one chord per bar at most',
+    doc: () =>
+      score(
+        {
+          template: 'piano',
+          measures: 8,
+          timeSig: { beats: 4, beatType: 4 },
+          keySig: { fifths: 1, mode: 'major' },
+          tempo: 96,
+        },
+        { 0: STUDY[0], 1: STUDY[1] },
+      ),
+    spec: () => ({ from: 0, count: 8, harmonicRhythm: 'bar' }),
+  },
+];
+
 /** Notes per part in measures [from, to), counting AI suggestions separately. */
 function noteCounts(doc: ScoreDoc, from: number, to: number) {
   const out = new Map<string, { notes: number; ai: number }>();
@@ -256,6 +304,16 @@ if (values.out) {
     writeFileSync(path, JSON.stringify(request, null, 1));
     console.log(`${path}  (${ex.about})`);
   }
+  for (const ex of ANALYSIS_EXAMPLES) {
+    const doc = ex.doc();
+    const request = buildAnalysisRequest(doc, ex.spec(doc), {
+      requestId: `example-${ex.name}`,
+      createdAt: NOW,
+    });
+    const path = join(values.out, `${ex.name}.request.json`);
+    writeFileSync(path, JSON.stringify(request, null, 1));
+    console.log(`${path}  (${ex.about})`);
+  }
 } else if (values.check) {
   let failures = 0;
   for (const ex of EXAMPLES) {
@@ -293,6 +351,46 @@ if (values.out) {
           model: result.model.name,
           imported: plan.stats,
           parts: noteCounts(next, spec.from, to),
+          warnings: plan.warnings,
+          problems,
+        },
+        null,
+        1,
+      ),
+    );
+  }
+  for (const ex of ANALYSIS_EXAMPLES) {
+    const resultPath = join(values.check, `${ex.name}.result.json`);
+    if (!existsSync(resultPath)) {
+      console.log(`${ex.name}: no result yet`);
+      continue;
+    }
+    const result = JSON.parse(readFileSync(resultPath, 'utf8')) as AnalysisResult;
+    const problems: string[] = [];
+    if (result.schema !== ANALYSIS_RESULT_SCHEMA)
+      problems.push(`unexpected schema ${result.schema}`);
+    const doc = ex.doc();
+    const plan = planAnalysisImport(doc, result, { ids: sequentialIds(900000) });
+    const next = applyCommand(doc, { type: 'batch', commands: plan.commands }).doc;
+    problems.push(...validateScore(next).map((p) => JSON.stringify(p)));
+    if (!plan.stats.chords) problems.push('no chord symbols were imported');
+    const bars = next.measures.map((m) =>
+      next.harmony
+        .filter((h) => h.measureId === m.id)
+        .map(
+          (h) =>
+            `${h.root.step}${h.root.alter > 0 ? '#' : h.root.alter < 0 ? 'b' : ''}:${h.quality}`,
+        )
+        .join(' '),
+    );
+    failures += problems.length ? 1 : 0;
+    console.log(
+      JSON.stringify(
+        {
+          example: ex.name,
+          model: result.model.name,
+          imported: plan.stats,
+          chords: bars,
           warnings: plan.warnings,
           problems,
         },

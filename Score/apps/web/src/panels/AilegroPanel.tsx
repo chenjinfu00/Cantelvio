@@ -1,5 +1,11 @@
 import { AILEGRO_GROUPS, type AilegroGroup } from '@ailegro-score/core';
-import type { ComposeRequest, ComposeTask } from '@ailegro-score/ailegro-bridge';
+import {
+  type AnalysisRequest,
+  type ComposeRequest,
+  type ComposeTask,
+  HARMONIC_RHYTHMS,
+  type HarmonicRhythm,
+} from '@ailegro-score/ailegro-bridge';
 import { useEffect, useMemo, useState } from 'react';
 import { BrandText } from '../components/BrandText';
 import { IN_ARTIFACT } from '../host';
@@ -13,7 +19,10 @@ import {
   type ServiceInfo,
   acceptRun,
   adapterCommand,
+  analysisRange,
+  analyzeWithService,
   defaultSpec,
+  exportAnalysisRequest,
   exportRecord,
   exportRequest,
   generateWithService,
@@ -40,7 +49,7 @@ export function AilegroPanel() {
   const doc = useEditor((s) => s.doc);
   const selection = useEditor((s) => s.selection);
   const [spec, setSpec] = useState<PanelSpec>(() => defaultSpec(doc, selection));
-  const [lastRequest, setLastRequest] = useState<ComposeRequest | null>(null);
+  const [lastRequest, setLastRequest] = useState<ComposeRequest | AnalysisRequest | null>(null);
   const [serviceUrl, setServiceUrl] = useState(loadServiceUrl);
   const [service, setService] = useState<ServiceInfo | 'offline' | null>(null);
   const [busy, setBusy] = useState(false);
@@ -126,6 +135,42 @@ export function AilegroPanel() {
       setBusy(false);
     }
   };
+
+  const onAnalyze = async () => {
+    setBusy(true);
+    try {
+      await analyzeWithService(serviceUrl, spec.harmonicRhythm);
+      setService((s) => (s === 'offline' ? null : s));
+    } catch (e) {
+      if (e instanceof TypeError) setService('offline');
+      fail(e);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const onExportAnalysis = () => {
+    try {
+      setLastRequest(exportAnalysisRequest(spec.harmonicRhythm));
+    } catch (e) {
+      fail(e);
+    }
+  };
+  const range = analysisRange(doc, selection);
+  const rhythmSelect = (
+    <label className="field">
+      <span>{t('ai.rhythm')}</span>
+      <select
+        value={spec.harmonicRhythm}
+        onChange={(e) => update({ harmonicRhythm: e.target.value as HarmonicRhythm })}
+      >
+        {HARMONIC_RHYTHMS.map((r) => (
+          <option key={r} value={r}>
+            {t(`ai.rhythm.${r}` as MessageKey)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 
   const needsMaterial = MATERIAL_TASKS.includes(spec.task);
   const taskLabel = (task: ComposeTask) =>
@@ -223,6 +268,7 @@ export function AilegroPanel() {
           <option value="given">{t('ai.chord.given')}</option>
         </select>
       </label>
+      {spec.task === 'accompany-melody' && spec.chordMode !== 'given' && rhythmSelect}
 
       <details className="advanced">
         <summary>{t('ai.advanced')}</summary>
@@ -343,6 +389,24 @@ export function AilegroPanel() {
             </button>
           </div>
         )}
+      </section>
+
+      <section className="ai-analysis">
+        <h4>{t('ai.analysis')}</h4>
+        <p className="hint">
+          <BrandText
+            text={t('ai.analysisHint', { a: range.from + 1, b: range.from + range.count })}
+          />
+        </p>
+        {rhythmSelect}
+        <div className="row tight wrap">
+          {!IN_ARTIFACT && (
+            <button className="primary" disabled={busy} onClick={() => void onAnalyze()}>
+              {busy ? t('ai.analyzing') : `✦ ${t('ai.analyze')}`}
+            </button>
+          )}
+          <button onClick={onExportAnalysis}>{t('ai.exportAnalysis')}</button>
+        </div>
       </section>
 
       <section className="ai-review">

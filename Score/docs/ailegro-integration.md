@@ -124,7 +124,7 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
   "requestId": "ai_k3…",
   "client": { "app": "AIlegro Score", "version": "0.1.0" },
   "task": "continue",                     // 见下表
-  "intent": null,                         // 预留：文字意图与标签
+  "intent": null,                         // 文字意图与标签；目前只定义了 harmonic-rhythm:<…>（见下）
   "score": { /* score-record：上下文小节 + 生成区间内的给定材料 */ },
   "material": [                           // 已知材料（条件）
     { "id": "context", "kind": "notes", "timeSpan": { "from": "0", "to": "32" },
@@ -160,6 +160,10 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 | `accompany-melody` | 旋律已给定（锁定），写其他声部 | 所选乐器的音符 | ✅ 旋律逐音保持；每小节写 `--candidates` 份，留下旋律最自然的一份 |
 | `develop-motif` | 发展一个动机 | 上下文里的动机 | ✅ 动机小节 = 上下文里最后一个有动机声部音符的小节（或请求里的参考小节）；动机声部本身也接着写 |
 | `orchestrate` | 把已有音乐配器到所选乐器组 | 所选乐器的音符 | ✅ 每个给定音由模型选乐器组和声部；可加叠置 |
+
+**意图标签**（`intent.tags`，不改契约版本）：`harmonic-rhythm:<beat|half-bar|bar|two-bars>` 让 AIlegro 选和弦
+时最多每拍 / 每半小节（强拍和小节中间）/ 每小节 / 每两小节换一次；不写或 `auto` 按模型学到的频率。目前用于
+为旋律配伴奏（配和声模型给和弦时）。面板的“换和弦频率”就是这个标签。
 
 三项锁定材料任务需要 AIlegro 的 `training/scripts/four_pillar_v31_tasks.py`（2026-10-02 加入；不改 v3.1 的训练代码和
 权重）。设计与取舍见 [ADR 0008](adr/0008-locked-material-by-decoding.md)。
@@ -202,6 +206,49 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 8. 所有内容带 `source: { kind: 'ai', model, runId, accepted: false }`，整个导入是**一个撤销步骤**。
    面板里“接受”= `provenance.accept`，“拒绝”= `provenance.reject`（删除未接受的内容）。
 
+## 契约 4、5：和声分析 `ailegro.analysis-request/1` → `ailegro.analysis-result/1`
+
+给已有的音乐标和弦（“自动标和弦”），不生成音符。决定见 [ADR 0010](adr/0010-harmonic-analysis-contract.md)。
+
+```jsonc
+{
+  "schema": "ailegro.analysis-request/1",
+  "requestId": "ai_…", "createdAt": "…", "client": { "app": "AIlegro Score", "version": "0.1.0" },
+  "score": { /* ailegro.score-record/1：要分析的小节，全部乐器 */ },
+  "analyze": {
+    "bars": { "from": 0, "count": 32 },     // 要标和弦的小节
+    "melodyPart": null,                    // 读作旋律的乐器；null = 第一个有音符的乐器
+    "engine": "auto",                      // auto | model（AIlegro 的分析模型）| rules（和弦跟踪器）
+    "harmonicRhythm": "auto"               // auto | beat | half-bar | bar | two-bars
+  }
+}
+```
+
+```jsonc
+{
+  "schema": "ailegro.analysis-result/1",
+  "requestId": "ai_…",
+  "model": { "name": "ailegro-harmony-analysis", "checkpoint": "…", "step": 4000 },
+  "startBar": 0,
+  "bars": [
+    { "bar": 0, "key": { "tonic": 5, "mode": 0, "name": "F major" },
+      "chords": [ { "onset": "0", "root": 5, "quality": 0, "name": "F" }, { "onset": "2", "root": 0, "quality": 10 } ] }
+  ],
+  "warnings": []
+}
+```
+
+- 每小节列出和弦**变化**（小节内位置，四分音符）；第一个分析的小节从 `onset 0` 的当前和弦开始。
+- `key` 是 AIlegro 的调性跟踪器读出的局部调，只用于拼写，不写进乐谱。
+- 引擎：`auto` 在 AIlegro 有和声分析模型 v2（`training/runs/harmonizer-v2-20261003`）时用它，否则用规则和弦
+  跟踪器（`warnings` 里说明）。AIlegro 测试集 80 首艺术歌曲上，与 AugmentedNet 标注逐拍完全一致：v2 71.2%，
+  跟踪器 67.0%（根音一致 77.6% / 75.3%）。跟踪器不支持换和弦频率。
+- 导入（`planAnalysisImport`）：每个变化写成一个和弦记号（`harmony.set`），带 AI 来源、作为待审阅的建议；
+  同一位置已有的和弦记号默认保留（`overwrite` 时替换）；落在小节外或性质未知的跳过并给出警告。
+  整个导入是一个撤销步骤，面板里按次接受或拒绝。
+- 面板：“和声分析” → “自动标和弦”（服务器 `POST /analyze`）或“导出分析请求”（文件交换；适配器按 `schema`
+  识别请求，命令与作曲请求相同）。范围是所选小节，没选时是全曲；“换和弦频率”同上。
+
 ## 适配器 `score_compose.py` 做了什么
 
 - `prepare()`：校验 schema 和任务；按 AIlegro 的**提交顺序**整理上下文小节的事件——同一时刻先和弦变化，
@@ -229,7 +276,8 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
   - `develop-motif`：按小节轮换：重述 → 上行二度模进 → 截取（再下行一级）→ 自由 → 倒影 → 下行模进 → 减值 →
     自由。重述用原小节作参考；模进、截取、减值把动机小节的整个织体变换后作为合成参考；倒影只变换动机声部，
     保留它下方的伴奏；“自由”让模型的指针自己选。每小节做了什么写进结果的 `warnings`。
-- 服务器：`GET /health`、`POST /compose`；422 = 请求无法执行（例如不支持的任务），400 = 格式错误，
+- 服务器：`GET /health`、`POST /compose`、`POST /analyze`（和声分析；`/health` 里 `analysis`、`analysisModel`
+  表示能不能分析、有没有分析模型）；422 = 请求无法执行（例如不支持的任务），400 = 格式错误，
   500 = 生成失败；CORS 只放行回环地址（`--allow-origin` 可加）。
 
 ## 验证状态与检查清单

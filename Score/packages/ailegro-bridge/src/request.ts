@@ -9,6 +9,7 @@ import {
   tempoMap,
   toString as ratString,
 } from '@ailegro-score/core';
+import type { HarmonicRhythm } from './analysis';
 import { buildScoreRecord } from './record';
 import {
   AILEGRO_GROUPS,
@@ -47,6 +48,9 @@ export interface ComposeSpec {
   readonly modelKeys?: boolean;
   readonly contextBars?: number;
   readonly intent?: { readonly text: string; readonly tags?: readonly string[] };
+  /** How often chords may change where AIlegro chooses them (accompany-melody); sent as the intent tag
+   * `harmonic-rhythm:<value>` so the compose contract stays unchanged. */
+  readonly harmonicRhythm?: HarmonicRhythm;
 }
 
 export interface RequestMeta {
@@ -56,6 +60,21 @@ export interface RequestMeta {
 }
 
 const q = (r: { n: number; d: number }) => ratString(mulInt(r, 4));
+
+/** The intent tag that carries a harmonic rhythm (`auto` sends none). */
+export function harmonicRhythmTag(rhythm: HarmonicRhythm): string | null {
+  return rhythm === 'auto' ? null : `harmonic-rhythm:${rhythm}`;
+}
+
+function intentOf(spec: ComposeSpec): ComposeRequest['intent'] {
+  const tag = spec.harmonicRhythm ? harmonicRhythmTag(spec.harmonicRhythm) : null;
+  const tags = [
+    ...(spec.intent?.tags ?? []).filter((t) => !t.startsWith('harmonic-rhythm:')),
+    ...(tag ? [tag] : []),
+  ];
+  if (!spec.intent && !tags.length) return null;
+  return { text: spec.intent?.text ?? '', tags };
+}
 
 export function buildComposeRequest(
   doc: ScoreDoc,
@@ -268,7 +287,7 @@ export function buildComposeRequest(
     createdAt: meta.createdAt ?? null,
     client: { app: 'AIlegro Score', version: meta.appVersion ?? '0.1.0' },
     task: spec.task,
-    intent: spec.intent ? { text: spec.intent.text, tags: [...(spec.intent.tags ?? [])] } : null,
+    intent: intentOf(spec),
     score: filtered,
     material,
     constraints,

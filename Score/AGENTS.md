@@ -58,8 +58,9 @@ npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/g
 8. **Engraving is a pure, deterministic function** `(doc, options) → layout → SVG`. Same input,
    same bytes. This keeps snapshot tests and visual diffs meaningful.
 9. **Versioned contracts**: the `.ailegro.json` file format and the AIlegro interchange schemas
-   (`ailegro.score-record/1`, `ailegro.compose-request/1`, `ailegro.compose-result/1`) only
-   change with a version bump, a migration, tests and a doc update.
+   (`ailegro.score-record/1`, `ailegro.compose-request/1`, `ailegro.compose-result/1`,
+   `ailegro.analysis-request/1`, `ailegro.analysis-result/1`) only change with a version bump, a
+   migration, tests and a doc update.
 10. **i18n**: every UI string goes through `apps/web/src/i18n` with both `zh` and `en`.
 
 ## Working rules

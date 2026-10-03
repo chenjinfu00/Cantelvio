@@ -20,6 +20,8 @@ export type QuarterTime = string;
 export const RECORD_SCHEMA = 'ailegro.score-record/1' as const;
 export const REQUEST_SCHEMA = 'ailegro.compose-request/1' as const;
 export const RESULT_SCHEMA = 'ailegro.compose-result/1' as const;
+export const ANALYSIS_REQUEST_SCHEMA = 'ailegro.analysis-request/1' as const;
+export const ANALYSIS_RESULT_SCHEMA = 'ailegro.analysis-result/1' as const;
 
 /** AIlegro's score-dynamic vocabulary (four_pillar_codec.DYNAMICS). */
 export const AILEGRO_DYNAMICS = [
@@ -281,5 +283,55 @@ export interface ComposeResult {
   /** Measure index in the score where `bars[0]` goes. */
   readonly startBar: number;
   readonly bars: readonly ResultBar[];
+  readonly warnings?: readonly string[];
+}
+
+// ------------------------------------------------------------------------------- harmonic analysis
+
+/** Ask AIlegro to label the chords (and local keys) of existing music. */
+export interface AnalysisRequest {
+  readonly schema: typeof ANALYSIS_REQUEST_SCHEMA;
+  readonly requestId: string;
+  readonly createdAt: string | null;
+  readonly client: { readonly app: 'AIlegro Score'; readonly version: string };
+  /** The music to analyse (all parts of the analysed bars). */
+  readonly score: ScoreRecord;
+  readonly analyze: {
+    /** Measure indices [from, from + count) to label. */
+    readonly bars: { readonly from: number; readonly count: number };
+    /** Part whose top line is read as the melody; null = the first part with notes. */
+    readonly melodyPart: string | null;
+    /** `auto` = AIlegro's best available engine; `model` = its trained analysis model; `rules` = its chord tracker. */
+    readonly engine: 'auto' | 'model' | 'rules';
+    /** How often chords may change: `auto` (as learned), `beat`, `half-bar`, `bar`, `two-bars`. */
+    readonly harmonicRhythm: 'auto' | 'beat' | 'half-bar' | 'bar' | 'two-bars';
+  };
+}
+
+export interface AnalysisBar {
+  readonly bar: number;
+  /** Local key AIlegro reads in the bar. */
+  readonly key: { readonly tonic: number; readonly mode: number; readonly name?: string };
+  /** Chord changes in the bar; the first analysed bar starts with the chord in effect at onset 0. */
+  readonly chords: readonly {
+    readonly onset: QuarterTime;
+    readonly root: number;
+    readonly quality: number | string;
+    readonly name?: string;
+  }[];
+}
+
+export interface AnalysisResult {
+  readonly schema: typeof ANALYSIS_RESULT_SCHEMA;
+  readonly requestId: string;
+  readonly model: {
+    readonly name: string;
+    readonly checkpoint?: string;
+    readonly sha256?: string;
+    readonly step?: number;
+  };
+  /** Measure index in the score where `bars[0]` goes. */
+  readonly startBar: number;
+  readonly bars: readonly AnalysisBar[];
   readonly warnings?: readonly string[];
 }

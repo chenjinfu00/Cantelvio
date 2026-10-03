@@ -51,6 +51,11 @@ from urllib.parse import urlsplit
 
 REQUEST_SCHEMA = 'ailegro.compose-request/1'
 RESULT_SCHEMA = 'ailegro.compose-result/1'
+ANALYSIS_REQUEST_SCHEMA = 'ailegro.analysis-request/1'
+ANALYSIS_RESULT_SCHEMA = 'ailegro.analysis-result/1'
+HARMONIC_RHYTHMS = ('auto', 'beat', 'half-bar', 'bar', 'two-bars')
+RHYTHM_TAG = 'harmonic-rhythm:'
+KEY_NAMES = ('C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B')
 BASIC_TASKS = ('continue', 'melody-from-chords')
 LOCKED_TASKS = ('accompany-melody', 'develop-motif', 'orchestrate')
 SUPPORTED_TASKS = BASIC_TASKS + LOCKED_TASKS
@@ -79,9 +84,11 @@ def qs(value: Fraction) -> str:
     return str(Fraction(value))
 
 
-def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto'):
-    """AIlegro modules (and with need_model the torch-based ones). harmonizer: 'auto' loads AIlegro's
-    melody -> chords model from its default run when present, 'none' never, otherwise a weights path."""
+def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto', analyzer: str = 'auto',
+                 harmonic_rhythm: str = 'auto'):
+    """AIlegro modules (and with need_model the torch-based ones). harmonizer / analyzer: 'auto' loads
+    AIlegro's melody -> chords model / its harmonic-analysis model (melody + all notes -> chords) from the
+    default runs when present, 'none' never, otherwise a weights path."""
     scripts = root / 'training' / 'scripts'
     if not scripts.is_dir():
         raise AdapterError(f'not an AIlegro project root (missing {scripts}); pass --ailegro-root')
@@ -103,25 +110,37 @@ def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto'):
         except ImportError:
             tasks = None
     has_tasks = tasks is not None or (scripts / 'four_pillar_v31_tasks.py').is_file()
-    chords_model = None
-    if need_model and harmonizer != 'none':
+    if harmonic_rhythm not in HARMONIC_RHYTHMS:
+        raise AdapterError(f'--harmonic-rhythm must be one of {", ".join(HARMONIC_RHYTHMS)}')
+    chords_model = analysis_model = None
+    harmonizer_v1 = None
+    if need_model and (harmonizer != 'none' or analyzer != 'none'):
         try:
             import harmonizer_v1  # noqa: E402  (melody -> chords, needs torch)
         except ImportError:
             harmonizer_v1 = None
-        path = None
-        if harmonizer_v1 is not None:
-            path = harmonizer_v1.DEFAULT_WEIGHTS if harmonizer == 'auto' else Path(harmonizer)
-        if path is not None and path.is_file():
-            model, info = harmonizer_v1.load(path)
-            chords_model = {'module': harmonizer_v1, 'model': model, 'info': info, 'path': str(path)}
-        elif harmonizer not in ('auto', 'none'):
-            raise AdapterError(f'harmonizer weights not found: {harmonizer}')
+
+    def load_chords_model(choice: str, default_name: str, what: str):
+        if harmonizer_v1 is None or choice == 'none':
+            if choice not in ('auto', 'none'):
+                raise AdapterError(f'{what} needs AIlegro training/scripts/harmonizer_v1.py')
+            return None
+        path = getattr(harmonizer_v1, default_name, None) if choice == 'auto' else Path(choice)
+        if path is not None and Path(path).is_file():
+            model, info = harmonizer_v1.load(Path(path))
+            return {'module': harmonizer_v1, 'model': model, 'info': info, 'path': str(path)}
+        if choice != 'auto':
+            raise AdapterError(f'{what} weights not found: {choice}')
+        return None
+
+    if need_model:
+        chords_model = load_chords_model(harmonizer, 'DEFAULT_WEIGHTS', 'harmonizer')
+        analysis_model = load_chords_model(analyzer, 'ANALYSIS_WEIGHTS', 'analyzer')
     return {'GROUPS': GROUPS, 'DYNAMICS': DYNAMICS, 'WEDGES': WEDGES, 'vocab': vocab,
             'quality_index': {qd['id']: i for i, qd in enumerate(qualities)}, 'qualities': qualities,
             'sample': sample, 'tasks': tasks, 'has_tasks': has_tasks,
             'tonal': tonal if ScoreEvents is not None else None, 'ScoreEvents': ScoreEvents,
-            'harmonizer': chords_model}
+            'harmonizer': chords_model, 'analyzer': analysis_model, 'harmonic_rhythm': harmonic_rhythm}
 
 
 def group_index(env: dict | None, group: str | None) -> int:
@@ -235,7 +254,7 @@ def tracked_chords(record: dict, env: dict, bars: list[int], parts: list[str] | 
 
 
 def harmonized_chords(record: dict, env: dict, context: list[int], bars: list[int], parts: list[str],
-                      in_effect) -> dict:
+                      in_effect, rhythm: str = 'auto') -> dict:
     """Chord changes for `bars` from AIlegro's harmonizer, read from the given melody (`parts`) over the context
     and generated bars. The chord in effect at the first generated bar is written there when it differs from
     the one the context left. {bar: [(offset, root, quality index), ...]}"""
@@ -255,7 +274,7 @@ def harmonized_chords(record: dict, env: dict, context: list[int], bars: list[in
     if not notes:
         return {}
     module = chords_model['module']
-    changes, path = module.harmonize(chords_model['model'], chords_model['info'], notes, shapes)
+    changes, path = module.harmonize(chords_model['model'], chords_model['info'], notes, shapes, rhythm=rhythm)
     index = {b: i for i, b in enumerate(order)}
     out = {b: [(Fraction(o), int(r), int(qy)) for o, r, qy in changes.get(index[b], ())] for b in bars}
     first = bars[0]
@@ -265,6 +284,18 @@ def harmonized_chords(record: dict, env: dict, context: list[int], bars: list[in
     if (not out[first] or out[first][0][0] != 0) and chord != in_effect:
         out[first].insert(0, (Fraction(0), *chord))
     return out
+
+
+def request_rhythm(request: dict, env: dict | None) -> str:
+    """Harmonic rhythm asked for by an intent tag `harmonic-rhythm:<auto|beat|half-bar|bar|two-bars>`,
+    otherwise the adapter's --harmonic-rhythm."""
+    for tag in (request.get('intent') or {}).get('tags') or []:
+        if isinstance(tag, str) and tag.startswith(RHYTHM_TAG):
+            value = tag[len(RHYTHM_TAG):]
+            if value not in HARMONIC_RHYTHMS:
+                raise AdapterError(f'unknown harmonic rhythm {value!r} (use {", ".join(HARMONIC_RHYTHMS)})')
+            return value
+    return (env or {}).get('harmonic_rhythm', 'auto')
 
 
 def prepare(request: dict, env: dict | None) -> dict:
@@ -338,8 +369,9 @@ def prepare(request: dict, env: dict | None) -> dict:
     if env is not None and task == 'orchestrate' and chord_mode != 'given':
         tracked_gen = tracked_chords(record, env, [b for b in gen_bars if b in measures], given, key_of)
     harmonized = {}
+    rhythm = request_rhythm(request, env)
     if env is not None and task == 'accompany-melody' and chord_mode != 'given':
-        harmonized = harmonized_chords(record, env, context_bars, gen_bars, given, current[0])
+        harmonized = harmonized_chords(record, env, context_bars, gen_bars, given, current[0], rhythm)
     in_effect = current[0]
     for k, bar in enumerate(gen_bars):
         m = measures.get(bar)
@@ -413,6 +445,84 @@ def find_motif(request: dict, record: dict, measures: dict, context_bars: list[i
     notes = [n for n in record['notes'] if n['bar'] == bar and not n.get('grace')]
     return {'bar': bar, 'start': q(measures[bar]['on']), 'length': q(measures[bar]['dur']),
             'parts': parts, 'notes': notes}
+
+
+def analyze(request: dict, env: dict | None) -> dict:
+    """Run an ailegro.analysis-request/1: chords (and local keys) of the requested bars, from AIlegro's
+    harmonic-analysis model (melody + every note of the score) or its chord tracker."""
+    if request.get('schema') != ANALYSIS_REQUEST_SCHEMA:
+        raise AdapterError(f'expected {ANALYSIS_REQUEST_SCHEMA}, got {request.get("schema")}')
+    record, spec = request['score'], request['analyze']
+    first, count = int(spec['bars']['from']), int(spec['bars']['count'])
+    measures = {m['number'] - 1: m for m in record['measures']}
+    bars = [b for b in range(first, first + count) if b in measures]
+    if not bars:
+        raise AdapterError('no measures to analyse in the request')
+    engine = spec.get('engine', 'auto')
+    if engine not in ('auto', 'model', 'rules'):
+        raise AdapterError(f'unknown engine {engine!r}')
+    rhythm = spec.get('harmonicRhythm', 'auto')
+    if rhythm not in HARMONIC_RHYTHMS:
+        raise AdapterError(f'unknown harmonic rhythm {rhythm!r}')
+    warnings = []
+    if env is None or env.get('tonal') is None:
+        raise AdapterError('harmonic analysis needs the AIlegro project (not available with --mock alone)')
+    notes = [n for n in record['notes'] if n['bar'] in measures and not n.get('grace') and n.get('pitch') is not None]
+    melody_part = spec.get('melodyPart')
+    if not melody_part:
+        order = [p['id'] for p in record['parts']]
+        with_notes = {n['part'] for n in notes}
+        melody_part = next((p for p in order if p in with_notes), None)
+    keys = analysed_keys(record, env, bars)
+    analysis_model = env.get('analyzer')
+    use_model = engine in ('auto', 'model') and analysis_model is not None
+    if engine == 'model' and analysis_model is None:
+        raise AdapterError('no harmonic-analysis model (train AIlegro harmonizer v2 or use engine "rules")')
+    chords = {}
+    if use_model and melody_part:
+        t0 = q(measures[bars[0]]['on'])
+        shapes = [(q(measures[b]['dur']), tuple(measures[b]['meter']), (measures[b].get('key') or {}).get('fifths'))
+                  for b in bars]
+        melody = [(q(n['on']) - t0, q(n['dur']), int(n['pitch'])) for n in notes if n['part'] == melody_part]
+        texture = [(q(n['on']) - t0, q(n['dur']), int(n['pitch'])) for n in notes]
+        module = analysis_model['module']
+        changes, _ = module.harmonize(analysis_model['model'], analysis_model['info'], melody, shapes,
+                                      texture=texture, rhythm=rhythm)
+        chords = {b: changes.get(i, []) for i, b in enumerate(bars)}
+        name = 'ailegro-harmony-analysis'
+        info = {'name': name, 'checkpoint': analysis_model['path'], 'step': analysis_model['info'].get('step')}
+    else:
+        if engine == 'auto' and analysis_model is None:
+            warnings.append('no harmonic-analysis model found: chords from the AIlegro chord tracker')
+        if rhythm != 'auto':
+            warnings.append('the chord tracker ignores the harmonic rhythm setting')
+        key_of = lambda b: keys.get(b)  # noqa: E731
+        chords = tracked_chords(record, env, bars, None, key_of)
+        info = {'name': 'ailegro-chord-tracker'}
+    out_bars = []
+    for b in bars:
+        tonic, mode = keys.get(b, (0, 0))
+        out_bars.append({'bar': b, 'key': {'tonic': tonic, 'mode': mode,
+                                           'name': KEY_NAMES[tonic] + (' minor' if mode else ' major')},
+                         'chords': [{'onset': qs(Fraction(o)), 'root': int(r) % 12, 'quality': int(qy),
+                                     'name': KEY_NAMES[int(r) % 12] + env['qualities'][int(qy)]['suffix']}
+                                    for o, r, qy in chords.get(b, ())]})
+    return {'schema': ANALYSIS_RESULT_SCHEMA, 'requestId': request['requestId'], 'model': info,
+            'startBar': bars[0], 'bars': out_bars, 'warnings': warnings}
+
+
+def analysed_keys(record: dict, env: dict, bars: list[int]) -> dict:
+    """Local key (tonic, mode) per bar from AIlegro's key tracker over all notes of those bars."""
+    tonal, ScoreEvents = env.get('tonal'), env.get('ScoreEvents')
+    measures = {m['number'] - 1: m for m in record['measures']}
+    local = {bar: i for i, bar in enumerate(bars)}
+    view = {'scoreId': record.get('scoreId', 'request'), 'parts': record['parts'],
+            'measures': [{'on': measures[b]['on'], 'dur': measures[b]['dur'], 'meter': measures[b]['meter'],
+                          'key': measures[b].get('key')} for b in bars],
+            'notes': [dict(n, bar=local[n['bar']]) for n in record['notes'] if n['bar'] in local and not n.get('grace')]}
+    score = ScoreEvents.from_candidate(view)
+    found = tonal.track_keys(score)
+    return {b: tonal.key_parts(found[i]) for i, b in enumerate(bars)}
 
 
 def dry_run_report(prep: dict) -> dict:
@@ -711,10 +821,14 @@ def make_handler(model, env, allow_origins: set[str]):
                 self.send_json(404, {'error': 'not found'})
                 return
             self.send_json(200, {'ok': True, 'model': model.name, 'mock': isinstance(model, MockModel),
-                                 'tasks': tasks, 'request': REQUEST_SCHEMA, 'result': RESULT_SCHEMA})
+                                 'tasks': tasks, 'request': REQUEST_SCHEMA, 'result': RESULT_SCHEMA,
+                                 'analysis': bool(env and env.get('tonal') is not None),
+                                 'analysisModel': bool(env and env.get('analyzer')),
+                                 'harmonicRhythms': list(HARMONIC_RHYTHMS)})
 
         def do_POST(self):
-            if urlsplit(self.path).path != '/compose':
+            path = urlsplit(self.path).path
+            if path not in ('/compose', '/analyze'):
                 self.send_json(404, {'error': 'not found'})
                 return
             if self.headers.get('Origin') and not self.origin_allowed():
@@ -726,6 +840,11 @@ def make_handler(model, env, allow_origins: set[str]):
                 return
             try:
                 request = json.loads(self.rfile.read(size))
+                if path == '/analyze':
+                    with lock:
+                        result = analyze(request, env)
+                    self.send_json(200, result)
+                    return
                 prep = prepare(request, env)
                 with lock:  # one generation at a time
                     result = model.compose(prep)
@@ -765,6 +884,12 @@ def main() -> None:
     parser.add_argument('--harmonizer', default='auto',
                         help="accompany-melody without given chords: 'auto' uses AIlegro's melody -> chords model "
                              "when its weights are present, 'none' lets v3.1 choose, or a weights path")
+    parser.add_argument('--harmonic-rhythm', default='auto', choices=HARMONIC_RHYTHMS,
+                        help='how often harmonizer chords may change when the request does not say '
+                             '(intent tag harmonic-rhythm:<value>)')
+    parser.add_argument('--analyzer', default='auto',
+                        help="harmonic analysis: 'auto' uses AIlegro's analysis model (harmonizer v2) when its "
+                             "weights are present, 'none' always uses the chord tracker, or a weights path")
     parser.add_argument('--doublings', choices=DOUBLINGS, default='light',
                         help='orchestrate: octave/unison doublings the model may add (light: at most half as '
                              'many as the given notes)')
@@ -781,7 +906,8 @@ def main() -> None:
         env = None
         if not args.mock or (args.ailegro_root / 'training' / 'scripts').is_dir():
             env = load_ailegro(args.ailegro_root.resolve(), need_model=not (args.dry_run or args.mock),
-                               harmonizer=args.harmonizer)
+                               harmonizer=args.harmonizer, analyzer=args.analyzer,
+                               harmonic_rhythm=args.harmonic_rhythm)
         if args.serve:
             if args.mock:
                 model = MockModel()
@@ -793,7 +919,16 @@ def main() -> None:
             return
         if not args.request:
             raise AdapterError('--request is required (or use --serve)')
-        prep = prepare(json.loads(args.request.read_text()), env)
+        request = json.loads(args.request.read_text())
+        if request.get('schema') == ANALYSIS_REQUEST_SCHEMA:
+            if not args.output:
+                raise AdapterError('--output is required')
+            result = analyze(request, env)
+            args.output.write_text(json.dumps(result, indent=1, default=str))
+            print(json.dumps({'bars': len(result['bars']), 'chords': sum(len(b['chords']) for b in result['bars']),
+                              'model': result['model']['name'], 'output': str(args.output)}))
+            return
+        prep = prepare(request, env)
         if args.dry_run:
             print(json.dumps(dry_run_report(prep), indent=1, default=str))
             return

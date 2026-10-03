@@ -9,6 +9,10 @@
 3. It returns an `ailegro.compose-result/1`, which the editor imports as reviewable suggestions
    (blue notes; accept or reject per run).
 
+It also answers harmonic-analysis requests (`ailegro.analysis-request/1` → `ailegro.analysis-result/1`,
+editor: AIlegro panel → “自动标和弦”): chord symbols for existing music, from AIlegro's analysis model or its
+chord tracker.
+
 Both folders sit side by side (`software develop/AIlegro` and `software develop/AIlegro Score`),
 so the commands below use the relative path `../AIlegro Score/...` from the AIlegro root.
 
@@ -21,7 +25,7 @@ cd "<path>/AIlegro"
 ```
 
 The model is loaded once; the server listens on `http://127.0.0.1:8765` (`--host`, `--port`) and
-answers `GET /health` and `POST /compose` (request JSON in, result JSON out). Browser calls are
+answers `GET /health`, `POST /compose` and `POST /analyze` (request JSON in, result JSON out). Browser calls are
 accepted from loopback origins (`http://localhost:*`, `http://127.0.0.1:*`); add others with
 `--allow-origin https://example.org`. One generation runs at a time.
 
@@ -35,7 +39,8 @@ cd "<path>/AIlegro"
   --output ~/Downloads/ailegro-result-<id>.json
 ```
 
-Then import the result in the editor (AIlegro panel → “导入生成结果”).
+Then import the result in the editor (AIlegro panel → “导入生成结果”). Analysis requests (AIlegro panel →
+“导出分析请求”) run the same way; they need no `--checkpoint`.
 
 ## Checks without a model
 
@@ -59,8 +64,18 @@ python3 integrations/ailegro/score_compose.py --serve --mock
   given melody with AIlegro's harmonizer (melody -> chords, `training/scripts/harmonizer_v1.py`) and locks them;
   the chords come back with the result and import as chord symbols. `auto` uses
   `training/runs/harmonizer-v1-20261003/weights.pt` when present; `none` lets v3.1 choose the chords.
+- `--harmonic-rhythm auto|beat|half-bar|bar|two-bars` (default auto): how often the harmonizer's chords may change
+  when a request does not say (requests carry the intent tag `harmonic-rhythm:<value>`; analysis requests the
+  field `analyze.harmonicRhythm`).
+- `--analyzer auto|none|PATH` (default auto): harmonic analysis uses AIlegro's analysis model (harmonizer v2,
+  melody + every note, `training/runs/harmonizer-v2-20261003/weights.pt`) when present, otherwise the chord
+  tracker; a request can ask for `engine: model` or `rules`.
 
-## Status (2026-10-02)
+## Status (2026-10-03)
+
+- Harmonic analysis runs end to end with AIlegro's analysis model v2 (step 4,000): the two analysis examples of
+  `npm run ailegro:examples` were analysed here and imported back as chord symbols (valid scores). On AIlegro's
+  test songs it agrees with the AugmentedNet labels on 71.2% of the beats (chord tracker 67.0%).
 
 - All five tasks run. `accompany-melody`, `develop-motif` and `orchestrate` use AIlegro's
   `training/scripts/four_pillar_v31_tasks.py` (decoding only; the v3.1 training code and weights are unchanged).

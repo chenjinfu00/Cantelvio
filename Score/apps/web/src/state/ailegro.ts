@@ -12,14 +12,20 @@ import {
   findInstrument,
 } from '@ailegro-score/core';
 import {
+  ANALYSIS_RESULT_SCHEMA,
+  type AnalysisRequest,
+  type AnalysisResult,
   type ComposeRequest,
   type ComposeResult,
   type ComposeSpec,
   type ComposeTask,
+  type HarmonicRhythm,
   RESULT_SCHEMA,
   type TargetMapping,
+  buildAnalysisRequest,
   buildComposeRequest,
   buildScoreRecord,
+  planAnalysisImport,
   planComposeImport,
 } from '@ailegro-score/ailegro-bridge';
 import { translate } from '../i18n';
@@ -63,6 +69,8 @@ export interface PanelSpec {
   readonly topP: number;
   /** null = let the model decide. */
   readonly density: number | null;
+  /** How often chords may change where AIlegro chooses them (accompaniment, harmonic analysis). */
+  readonly harmonicRhythm: HarmonicRhythm;
 }
 
 // ------------------------------------------------------------------------------- defaults
@@ -105,6 +113,7 @@ export function defaultSpec(doc: ScoreDoc, selection: Selection): PanelSpec {
     temperature: 0.9,
     topP: 0.95,
     density: null,
+    harmonicRhythm: 'auto',
   };
 }
 
@@ -121,6 +130,7 @@ export function toComposeSpec(p: PanelSpec): ComposeSpec {
     temperature: p.temperature,
     topP: p.topP,
     ...(p.density !== null ? { density: p.density } : {}),
+    ...(p.task === 'accompany-melody' ? { harmonicRhythm: p.harmonicRhythm } : {}),
   };
 }
 
@@ -168,11 +178,11 @@ export function newRequest(spec: PanelSpec): ComposeRequest {
   return request;
 }
 
-export function requestFileName(request: ComposeRequest): string {
+export function requestFileName(request: ComposeRequest | AnalysisRequest): string {
   return `ailegro-request-${request.requestId}.json`;
 }
 
-export function resultFileName(request: ComposeRequest): string {
+export function resultFileName(request: ComposeRequest | AnalysisRequest): string {
   return `ailegro-result-${request.requestId}.json`;
 }
 
@@ -192,8 +202,84 @@ export function exportRecord(): void {
   );
 }
 
+// ------------------------------------------------------------------------------- harmonic analysis
+
+/** Bars to analyse: the selected range, otherwise the whole score. */
+export function analysisRange(
+  doc: ScoreDoc,
+  selection: Selection,
+): { from: number; count: number } {
+  if (selection.kind === 'range')
+    return { from: selection.measureFrom, count: selection.measureTo - selection.measureFrom + 1 };
+  return { from: 0, count: doc.measures.length };
+}
+
+export function newAnalysisRequest(rhythm: HarmonicRhythm): AnalysisRequest {
+  const s = getStore().getState();
+  return buildAnalysisRequest(
+    s.doc,
+    { ...analysisRange(s.doc, s.selection), harmonicRhythm: rhythm },
+    { requestId: s.ids.next('ai'), createdAt: new Date().toISOString(), appVersion: APP_VERSION },
+  );
+}
+
+export function exportAnalysisRequest(rhythm: HarmonicRhythm): AnalysisRequest {
+  const request = newAnalysisRequest(rhythm);
+  void download(requestFileName(request), JSON.stringify(request, null, 1));
+  return request;
+}
+
+export function importAnalysisResult(result: AnalysisResult): boolean {
+  const s = getStore().getState();
+  const lang = s.view.lang;
+  let plan;
+  try {
+    plan = planAnalysisImport(s.doc, result, { ids: s.ids, runId: result.requestId });
+  } catch (e) {
+    s.notify(translate(lang, 'toast.error', { m: (e as Error).message }), 'error');
+    return false;
+  }
+  if (!plan.commands.length) {
+    s.notify(translate(lang, 'ai.analysisEmpty'), 'error');
+    return false;
+  }
+  if (!s.apply(plan.commands, 'AIlegro', { selection: { kind: 'none' } })) return false;
+  const w = plan.warnings.length
+    ? plan.warnings.slice(0, 2).join('; ')
+    : translate(lang, 'ai.noWarnings');
+  getStore()
+    .getState()
+    .notify(translate(lang, 'ai.analyzed', { n: plan.stats.chords, w }));
+  for (const warning of plan.warnings) console.info('[AIlegro]', warning);
+  return true;
+}
+
+/** Ask the adapter server (`POST /analyze`) for the chords of the selected bars and import them. */
+export async function analyzeWithService(base: string, rhythm: HarmonicRhythm): Promise<boolean> {
+  const request = newAnalysisRequest(rhythm);
+  const res = await fetch(endpoint(base, '/analyze'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+  const text = await res.text();
+  if (!res.ok) {
+    let message = text;
+    try {
+      message = (JSON.parse(text) as { error?: string }).error ?? text;
+    } catch {
+      /* plain-text error */
+    }
+    throw new Error(message || `HTTP ${res.status}`);
+  }
+  return importAnalysisResult(JSON.parse(text) as AnalysisResult);
+}
+
 /** Shell command for the reference adapter, run from the AIlegro project root. */
-export function adapterCommand(request: ComposeRequest, mode: 'file' | 'serve'): string {
+export function adapterCommand(
+  request: ComposeRequest | AnalysisRequest,
+  mode: 'file' | 'serve',
+): string {
   const script = '"../AIlegro Score/integrations/ailegro/score_compose.py"';
   if (mode === 'serve') {
     return `cd "<AIlegro>"\n.venv-training/bin/python ${script} \\\n  --serve --checkpoint training/runs/<run>/weights.pt`;
@@ -208,11 +294,13 @@ export function adapterCommand(request: ComposeRequest, mode: 'file' | 'serve'):
 
 // ------------------------------------------------------------------------------- results
 
-export function importResult(result: ComposeResult): boolean {
+export function importResult(result: ComposeResult | AnalysisResult): boolean {
+  if (result?.schema === ANALYSIS_RESULT_SCHEMA) return importAnalysisResult(result);
   const s = getStore().getState();
   const lang = s.view.lang;
   if (result?.schema !== RESULT_SCHEMA) {
-    s.notify(translate(lang, 'ai.badResult', { s: String(result?.schema ?? '?') }), 'error');
+    const schema = (result as { schema?: unknown } | null)?.schema;
+    s.notify(translate(lang, 'ai.badResult', { s: String(schema ?? '?') }), 'error');
     return false;
   }
   const targets = targetsFor(result.requestId);
@@ -244,7 +332,7 @@ export function importResult(result: ComposeResult): boolean {
 
 export async function importResultFile(file: File): Promise<boolean> {
   try {
-    return importResult(JSON.parse(await file.text()) as ComposeResult);
+    return importResult(JSON.parse(await file.text()) as ComposeResult | AnalysisResult);
   } catch (e) {
     const s = getStore().getState();
     s.notify(translate(s.view.lang, 'toast.error', { m: (e as Error).message }), 'error');
