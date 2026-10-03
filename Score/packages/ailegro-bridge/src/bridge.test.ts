@@ -151,6 +151,21 @@ describe('compose request', () => {
     expect(req.score.notes.some((n) => n.part !== melody && Number(n.on) >= 16)).toBe(false);
     expect(req.targets.flatMap((t) => t.parts)).not.toContain(melody);
   });
+
+  it('lets a motif part continue in develop-motif', () => {
+    const doc = SAMPLES[0]!.build(); // piano
+    const piano = doc.parts[0]!.id;
+    const req = buildComposeRequest(
+      doc,
+      { task: 'develop-motif', from: 2, count: 4, materialParts: [piano] },
+      { requestId: 'm' },
+    );
+    expect(req.material.find((m) => m.kind === 'motif')).toMatchObject({
+      parts: [piano],
+      timeSpan: { from: '0', to: '8' },
+    });
+    expect(req.targets).toEqual([{ group: 'keys', parts: [piano] }]);
+  });
 });
 
 describe('spelling', () => {

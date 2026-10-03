@@ -29,7 +29,13 @@ import { type Selection, getStore } from './store';
 export const APP_VERSION = '0.1.0';
 
 /** Tasks the reference adapter (integrations/ailegro/score_compose.py) can run today. */
-export const ADAPTER_TASKS: readonly ComposeTask[] = ['continue', 'melody-from-chords'];
+export const ADAPTER_TASKS: readonly ComposeTask[] = [
+  'continue',
+  'melody-from-chords',
+  'accompany-melody',
+  'develop-motif',
+  'orchestrate',
+];
 export const ALL_TASKS: readonly ComposeTask[] = [
   'continue',
   'melody-from-chords',

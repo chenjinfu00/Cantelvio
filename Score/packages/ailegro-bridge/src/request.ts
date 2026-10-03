@@ -76,8 +76,13 @@ export function buildComposeRequest(
   const ctxStart = infos[ctxFrom]?.start ?? { n: 0, d: 1 };
 
   const materialParts = spec.materialParts ?? [];
+  // develop-motif writes on from the motif (it lies in the context), so its own parts receive new bars
+  // too; the other tasks keep their given notes and write into the remaining parts.
   const targetParts =
-    spec.targetParts ?? doc.parts.map((p) => p.id).filter((id) => !materialParts.includes(id));
+    spec.targetParts ??
+    doc.parts
+      .map((p) => p.id)
+      .filter((id) => spec.task === 'develop-motif' || !materialParts.includes(id));
   // Score record: context bars, plus the material parts inside the generated span.
   const record = buildScoreRecord(doc, { bars: { from: ctxFrom, to: genTo } });
   const inSpan = (on: string) => {

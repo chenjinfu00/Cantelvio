@@ -12,6 +12,7 @@
 | [0005](0005-ailegro-contract.md) | 与 AIlegro 只通过版本化 JSON 契约交互，AI 结果作为可审阅的建议 | 已接受 |
 | [0006](0006-file-format.md) | `.ailegro.json`：规范化、逐事件一行、适合 git 的 JSON | 已接受 |
 | [0007](0007-marks-graces-spanners.md) | 记号挂在事件上，倚音属于主音，线条放在全局 `spanners` 列表（格式 v2） | 已接受 |
+| [0008](0008-locked-material-by-decoding.md) | 生成区间内的给定材料（配伴奏、配器、动机发展）用 AIlegro 的解码约束实现，不重训 | 已接受 |
 
 ## 模板
 

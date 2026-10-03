@@ -24,6 +24,7 @@
     "test:watch": "vitest",
     "check": "npm run lint && npm run typecheck && npm run test",
     "render": "tsx tools/render-score.ts",
+    "ailegro:examples": "tsx tools/ailegro-examples.ts",
     "gen:smufl": "node packages/engraving/scripts/gen-smufl.mjs"
   },
   "devDependencies": {

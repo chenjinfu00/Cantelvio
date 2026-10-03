@@ -40,7 +40,8 @@ Then import the result in the editor (AIlegro panel → “导入生成结果”
 ## Checks without a model
 
 ```sh
-# conversion check against AIlegro's time vocabulary and chord list (no torch needed)
+# conversion check against AIlegro's time vocabulary and chord list (no torch needed; with numpy it also
+# estimates context chords like the real run)
 python3 "../AIlegro Score/integrations/ailegro/score_compose.py" --request request.json --dry-run
 
 # placeholder music (scales over a tonic bass) to test the editor round trip anywhere,
@@ -48,17 +49,27 @@ python3 "../AIlegro Score/integrations/ailegro/score_compose.py" --request reque
 python3 integrations/ailegro/score_compose.py --serve --mock
 ```
 
+## Options
+
+- `--candidates N` (default 16): accompany-melody writes each bar N times and keeps the version under which the
+  given melody is most probable. More candidates fit the harmony better and cost proportionally more time.
+- `--doublings none|light|full` (default light): octave/unison doublings orchestrate may add (light: at most half as
+  many as the given notes per bar).
+
 ## Status (2026-10-02)
 
-- The dry run was verified against AIlegro's real time vocabulary, chord-quality list and score
-  reader (`score_events_v2.ScoreEvents.from_candidate` loads every exported sample).
-- The editor ↔ server round trip (request → result → suggestions → accept/reject) is tested with
-  `--mock`.
-- **Generation with trained weights has not been run from this repository** — run the server
-  once in the AIlegro environment and report any mismatch in `Composer` arguments.
-- Supported tasks: `continue`, `melody-from-chords` (locked chords). `accompany-melody`,
-  `develop-motif` and `orchestrate` need hard-locked notes inside generated bars and wait for
-  AIlegro's decoder support; the server rejects them with a clear message.
+- All five tasks run. `accompany-melody`, `develop-motif` and `orchestrate` use AIlegro's
+  `training/scripts/four_pillar_v31_tasks.py` (decoding only; the v3.1 training code and weights are unchanged).
+  An AIlegro folder without that file runs `continue` and `melody-from-chords` only and rejects the others.
+- Context bars without any chord symbol get chord changes from AIlegro's own chord tracker (the labeler of the
+  training data); a chord symbol that repeats the chord in effect is not fed as a change; with `chordMode: given`
+  a bar without a symbol holds the previous chord.
+- **Run end to end with the trained weights** (four-pillar v3.1, step 45,225, torch 2.14.1, Linux): the requests
+  written by `npm run ailegro:examples -- --out out/ailegro` were generated here and imported back with
+  `npm run ailegro:examples -- --check out/ailegro` (valid scores, given material unchanged). Not yet run on the
+  owner's Mac `.venv-training`.
+- The dry run was verified against AIlegro's real time vocabulary, chord-quality list and score reader; the
+  editor ↔ server round trip is tested with `--mock`, which now also handles the three new tasks.
 
 The contract is specified in [docs/ailegro-integration.md](../../docs/ailegro-integration.md).
 This file lives in AIlegro Score because it implements AIlegro Score's contract; it only imports

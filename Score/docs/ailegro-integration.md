@@ -37,6 +37,12 @@ cd "<…>/software develop/AIlegro"
 编辑器 → AIlegro 面板 → “本机 AIlegro 服务” 填 `http://127.0.0.1:8765` → “连接” → “直接生成”。
 模型只加载一次；一次只跑一个生成；默认只接受来自 `localhost` / `127.0.0.1` 页面的请求。
 
+两个只在适配器上设置的选项（不在契约里）：
+
+- `--candidates 16`：为旋律配伴奏时每小节写几份、留下和旋律最合的一份。份数越多和声越贴，耗时也成正比
+  （云端 2 线程：8 小节 8 份约 5 秒，32 份约 21 秒）。
+- `--doublings none|light|full`：配器时模型可以加的八度/同度叠置。`light`（默认）最多为给定音数的一半。
+
 ### B. 文件交换（不开服务器）
 
 1. 面板 → “导出请求 (.json)”，得到 `ailegro-request-<id>.json`；面板会显示要运行的命令。
@@ -143,13 +149,16 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 
 ### 任务
 
-| `task` | 含义 | 给定材料 | 适配器状态 |
+| `task` | 含义 | 给定材料 | 适配器 |
 | --- | --- | --- | --- |
-| `continue` | 在上下文之后自由续写 | 上下文小节 | ✅ 支持 |
-| `melody-from-chords` | 按乐谱上的和弦记号写旋律与伴奏 | 和弦（hardLock） | ✅ 支持 |
-| `accompany-melody` | 旋律已给定（锁定），写其他声部 | 所选乐器的音符 | ⏳ 需要 AIlegro 解码器支持“生成区间内的锁定音符” |
-| `develop-motif` | 发展一个动机 | 上下文里的动机 | ⏳ 同上 |
-| `orchestrate` | 把已有音乐配器到所选乐器组 | 所选乐器的音符 | ⏳ 同上 |
+| `continue` | 在上下文之后自由续写 | 上下文小节 | ✅ |
+| `melody-from-chords` | 按乐谱上的和弦记号写旋律与伴奏 | 和弦（hardLock） | ✅ 没有和弦记号的小节保持前一个和弦 |
+| `accompany-melody` | 旋律已给定（锁定），写其他声部 | 所选乐器的音符 | ✅ 旋律逐音保持；每小节写 `--candidates` 份，留下旋律最自然的一份 |
+| `develop-motif` | 发展一个动机 | 上下文里的动机 | ✅ 动机小节 = 上下文里最后一个有动机声部音符的小节（或请求里的参考小节）；动机声部本身也接着写 |
+| `orchestrate` | 把已有音乐配器到所选乐器组 | 所选乐器的音符 | ✅ 每个给定音由模型选乐器组和声部；可加叠置 |
+
+三项锁定材料任务需要 AIlegro 的 `training/scripts/four_pillar_v31_tasks.py`（2026-10-02 加入；不改 v3.1 的训练代码和
+权重）。设计与取舍见 [ADR 0008](adr/0008-locked-material-by-decoding.md)。
 
 ## 契约 3：`ailegro.compose-result/1`
 
@@ -195,22 +204,59 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
   再无音高打击乐，再有音高的音（从低到高）；时间通过 AIlegro 的 `TimeVocabulary.lookup` 映射到词表
   （统计被映射到最近值的次数）；和弦性质 id → AIlegro 下标；未知的 GM 鼓号用 38（军鼓）。
 - 调：优先用 `key-<bar>` 约束，其次用记录里小节的调号；`modelKeys` 时允许模型在小节边界换调。
-- 生成：`Composer(model, vocab, seed, key=…)`；上下文逐小节 `feed_bar(events, length, meter, tempo, key)`；
-  每个目标小节 `next_bar(length, meter, tempo, groups, request_groups, density, key, chord_mode, chords,
-  style, max_notes, temperature, top_p, reference)`。`chordMode: given` 时把乐谱和弦作为 `chords` 传入。
+- 和弦：
+  - 上下文小节**没有任何和弦记号**时，用 AIlegro 自己的和弦跟踪器（训练数据用的同一个标注器）估计每小节的和弦，
+    结果里注明估计了几个小节；
+  - 与当前和弦相同的和弦记号不再写成一次“换和弦”（训练数据里没有这种事件）；
+  - `chordMode: given` 时，有和弦记号的小节锁定这些和弦，没有记号的小节保持前一个和弦（以前会让模型自己加和弦）；
+  - 配器且没有和弦记号时，和弦由跟踪器从给定音乐估计并锁定。
+- 生成：`TaskComposer(model, vocab, seed, key=…)`（v3.1 `Composer` 的扩展）；上下文逐小节
+  `feed_bar(events, length, meter, tempo, key)`；每个目标小节 `next_bar_locked(…, locks=…)`，参数同
+  `next_bar(length, meter, tempo, groups, request_groups, density, key, chord_mode, chords, style, max_notes,
+  temperature, top_p, reference)`，没有锁定音时结果与 `next_bar` 逐位相同。
+- 各任务：
+  - `accompany-melody`：生成区间里材料声部的音符成为锁定音（乐器组、声部、音高、起音、时值、力度都保持；人声
+    声部是 AIlegro 的“六组以外”）。模型自己写的音排在下一个锁定音之前就保留，否则先写锁定音。每小节 `best_of`
+    N 份，按锁定旋律的对数概率选。结果只含新写的声部；有人声旋律时不传 `request_groups`（与训练一致）。
+  - `orchestrate`：锁定音只固定音高、起音、时值和表情，乐器组和声部按模型后验选（`request_groups` 打开）；
+    叠置音只能是同一时刻发声的给定音的八度或同度。结果包含全部给定音（已分到各组）和叠置音。
+  - `develop-motif`：按小节轮换：重述 → 上行二度模进 → 截取（再下行一级）→ 自由 → 倒影 → 下行模进 → 减值 →
+    自由。重述用原小节作参考；模进、截取、减值把动机小节的整个织体变换后作为合成参考；倒影只变换动机声部，
+    保留它下方的伴奏；“自由”让模型的指针自己选。每小节做了什么写进结果的 `warnings`。
 - 服务器：`GET /health`、`POST /compose`；422 = 请求无法执行（例如不支持的任务），400 = 格式错误，
   500 = 生成失败；CORS 只放行回环地址（`--allow-origin` 可加）。
 
 ## 验证状态与检查清单
 
 - ✅ 转换层（dry run）对照 AIlegro 真实的时间词表、和弦性质表和乐谱读取器验证过；示例上下文 0 次映射。
-- ✅ 编辑器 ↔ 服务器 ↔ 导入 ↔ 接受/拒绝 的完整往返，用 `--mock` 在浏览器里测试过。
-- ⚠️ **尚未用训练好的权重从本仓库跑过生成。** 第一次在 AIlegro 环境运行时请检查：
-  1. `four_pillar_v31_sample.load()` 的返回值是否仍是 `(model, vocab, weights)`；
-  2. `Composer.feed_bar` / `next_bar` 的参数名与上面一致；
-  3. `next_bar` 返回的时间是 `Fraction`（会被写成 `"3/2"` 字符串）；
-  4. 生成 2–4 小节后在编辑器导入，看声部分配和拼写是否合理。
-  有出入时改适配器（本仓库），**不要改 AIlegro**；契约字段要变就按下面的规则升版本。
+- ✅ 编辑器 ↔ 服务器 ↔ 导入 ↔ 接受/拒绝 的完整往返，用 `--mock` 在浏览器里测试过（`--mock` 也认得新任务）。
+- ✅ **用训练好的权重端到端跑通**（2026-10-02，四大件 v3.1 第 45,225 步，torch 2.14.1，云端 Linux）：
+  `npm run ailegro:examples -- --out out/ailegro` 写出六个示例请求（续写、依和弦写旋律、小提琴旋律配钢琴、
+  女高音旋律配钢琴、钢琴练习曲配器、钢琴动机发展），适配器生成结果，`--check` 把结果导入回原乐谱：
+  `validateScore` 无问题，给定材料不变。生成时间（2 线程）：两个配伴奏示例 8–11 秒（每小节选 16 份），
+  其余约 2 秒。导入时同一谱表超过 4 个声部的音会被跳过（小提琴配钢琴示例 135 个音里 7 个）。
+- ⚠️ 还没在 Mac 上的 `.venv-training` 里亲自跑过；第一次运行时：
+  1. 在 AIlegro 文件夹确认有 `training/scripts/four_pillar_v31_tasks.py`；
+  2. `npm run ailegro:examples -- --out out/ailegro`，对每个请求运行适配器（见 A/B 两节），再 `--check out/ailegro`；
+  3. 在编辑器里试听。
+
+测得的质量（AIlegro `training/scripts/eval_four_pillar_v31_tasks.py`，训练集窗口，只适合比较做法）：
+
+| | 半音冲突 | 强拍和弦音 | 与旋律同音/八度重叠 | 其中同音 |
+| --- | ---: | ---: | ---: | ---: |
+| 配伴奏：只锁旋律 | 25% | 53% | 41% | 6% |
+| 配伴奏：选 8 份 | 14% | 73% | 65% | 7% |
+| 配伴奏：选 32 份 | 8% | 84% | 68% | 6% |
+| 配伴奏：旋律 + 人写的和弦 | 11% | 88% | 65% | 12% |
+| 真实艺术歌曲（人声对钢琴） | 8% | 90% | 67% | 43% |
+
+- 2026-10-02 修正过一次解码：第一版会让钢琴把给定旋律原样抄一遍（选 8 份时 81% 的旋律音被同音重复，
+  还会在同一声部重复同一个音）。上表是修正后的结果；钢琴默认不在旋律之前与它同音，所以“其中同音”
+  比真实艺术歌曲少得多。
+- 依和弦写旋律：强拍音落在锁定和弦上的比例 93%，与模型自己写和弦时相同。
+- 配器：给定音分到原曲里演奏过它的乐器组 71%（像编辑器那样加轻度叠置时 68%；按上下文音区分配 66%，
+  随机 35%）。
+- 动机发展（与目标小节的相似度，0–1）：原小节参考 0.57，完整织体的合成模进 0.51，不参考 0.06。
 
 ## 修改契约的规则
 
@@ -221,7 +267,11 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 
 ## 未决问题
 
-- 生成区间内的**锁定音符**（伴奏、配器、动机发展需要）——等待 AIlegro 解码器支持。
+- **配器在没有管弦乐上下文时几乎全给弦乐**，每组也多半只用一个声部（示例：57 个给定音里 56 个给了小提琴和
+  大提琴，中提琴、双簧管几乎没有）。可以试按后验抽样（AIlegro 的 `lock_choice='sample'`）或给要求的乐器加先验。
+- 为旋律配伴奏时**和声**是主要短板：和弦在同一拍的旋律音之前决定。更好的办法是另训一个“旋律 → 和弦”的
+  配和声模型（AIlegro 侧），先出和弦记号给用户改，再锁定和弦写伴奏。
+- 动机发展的**变形方式**目前由适配器自动安排；要让用户逐小节选择，需要 `compose-request/2`。
 - 声部“角色”（旋律 / 低音 / 和声）目前只在记录里预留 `role` 字段，界面尚未提供。
 - 文字意图（`intent`）与风格标签需要 AIlegro 侧定义词表。
-- 人声目前不映射到任何组。
+- 人声目前不映射到六个组；作为给定材料时按 AIlegro 的“六组以外”（第 7 组）传入，模型不会给人声声部写新音。
