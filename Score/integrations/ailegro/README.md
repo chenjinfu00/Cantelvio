@@ -55,6 +55,10 @@ python3 integrations/ailegro/score_compose.py --serve --mock
   given melody is most probable. More candidates fit the harmony better and cost proportionally more time.
 - `--doublings none|light|full` (default light): octave/unison doublings orchestrate may add (light: at most half as
   many as the given notes per bar).
+- `--harmonizer auto|none|PATH` (default auto): accompany-melody without given chords first reads chords from the
+  given melody with AIlegro's harmonizer (melody -> chords, `training/scripts/harmonizer_v1.py`) and locks them;
+  the chords come back with the result and import as chord symbols. `auto` uses
+  `training/runs/harmonizer-v1-20261003/weights.pt` when present; `none` lets v3.1 choose the chords.
 
 ## Status (2026-10-02)
 

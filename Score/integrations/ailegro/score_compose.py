@@ -79,7 +79,9 @@ def qs(value: Fraction) -> str:
     return str(Fraction(value))
 
 
-def load_ailegro(root: Path, need_model: bool):
+def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto'):
+    """AIlegro modules (and with need_model the torch-based ones). harmonizer: 'auto' loads AIlegro's
+    melody -> chords model from its default run when present, 'none' never, otherwise a weights path."""
     scripts = root / 'training' / 'scripts'
     if not scripts.is_dir():
         raise AdapterError(f'not an AIlegro project root (missing {scripts}); pass --ailegro-root')
@@ -101,10 +103,25 @@ def load_ailegro(root: Path, need_model: bool):
         except ImportError:
             tasks = None
     has_tasks = tasks is not None or (scripts / 'four_pillar_v31_tasks.py').is_file()
+    chords_model = None
+    if need_model and harmonizer != 'none':
+        try:
+            import harmonizer_v1  # noqa: E402  (melody -> chords, needs torch)
+        except ImportError:
+            harmonizer_v1 = None
+        path = None
+        if harmonizer_v1 is not None:
+            path = harmonizer_v1.DEFAULT_WEIGHTS if harmonizer == 'auto' else Path(harmonizer)
+        if path is not None and path.is_file():
+            model, info = harmonizer_v1.load(path)
+            chords_model = {'module': harmonizer_v1, 'model': model, 'info': info, 'path': str(path)}
+        elif harmonizer not in ('auto', 'none'):
+            raise AdapterError(f'harmonizer weights not found: {harmonizer}')
     return {'GROUPS': GROUPS, 'DYNAMICS': DYNAMICS, 'WEDGES': WEDGES, 'vocab': vocab,
             'quality_index': {qd['id']: i for i, qd in enumerate(qualities)}, 'qualities': qualities,
             'sample': sample, 'tasks': tasks, 'has_tasks': has_tasks,
-            'tonal': tonal if ScoreEvents is not None else None, 'ScoreEvents': ScoreEvents}
+            'tonal': tonal if ScoreEvents is not None else None, 'ScoreEvents': ScoreEvents,
+            'harmonizer': chords_model}
 
 
 def group_index(env: dict | None, group: str | None) -> int:
@@ -217,6 +234,39 @@ def tracked_chords(record: dict, env: dict, bars: list[int], parts: list[str] | 
     return {order[i]: [(Fraction(o), int(r) % 12, int(qy)) for o, r, qy in found.get(i, ())] for i in range(len(order))}
 
 
+def harmonized_chords(record: dict, env: dict, context: list[int], bars: list[int], parts: list[str],
+                      in_effect) -> dict:
+    """Chord changes for `bars` from AIlegro's harmonizer, read from the given melody (`parts`) over the context
+    and generated bars. The chord in effect at the first generated bar is written there when it differs from
+    the one the context left. {bar: [(offset, root, quality index), ...]}"""
+    chords_model = env.get('harmonizer')
+    if chords_model is None or not bars or not parts:
+        return {}
+    measures = {m['number'] - 1: m for m in record['measures']}
+    order = [b for b in context + bars if b in measures]
+    if any(b not in measures for b in bars) or not order:
+        return {}
+    t0 = q(measures[order[0]]['on'])
+    shapes = [(q(measures[b]['dur']), tuple(measures[b]['meter']),
+               (measures[b].get('key') or {}).get('fifths')) for b in order]
+    notes = [(q(n['on']) - t0, q(n['dur']), int(n['pitch'])) for n in record['notes']
+             if n['bar'] in measures and n['part'] in parts and not n.get('grace') and n.get('pitch') is not None
+             and order[0] <= n['bar'] <= order[-1]]
+    if not notes:
+        return {}
+    module = chords_model['module']
+    changes, path = module.harmonize(chords_model['model'], chords_model['info'], notes, shapes)
+    index = {b: i for i, b in enumerate(order)}
+    out = {b: [(Fraction(o), int(r), int(qy)) for o, r, qy in changes.get(index[b], ())] for b in bars}
+    first = bars[0]
+    step = int(round(sum(shape[0] for shape in shapes[:index[first]]) * 4))
+    start = int(path[min(step, len(path) - 1)])
+    chord = (start % 12, start // 12)
+    if (not out[first] or out[first][0][0] != 0) and chord != in_effect:
+        out[first].insert(0, (Fraction(0), *chord))
+    return out
+
+
 def prepare(request: dict, env: dict | None) -> dict:
     """Validate a request and turn it into feeds (context bars) and a per-bar generation plan.
     `env` is None only for --mock without an AIlegro checkout (no context feeds then)."""
@@ -234,7 +284,7 @@ def prepare(request: dict, env: dict | None) -> dict:
     count = gen['bars']['count']
     context_from = first - gen.get('contextBars', first)
     stats = {'remapped': 0, 'unknownQualities': 0, 'contextBars': 0, 'contextEvents': 0, 'repeatedChords': 0,
-             'trackedChordBars': 0, 'lockedNotes': 0}
+             'trackedChordBars': 0, 'lockedNotes': 0, 'harmonizedBars': 0}
     measures = {m['number'] - 1: m for m in record['measures']}
 
     def key_of(bar: int):
@@ -287,6 +337,9 @@ def prepare(request: dict, env: dict | None) -> dict:
     tracked_gen = {}
     if env is not None and task == 'orchestrate' and chord_mode != 'given':
         tracked_gen = tracked_chords(record, env, [b for b in gen_bars if b in measures], given, key_of)
+    harmonized = {}
+    if env is not None and task == 'accompany-melody' and chord_mode != 'given':
+        harmonized = harmonized_chords(record, env, context_bars, gen_bars, given, current[0])
     in_effect = current[0]
     for k, bar in enumerate(gen_bars):
         m = measures.get(bar)
@@ -313,6 +366,10 @@ def prepare(request: dict, env: dict | None) -> dict:
         elif bar in tracked_gen:
             chords = tuple(tracked_gen[bar])
             item_mode = 'free' if chords else 'hold'
+        elif bar in harmonized:
+            chords = tuple(harmonized[bar])
+            item_mode = 'free' if chords else 'hold'
+            stats['harmonizedBars'] += 1
         locks = []
         if given and m:
             for n in record['notes']:
@@ -376,6 +433,9 @@ def result_document(prep: dict, model: dict, bars: list, warnings: list[str]) ->
         notes.append(f'{stats["remapped"]} context times were mapped to the nearest vocabulary value')
     if stats.get('trackedChordBars'):
         notes.append(f'chords of {stats["trackedChordBars"]} context bars estimated by the AIlegro chord tracker')
+    if stats.get('harmonizedBars'):
+        notes.append(f'chords of {stats["harmonizedBars"]} bars from the AIlegro harmonizer (read from the given '
+                     'melody); edit the chord symbols and generate with given chords to change them')
     return {
         'schema': RESULT_SCHEMA,
         'requestId': prep['request']['requestId'],
@@ -702,6 +762,9 @@ def main() -> None:
     parser.add_argument('--threads', type=int, default=1)
     parser.add_argument('--candidates', type=int, default=16,
                         help='accompany-melody: versions written per bar; the one fitting the melody best is kept')
+    parser.add_argument('--harmonizer', default='auto',
+                        help="accompany-melody without given chords: 'auto' uses AIlegro's melody -> chords model "
+                             "when its weights are present, 'none' lets v3.1 choose, or a weights path")
     parser.add_argument('--doublings', choices=DOUBLINGS, default='light',
                         help='orchestrate: octave/unison doublings the model may add (light: at most half as '
                              'many as the given notes)')
@@ -717,7 +780,8 @@ def main() -> None:
     try:
         env = None
         if not args.mock or (args.ailegro_root / 'training' / 'scripts').is_dir():
-            env = load_ailegro(args.ailegro_root.resolve(), need_model=not (args.dry_run or args.mock))
+            env = load_ailegro(args.ailegro_root.resolve(), need_model=not (args.dry_run or args.mock),
+                               harmonizer=args.harmonizer)
         if args.serve:
             if args.mock:
                 model = MockModel()

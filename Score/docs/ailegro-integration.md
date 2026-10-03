@@ -37,11 +37,15 @@ cd "<…>/software develop/AIlegro"
 编辑器 → AIlegro 面板 → “本机 AIlegro 服务” 填 `http://127.0.0.1:8765` → “连接” → “直接生成”。
 模型只加载一次；一次只跑一个生成；默认只接受来自 `localhost` / `127.0.0.1` 页面的请求。
 
-两个只在适配器上设置的选项（不在契约里）：
+三个只在适配器上设置的选项（不在契约里）：
 
 - `--candidates 16`：为旋律配伴奏时每小节写几份、留下和旋律最合的一份。份数越多和声越贴，耗时也成正比
   （云端 2 线程：8 小节 8 份约 5 秒，32 份约 21 秒）。
 - `--doublings none|light|full`：配器时模型可以加的八度/同度叠置。`light`（默认）最多为给定音数的一半。
+- `--harmonizer auto|none|<路径>`：为旋律配伴奏且没有给定和弦时，先用 AIlegro 的配和声模型（旋律 → 和弦）
+  从给定旋律读出和弦并锁定，再让 v3.1 写伴奏。和弦随结果导入为和弦记号，可以修改后用 `chordMode: given`
+  重新生成。`auto`（默认）在 AIlegro 文件夹里有 `training/runs/harmonizer-v1-20261003/weights.pt` 时使用；
+  `none` 让 v3.1 自己决定和弦。
 
 ### B. 文件交换（不开服务器）
 
@@ -209,7 +213,9 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
     结果里注明估计了几个小节；
   - 与当前和弦相同的和弦记号不再写成一次“换和弦”（训练数据里没有这种事件）；
   - `chordMode: given` 时，有和弦记号的小节锁定这些和弦，没有记号的小节保持前一个和弦（以前会让模型自己加和弦）；
-  - 配器且没有和弦记号时，和弦由跟踪器从给定音乐估计并锁定。
+  - 配器且没有和弦记号时，和弦由跟踪器从给定音乐估计并锁定；
+  - 为旋律配伴奏且不是 `chordMode: given` 时，和弦由配和声模型从给定旋律（上下文小节和生成小节）读出并锁定；
+    生成区间第一小节开头的和弦与上下文留下的不同时，也写在那里。
 - 生成：`TaskComposer(model, vocab, seed, key=…)`（v3.1 `Composer` 的扩展）；上下文逐小节
   `feed_bar(events, length, meter, tempo, key)`；每个目标小节 `next_bar_locked(…, locks=…)`，参数同
   `next_bar(length, meter, tempo, groups, request_groups, density, key, chord_mode, chords, style, max_notes,
@@ -254,6 +260,17 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
   还会在同一声部重复同一个音）。上表是修正后的结果；钢琴默认不在旋律之前与它同音，所以“其中同音”
   比真实艺术歌曲少得多。
 - 依和弦写旋律：强拍音落在锁定和弦上的比例 93%，与模型自己写和弦时相同。
+- 配和声模型（AIlegro `training/scripts/harmonizer_v1.py`，2026-10-03，[ADR 0009](adr/0009-harmonizer-model.md)）
+  给出的和弦用于配伴奏时：
+
+  | 和弦来源（三首旋律 × 4 个种子，每小节选 8 份） | 半音冲突 | 强拍和弦音 |
+  | --- | ---: | ---: |
+  | v3.1 自己定 | 12% | 72% |
+  | 配和声模型 | 6% | 99% |
+  | 人写的和弦 | 9% | 88% |
+
+  真实艺术歌曲（AIlegro 的测试集，60 首，每小节选 4 份）上，冲突从 19.5% 降到 14.3%，强拍和弦音从 69% 升到
+  84%。代价是和声节奏偏密（简单旋律几乎每拍换和弦），伴奏的音也更多。
 - 配器：给定音分到原曲里演奏过它的乐器组 71%（像编辑器那样加轻度叠置时 68%；按上下文音区分配 66%，
   随机 35%）。
 - 动机发展（与目标小节的相似度，0–1）：原小节参考 0.57，完整织体的合成模进 0.51，不参考 0.06。
