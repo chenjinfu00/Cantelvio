@@ -27,9 +27,12 @@ Run it from the AIlegro project root with AIlegro's own environment. Modes:
     .venv-training/bin/python "<AIlegro Score>/integrations/ailegro/score_compose.py" \\
         --request request.json --checkpoint training/runs/<run>/weights.pt --output result.json
 
-    # local server for the editor's "Generate" button (model loaded once, 127.0.0.1:8765)
+    # local server for the editor's "Generate" button (model loaded once, 127.0.0.1:8765); it also opens PDFs /
+    # images (Audiveris) and recordings (MuScriptor + AIlegro's audio_to_score.py) for the editor as background
+    # jobs: POST /import/pdf or /import/audio with the file as the body, then GET /jobs/<id> (score_imports.py).
+    # `npm run ailegro:serve` in AIlegro Score finds the paths and starts this.
     .venv-training/bin/python "<AIlegro Score>/integrations/ailegro/score_compose.py" \\
-        --serve --checkpoint training/runs/<run>/weights.pt
+        --serve --checkpoint training/runs/<run>/weights.pt [--audiveris PATH] [--muscriptor-python PATH]
 
     # conversion check against AIlegro's time vocabulary (no torch, no checkpoint)
     python3 "<AIlegro Score>/integrations/ailegro/score_compose.py" --request request.json --dry-run
@@ -47,7 +50,10 @@ import threading
 from fractions import Fraction
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
+
+sys.path.append(str(Path(__file__).resolve().parent))
+import score_imports as imports  # noqa: E402  (PDF / audio import jobs, standard library only)
 
 REQUEST_SCHEMA = 'ailegro.compose-request/1'
 RESULT_SCHEMA = 'ailegro.compose-result/1'
@@ -774,7 +780,7 @@ class MockModel:
 LOOPBACK = {'localhost', '127.0.0.1', '::1'}
 
 
-def make_handler(model, env, allow_origins: set[str]):
+def make_handler(model, env, allow_origins: set[str], jobs: 'imports.Jobs | None' = None):
     lock = threading.Lock()
     tasks = list(SUPPORTED_TASKS if isinstance(model, MockModel) or (env and env.get('tasks')) else BASIC_TASKS)
 
@@ -809,7 +815,7 @@ def make_handler(model, env, allow_origins: set[str]):
             if origin:
                 self.send_header('Access-Control-Allow-Origin', origin)
                 self.send_header('Vary', 'Origin')
-                self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+                self.send_header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
                 self.send_header('Access-Control-Allow-Headers', 'Content-Type')
                 self.send_header('Access-Control-Max-Age', '600')
                 if self.headers.get('Access-Control-Request-Private-Network') == 'true':
@@ -817,22 +823,74 @@ def make_handler(model, env, allow_origins: set[str]):
             self.end_headers()
 
         def do_GET(self):
-            if urlsplit(self.path).path != '/health':
+            path = urlsplit(self.path).path
+            if path.startswith('/jobs/'):
+                job = jobs.get(path[len('/jobs/'):]) if jobs else None
+                if job is None:
+                    self.send_json(404, {'error': 'no such job (finished jobs are kept for an hour)'})
+                else:
+                    self.send_json(200, job.snapshot())
+                return
+            if path != '/health':
                 self.send_json(404, {'error': 'not found'})
                 return
             self.send_json(200, {'ok': True, 'model': model.name, 'mock': isinstance(model, MockModel),
                                  'tasks': tasks, 'request': REQUEST_SCHEMA, 'result': RESULT_SCHEMA,
                                  'analysis': bool(env and env.get('tonal') is not None),
                                  'analysisModel': bool(env and env.get('analyzer')),
-                                 'harmonicRhythms': list(HARMONIC_RHYTHMS)})
+                                 'harmonicRhythms': list(HARMONIC_RHYTHMS),
+                                 'imports': jobs.tools.describe() if jobs else None,
+                                 'job': imports.JOB_SCHEMA})
 
-        def do_POST(self):
+        def do_DELETE(self):
             path = urlsplit(self.path).path
-            if path not in ('/compose', '/analyze'):
+            if not path.startswith('/jobs/') or not jobs:
                 self.send_json(404, {'error': 'not found'})
                 return
             if self.headers.get('Origin') and not self.origin_allowed():
                 self.send_json(403, {'error': 'origin not allowed (use --allow-origin)'})
+                return
+            job = jobs.cancel(path[len('/jobs/'):])
+            if job is None:
+                self.send_json(404, {'error': 'no such job'})
+            else:
+                self.send_json(200, job.snapshot(with_result=False))
+
+        def start_import(self, kind: str, query: dict) -> None:
+            size = int(self.headers.get('Content-Length') or 0)
+            if size <= 0 or size > imports.MAX_UPLOAD:
+                self.send_json(413 if size > 0 else 400, {'error': 'missing or oversized file'})
+                return
+            one = lambda key: (query.get(key) or [''])[0].strip()  # noqa: E731
+            options = {'title': one('title') or None}
+            if kind == 'pdf':
+                options['sheets'] = one('sheets') or None
+            else:
+                options.update(instruments=[g for g in one('instruments').split(',') if g.strip()] or None,
+                               metre=one('metre') or None, piano=one('piano') in ('1', 'true'),
+                               keepAll=one('keepAll') in ('1', 'true'))
+            data = self.rfile.read(size)
+            try:
+                job = jobs.submit(kind, one('name') or f'upload.{kind}', data, options)
+            except imports.ImportRefused as e:
+                self.send_json(422, {'error': str(e)})
+                return
+            self.send_json(202, job.snapshot())
+
+        def do_POST(self):
+            url = urlsplit(self.path)
+            path = url.path
+            if path not in ('/compose', '/analyze', '/import/pdf', '/import/audio'):
+                self.send_json(404, {'error': 'not found'})
+                return
+            if self.headers.get('Origin') and not self.origin_allowed():
+                self.send_json(403, {'error': 'origin not allowed (use --allow-origin)'})
+                return
+            if path.startswith('/import/'):
+                if not jobs:
+                    self.send_json(404, {'error': 'imports are not available'})
+                    return
+                self.start_import(path[len('/import/'):], parse_qs(url.query))
                 return
             size = int(self.headers.get('Content-Length') or 0)
             if size <= 0 or size > MAX_BODY:
@@ -859,11 +917,17 @@ def make_handler(model, env, allow_origins: set[str]):
     return Handler
 
 
-def serve(model, env, host: str, port: int, allow_origins: set[str]) -> None:
+def serve(model, env, host: str, port: int, allow_origins: set[str], jobs: 'imports.Jobs | None' = None) -> None:
     if host not in LOOPBACK:
         print(f'warning: listening on {host}; anyone on the network can use this model', file=sys.stderr)
-    httpd = ThreadingHTTPServer((host, port), make_handler(model, env, allow_origins))
-    print(f'AIlegro adapter ({model.name}) on http://{host}:{port}  — POST /compose, GET /health', file=sys.stderr)
+    httpd = ThreadingHTTPServer((host, port), make_handler(model, env, allow_origins, jobs))
+    print(f'AIlegro adapter ({model.name}) on http://{host}:{port}  — POST /compose, POST /analyze, GET /health',
+          file=sys.stderr)
+    if jobs:
+        info = jobs.tools.describe()
+        for kind, label in (('pdf', 'PDF / images (Audiveris)'), ('audio', 'recordings (MuScriptor)')):
+            state = 'ready' if info[kind] else f'unavailable: {info["why"][kind]}'
+            print(f'  open {label}: {state}', file=sys.stderr)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
@@ -900,6 +964,11 @@ def main() -> None:
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--allow-origin', action='append', default=[],
                         help='extra browser origin allowed to call the server (loopback origins always are)')
+    parser.add_argument('--audiveris', help='Audiveris launcher for opening PDFs and images (default: $AUDIVERIS, '
+                                            'the PATH, then the default install location)')
+    parser.add_argument('--muscriptor-python',
+                        help="Python of MuScriptor's environment for opening recordings "
+                             '(default: <AIlegro>/MuScriptor-large-1.3B/.venv-py312/bin/python)')
     args = parser.parse_args()
 
     try:
@@ -915,7 +984,10 @@ def main() -> None:
                 raise AdapterError('--serve needs --checkpoint (or --mock)')
             else:
                 model = Model(env, args.checkpoint, args.threads, args.candidates, args.doublings)
-            serve(model, env, args.host, args.port, set(args.allow_origin))
+            root = args.ailegro_root.resolve()
+            tools = imports.Tools(root if (root / 'training' / 'scripts').is_dir() else None, args.audiveris,
+                                  args.muscriptor_python)
+            serve(model, env, args.host, args.port, set(args.allow_origin), imports.Jobs(tools))
             return
         if not args.request:
             raise AdapterError('--request is required (or use --serve)')

@@ -27,6 +27,8 @@
     "ailegro:examples": "tsx tools/ailegro-examples.ts",
     "import:musicxml": "tsx tools/import-musicxml.ts",
     "import:pdf": "tsx tools/pdf-to-score.ts",
+    "ailegro:serve": "tsx tools/ailegro-service.ts",
+    "test:adapter": "python3 integrations/ailegro/test_score_imports.py",
     "gen:smufl": "node packages/engraving/scripts/gen-smufl.mjs"
   },
   "devDependencies": {

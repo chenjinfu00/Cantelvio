@@ -19,6 +19,12 @@ so the commands below use the relative path `../AIlegro Score/...` from the AIle
 ## Local server (editor button “直接生成 / Generate”)
 
 ```sh
+npm run ailegro:serve        # from AIlegro Score: finds ../AIlegro, .venv-training and the newest v3.1 weights
+```
+
+which runs, from the AIlegro root:
+
+```sh
 cd "<path>/AIlegro"
 .venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
@@ -28,6 +34,13 @@ The model is loaded once; the server listens on `http://127.0.0.1:8765` (`--host
 answers `GET /health`, `POST /compose` and `POST /analyze` (request JSON in, result JSON out). Browser calls are
 accepted from loopback origins (`http://localhost:*`, `http://127.0.0.1:*`); add others with
 `--allow-origin https://example.org`. One generation runs at a time.
+
+The same server opens PDFs / scanned pages and recordings for the editor as background jobs
+(`score_imports.py`, ADR 0013): `POST /import/pdf` (Audiveris, `--audiveris PATH`) and `POST /import/audio`
+(MuScriptor's Python, `--muscriptor-python PATH`, then AIlegro's `audio_to_score.py`) take the file as the body
+and return a job; `GET /jobs/<id>` reports stage, progress and finally the MusicXML (base64), `DELETE /jobs/<id>`
+cancels. `GET /health` lists what can be opened (`imports`). Tests with stand-in tools:
+`python3 integrations/ailegro/test_score_imports.py` (`npm run test:adapter`).
 
 ## Files (no server)
 
@@ -72,6 +85,11 @@ python3 integrations/ailegro/score_compose.py --serve --mock
   tracker; a request can ask for `engine: model` or `rules`.
 
 ## Status (2026-10-03)
+
+- PDF and recording imports run end to end through the editor here (Linux): Audiveris 5.11.0 on an engraved
+  chorale, and a recording through a stand-in for MuScriptor (its weights are on the Mac) plus the real
+  `audio_to_score.py` with the analysis model; progress, cancel and the unsaved-changes prompt were checked in
+  Chromium. MuScriptor itself has not run through the server yet.
 
 - Harmonic analysis runs end to end with AIlegro's analysis model v2 (step 4,000): the two analysis examples of
   `npm run ailegro:examples` were analysed here and imported back as chord symbols (valid scores). On AIlegro's
