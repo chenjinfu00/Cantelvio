@@ -1,6 +1,6 @@
 # 0012. PDF / 图片识谱：调用外部的 Audiveris，再走 MusicXML 导入
 
-- 状态：已接受
+- 状态：已接受（编辑器经本机服务打开 PDF 的部分由 [ADR 0013](0013-local-service-imports.md) 补充）
 - 日期：2026-10-03
 
 ## 背景

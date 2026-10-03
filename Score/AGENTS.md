@@ -36,6 +36,8 @@ npm run dev            # editor at http://127.0.0.1:5178/
 npm run check          # lint + typecheck + unit tests — must pass before every commit
 npm run build          # production build of the editor
 npm run render -- --sample orchestra --out out/   # headless SVG/PNG render for visual checks
+npm run ailegro:serve  # local AIlegro service (../AIlegro): compose, analysis, PDF/recording imports
+npm run test:adapter   # Python tests of the adapter's import jobs (stand-in tools)
 npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/glyph lists)
 ```
 

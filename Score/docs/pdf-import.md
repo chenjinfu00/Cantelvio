@@ -16,6 +16,12 @@ MusicXML，再用本仓库的 MusicXML 导入（[musicxml-import.md](musicxml-im
 
 ## 用法
 
+**在编辑器里**：先运行本机服务 `npm run ailegro:serve`（[try-it.md](try-it.md)），再“打开”或拖入 PDF / 图片，
+或在 AIlegro 面板“从 PDF 或录音开始”→“打开 PDF / 图片…”。服务在后台调用 Audiveris，左下角显示第几页和用时，
+完成后作为新乐谱打开；面板的“识谱 / 扒谱选项”可以只读某几页、按实际音高读（[ADR 0013](adr/0013-local-service-imports.md)）。
+
+**命令行**：
+
 ```sh
 npm run import:pdf -- score.pdf                                  # → score.ailegro.json，放在 PDF 旁边
 npm run import:pdf -- score.pdf --instruments clarinet-bb,piano  # 指定各声部的乐器（目录 id，按顺序）
@@ -34,8 +40,8 @@ npm run import:pdf -- page.png --sheets "1 3-4" --keep out/omr   # 只识别某�
   这些都会在提示里计数。
 - `--keep <目录>` 留下 Audiveris 的 `.mxl` 和 `.omr`。识别错误较多时，可以用 Audiveris 打开 `.omr`
   逐页校对，再导出 `.mxl`，在编辑器里直接打开。
-- 编辑器本身不能打开 PDF（浏览器里运行不了 Audiveris）；转换后打开 `.ailegro.json`，或打开 Audiveris
-  导出的 `.mxl`。
+- 浏览器里运行不了 Audiveris：编辑器打开 PDF 要靠本机服务（上面）；没有服务时转换后打开 `.ailegro.json`，
+  或打开 Audiveris 导出的 `.mxl`。命令行的 `--instruments` 在编辑器里还没有对应选项。
 
 ## 实测（2026-10-03，Audiveris 5.11.0，Linux，300 dpi，没有 OCR 语言）
 

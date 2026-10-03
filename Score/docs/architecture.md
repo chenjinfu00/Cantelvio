@@ -27,7 +27,7 @@ graph LR
 | `@ailegro-score/ailegro-bridge` | 三个版本化契约：乐谱记录、作曲请求、生成结果导入 | `core` |
 | `@ailegro-score/web` | 编辑器界面：状态（zustand）、键盘/鼠标输入、面板、回放（Web Audio）、文件 | 以上全部 + React |
 | `tools/` | Node 命令行：无界面渲染（SVG/PNG） | `core`、`engraving`、`sharp` |
-| `integrations/ailegro` | 参考适配器 `score_compose.py`：把请求喂给 AIlegro 的 v3.1 Composer | 只 import AIlegro 模块 |
+| `integrations/ailegro` | 参考适配器 `score_compose.py`：把请求喂给 AIlegro 的 v3.1 Composer；本机服务还替编辑器运行识谱（Audiveris）和扒谱（MuScriptor + AIlegro）的后台任务（`score_imports.py`，ADR 0013） | 只 import AIlegro 模块；外部工具作为子进程 |
 
 `packages/*` 是**纯 TypeScript**：不能用 DOM、Node API、React、`localStorage`。
 由 `packages/tsconfig.json`（不含 DOM lib、`types: []`）和 ESLint 规则共同保证。

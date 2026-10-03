@@ -17,6 +17,7 @@
 | [0010](0010-harmonic-analysis-contract.md) | 和声分析用单独的契约（analysis-request/1 → analysis-result/1），结果作为可审阅的和弦记号 | 已接受 |
 | [0011](0011-musicxml-import.md) | MusicXML 导入：自写 XML 解析器，整和弦连音线合并成一个事件，调号取不移调声部 | 已接受 |
 | [0012](0012-pdf-import-audiveris.md) | PDF / 图片识谱：调用外部的 Audiveris（AGPL，单独安装），再走 MusicXML 导入 | 已接受 |
+| [0013](0013-local-service-imports.md) | 编辑器经本机 AIlegro 服务打开 PDF、图片和录音：后台导入任务、轮询进度，结果走 MusicXML 导入 | 已接受 |
 
 ## 模板
 

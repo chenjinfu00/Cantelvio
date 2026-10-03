@@ -3,7 +3,15 @@
 把一段录音变成可以编辑的乐谱。识别在 AIlegro 里完成（两个模型、两个 Python 环境），结果是 MusicXML，
 在编辑器里用“打开”或拖进窗口即可（[musicxml-import.md](musicxml-import.md)）。
 
-## 流程
+## 在编辑器里
+
+先运行本机服务 `npm run ailegro:serve`（[try-it.md](try-it.md)），再“打开”或拖入录音（WAV、MP3、FLAC、OGG、M4A、
+AIFF），或在 AIlegro 面板“从 PDF 或录音开始”→“打开录音…”。服务在后台依次运行下面两步，左下角显示阶段（载入、
+转写第几段、找拍子、整理成乐谱）和用时，可以取消；完成后作为新乐谱打开，提示里写保留了多少音、拍号、速度和小节数。
+面板“识谱 / 扒谱选项”对应命令行的选项：录音里的乐器（`--instruments`）、拍号（`--metre`）、合成一个钢琴谱（`--piano`）。
+（[ADR 0013](adr/0013-local-service-imports.md)）
+
+## 命令行流程
 
 ```sh
 cd "<path>/AIlegro"
@@ -44,4 +52,4 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 ## 下一步
 
 在 Mac 上把测试集乐谱合成为音频、用 MuScriptor 真实转写，量出真实的错误分布；再用（转写, 原谱）训练 AIlegro 自己的
-“保留 / 去掉”模型。编辑器里直接“打开音频”需要本机服务（和 PDF 识谱一样）。
+“保留 / 去掉”模型。

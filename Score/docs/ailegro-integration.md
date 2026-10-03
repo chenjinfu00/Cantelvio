@@ -29,6 +29,12 @@ sequenceDiagram
 ### A. 本机服务器（推荐，一键生成）
 
 ```sh
+npm run ailegro:serve        # 在 AIlegro Score 文件夹：找到 ../AIlegro、.venv-training 和最新的 v3.1 权重
+```
+
+它等于在 AIlegro 文件夹里运行（需要别的路径时也可以直接这样运行）：
+
+```sh
 cd "<…>/software develop/AIlegro"
 .venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
@@ -36,6 +42,7 @@ cd "<…>/software develop/AIlegro"
 
 编辑器 → AIlegro 面板 → “本机 AIlegro 服务” 填 `http://127.0.0.1:8765` → “连接” → “直接生成”。
 模型只加载一次；一次只跑一个生成；默认只接受来自 `localhost` / `127.0.0.1` 页面的请求。
+同一个服务也替编辑器打开 PDF、图片和录音（见下面 D 节）。一步步试用见 [try-it.md](try-it.md)。
 
 三个只在适配器上设置的选项（不在契约里）：
 
@@ -63,6 +70,38 @@ cd "<…>/software develop/AIlegro"
 
 面板 → “导出乐谱记录 (.json)”：`ailegro.score-record/1`，可作为 AIlegro 的分析/训练材料
 （与 AIlegro 的 classical-score-v1 读取器兼容）。
+
+### D. 打开 PDF、图片和录音（本机服务的导入任务）
+
+编辑器的“打开”、拖放和面板“从 PDF 或录音开始”把这些文件交给服务（[ADR 0013](adr/0013-local-service-imports.md)，
+代码 `integrations/ailegro/score_imports.py`）：
+
+- `POST /import/pdf?name=<文件名>[&sheets=1 3-4]`：请求体是 PDF / PNG / JPG / TIFF 本身；服务调用 Audiveris
+  （`-batch -export`），找不到时 `--audiveris PATH` 或环境变量 `AUDIVERIS`。
+- `POST /import/audio?name=<文件名>[&instruments=acoustic_piano,voice][&metre=6/8][&piano=1][&keepAll=1]`：请求体是
+  WAV / MP3 / FLAC / OGG / M4A / AIFF；服务先用 MuScriptor 的 Python（默认
+  `<AIlegro>/MuScriptor-large-1.3B/.venv-py312/bin/python`，或 `--muscriptor-python`）运行 AIlegro 的
+  `audio_transcribe_muscriptor.py`，再用自己的 Python 运行 `audio_to_score.py`。
+- 两者都立即返回 `202` 和任务；`GET /jobs/<id>` 查询，`DELETE /jobs/<id>` 取消；`422` = 文件或选项不被接受
+  （类型不对、工具没装、拍号写错），`413` = 文件太大（上限 512 MB）。
+- `GET /health` 的 `imports`：`{pdf, audio, why: {pdf?, audio?}, instruments, pdfSuffixes, audioSuffixes}`。
+
+任务（`ailegro-score.import-job/1`，编辑器与本仓库适配器之间的格式，不是 AIlegro 契约）：
+
+```json
+{ "schema": "ailegro-score.import-job/1", "id": "3f9c1a2b4d5e", "kind": "audio", "name": "take_1.wav",
+  "state": "running", "stage": "transcribing", "progress": [3, 12], "elapsed": 41.5,
+  "log": ["  3/12 chunks"],
+  "result": { "files": [{ "name": "take_1.musicxml", "format": "musicxml", "data": "<base64>" }],
+              "warnings": [], "report": { "notes": 317, "kept": 300, "metre": "2/4", "qpm": 97.1, "bars": 24 } } }
+```
+
+- `state`：`queued` → `running` → `done` / `failed`（带 `error`）/ `cancelled`；`result` 只在 `done` 时有。
+- `stage`：PDF `recognising[:<Audiveris 步骤>]`、`exporting`；录音 `loading`、`transcribing`、`beats`、`score`。
+  `progress`：PDF 是 [完成页数, 总页数]，录音转写时是 [完成段数, 总段数]。
+- `result.files`：PDF 是 Audiveris 的 `.mxl`（找到几个乐章就有几个，编辑器打开第一个），录音是 MusicXML；
+  `report` 是 `audio_to_score.py --report` 的内容（去掉了什么音、为什么，拍号、速度、调）或识谱的页数。
+- 一次只跑一个工具，其余排队；结束的任务保留一小时；上传的文件在工具跑完后删除。
 
 ### 不用模型测试整个流程
 
@@ -277,8 +316,9 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
     自由。重述用原小节作参考；模进、截取、减值把动机小节的整个织体变换后作为合成参考；倒影只变换动机声部，
     保留它下方的伴奏；“自由”让模型的指针自己选。每小节做了什么写进结果的 `warnings`。
 - 服务器：`GET /health`、`POST /compose`、`POST /analyze`（和声分析；`/health` 里 `analysis`、`analysisModel`
-  表示能不能分析、有没有分析模型）；422 = 请求无法执行（例如不支持的任务），400 = 格式错误，
-  500 = 生成失败；CORS 只放行回环地址（`--allow-origin` 可加）。
+  表示能不能分析、有没有分析模型），导入任务 `POST /import/pdf|audio`、`GET|DELETE /jobs/<id>`（上面 D 节）；
+  422 = 请求无法执行（例如不支持的任务），400 = 格式错误，500 = 生成失败；CORS 只放行回环地址
+  （`--allow-origin` 可加）。`npm run test:adapter` 用替身工具测导入任务和这些接口。
 
 ## 验证状态与检查清单
 

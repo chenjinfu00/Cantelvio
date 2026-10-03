@@ -6,7 +6,7 @@
 
 状态：✅ 完成 · 🚧 进行中 · ⏳ 待做 · ⛔ 受阻（写明原因）
 
-## 当前状态（2026-10-02）
+## 当前状态（2026-10-03）
 
 能用的：
 
@@ -21,15 +21,16 @@
   回放（钢琴采样 + 合成音色）、保存（写回原文件）/ 另存为 / 打开 / 最近文件 / 拖放打开 / 自动保存、
   SVG 导出、打印。
 - MusicXML 导入（`.musicxml`、`.xml`、`.mxl`）：音符、连音、倚音、记号、线条、和弦记号、移调乐器，
-  模型里没有的内容计数提示。PDF / 图片识谱：命令行调用 Audiveris 后导入（`npm run import:pdf`）。
-  音频 → 乐谱：在 AIlegro 里转写成 MusicXML 后打开（[audio-import.md](audio-import.md)）。
-- AIlegro：乐谱记录、作曲请求、结果导入为可审阅建议；本机适配服务器（`--serve`）与文件交换；
-  `--mock` 往返测试。五项任务都能用训练好的 v3.1 运行（续写、依和弦写旋律、为旋律配伴奏、动机发展、配器），
+  模型里没有的内容计数提示。PDF / 图片识谱（Audiveris）和录音扒谱（MuScriptor + AIlegro）：编辑器经本机
+  AIlegro 服务直接打开，后台运行、显示进度（[ADR 0013](adr/0013-local-service-imports.md)）；也可以用命令行
+  （`npm run import:pdf`，[audio-import.md](audio-import.md)）。
+- AIlegro：乐谱记录、作曲请求、结果导入为可审阅建议；本机适配服务器（`npm run ailegro:serve`）与文件交换；
+  `--mock` 往返测试；试用步骤见 [try-it.md](try-it.md)。五项任务都能用训练好的 v3.1 运行（续写、依和弦写旋律、为旋律配伴奏、动机发展、配器），
   `npm run ailegro:examples` 写出示例请求并检查导入结果；为旋律配伴奏时和弦由 AIlegro 的配和声模型给出，
   可以指定换和弦频率；和声分析给已有的音乐自动标和弦记号。
-- 中英文界面，149 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
+- 中英文界面，154 个单元测试 + 8 个适配器测试（`npm run test:adapter`），CI（lint、类型检查、测试、构建、示例渲染）。
 
-最需要先做的：在 Mac 上用真实权重跑一遍 `M3-AI-01` 的检查清单并试听、`M2-ENG-01`（增量排版）、
+最需要先做的：在 Mac 上按 [try-it.md](try-it.md) 试一遍（`M3-AI-01` 的检查清单、真实录音扒谱）、`M2-ENG-01`（增量排版）、
 `M2-ENG-02`（多声部碰撞）。
 
 ## M1 · 基础（v0.1）✅
@@ -67,8 +68,8 @@
 | M2-CORE-04 | MusicXML 导入（导入的内容带 `source: import`） | ✅ `.musicxml` / `.xml` / `.mxl`，编辑器打开或拖入、`npm run import:musicxml`（[musicxml-import.md](musicxml-import.md)、[ADR 0011](adr/0011-musicxml-import.md)） | claude |
 | M2-CORE-05 | MusicXML、MIDI 导出 | ⏳ | |
 | M2-CORE-06 | 文件格式 v2（事件记号、倚音、`spanners`，v1 迁移）、文字记谱 v1 | ✅ | claude |
-| M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器里直接打开 PDF 需要本机服务 | claude |
-| M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，模拟评估逐音 F1 86–88%（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
+| M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器经本机服务打开 PDF 见 `M3-AI-10` | claude |
+| M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，编辑器经本机服务打开录音（`M3-AI-10`）；模拟评估逐音 F1 86–88%（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
 | M2-WEB-01 | 复制粘贴界面；范围移调、范围改时值 | ⏳ | |
 | M2-WEB-02 | 快速插入面板：力度、谱号、调号、拍号、演奏法 | 🚧 小键盘已有力度、演奏法、装饰、线条；谱号、调号、拍号还在属性面板 | |
 | M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ⏳ | |
@@ -92,6 +93,7 @@
 | M3-AI-07 | 配和声：AIlegro 侧“旋律 → 和弦”小模型，先出和弦记号给用户改，再锁定和弦写伴奏 | ✅ 配和声模型 v1 + 适配器 `--harmonizer`（[ADR 0009](adr/0009-harmonizer-model.md)）；和弦随结果导入为和弦记号 | claude |
 | M3-AI-08 | 动机发展的变形方式（重复、模进、倒影、增值、截取）在面板里逐小节选择 → `compose-request/2` | ⏳ | |
 | M3-AI-09 | 和声分析：给已有的音乐自动标和弦记号（所选小节或全曲）；换和弦频率（分析与配伴奏） | ✅ 契约 `analysis-request/1` → `analysis-result/1`、`POST /analyze`、AIlegro 和声分析模型 v2（[ADR 0010](adr/0010-harmonic-analysis-contract.md)）；意图标签 `harmonic-rhythm:<…>` | claude |
+| M3-AI-10 | 本机 AIlegro 服务：编辑器里直接打开 PDF / 图片（Audiveris）和录音（MuScriptor + AIlegro），后台任务、进度、取消；`npm run ailegro:serve` 一条命令启动 | ✅ `POST /import/pdf\|audio`、`GET\|DELETE /jobs/<id>`（[ADR 0013](adr/0013-local-service-imports.md)）；[试用指南](try-it.md) | claude |
 | M3-HIST-01 | 命名版本：IndexedDB、自动版本、时间线面板 | ⏳ | |
 | M3-HIST-02 | `diffScores` 语义对比（core）+ 测试 | ⏳ | |
 | M3-HIST-03 | 对比界面（叠加 / 并排） | ⏳ | |

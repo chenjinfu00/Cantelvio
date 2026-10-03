@@ -20,20 +20,20 @@ npm run check      # 代码检查 + 类型检查 + 单元测试
 npm run render -- --sample orchestra --out out/   # 无界面渲染示例乐谱为 SVG/PNG
 npm run import:musicxml -- score.mxl --out out/score.ailegro.json   # MusicXML → .ailegro.json
 npm run import:pdf -- score.pdf   # PDF / 图片识谱（需要 Audiveris，见 docs/pdf-import.md）
+npm run ailegro:serve             # 本机 AIlegro 服务：作曲、和声分析、在编辑器里打开 PDF 和录音
 ```
 
 ## 和 AIlegro 一起用
 
 ```sh
-# 在 AIlegro 文件夹里启动适配服务器（模型只加载一次）
-cd "../AIlegro"
-.venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
-  --serve --checkpoint training/runs/<run>/weights.pt
+npm run ailegro:serve   # 终端 1：找到 ../AIlegro、它的 Python 环境和最新的 v3.1 权重，启动本机服务
+npm run dev             # 终端 2：编辑器
 ```
 
 然后在编辑器右侧 **AIlegro** 面板点“连接”→“直接生成”：生成的音乐以蓝色建议音符出现，
-按批次接受或拒绝。不开服务器也可以导出请求文件、运行脚本、再导入结果；没有模型时用
-`--mock` 测试整个流程。详见 [docs/ailegro-integration.md](docs/ailegro-integration.md)。
+按批次接受或拒绝；“自动标和弦”给已有的音乐标和弦记号；“打开”PDF、图片或录音时由服务在后台识谱或扒谱。
+不开服务器也可以导出请求文件、运行脚本、再导入结果；没有模型时用 `--mock` 测试整个流程。
+一步步试用见 [docs/try-it.md](docs/try-it.md)，接口见 [docs/ailegro-integration.md](docs/ailegro-integration.md)。
 
 ## 项目结构
 
@@ -52,6 +52,7 @@ cd "../AIlegro"
 - [整体架构](docs/architecture.md)
 - [乐谱数据模型](docs/score-model.md)
 - [排版引擎](docs/engraving.md)
+- [试用指南：AIlegro Score + AIlegro](docs/try-it.md)
 - [与 AIlegro 的接口](docs/ailegro-integration.md)
 - [编辑器与输入方式](docs/editor.md)
 - [版本历史、对比与实时协作](docs/collaboration-and-history.md)

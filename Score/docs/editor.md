@@ -125,9 +125,12 @@ Mac 上带 `Alt`（Option）的快捷键按键位识别（Option 会改变打出
 - **MusicXML**（`.musicxml`、`.xml`、`.mxl`）用同样的方式打开或拖进来：导入成一份新的未保存乐谱，
   保存时另存为 `.ailegro.json`，不会写回 MusicXML。没导入或近似处理的内容（歌词、房子等）在提示里列出前两条，
   完整列表在浏览器控制台。转换规则见 [musicxml-import.md](musicxml-import.md)。
-- **PDF / 扫描图片**不能在编辑器里直接打开：先用 `npm run import:pdf -- score.pdf` 识谱（需要安装 Audiveris，
-  见 [pdf-import.md](pdf-import.md)），再打开生成的 `.ailegro.json`。
-- **录音**同样先在 AIlegro 里转成 MusicXML（[audio-import.md](audio-import.md)），再打开。
+- **PDF / 扫描图片**（PDF、PNG、JPG、TIFF）和**录音**（WAV、MP3、FLAC、OGG、M4A、AIFF）也可以打开或拖进来，
+  前提是本机 AIlegro 服务在运行（`npm run ailegro:serve`，[try-it.md](try-it.md)）：服务在后台识谱（Audiveris，
+  [pdf-import.md](pdf-import.md)）或扒谱（MuScriptor + AIlegro，[audio-import.md](audio-import.md)），
+  左下角显示进度、可以取消，完成后作为新的未保存乐谱打开；这期间可以继续编辑当前乐谱，打开结果前有未保存的
+  修改会先问。选项在 AIlegro 面板“从 PDF 或录音开始”里。没有服务时用命令行 `npm run import:pdf` 或 AIlegro 的
+  两步脚本，再打开结果。
 - 新建、打开、换示例之前，如果有未保存的修改，会问“保存 / 不保存 / 取消”。选“保存”且需要先弹出保存对话框时，
   保存完会再问一次“继续打开吗？”——浏览器只允许在一次点击之后打开文件对话框，保存对话框已经用掉了那次点击。
 - 关闭或刷新页面时，如果打开的文件有未保存的修改，浏览器会提醒。
