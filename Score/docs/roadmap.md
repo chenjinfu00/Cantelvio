@@ -22,6 +22,7 @@
   SVG 导出、打印。
 - MusicXML 导入（`.musicxml`、`.xml`、`.mxl`）：音符、连音、倚音、记号、线条、和弦记号、移调乐器，
   模型里没有的内容计数提示。PDF / 图片识谱：命令行调用 Audiveris 后导入（`npm run import:pdf`）。
+  音频 → 乐谱：在 AIlegro 里转写成 MusicXML 后打开（[audio-import.md](audio-import.md)）。
 - AIlegro：乐谱记录、作曲请求、结果导入为可审阅建议；本机适配服务器（`--serve`）与文件交换；
   `--mock` 往返测试。
 - 中英文界面，143 个单元测试，CI（lint、类型检查、测试、构建、示例渲染）。
@@ -65,6 +66,7 @@
 | M2-CORE-05 | MusicXML、MIDI 导出 | ⏳ | |
 | M2-CORE-06 | 文件格式 v2（事件记号、倚音、`spanners`，v1 迁移）、文字记谱 v1 | ✅ | claude |
 | M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器里直接打开 PDF 需要本机服务 | claude |
+| M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，模拟评估逐音 F1 86–88%（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
 | M2-WEB-01 | 复制粘贴界面；范围移调、范围改时值 | ⏳ | |
 | M2-WEB-02 | 快速插入面板：力度、谱号、调号、拍号、演奏法 | 🚧 小键盘已有力度、演奏法、装饰、线条；谱号、调号、拍号还在属性面板 | |
 | M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ⏳ | |
