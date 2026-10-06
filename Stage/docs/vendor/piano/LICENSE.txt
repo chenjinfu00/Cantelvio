@@ -1,0 +1,8 @@
+Salamander Grand Piano — Yamaha C5, recorded by Alexander Holm
+Licensed under Creative Commons Attribution 3.0 (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+
+These 30 MP3 samples (every minor third from A0 to C8) are the set published
+with Tone.js at https://github.com/Tonejs/audio/tree/master/salamander .
+Volta plays them through its own sampler; notes between samples are pitched
+from the nearest one.
