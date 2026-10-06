@@ -1,0 +1,197 @@
+{
+ "schema": "four-pillar-v31-tasks-eval-1",
+ "checkpointStep": 101129,
+ "note": "training-set windows (no held-out split): compare conditions; listen to the MIDI files",
+ "parts": {
+  "windows": 96,
+  "removed": {
+   "full": {
+    "kind": 0.1001,
+    "onset": 0.1291,
+    "chord_root": 1.3556,
+    "chord_quality": 1.087,
+    "group": 0.1169,
+    "voice": 0.2404,
+    "pitch": 0.7947,
+    "duration": 0.4085,
+    "notes": 1.7897
+   },
+   "planner": {
+    "kind": 0.1028,
+    "onset": 0.1345,
+    "chord_root": 1.797,
+    "chord_quality": 1.4867,
+    "group": 0.1279,
+    "voice": 0.2558,
+    "pitch": 0.8414,
+    "duration": 0.4242,
+    "notes": 1.8866
+   },
+   "reference": {
+    "kind": 0.1028,
+    "onset": 0.143,
+    "chord_root": 1.5165,
+    "chord_quality": 1.1735,
+    "group": 0.126,
+    "voice": 0.2415,
+    "pitch": 0.9621,
+    "duration": 0.4622,
+    "notes": 2.0376
+   },
+   "planner+reference": {
+    "kind": 0.105,
+    "onset": 0.1487,
+    "chord_root": 2.0777,
+    "chord_quality": 1.6095,
+    "group": 0.1381,
+    "voice": 0.2591,
+    "pitch": 1.0138,
+    "duration": 0.4796,
+    "notes": 2.1443
+   },
+   "controls": {
+    "kind": 0.1012,
+    "onset": 0.1307,
+    "chord_root": 1.3612,
+    "chord_quality": 1.0888,
+    "group": 0.1264,
+    "voice": 0.2407,
+    "pitch": 0.7955,
+    "duration": 0.4114,
+    "notes": 1.8059
+   }
+  }
+ },
+ "accompany": {
+  "melody locked": {
+   "clash": 0.2251,
+   "doubled": 0.3916,
+   "unison": 0.0829,
+   "chordTone": 0.5593,
+   "accompanimentNotesPerBar": 21.1181,
+   "logp": -3.7725,
+   "pieces": 18,
+   "secondsPerPiece": 0.65
+  },
+  "melody locked, best of 8": {
+   "clash": 0.1595,
+   "doubled": 0.6061,
+   "unison": 0.0975,
+   "chordTone": 0.7275,
+   "accompanimentNotesPerBar": 23.5208,
+   "logp": -2.5151,
+   "pieces": 18,
+   "secondsPerPiece": 5.49
+  },
+  "melody locked, best of 32": {
+   "clash": 0.0989,
+   "doubled": 0.5939,
+   "unison": 0.067,
+   "chordTone": 0.8628,
+   "accompanimentNotesPerBar": 22.1667,
+   "logp": -1.7788,
+   "pieces": 12,
+   "secondsPerPiece": 21.17
+  },
+  "melody + chords locked": {
+   "clash": 0.1159,
+   "doubled": 0.6151,
+   "unison": 0.172,
+   "chordTone": 0.875,
+   "accompanimentNotesPerBar": 31.7014,
+   "logp": -4.9013,
+   "pieces": 18,
+   "secondsPerPiece": 0.76
+  },
+  "melody + chords locked, best of 8": {
+   "clash": 0.087,
+   "doubled": 0.6179,
+   "unison": 0.0759,
+   "chordTone": 0.875,
+   "accompanimentNotesPerBar": 23.9583,
+   "logp": -3.4327,
+   "pieces": 18,
+   "secondsPerPiece": 5.76
+  },
+  "melody locked, piano may double the voice first": {
+   "clash": 0.1708,
+   "doubled": 0.5714,
+   "unison": 0.4829,
+   "chordTone": 0.5546,
+   "accompanimentNotesPerBar": 22.9028,
+   "logp": -3.9615,
+   "pieces": 18,
+   "secondsPerPiece": 0.68
+  },
+  "melody locked, piano may double the voice first, best of 8": {
+   "clash": 0.1155,
+   "doubled": 0.7956,
+   "unison": 0.7398,
+   "chordTone": 0.7382,
+   "accompanimentNotesPerBar": 25.4931,
+   "logp": -1.9687,
+   "pieces": 18,
+   "secondsPerPiece": 5.69
+  },
+  "real Lieder (voice vs piano)": {
+   "clash": 0.0788,
+   "doubled": 0.6722,
+   "unison": 0.4296,
+   "chordTone": 0.9026,
+   "voiceNotes": 9449
+  }
+ },
+ "melodyFromChords": {
+  "locked chords": {
+   "strongBeatChordTones": 0.9517,
+   "notes": 352
+  },
+  "the model's own chords": {
+   "strongBeatChordTones": 0.9707,
+   "notes": 273
+  }
+ },
+ "orchestrate": {
+  "groups not requested": {
+   "model": 0.7078,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.8896,
+   "doublingsPerBar": 0.0,
+   "notes": 1006,
+   "bars": 40
+  },
+  "groups requested": {
+   "model": 0.664,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.8771,
+   "doublingsPerBar": 0.0,
+   "notes": 1006,
+   "bars": 40
+  },
+  "groups requested, light doublings (AIlegro Score)": {
+   "model": 0.6799,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.9625,
+   "doublingsPerBar": 11.68,
+   "notes": 1006,
+   "bars": 40
+  }
+ },
+ "motif": {
+  "restate: bank reference": 0.5947,
+  "restate: none": 0.1024,
+  "sequence +1: synthetic full texture": 0.5279,
+  "sequence +1: none": 0.0653,
+  "sequence +1: synthetic top line": 0.2063,
+  "invert: synthetic top line": 0.2183,
+  "invert: top line + lower accompaniment": 0.2808,
+  "invert: none": 0.0373,
+  "fragment: synthetic full texture": 0.4048,
+  "diminish: synthetic full texture": 0.3178,
+  "windows": 39
+ },
+ "seconds": 893
+}

@@ -1,0 +1,26 @@
+import {AudioEngine} from '../src/audio.js';
+import {SCENES,defaults,snapshotScene} from '../src/scenes.js';
+import {Session} from '../src/session.js';
+const $=id=>document.getElementById(id);
+$('buttons').innerHTML=SCENES.map(s=>`<button data-scene="${s.id}">${s.name} · Render WAV</button>`).join('');
+function randomSeed(seed){let n=seed|0;return()=>{n=(Math.imul(n,1664525)+1013904223)|0;return(n>>>0)/4294967296;};}
+function wav(buffer){const frames=buffer.length,channels=buffer.numberOfChannels,data=new ArrayBuffer(44+frames*channels*2),v=new DataView(data),str=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));str(0,'RIFF');v.setUint32(4,data.byteLength-8,true);str(8,'WAVE');str(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,buffer.sampleRate,true);v.setUint32(28,buffer.sampleRate*channels*2,true);v.setUint16(32,channels*2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,frames*channels*2,true);const arrays=Array.from({length:channels},(_,i)=>buffer.getChannelData(i));let o=44;for(let f=0;f<frames;f++)for(let c=0;c<channels;c++,o+=2){const n=Math.max(-1,Math.min(1,arrays[c][f]));v.setInt16(o,n<0?n*32768:n*32767,true);}return new Blob([data],{type:'audio/wav'});}
+function stats(buffer){let peak=0,sum=0,dc=0,nonfinite=0,clipping=0,tail=0;for(let c=0;c<buffer.numberOfChannels;c++){const a=buffer.getChannelData(c);for(let i=0;i<a.length;i++){const n=a[i];if(!Number.isFinite(n)){nonfinite++;continue;}peak=Math.max(peak,Math.abs(n));sum+=n*n;dc+=n;if(Math.abs(n)>=.999)clipping++;if(i>=a.length-buffer.sampleRate*.25)tail=Math.max(tail,Math.abs(n));}}const n=buffer.length*buffer.numberOfChannels;return {peak:+peak.toFixed(6),peakDbFS:+(20*Math.log10(Math.max(peak,1e-12))).toFixed(2),rms:+Math.sqrt(sum/n).toFixed(6),rmsDbFS:+(10*Math.log10(Math.max(sum/n,1e-24))).toFixed(2),clippedSamples:clipping,nonfiniteSamples:nonfinite,dc:+(dc/n).toFixed(8),last250msPeak:+tail.toFixed(8),durationSeconds:+buffer.duration.toFixed(3)};}
+$('buttons').onclick=async e=>{const button=e.target.closest('[data-scene]');if(!button)return;const scene=SCENES.find(s=>s.id===button.dataset.scene),mode=$('qa-mode').value,changeMode=$('qa-changeMode').value,seed=Number($('qa-seed').value)||41977;document.querySelectorAll('[data-scene]').forEach(b=>b.disabled=true);$('status').textContent=`Loading samples and generating ${scene.name}…`;try{
+ const state={...defaults(),...snapshotScene(scene),scene:scene.id,mode:'auto',changeMode,melodyOn:true};
+ state.instrumentBoard.lanes.melody.enabled=true;
+ if(mode==='orchestra'){
+  for(const id of ['woodwinds','brass','percussion','keys','high_strings','low_strings'])state.instrumentBoard.lanes[id].enabled=true;
+  state.orchestra.enabled=true;
+ }
+ const duration=4*state.meter*60/state.bpm+2,context=new OfflineAudioContext(2,Math.ceil(44100*duration),44100),audio=new AudioEngine({context});
+ await audio.loadSamples();
+ const session=new Session(audio,{random:randomSeed(seed)});session.state=state;session.newTimeline();session.transport.running=true;
+ audio.setMix(mode==='stress'?{harmony:1,bass:1,melody:1}:state.mix,{harmony:mode==='bass'||mode==='melody',bass:mode==='harmony'||mode==='melody',melody:mode==='harmony'||mode==='bass'});
+ audio.setOrchestra(state.orchestra);audio.setMaster(mode==='stress'?1:state.master);
+ let at=.08;const chords=[],events=[];
+ for(let bar=0;bar<4;bar++){session.composer.ensureBar(bar+1);const plan=session.boundary({bar,first:bar===0,start:at});chords.push(...plan.timeline.map(segment=>`bar${bar+1} beat${segment.startBeat+1}: ${segment.label} (${segment.lengthBeats} beats)`));for(const event of plan.events){audio.play(event,at);events.push({...event,absoluteTime:at+event.time});}session.transport.frame={bar,start:at,duration:plan.duration,beats:plan.beats};plan.onStart();for(const transition of plan.transitions)transition.onStart();at+=plan.duration;}
+ session.transport.running=false;session.composer.stop();
+ if(mode==='cancel'){const suspended=context.suspend(2);suspended.then(()=>{audio.panic();context.resume();});}
+ $('status').textContent=`Rendering ${scene.name}…`;const buffer=await context.startRendering(),metrics=stats(buffer),blob=wav(buffer),url=URL.createObjectURL(blob),id=`${scene.id}-${changeMode}-${mode}-${seed}`;const card=document.createElement('article');card.className='panel';card.style.marginBottom='16px';const count=events.reduce((o,e)=>(o[e.role]=(o[e.role]||0)+1,o),{});card.innerHTML=`<h2>${scene.name} · ${changeMode} · ${mode}</h2><p>Seed ${seed} · ${chords.join(' → ')} · ${audio.loaded}/35 samples decoded (${audio.failed} failures)</p><p>Events: ${Object.entries(count).map(([role,n])=>`${role} ${n}`).join(', ')}</p><audio controls style="width:100%" src="${url}"></audio><p><a download="ailegro-${id}.wav" href="${url}">Download WAV · ${id}</a></p><pre style="white-space:pre-wrap">${JSON.stringify(metrics,null,2)}</pre>`;$('results').prepend(card);$('status').textContent='Render complete. Audition or download the WAV; metrics are measured from the actual floating-point audio output.';
+ }catch(error){$('status').textContent='Render failed: '+error.message;console.error(error);}finally{document.querySelectorAll('[data-scene]').forEach(b=>b.disabled=false);}};

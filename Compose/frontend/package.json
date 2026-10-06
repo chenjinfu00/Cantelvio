@@ -1,0 +1,8 @@
+{
+  "name": "ailegro-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ../backend/server.mjs"
+  }
+}

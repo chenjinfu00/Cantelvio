@@ -1,0 +1,190 @@
+{
+ "schema": "harmonizer-v1-eval-1",
+ "harmonizer": "runs/harmonizer-v1-20261003/weights.pt",
+ "harmonizerStep": 3500,
+ "parameters": 865248,
+ "validation": {
+  "step": 0.3838,
+  "beat": 0.3863,
+  "beatRoot": 0.4616,
+  "beatFamily": 0.4349,
+  "steps": 79067
+ },
+ "tunes": {
+  "chords": {
+   "ode-to-joy": {
+    "agreementWithHumanChordsPerBeat": 0.6562,
+    "bars": [
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "1:A7",
+      "2:D",
+      "3:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "2:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "1:A7",
+      "2:D",
+      "3:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "0:A7",
+      "1:D"
+     ]
+    ]
+   },
+   "twinkle": {
+    "agreementWithHumanChordsPerBeat": 0.6875,
+    "bars": [
+     [
+      "0:C"
+     ],
+     [
+      "0:F",
+      "2:C"
+     ],
+     [
+      "0:F",
+      "2:C"
+     ],
+     [
+      "0:G7",
+      "2:C"
+     ],
+     [
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ]
+    ]
+   },
+   "lightly-row": {
+    "agreementWithHumanChordsPerBeat": 0.875,
+    "bars": [
+     [
+      "0:C"
+     ],
+     [
+      "0:G7"
+     ],
+     [
+      "0:C",
+      "1:G7",
+      "2:C",
+      "3:G7"
+     ],
+     [
+      "0:C"
+     ],
+     [],
+     [
+      "0:G7"
+     ],
+     [
+      "0:C"
+     ],
+     []
+    ]
+   }
+  },
+  "accompaniment": {
+   "melody locked": {
+    "clash": 0.2191,
+    "doubled": 0.3864,
+    "unison": 0.0683,
+    "chordTone": 0.5521,
+    "accompanimentNotesPerBar": 18.9583,
+    "pieces": 12,
+    "secondsPerPiece": 0.6
+   },
+   "melody locked, best of 8": {
+    "clash": 0.1721,
+    "doubled": 0.6223,
+    "unison": 0.1259,
+    "chordTone": 0.7403,
+    "accompanimentNotesPerBar": 26.2083,
+    "pieces": 12,
+    "secondsPerPiece": 5.43
+   },
+   "melody + harmonizer chords": {
+    "clash": 0.1365,
+    "doubled": 0.5531,
+    "unison": 0.1763,
+    "chordTone": 0.9667,
+    "accompanimentNotesPerBar": 39.1458,
+    "pieces": 12,
+    "secondsPerPiece": 1.03
+   },
+   "melody + harmonizer chords, best of 8": {
+    "clash": 0.0795,
+    "doubled": 0.6208,
+    "unison": 0.1085,
+    "chordTone": 0.9944,
+    "accompanimentNotesPerBar": 28.3958,
+    "pieces": 12,
+    "secondsPerPiece": 6.63
+   },
+   "melody + human chords": {
+    "clash": 0.1095,
+    "doubled": 0.6265,
+    "unison": 0.1802,
+    "chordTone": 0.875,
+    "accompanimentNotesPerBar": 32.1354,
+    "pieces": 12,
+    "secondsPerPiece": 0.76
+   },
+   "melody + human chords, best of 8": {
+    "clash": 0.0956,
+    "doubled": 0.6462,
+    "unison": 0.0958,
+    "chordTone": 0.875,
+    "accompanimentNotesPerBar": 26.7083,
+    "pieces": 12,
+    "secondsPerPiece": 6.31
+   }
+  }
+ },
+ "auditions": [
+  "ode-to-joy--v31-chords-best-of-8.mid",
+  "ode-to-joy--harmonizer-chords-best-of-8.mid",
+  "ode-to-joy--human-chords-best-of-8.mid",
+  "twinkle--v31-chords-best-of-8.mid",
+  "twinkle--harmonizer-chords-best-of-8.mid",
+  "twinkle--human-chords-best-of-8.mid",
+  "lightly-row--v31-chords-best-of-8.mid",
+  "lightly-row--harmonizer-chords-best-of-8.mid",
+  "lightly-row--human-chords-best-of-8.mid"
+ ],
+ "seconds": 300
+}

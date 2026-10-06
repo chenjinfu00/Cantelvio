@@ -1,0 +1,68 @@
+{
+  "sourceCommit": "622c2f1c32c8cfce4158ddc3eb26e518ddef37e5",
+  "samples": [
+    {
+      "midi": 54,
+      "file": "Fs3.mp3",
+      "bytes": 102696,
+      "sha256": "c8ac921a460d64d162a79e0c7174ddabec7b7d501ddcf875efe81c84ae160b8e",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/Fs3.mp3"
+    },
+    {
+      "midi": 57,
+      "file": "A3.mp3",
+      "bytes": 102696,
+      "sha256": "b840f271794efc3efcce886d71d1ee57cf6d524b6da1be15b1429f6bc8fe2f45",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/A3.mp3"
+    },
+    {
+      "midi": 60,
+      "file": "C4.mp3",
+      "bytes": 102696,
+      "sha256": "b2252b95bbea34faba9d7800c1ab1c819d548d18d0cbada7882395fdc34e2617",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/C4.mp3"
+    },
+    {
+      "midi": 63,
+      "file": "Ds4.mp3",
+      "bytes": 102696,
+      "sha256": "0d9d732faa3ec958c9e537a8bcc4421077150362617266636407ee7a93ca11eb",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/Ds4.mp3"
+    },
+    {
+      "midi": 66,
+      "file": "Fs4.mp3",
+      "bytes": 102696,
+      "sha256": "ff8045e8c863e3cad7a6094f32b672893ddc98a00de88460ef114d99f3e7c016",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/Fs4.mp3"
+    },
+    {
+      "midi": 69,
+      "file": "A4.mp3",
+      "bytes": 102696,
+      "sha256": "a817ca1ebdbdc32d0011044c41d906438cc1b0358a0adb6373f2f26d140e5cb2",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/A4.mp3"
+    },
+    {
+      "midi": 72,
+      "file": "C5.mp3",
+      "bytes": 102696,
+      "sha256": "6b0671195f6d82b2fdf8afab8d1883554d2c0fb7d99cc935adc609c2816397f3",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/C5.mp3"
+    },
+    {
+      "midi": 75,
+      "file": "Ds5.mp3",
+      "bytes": 102696,
+      "sha256": "f8c690e0fa3fd235196673e6ef32a5929534c70bc9eaaa5a7632e39cca263cf4",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/Ds5.mp3"
+    },
+    {
+      "midi": 78,
+      "file": "Fs5.mp3",
+      "bytes": 102696,
+      "sha256": "ded100a22902ef51c6ef634dfcefdedd278b96322f5d7b31dd8d2f400b78d0ba",
+      "source": "https://raw.githubusercontent.com/nbrosowsky/tonejs-instruments/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric/Fs5.mp3"
+    }
+  ]
+}

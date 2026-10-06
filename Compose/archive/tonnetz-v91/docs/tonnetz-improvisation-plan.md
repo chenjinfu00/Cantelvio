@@ -1,0 +1,20 @@
+# Tonnetz: playable improvisation and editable future
+
+## Scope
+
+Local iteration on the existing Tonnetz. Preserve the learned Transformer and 2,172 chord variants, keyboard gestures, English/Chinese, stable overlay sheets and isolated manual melody. No deployment without the pending explicit production authorization.
+
+1. **Random arrangement**: opt-in Markov chain across Pop/Rock/Jazz/Classical. Mean residence time controlled in bars (1–32). Conditional style transitions plus optional broad, uniform instrument/pattern selection. Instrument, rhythm, pattern, bass voice/line, feel and variation can change; optional tempo variation is bounded around the user's tempo and changes only at a boundary. Never switch the user's key, master volume or automatic-melody enable state.
+2. **Walking bass**: plan a complete bar with strong-beat chord tones, scale passing tones, smooth register and semitone approach to the next actual bass landing; preserve slash basses.
+3. **Automatic melody**: independent opt-in monophonic voice, default Off. Pop/Jazz/Blues/Classical/Ambient, instrument, rhythm, contour, density, register and mix controls. Chord-aware strong beats, short motifs, phrase rests, approach notes and bounded voice leading. Shared transport; disabling/stopping cancels scheduled solo notes without touching a held manual note.
+4. **Visible key and temperature**: persistent bottom-bar key selector plus lit key-walk state, and a named Temperature control that opens a compact slider. Small screens keep four chord cells readable by using a compact second control row; sheets still overlay rather than resize the keyboard.
+5. **Edit future chords**: tap any of the three future cells. Offer predicted alternatives and full root/type/inversion selection. Save a one-time replacement; preserve earlier committed cells, regenerate only the downstream future using the replacement as context. Use stable queue identities to prevent editing a different chord when playback advances during editing. Hold stays Hold; enabling Auto consumes the saved future.
+6. **Verification**: deterministic Markov/statistical checks, bass/solo musical invariants, queue prefix/reconditioning/race tests, transport/cancellation tests, build, browser audio and desktop/phone/tablet layout checks.
+
+## Accepted follow-up: learned melody and two-way interaction
+
+Replace the rule-based melodic performer with a second, trained conditional causal Transformer. Five broad styles remain; no composer presets. Train on explicitly documented original structured phrase examples, validate on disjoint phrase/motif families, export learned weights and Python parity probes. Pitch, rests and durations must come from the network, with bounded decoding for register, phrase length and harmonic stability.
+
+Use 4 layers, 8 attention heads, relative position bias and a rolling event context. The melody Transformer sees the sounding chord, its inversion, the next committed chord, key, style, metrical position and previous melodic events. A separate learned harmony-affinity output sees past/current information only (no upcoming-chord input) and softly adjusts the harmony Transformer's next-chord probabilities. This is an explicit joint decoding step, not a claim that the existing harmony weights were jointly retrained. Already advertised chords remain stable; feedback affects only newly appended futures and explicit downstream edits.
+
+Add a melody-temperature control and adjustable interaction strength under Melody settings. Preserve independent solo Off, volume, rhythm/pattern choices, random settings, walking bass, editable futures and mobile layouts. Verify learned-vs-untrained validation metrics, causal attention, browser/PyTorch parity, influence of history/style/chords, no future leakage in feedback, live onset/cancellation, and browser inference latency. Musical validation includes example phrases and checks of register, intervals, rests and cadential behavior; test scores alone do not establish aesthetic quality.

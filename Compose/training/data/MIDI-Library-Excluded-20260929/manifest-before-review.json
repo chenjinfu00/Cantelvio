@@ -1,0 +1,1022 @@
+{
+  "schema": "ailegro-visible-midi-library-v1",
+  "count": 145,
+  "selectionSha256": "a4c7490f0161e87d75663dd153121b132c2f3a636254815e4d2a888081be1308",
+  "files": [
+    {
+      "file": "001 - tchai_op35-1.mid",
+      "sourceRelativePath": "software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-1.mid",
+      "sha256": "d1f909fd75918d61af6a457621d540e91637df4223ee4d452be86c14bc5f095c",
+      "bytes": 19343,
+      "multiGroup": true
+    },
+    {
+      "file": "002 - tchai_op35-2.mid",
+      "sourceRelativePath": "software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-2.mid",
+      "sha256": "22c6c11ccade18d8121e6487cde20d18a84be3c8ca3cab4bb2c7c4123421ca8d",
+      "bytes": 129125,
+      "multiGroup": true
+    },
+    {
+      "file": "003 - tchai_op35.mid",
+      "sourceRelativePath": "software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35.mid",
+      "sha256": "752c04565cf1287ff3a4983ee9e561fdb7cd26c5fa78994a02f795deb516a88e",
+      "bytes": 190806,
+      "multiGroup": true
+    },
+    {
+      "file": "004 - Chopin_Op21_Mvt1_Piano_Editable_Draft.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Movement_1_Maestoso/Piano_Editable_Backup/Chopin_Op21_Mvt1_Piano_Editable_Draft.mid",
+      "sha256": "3134cd413d1c9f0d6f589b5e80df1bff306745354227df9442c0b86b178372bc",
+      "bytes": 74532,
+      "multiGroup": false
+    },
+    {
+      "file": "005 - Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid",
+      "sha256": "31f41c81a74701f3c0bca21f31cac4c8e1236bd2d3a66dc7ce038da21a9e4df5",
+      "bytes": 56703,
+      "multiGroup": true
+    },
+    {
+      "file": "006 - Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid",
+      "sha256": "2928945da63d7db2846f33b6a4bf6f2180a743252f66dcbe139c859c1da53de9",
+      "bytes": 49678,
+      "multiGroup": false
+    },
+    {
+      "file": "007 - Chopin_Op21_Mvt2_Larghetto_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt2_Larghetto_Finley.mid",
+      "sha256": "be6c83b41abf0ae51e7b619e76c794e332388532eb16e3768e9b2bea14c58d06",
+      "bytes": 65794,
+      "multiGroup": true
+    },
+    {
+      "file": "008 - Chopin_Op21_Mvt3_Allegro_vivace_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt3_Allegro_vivace_Finley.mid",
+      "sha256": "a763b442db2566c960414608732cf9545c904dba3f3a6f64c30e498c79495f3e",
+      "bytes": 84099,
+      "multiGroup": true
+    },
+    {
+      "file": "009 - Tchaikovsky_Op35_Mvt1_Private_Reference.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/local_sources/Tchaikovsky_Op35_Mvt1_Private_Reference.mid",
+      "sha256": "857f3e143e65fbb82cb5abfc7bd84530983f652a4a6c74e9446d4feb5e816b45",
+      "bytes": 116551,
+      "multiGroup": true
+    },
+    {
+      "file": "010 - Tchaikovsky_Op35_Mvt1_Piano_Reference.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Piano_Reference.mid",
+      "sha256": "779d8cc83fd547be9debcdcf979070f7cf59994704b702a8e76263ad22811f4d",
+      "bytes": 60560,
+      "multiGroup": false
+    },
+    {
+      "file": "011 - Tchaikovsky_Op35_Mvt1_Solo_Violin.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Solo_Violin.mid",
+      "sha256": "7cc5921b2eaf947c9b80fb9c18b423c04e8472af0b32c187047cdf2d983f44ae",
+      "bytes": 44954,
+      "multiGroup": false
+    },
+    {
+      "file": "012 - op10_no01_piano_violin_arrangement.mid",
+      "sourceRelativePath": "曲谱&编曲/op10_no01_piano_violin_arrangement.mid",
+      "sha256": "059fdc29b53ce440c4f6bbb0cb35edc1ba0dc9d6b1b145f97b6e5866ef00b4ac",
+      "bytes": 11854,
+      "multiGroup": true
+    },
+    {
+      "file": "013 - chp-10-01.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op10_No01/chp-10-01.mid",
+      "sha256": "42c52ece86795168636b3bbd387393fba9759214498a20b39308c848f8e49f03",
+      "bytes": 18677,
+      "multiGroup": false
+    },
+    {
+      "file": "014 - op10_no01_piano_violin_final.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op10_No01/op10_no01_piano_violin_final.mid",
+      "sha256": "a2fb145ec94233285865236457f046518e7cafe9033f5c801573d42fd444f4d2",
+      "bytes": 12885,
+      "multiGroup": true
+    },
+    {
+      "file": "015 - op25_no11_kunstderfuge_finley.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_kunstderfuge_finley.mid",
+      "sha256": "b8e858f1600fa04898c8475b682d569db073552cfdd205f3e6ee6fb47ae4fb47",
+      "bytes": 28347,
+      "multiGroup": false
+    },
+    {
+      "file": "016 - op25_no11_piano_violin_refined_draft_from_midi_import.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_piano_violin_refined_draft_from_midi_import.mid",
+      "sha256": "4815494064974046b4b11d88cb9538ef1b924bb1d44808a83cb40cba108489ed",
+      "bytes": 35109,
+      "multiGroup": true
+    },
+    {
+      "file": "017 - chopin_op10_no2_mutopia.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia.mid",
+      "sha256": "ebee39ee0f9bd743586cbcd4890d3f0e39f24808957302341316a734e42a7989",
+      "bytes": 12115,
+      "multiGroup": false
+    },
+    {
+      "file": "018 - chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid",
+      "sha256": "25e7bd792d3c589ef038ca801b4f654c626c84444368a528e60e8dabbb2d6975",
+      "bytes": 11683,
+      "multiGroup": false
+    },
+    {
+      "file": "019 - chopin_op10_no2_mutopia_thirds_beamed.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_thirds_beamed.mid",
+      "sha256": "3c8282706a34c1c9c3c3283cf80ae681f6f094d117e8d9d8bf9e2b89098c8609",
+      "bytes": 11683,
+      "multiGroup": false
+    },
+    {
+      "file": "020 - Unravel.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/unravel-东京喰种OP/Unravel.mid",
+      "sha256": "8230bc82f74dc75ab304bb116bdf41c860bbd7807bd3423e26fbb07244b4c4fd",
+      "bytes": 29196,
+      "multiGroup": false
+    },
+    {
+      "file": "021 - 挪德卡莱.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/挪德卡莱主题曲/挪德卡莱.mid",
+      "sha256": "8e1cc5567a1b91690b4ddd53d672504aac227af0b80831648ce69489c0ddec28",
+      "bytes": 97796,
+      "multiGroup": true
+    },
+    {
+      "file": "022 - 白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/output/midi/白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid",
+      "sha256": "265603cf96309d7a5394bb26d34049b645b0d7d6d7026887036d2b07df23c2b4",
+      "bytes": 87591,
+      "multiGroup": true
+    },
+    {
+      "file": "023 - 白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid",
+      "sha256": "9924200c2bdb1a164d7b573bd191c55f1ced498a4156c24aadc12ec71080c7dc",
+      "bytes": 54118,
+      "multiGroup": true
+    },
+    {
+      "file": "024 - 白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid",
+      "sha256": "c0db0c5665b049023ebbb33bd0948be4c6dd4d46f0dccd6e5d4f1db29830f938",
+      "bytes": 35386,
+      "multiGroup": true
+    },
+    {
+      "file": "025 - Climax_v7.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Climax_v7.mid",
+      "sha256": "422ccd0ee607feeef8d77b54c848388aea68f603aeb1465b43a08e2cd509cec6",
+      "bytes": 1637,
+      "multiGroup": false
+    },
+    {
+      "file": "026 - Opening_v7.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Opening_v7.mid",
+      "sha256": "0a854f03a0cefd85456271db37e1b44b33b3c8fe975d004e72e415f45d88d922",
+      "bytes": 1589,
+      "multiGroup": false
+    },
+    {
+      "file": "027 - Final_climax_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Final_climax_v8.mid",
+      "sha256": "84a8d2f2efbff64e0f7437cc095f47dccfe8e984820b46d24723b7230bbc8be0",
+      "bytes": 2812,
+      "multiGroup": false
+    },
+    {
+      "file": "028 - Lyrical_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Lyrical_v8.mid",
+      "sha256": "5f59a8935d4108a7fbdcf846a7fd6e439ef34a8f63e971f7b5fb9181cc1b40b8",
+      "bytes": 1694,
+      "multiGroup": false
+    },
+    {
+      "file": "029 - Opening_and_theme_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Opening_and_theme_v8.mid",
+      "sha256": "db567091a50d21e70e4c56ac2aca33cc951d70c276ed976d347cf1ac0c8621b1",
+      "bytes": 4755,
+      "multiGroup": false
+    },
+    {
+      "file": "030 - White_Dove_Piano_v10.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/handoff_archive/White_Dove_Piano_v10.mid",
+      "sha256": "c8ec76b8479eec1b679159aee59ceab3f312138fa5622f5b93bb3e802094be77",
+      "bytes": 24630,
+      "multiGroup": false
+    },
+    {
+      "file": "031 - score_roundtrip.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/score_roundtrip.mid",
+      "sha256": "a2138fbf9a6c0cb08f30b234ce0d071ad9b1023d3841c4da55daae556b6ee95d",
+      "bytes": 18911,
+      "multiGroup": false
+    },
+    {
+      "file": "032 - 冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/Triumph on the Ice/output/midi/冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid",
+      "sha256": "1ec5a66f55f9f46053c86acc24b705ec7293d1f9356464577a46667510b6e181",
+      "bytes": 107452,
+      "multiGroup": true
+    },
+    {
+      "file": "033 - Snezhnaya_conductor_score_draft.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_draft.mid",
+      "sha256": "7b4f47056050428b56cb061ecdcacac61d5641f7c7dc20b42d02976fe71f8e94",
+      "bytes": 90345,
+      "multiGroup": true
+    },
+    {
+      "file": "034 - Snezhnaya_conductor_score_piano_sustain.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_piano_sustain.mid",
+      "sha256": "34ab753f283593d1ff6338cbb20d7f2477b622dd25cab2327743c9a32a69630d",
+      "bytes": 86601,
+      "multiGroup": true
+    },
+    {
+      "file": "035 - 给你们--张宇_五线谱.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/流行音乐改编/给你们/给你们--张宇_五线谱.mid",
+      "sha256": "90b1089c840ac0d5e53381065d305e89a5725a52700f3b287b8625dc633da925",
+      "bytes": 21957,
+      "multiGroup": true
+    },
+    {
+      "file": "036 - 愿戴荣光坠入天渊.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/鸣潮/愿戴荣光坠入天渊.mid",
+      "sha256": "a1f6206ff24b13d54007a77aa1d85b1bcaa1123c224a6b07190b6d3aa73322c8",
+      "bytes": 3321,
+      "multiGroup": false
+    },
+    {
+      "file": "037 - AQUA.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/AQUA-水星领航员OST/AQUA.mid",
+      "sha256": "bb743c8b35657868544d3d807e07303074f33866c7d9a02f96c488cdf01d7e0f",
+      "bytes": 8445,
+      "multiGroup": false
+    },
+    {
+      "file": "038 - Again.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Again-钢之炼金术师FA-OP1/Again.mid",
+      "sha256": "2578d82fa150a3eea1c03fdfc5275988253ee25fff3c3748d713565b2691e357",
+      "bytes": 30381,
+      "multiGroup": false
+    },
+    {
+      "file": "039 - All in good time.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/All in good time-灼眼的夏娜S（OVA）ED/All in good time.mid",
+      "sha256": "88f11a45ed5cfff880c95e44a5cf33ab1fd466f3b23d277578c75e37c26c0437",
+      "bytes": 5635,
+      "multiGroup": false
+    },
+    {
+      "file": "040 - Amnanesis.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Anamnesis-Another ED/Amnanesis.mid",
+      "sha256": "7e3271f4bf00657203f2b271c2fce65b1c6905db0663135794a163a169b91ad7",
+      "bytes": 4442,
+      "multiGroup": false
+    },
+    {
+      "file": "041 - Aruji Naki Sono Koe.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Aruji Naki Sono Koe-AKB0048 NEXT STAGE ED/Aruji Naki Sono Koe.mid",
+      "sha256": "9cbb548e078a64dd9d7fbe62d3886473104070e74a3ab7b286360711c72c1f59",
+      "bytes": 11289,
+      "multiGroup": false
+    },
+    {
+      "file": "042 - Before my body is dry.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Before my body is dry（Don't lose your way）/Before my body is dry.mid",
+      "sha256": "cd3ef83cdf60590a97cff22aec422ae4fac8b9bea584688f3dcb185960030c83",
+      "bytes": 22629,
+      "multiGroup": false
+    },
+    {
+      "file": "043 - Blessing.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Blessing-神不在的星期天OST/Blessing.mid",
+      "sha256": "77e848f556102f6414238f4612ebdbaa65f414f1d5032edb84be32b79e363993",
+      "bytes": 8772,
+      "multiGroup": false
+    },
+    {
+      "file": "044 - Blue Bird.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Blue Bird/Blue Bird.mid",
+      "sha256": "8554e5d02a0f548b86a60b899751998bb6ab647f4eb7ce3705d1bb8f6270db26",
+      "bytes": 24380,
+      "multiGroup": false
+    },
+    {
+      "file": "045 - Blumenkranz.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Blumenkranz-kill la kill/Blumenkranz.mid",
+      "sha256": "4457350161662d0bee457f333b83fcc3bd2d47eaa883466a35f4699da22dcfbb",
+      "bytes": 18813,
+      "multiGroup": false
+    },
+    {
+      "file": "046 - Boku ja nai.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Boku ja nai-革命机Valvrave/Boku ja nai.mid",
+      "sha256": "1e821e14ceba6d825333f800770f1ce08837fa8148af7fb4cdcd2377ed13262f",
+      "bytes": 15161,
+      "multiGroup": false
+    },
+    {
+      "file": "047 - Boys be Smile.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Boys be Smile-Little Busters Refrain OP/Boys be Smile.mid",
+      "sha256": "cbc40f0d8de5e86da298a78b79a22c5bba853b742d3dd5a8b731b7125ae49aa1",
+      "bytes": 11580,
+      "multiGroup": false
+    },
+    {
+      "file": "048 - Brave Heart.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Brave Heart-数码宝贝/Brave Heart.mid",
+      "sha256": "97e1f14a9fea703f8120a949f40fb4dea65879498bd86a91e519e68067a57c59",
+      "bytes": 11586,
+      "multiGroup": false
+    },
+    {
+      "file": "049 - Brave Shine.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Brave Shine/Brave Shine.mid",
+      "sha256": "14ffce35a7705a12e050c2c8c05639a66358100c58c15a2dda1a6f1b135d2a5f",
+      "bytes": 29424,
+      "multiGroup": false
+    },
+    {
+      "file": "050 - Brave Song (piano + viola).mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Brave Song/Brave Song (piano + viola).mid",
+      "sha256": "f78bef1eb1cbba0d73cdf4ba8af239522798a441452d26ec89b9243698da57a1",
+      "bytes": 26702,
+      "multiGroup": true
+    },
+    {
+      "file": "051 - Brave Song.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Brave Song/Brave Song.mid",
+      "sha256": "8fc60d8485290f291f6f2cb07dac0c65ac647bafbc8830c30da9daf328dc5ba1",
+      "bytes": 4905,
+      "multiGroup": false
+    },
+    {
+      "file": "052 - Butterfly.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Butterfly-数码宝贝OP/Butterfly.mid",
+      "sha256": "36924f49452bd7728d1e0bc2ce17adaf4f9b0bac0c6964eaaf41cea357594f17",
+      "bytes": 5610,
+      "multiGroup": false
+    },
+    {
+      "file": "053 - COLORS.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/COLORS/COLORS.mid",
+      "sha256": "70127ec0aac14d22dbebdae1f727784cc5b02617b9614f5f8062d96a38eda027",
+      "bytes": 25019,
+      "multiGroup": false
+    },
+    {
+      "file": "054 - Cha-la Head-Cha-La.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Cha-la Head-Cha-La-七龙珠OP/Cha-la Head-Cha-La.mid",
+      "sha256": "f8c55929af6ca5f997972b63cf3066411034282a2ac84bc1ceb27a5e4c8431ff",
+      "bytes": 12397,
+      "multiGroup": false
+    },
+    {
+      "file": "055 - Challenge accepted (1).mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Challenge accepted/Challenge accepted (1).mid",
+      "sha256": "eb8497b2939d58a4f8cb804c4971f41107e876c1535e7a525920ea16a2a2aa11",
+      "bytes": 2286,
+      "multiGroup": false
+    },
+    {
+      "file": "056 - City of Eternity.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/City of Eternity-京骚戏画OST/City of Eternity.mid",
+      "sha256": "bdc545a7fa4cc4c94b7a7ae6aa8635c53e7ef02d2825eefc6a0ab2efe476c422",
+      "bytes": 13748,
+      "multiGroup": false
+    },
+    {
+      "file": "057 - Megumeru - Cuckool mix 2007 -.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Clannad OP/Megumeru - Cuckool mix 2007 -.mid",
+      "sha256": "2be15004b6da883306cf14a9aeddd0edd931cbbbbd4717cb62eb6aa52e4deea3",
+      "bytes": 12583,
+      "multiGroup": false
+    },
+    {
+      "file": "058 - Cras numquam scire.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Cras numquam scire-丹特丽安的书架OP/Cras numquam scire.mid",
+      "sha256": "928d74edbe8ff3db38f4cbcaaa9c57fdd4426c4b1ebec1c472c8581d15426188",
+      "bytes": 5109,
+      "multiGroup": false
+    },
+    {
+      "file": "059 - Daydream Syndrome.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Daydream Syndrome-食梦者玛丽OP/Daydream Syndrome.mid",
+      "sha256": "f5f69291cc54074e627d8055a55dd80453935a564e7a3136b68ecf1804594e33",
+      "bytes": 8631,
+      "multiGroup": false
+    },
+    {
+      "file": "060 - Dream theme from Nazo no Kanojo X.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Dream theme 谜样女友 X/Dream theme from Nazo no Kanojo X.mid",
+      "sha256": "c875857d9e54ba0cf52134f34b01484772197a2bd7a13706d9532bd049e24c41",
+      "bytes": 4633,
+      "multiGroup": false
+    },
+    {
+      "file": "061 - EONIAN.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/EONIAN-乐园追放/EONIAN.mid",
+      "sha256": "2780ce2c1da28fa442fff6fba8e055c3c237a9b0a8b0b1c57a9d1f60016f0480",
+      "bytes": 24840,
+      "multiGroup": false
+    },
+    {
+      "file": "062 - Enter Enter Mission.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Enter Enter Mission-少女与战车ED/Enter Enter Mission.mid",
+      "sha256": "b33f109f0cde0a18f2fff1e3670b7e0bf08a8ff7c537c0d97159aa1c628307f5",
+      "bytes": 10041,
+      "multiGroup": false
+    },
+    {
+      "file": "063 - Euterpe.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Euterpe-罪恶王冠/Euterpe.mid",
+      "sha256": "112d64a330572a7cac5b3b056bf84349706c98f75d9f2f528755c4ac663235d9",
+      "bytes": 16805,
+      "multiGroup": false
+    },
+    {
+      "file": "064 - Fallen Angel.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Fallen Angel-吊带袜天使ED/Fallen Angel.mid",
+      "sha256": "8123c58ee6ca589ebdc5630b3da26c69156524102a6849af3d1bd6d0e85d3a4c",
+      "bytes": 11719,
+      "multiGroup": false
+    },
+    {
+      "file": "065 - GO GO Maniac.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/GO GO Maniac-轻音少女OP2/GO GO Maniac.mid",
+      "sha256": "50bc788f45b055be98bd27e5e08c8422a0d363c194aa84a3fd27e4750546c590",
+      "bytes": 10036,
+      "multiGroup": false
+    },
+    {
+      "file": "066 - Gotta catch 'em all.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Gotta catch 'em all神奇宝贝OP/Gotta catch 'em all.mid",
+      "sha256": "ea6a66d15742ce84b207f3360678fb276e62db17cbd8f03c980fe6debb7805fb",
+      "bytes": 7379,
+      "multiGroup": false
+    },
+    {
+      "file": "067 - Heartwarming.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Heartwarming-请问今天要来点兔子么/Heartwarming.mid",
+      "sha256": "75ed0218e6268decb8a091218d40ca50e72e6d2205747fb9651640d3737f642c",
+      "bytes": 6510,
+      "multiGroup": false
+    },
+    {
+      "file": "068 - Hello Alone -Yui Ballade-.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Hello Alone -我的青春恋爱物语果然有问题/Hello Alone -Yui Ballade-.mid",
+      "sha256": "4d3cf54eaedacd528909ab738aa56e3400049cb1a6d10277288a17992df64659",
+      "bytes": 6604,
+      "multiGroup": false
+    },
+    {
+      "file": "069 - Hikaru Nara.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Hikaru Nara-四月是你的谎言/Hikaru Nara.mid",
+      "sha256": "91d3d33dd96da4eb6488d6a5162e4d8dd8c0492819f1573f16e124372970fe73",
+      "bytes": 28310,
+      "multiGroup": false
+    },
+    {
+      "file": "070 - Level 5 - Judgelight.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Judgelight/Level 5 - Judgelight.mid",
+      "sha256": "3a6f7a437e21f8d10da7a905d16346ca8a4df9dffb818b164c005a9bbfc9a400",
+      "bytes": 9254,
+      "multiGroup": false
+    },
+    {
+      "file": "071 - Kanashimi no ato ni.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Kanashimi no ato ni-AKB0048 soundtrack/Kanashimi no ato ni.mid",
+      "sha256": "a16111191a39c9f85963b3cc2dae4f835bb5f8cb27a56a5229f7f4199540f07f",
+      "bytes": 10612,
+      "multiGroup": false
+    },
+    {
+      "file": "072 - Kibou ni Tsuite.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Kibou ni Tsuite-AKB0048 OP/Kibou ni Tsuite.mid",
+      "sha256": "1162f8cca0dd8ee7001dcd65bded368a6508c9b7523220a2392757150eb191f0",
+      "bytes": 7452,
+      "multiGroup": false
+    },
+    {
+      "file": "073 - Killy Killy Joker.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Killy Killy Joker/Killy Killy Joker.mid",
+      "sha256": "8f2eb018eab6287b9bb3599bbdce023e0c26893cd0ac062ea762135060a58981",
+      "bytes": 32198,
+      "multiGroup": false
+    },
+    {
+      "file": "074 - Kimi ni Matsuwaru Mystery.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Kimi ni Matsuwaru Mystery-冰菓ED2/Kimi ni Matsuwaru Mystery.mid",
+      "sha256": "0f2bf37b30c567c4221d3af9f7326229eff4d96eef12e7de6b535c2508f362c3",
+      "bytes": 9120,
+      "multiGroup": false
+    },
+    {
+      "file": "075 - Kono Namida wo Kimi ni Sasagu .mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Kono Namida wo Kimi ni Sasagu/Kono Namida wo Kimi ni Sasagu .mid",
+      "sha256": "9e932361ac26f00ccb8f21d7f11a2db2ffd6b11f970f54e3b4020e426e4ead9e",
+      "bytes": 17049,
+      "multiGroup": false
+    },
+    {
+      "file": "076 - Kuchizuke Diamond.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Kuchizuke Diamond-山田君与七人魔女/Kuchizuke Diamond.mid",
+      "sha256": "8e8ed46c745ce090871940f6143fe75cb2cc477332ce0942e5c74d7f6c97296b",
+      "bytes": 25162,
+      "multiGroup": false
+    },
+    {
+      "file": "077 - Life goes on.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Life goes on/Life goes on.mid",
+      "sha256": "34adf4c3e31fb590a58b7bd54f4d15dbc74cc29eb94dcd82f48d3079ab023287",
+      "bytes": 13337,
+      "multiGroup": false
+    },
+    {
+      "file": "078 - Light my Fire.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Light my Fire-灼眼的夏娜第三季OP1/Light my Fire.mid",
+      "sha256": "c49fc97907e137ffc2a2e7f54b32ed547a5d63069ecfab08ee1d5fd439f8c628",
+      "bytes": 12204,
+      "multiGroup": false
+    },
+    {
+      "file": "079 - Little Busters!.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Little Busters!-Little Busters!OP/Little Busters!.mid",
+      "sha256": "8051dab5c63350257ad877ae415fb7f06be69abbc65e6ae7f61cf609b95bc645",
+      "bytes": 24748,
+      "multiGroup": false
+    },
+    {
+      "file": "080 - Magia.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Magia-魔法少女小圆/Magia.mid",
+      "sha256": "4934fada2bd89e58d057f1335bddac8da3fb93fe25750d6d00b381cb45bfd7b5",
+      "bytes": 11257,
+      "multiGroup": false
+    },
+    {
+      "file": "081 - Masshiro World.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Masshiro World-未确认进行式ED/Masshiro World.mid",
+      "sha256": "e3d3a887501b10d9e5be6f601d967b6c992ca3d22986894dee56bdc34b9dd97e",
+      "bytes": 15605,
+      "multiGroup": false
+    },
+    {
+      "file": "082 - Mikansei Stride.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Mikansei Stride-冰菓OP2/Mikansei Stride.mid",
+      "sha256": "1aaad33fd6ee3b53b3a53ad8921411356f5e6a163345da287da8ac5b329348db",
+      "bytes": 8185,
+      "multiGroup": false
+    },
+    {
+      "file": "083 - My Dearest.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/My Dearest/My Dearest.mid",
+      "sha256": "0bc2069106cb71bcaa9db5d55e97ca0096fa0905a04bb6a4e9a82fbd2be07fb4",
+      "bytes": 37062,
+      "multiGroup": false
+    },
+    {
+      "file": "084 - Oath Sign.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Oath Sign/Oath Sign.mid",
+      "sha256": "b2ab5711521b86d0828760b25c5a1572034333b4cfe3cfeb44df9cbfc8b8dbb2",
+      "bytes": 7004,
+      "multiGroup": false
+    },
+    {
+      "file": "085 - One Last Song.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/One Last Song/One Last Song.mid",
+      "sha256": "09b97aa988d75d3623a8cee3f6194eff685886e2e513fcfca6897b926f19d0c4",
+      "bytes": 8456,
+      "multiGroup": false
+    },
+    {
+      "file": "086 - Only my railgun.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Only my railgun/Only my railgun.mid",
+      "sha256": "0e402de4b632ccc20fcaa487b2fbd2b807c62ac19903ea65879a2573ab7de37e",
+      "bytes": 12812,
+      "multiGroup": false
+    },
+    {
+      "file": "087 - Patema Inverse.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Patema Inverse -颠倒的帕特玛ED/Patema Inverse.mid",
+      "sha256": "a18ab3d2554f6cd5c2692d0c3be3ee7c1570a7de92ceb92e7c06354d0d74c661",
+      "bytes": 10293,
+      "multiGroup": false
+    },
+    {
+      "file": "088 - Pierce the Heavens with your drill!.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Pierce the Heavens with your drill!-天元突破/Pierce the Heavens with your drill!.mid",
+      "sha256": "f2de0050fdd2a6181d9f332043d0bc05d40444c7003b50833e35a73f7fec6399",
+      "bytes": 14886,
+      "multiGroup": false
+    },
+    {
+      "file": "089 - REDLINE DAY.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/REDLINE DAY/REDLINE DAY.mid",
+      "sha256": "9869085689f2ec1f80d32fc29fe5e602a6a404e386b4adaabb45c3ba3ff891eb",
+      "bytes": 18234,
+      "multiGroup": false
+    },
+    {
+      "file": "090 - Resonance.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Resonance-噬魂师OP1/Resonance.mid",
+      "sha256": "c8e016004112e0c412f919edc4efd4651216fe7700178a06cf6ba92c1e6423b5",
+      "bytes": 32148,
+      "multiGroup": false
+    },
+    {
+      "file": "091 - Rewrite v2 - Lenno Liu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Rewrite（OP2）/Rewrite v2 - Lenno Liu.mid",
+      "sha256": "bf8d3ef313eaa431d1f8569e106ddd578f408902ce03b444e16a4d2e1f886202",
+      "bytes": 9452,
+      "multiGroup": false
+    },
+    {
+      "file": "092 - Sagitta Luminis.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sagitta Luminis-魔法少女小圆OST/Sagitta Luminis.mid",
+      "sha256": "3f858e29988f91b058d5425c3c1465c407449b8f8e1827c42557f03d0cd78938",
+      "bytes": 5837,
+      "multiGroup": false
+    },
+    {
+      "file": "093 - Sakura.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sakura-交响诗篇OP4/Sakura.mid",
+      "sha256": "40ca0838dc1a86255f3c7123875e3e63a1c2d5ff15b61f3c2fb7a86915d1d20d",
+      "bytes": 14738,
+      "multiGroup": false
+    },
+    {
+      "file": "094 - Scarlet Ballet.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Scarlet Ballet-绯弹的亚里亚OP/Scarlet Ballet.mid",
+      "sha256": "cd33edb90de025b7bd08ef89ef1fba6e337fe0e1a658d2500525a87d85ff741a",
+      "bytes": 12521,
+      "multiGroup": false
+    },
+    {
+      "file": "095 - Sis puella magica!.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sis puella magica!-魔法少女小圆/Sis puella magica!.mid",
+      "sha256": "9eb3aa481b6bd0b70c2a95645fd66e5eb444ffcf4df9480770051fd9e79823d6",
+      "bytes": 7784,
+      "multiGroup": false
+    },
+    {
+      "file": "096 - Sister's Noise.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sister's Noise/Sister's Noise.mid",
+      "sha256": "1c4250084132dc49f5c68acaf9e9bbf11610311694ff3e921faca18ec537ce16",
+      "bytes": 16097,
+      "multiGroup": false
+    },
+    {
+      "file": "097 - Snow Halation.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Snow Halation/Snow Halation.mid",
+      "sha256": "9af73bba500a545117786d3b24b224512ffe9d0531cf3f1a6c6c682c473eb63f",
+      "bytes": 30196,
+      "multiGroup": false
+    },
+    {
+      "file": "098 - Sora to Kimi no Message.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sora to Kimi no Message-翠星的加尔刚蒂亚ED/Sora to Kimi no Message.mid",
+      "sha256": "434ca8d47b2a1b49ea160dd781423ac1193356f5ea356e5236419f0aeed8191c",
+      "bytes": 10723,
+      "multiGroup": false
+    },
+    {
+      "file": "099 - Sparkling Daydream.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sparkling Daydream-中二病也要谈恋爱OP/Sparkling Daydream.mid",
+      "sha256": "53ada81f85b50d7f40f45aa4d413cd78377ce6dc72a51c196195dfca5102c972",
+      "bytes": 9608,
+      "multiGroup": false
+    },
+    {
+      "file": "100 - Sweet & Sweet Cherry.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Sweet & Sweet Cherry/Sweet & Sweet Cherry.mid",
+      "sha256": "d543d8674339718db47539212fc908e52c282f7dcbb1793c05c549fd6d661994",
+      "bytes": 7527,
+      "multiGroup": false
+    },
+    {
+      "file": "101 - Swordland (Main Theme).mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Swordland-刀剑神域maintheme/Swordland (Main Theme).mid",
+      "sha256": "d87ad16d03b1f5b9a1a3bbe394e0a9bfadf565a19498c4f988618ed9eb249e51",
+      "bytes": 22633,
+      "multiGroup": false
+    },
+    {
+      "file": "102 - The Reluctant Heroes.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/The Reluctant Heroes-进击的巨人/The Reluctant Heroes.mid",
+      "sha256": "2fb18e3bdb1459649a3b88e8392baed8b089c169bafe0770493cae713c7a1163",
+      "bytes": 27892,
+      "multiGroup": false
+    },
+    {
+      "file": "103 - The Song of Aether.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/The Song of Aether（升C小调钢琴小品）/The Song of Aether.mid",
+      "sha256": "da771b6509fda760af48ee02bd4e88f082b2dc5a81d4b59f8094a434e3e8e205",
+      "bytes": 8571,
+      "multiGroup": false
+    },
+    {
+      "file": "104 - The city in the night.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/The city in the night/The city in the night.mid",
+      "sha256": "ece1fbfec0a9346bcf7da379d254ee9e55186c0d3f3d4114fb21dae7ca386c59",
+      "bytes": 13188,
+      "multiGroup": false
+    },
+    {
+      "file": "105 - This Game .mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/This Game/This Game .mid",
+      "sha256": "80c9e012bf01e75980f2e3ad79582dbd098f0c48ed9bc35bceff31fe76b8bc88",
+      "bytes": 36131,
+      "multiGroup": false
+    },
+    {
+      "file": "106 - This is (not) the end.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/This is (not) the end/This is (not) the end.mid",
+      "sha256": "2ae18102edf4330c30a78939636316c9ee00a49e1b025f44b55aee754be3595c",
+      "bytes": 5588,
+      "multiGroup": false
+    },
+    {
+      "file": "107 - Toki Tsukasadoru Juuni no Meiyaku.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Toki Tsukasadoru Juuni no Meiyaku-命运石之门ED/Toki Tsukasadoru Juuni no Meiyaku.mid",
+      "sha256": "84c52e755f78c22a84202a977e19e7674e91f7d695f2b5bdd93e3ec35ce71491",
+      "bytes": 7769,
+      "multiGroup": false
+    },
+    {
+      "file": "108 - Trust me.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Trust me-无头骑士异闻录ED1/Trust me.mid",
+      "sha256": "e66dc1a5d47501dd996a17387103fa2f80f60a0a6c7f46bcf53eff17e42fb4e6",
+      "bytes": 11386,
+      "multiGroup": false
+    },
+    {
+      "file": "109 - Unbeatable Network.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Unbeatable Network-科学小飞侠OST/Unbeatable Network.mid",
+      "sha256": "eccc55c2b2631d51f9a8f39e9e434a0b4605a8ab3ccef550df632f0fb5c0fec2",
+      "bytes": 22158,
+      "multiGroup": false
+    },
+    {
+      "file": "110 - unfinished.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Unfinished-加速世界ED/unfinished.mid",
+      "sha256": "ca66cc6cbf8ed2f7ad4c1de9ddfbd06c875b677ff7493a067b6c772ac768c3f0",
+      "bytes": 9342,
+      "multiGroup": false
+    },
+    {
+      "file": "111 - We are!.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/We Are!- 海贼王 One Piece OP1/We are!.mid",
+      "sha256": "caa129b0f52f5375cdf8ce7fcb090bb27d443b69b830103bf3c07fd14d7b3a0b",
+      "bytes": 29751,
+      "multiGroup": false
+    },
+    {
+      "file": "112 - Wiosna.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Wiosna-片轮少女主题曲/Wiosna.mid",
+      "sha256": "6efea1a9e590dfb65f286e237ef19655aabf17904db5d785ada95ecdf4cc741e",
+      "bytes": 2616,
+      "multiGroup": false
+    },
+    {
+      "file": "113 - Yoake Umarekuru Shoujo.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Yoake Umarekuru Shoujo-灼眼的夏娜ED1/Yoake Umarekuru Shoujo.mid",
+      "sha256": "b9dc967b85f1547c1b7cc7919716ecc8dd0ad0bad303f8a61fb2753bbf97644c",
+      "bytes": 11284,
+      "multiGroup": false
+    },
+    {
+      "file": "114 - Yume wa Nando mo Umarekawaru.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Yume wa Nando mo Umarekawaru-AKB0048 ED/Yume wa Nando mo Umarekawaru.mid",
+      "sha256": "dce786a8c14b70e279c3a41bb37d60e400d0e661354f6caf58ff231c0e0b7cef",
+      "bytes": 8479,
+      "multiGroup": false
+    },
+    {
+      "file": "115 - ZZZ.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/ZZZ-日常ED/ZZZ.mid",
+      "sha256": "11c670e4d31bbc89b9f26a8c1f1d1a70835ce5da84c54ef41575a23b4a3c97ea",
+      "bytes": 6836,
+      "multiGroup": false
+    },
+    {
+      "file": "116 - aLIEz.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/aLIEz（核爆神曲）/aLIEz.mid",
+      "sha256": "a01ea1b1a6305a4ec0f6c26d87486f9383490ca8d37954bed137e783ddcad2b4",
+      "bytes": 26039,
+      "multiGroup": false
+    },
+    {
+      "file": "117 - Key anime piano suite.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/key社组曲串烧/Key anime piano suite.mid",
+      "sha256": "46a2fe7dab921c970097f972347fb7f2dd37a57e279568bb26f48aedd13771c8",
+      "bytes": 44717,
+      "multiGroup": false
+    },
+    {
+      "file": "118 - tokimeki poporon.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/tokimeki poporon-点兔第二季ED/tokimeki poporon.mid",
+      "sha256": "9cb6a2e2f7793a523d798a81e8bf3a71d609e02857920c8e79d1ed49bdbe6d9e",
+      "bytes": 28130,
+      "multiGroup": false
+    },
+    {
+      "file": "119 - βios.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/βios（拔剑神曲）-罪恶王冠/βios.mid",
+      "sha256": "1fbc7d065b79e7c21196861edd44fa9fff341f092158a7c8a28dab36f16486fd",
+      "bytes": 22006,
+      "multiGroup": false
+    },
+    {
+      "file": "120 - My precious friend - Isshuukan Friends.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/一周的朋友OST/My precious friend - Isshuukan Friends.mid",
+      "sha256": "860424a10c1065fe7771daca28ce4598fb2460404384d4bb3dc6566ab8663862",
+      "bytes": 8328,
+      "multiGroup": false
+    },
+    {
+      "file": "121 - Koko Kara Hajimaru Monogatari.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/从这里开始的故事-异国迷宫的十字路口ED/Koko Kara Hajimaru Monogatari.mid",
+      "sha256": "bc5597845a4876c20332682040b15145ae292dca664ad46127f4977d44762798",
+      "bytes": 5862,
+      "multiGroup": false
+    },
+    {
+      "file": "122 - Hikari no Senritsu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/光の旋律-空·之·音/Hikari no Senritsu.mid",
+      "sha256": "026b0ed76588aa3070b3eace866954b3ebdf59e10094bc94fe851e0e29568b93",
+      "bytes": 7374,
+      "multiGroup": false
+    },
+    {
+      "file": "123 - Sayonara Memories.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/再见了，回忆-Supercell/Sayonara Memories.mid",
+      "sha256": "3de17558aa8a28887ba8ab096c99b243cd67b103bf3308c08b1d8a5f2e510dd9",
+      "bytes": 40103,
+      "multiGroup": false
+    },
+    {
+      "file": "124 - Fubuki.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/吹雪Fubuki/Fubuki.mid",
+      "sha256": "1f42f43705c658a2c558c42294aed6c3f901f53da5f0a410c89f88642e0fe2cd",
+      "bytes": 31120,
+      "multiGroup": false
+    },
+    {
+      "file": "125 - Yasashii Boukyaku.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/善意的忘却-凉宫春日的消失ED/Yasashii Boukyaku.mid",
+      "sha256": "cb9dd9d6b07fe74f601faad9a77494a5bca06c2036f9f705f27b5081762d4556",
+      "bytes": 7350,
+      "multiGroup": false
+    },
+    {
+      "file": "126 - Kibou no Hana.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/希望の花-琴浦小姐ED/Kibou no Hana.mid",
+      "sha256": "e3ca5fd59f63bfef1db5d82e5ecd5a4b6e39cf828e161a986a0097d900d045ec",
+      "bytes": 6227,
+      "multiGroup": false
+    },
+    {
+      "file": "127 - Kokoro no Senritsu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/心之旋律-Tari Tari/Kokoro no Senritsu.mid",
+      "sha256": "fcbaa83851d544da2321cbd3b7acf809d68db4396a43538e94cc98013bd1f2bd",
+      "bytes": 8040,
+      "multiGroup": false
+    },
+    {
+      "file": "128 - Koibumi.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/恋文-Rewrite/Koibumi.mid",
+      "sha256": "bd0c5215650a4451e13899c2978e88fa83c6cb049fff3ba418a915f436808601",
+      "bytes": 11982,
+      "multiGroup": false
+    },
+    {
+      "file": "129 - Main Theme from Non Non Byori.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/悠哉日常大王主题曲/Main Theme from Non Non Byori.mid",
+      "sha256": "165bd93cbdbe0ef7670073eb7028e80952eebb6af485a111f2fdaf3f67fa9c83",
+      "bytes": 14723,
+      "multiGroup": false
+    },
+    {
+      "file": "130 - Ashita e no Kaerimichi.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/明日的回家路上-夏色奇迹ED/Ashita e no Kaerimichi.mid",
+      "sha256": "0ea1a4bda1a48dd53bb5680c03b275d23dff2cc44c736252b7879ad73d44a894",
+      "bytes": 10448,
+      "multiGroup": false
+    },
+    {
+      "file": "131 - Moonlight Densetsu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/月光传说-美少女战士OP/Moonlight Densetsu.mid",
+      "sha256": "735a63e44639d9025cd36a040beea261fa8865fd4c5b262d8be1ee1f361e4968",
+      "bytes": 10016,
+      "multiGroup": false
+    },
+    {
+      "file": "132 - Nagi no Asukara - Piano Suite.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/来自风平浪静的明天全OP和ED串烧/Nagi no Asukara - Piano Suite.mid",
+      "sha256": "567645b5a728c38969b5e1b1004ec2cf2ee4d91d0e930a2475603d04fa9df27b",
+      "bytes": 36628,
+      "multiGroup": false
+    },
+    {
+      "file": "133 - Esoragoto.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/没有剧本的故事（绘空事）/Esoragoto.mid",
+      "sha256": "9a98d1e5766f9b7209f31dad69e49fcde22f0ba95c32fb85ea8b7f19931fabab",
+      "bytes": 8311,
+      "multiGroup": false
+    },
+    {
+      "file": "134 - Namae no nai Kaibutsu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/没有名字的怪物-Psycho-Pass ED/Namae no nai Kaibutsu.mid",
+      "sha256": "6652d46655b399bae5ea1d6a0f9703ce5761d80d1aeb89832bf4be71fe26a26d",
+      "bytes": 11278,
+      "multiGroup": false
+    },
+    {
+      "file": "135 - Miiro.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/海色Miiro/Miiro.mid",
+      "sha256": "69610cfd9dff655fda47c87908122401f8239c3a67ba465bd7a388785ec09826",
+      "bytes": 33960,
+      "multiGroup": false
+    },
+    {
+      "file": "136 - Yasashisa no Riyuu.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/温柔的理由-冰菓OP/Yasashisa no Riyuu.mid",
+      "sha256": "0efbbb552d249187d234dc5c030795ab071a61d12eae451d0d2afe6e4531d0f4",
+      "bytes": 7469,
+      "multiGroup": false
+    },
+    {
+      "file": "137 - Ninelie.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/甲铁城的卡巴内利ED/Ninelie.mid",
+      "sha256": "011c32902782453c12b9f4fa8078c4712206ad314555c8de7cd668d19cb47c79",
+      "bytes": 23163,
+      "multiGroup": false
+    },
+    {
+      "file": "138 - Kuusou Mesorogiwi.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/空想神话-未来日记/Kuusou Mesorogiwi.mid",
+      "sha256": "77b6a1e109d6ced781510e8a177df4d177db0b6edbfb54e05a7481feb42fd2b2",
+      "bytes": 23920,
+      "multiGroup": false
+    },
+    {
+      "file": "139 - Guren no Yumiya.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/红莲の弓矢/Guren no Yumiya.mid",
+      "sha256": "4e078d203a647554f0caae10fac9d40db6fa59737fe86dc0b7f7fd7fa3b480e6",
+      "bytes": 17158,
+      "multiGroup": false
+    },
+    {
+      "file": "140 - Owari no Sekai Kara.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/终焉的世界-麻枝准/Owari no Sekai Kara.mid",
+      "sha256": "d1b3dae3068260aa7c46eddd3bba2a222a5325916e6e27a29760bff7df4cd2a2",
+      "bytes": 28940,
+      "multiGroup": false
+    },
+    {
+      "file": "141 - Jiyuu no Tsubasa for two pianos (MIDI).mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/自由之翼-进击的巨人/Jiyuu no Tsubasa for two pianos (MIDI).mid",
+      "sha256": "d2db2aeda783eb3cf8be7ea9f72d4a4b036c1548766bdb0802f8d7a30bd32e2e",
+      "bytes": 56380,
+      "multiGroup": false
+    },
+    {
+      "file": "142 - Kancolle - Piano Suite.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/舰娘串烧/Kancolle - Piano Suite.mid",
+      "sha256": "0aa197b0a1c4089c98c427f2a90f13a6e4b47030fc9f154c2899119f705f7705",
+      "bytes": 45947,
+      "multiGroup": false
+    },
+    {
+      "file": "143 - Niji no Ressha.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/虹の列车-AKB0048/Niji no Ressha.mid",
+      "sha256": "a6aff84061ddf1c6514d5bd028ab06f2cb9aeee547519805df55cbaa4da7eb00",
+      "bytes": 15029,
+      "multiGroup": false
+    },
+    {
+      "file": "144 - Madoka Magica - Piano Medley.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/魔法少女小圆medley/Madoka Magica - Piano Medley.mid",
+      "sha256": "bbdb1f18f726a5fd5393709d9570f94b99fa7b40fda05bb68a575d1415e6614f",
+      "bytes": 37849,
+      "multiGroup": false
+    },
+    {
+      "file": "145 - Chopin Op.21 - I. Maestoso - Robert Finley.mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/弗雷德里克·肖邦/大型作品/F小调钢琴协奏曲Op.21/Chopin Op.21 - I. Maestoso - Robert Finley.mid",
+      "sha256": "105f564a1f7bda5529734ccbc046a72851a57153fb5d47b91539e272513b5fa3",
+      "bytes": 103006,
+      "multiGroup": true
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+ "schema": "harmonizer-v1-eval-1",
+ "harmonizer": "training/runs/harmonizer-v1-20261003/weights.pt",
+ "harmonizerStep": 3500,
+ "parameters": 865248,
+ "validation": {
+  "step": 0.3838,
+  "beat": 0.3863,
+  "beatRoot": 0.4616,
+  "beatFamily": 0.4349,
+  "steps": 79067
+ },
+ "analysis": {
+  "pieces": 80,
+  "analysis model, all notes": {
+   "exact": 0.7121,
+   "root": 0.7756,
+   "family": 0.759,
+   "beats": 13213
+  },
+  "analysis model, melody only": {
+   "exact": 0.3503,
+   "root": 0.4266,
+   "family": 0.4002,
+   "beats": 13213
+  },
+  "harmonizer v1, melody only": {
+   "exact": 0.3612,
+   "root": 0.4394,
+   "family": 0.4126,
+   "beats": 13213
+  },
+  "chord tracker (rules), all notes": {
+   "exact": 0.6702,
+   "root": 0.7533,
+   "family": 0.7313,
+   "beats": 13213
+  }
+ },
+ "analyzer": {
+  "path": "training/runs/harmonizer-v2-20261003/weights.pt",
+  "step": 4000,
+  "parameters": 870368,
+  "validation": {
+   "step": 0.6504,
+   "beat": 0.6485,
+   "beatRoot": 0.7021,
+   "beatFamily": 0.6853,
+   "steps": 79067,
+   "melodyOnly": {
+    "step": 0.3724,
+    "beat": 0.3724,
+    "beatRoot": 0.4463,
+    "beatFamily": 0.4184,
+    "steps": 79067
+   }
+  }
+ },
+ "seconds": 11
+}

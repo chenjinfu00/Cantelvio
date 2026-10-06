@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#17182b">
+  <meta name="description" content="An interactive presentation about the Kitaev model and the Tonnetz.">
+  <title>The Kitaev Honeycomb Model · Karaoke</title>
+  <link rel="stylesheet" href="./vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="./deck.css">
+  <script defer src="./vendor/katex/katex.min.js"></script>
+  <script type="module" src="./math.js"></script>
+</head>
+<body>
+  <main class="deck" id="deck" data-page="cover" data-build="0">
+    <div class="stage-shell">
+      <div class="stage" id="stage">
+        <div id="persistentLattice" class="persistent-lattice" aria-live="off"></div>
+
+        <section class="slide title-cover is-active" id="cover" data-title="Cover" aria-hidden="false">
+          <div class="title-cover-copy">
+            <p class="eyebrow">EXACTLY SOLVED QUANTUM MATTER</p>
+            <h1>The Kitaev<br>Honeycomb Model</h1>
+            <p class="title-cover-subtitle">Exact solvability <span>·</span> Majorana fermions</p>
+          </div>
+          <div class="cover-lattice" id="coverLattice" aria-hidden="true"></div>
+        </section>
+
+        <section class="slide act-one solution" id="solution" data-title="From spins to free fermions" aria-hidden="true">
+          <div class="cover-rule"></div>
+          <p class="eyebrow">EXACT SOLUTION</p>
+          <h1>From spins to free fermions</h1>
+          <div class="solution-map" aria-label="Exact solution map">
+            <article><b>Spins</b><div data-tex="H=-\sum_{\langle ij\rangle_\alpha}J_\alpha\sigma_i^\alpha\sigma_j^\alpha" data-display="true"></div></article>
+            <span>→</span>
+            <article><b>Majoranas</b><div data-tex="\sigma_i^\alpha=i b_i^\alpha c_i,\qquad D_i=b_i^x b_i^y b_i^z c_i=1" data-display="true"></div></article>
+            <span>→</span>
+            <article><b>static Z₂ gauge</b><div data-tex="u_{ij}=i b_i^\alpha b_j^\alpha=\pm1,\qquad [u_{ij},H]=0" data-display="true"></div></article>
+            <span>→</span>
+            <article><b>free fermions</b><div data-tex="H(u)=i\sum_{\langle ij\rangle_\alpha}J_\alpha u_{ij}c_i c_j" data-display="true"></div></article>
+          </div>
+          <p class="solution-note">Fix <span data-tex="u"></span> → diagonalize → project <span data-tex="D_i=1"></span>.</p>
+          <p class="cover-citation">A. Kitaev, <i>Annals of Physics</i> 321 (2006) 2–111 · <a href="https://doi.org/10.1016/j.aop.2005.10.005" target="_blank" rel="noreferrer">DOI</a> · <a href="https://arxiv.org/abs/cond-mat/0506438" target="_blank" rel="noreferrer">arXiv</a></p>
+        </section>
+
+        <section class="slide act-one lattice-slide" id="kitaev" data-title="Kitaev" aria-hidden="true">
+          <header><p class="chapter">MODEL</p><h2>Spins on a honeycomb. Three bonds.</h2></header>
+          <aside class="formula-card kitaev-formula">
+            <div data-tex="H=-\sum_{\langle ij\rangle_\alpha}J_\alpha\sigma_i^\alpha\sigma_j^\alpha" data-display="true"></div>
+            <div class="tag-row"><b>exactly solvable</b><b>four Majoranas per spin</b><b>anyons</b></div>
+          </aside>
+          <div class="bond-legend"><span>— x</span><span>— y</span><span>— z</span></div>
+        </section>
+
+        <section class="slide act-one lattice-slide" id="dual" data-title="Dual" data-builds="2" aria-hidden="true">
+          <header><p class="chapter">DUALITY</p><h2>Forget the spins. Take the dual.</h2></header>
+          <aside class="dual-copy build" data-build="2">Its vertices are the plaquettes,<br>where the <span data-tex="\mathbb{Z}_2"></span> fluxes live.</aside>
+          <div class="diagram-note one build" data-build="1">one plaquette → one dual site</div>
+          <div class="diagram-note two build" data-build="2">dual of honeycomb = triangular</div>
+        </section>
+
+        <section class="slide pivot lattice-slide" id="pivot" data-title="Pivot" aria-hidden="true">
+          <header><p class="chapter">RELABEL</p><h2>Now label the dual sites.</h2></header>
+          <p class="pivot-line">Every small triangle is a chord. <b>This is the Tonnetz — Euler, 1739.</b></p>
+        </section>
+
+        <section class="slide warm" id="shapes" data-title="Shape of chord" aria-hidden="true">
+          <header class="compact"><p class="chapter">CHORDS</p><h2>Shape of chord</h2></header>
+          <div class="chord-grid" id="chordGrid"></div>
+        </section>
+
+        <section class="slide warm" id="progressions" data-title="Progressions" aria-hidden="true">
+          <header class="compact"><p class="chapter">PROGRESSIONS</p><h2>Chord progressions on the lattice</h2></header>
+          <div class="filmstrip" id="filmstrip"></div>
+          <div class="progression-grid" id="progressionGrid"></div>
+        </section>
+
+        <section class="slide warm" id="lumatone" data-title="Periodicity" data-builds="3" aria-hidden="true">
+          <header><p class="chapter">PERIODICITY</p><h2>Why the circle of fifths closes</h2></header>
+          <div class="period-tabs" id="periodTabs" role="tablist" aria-label="Periodicity concepts">
+            <button type="button" role="tab" data-period-step="0">Pure fifth</button>
+            <button type="button" role="tab" data-period-step="1">Twelve fifths</button>
+            <button type="button" role="tab" data-period-step="2">12-TET</button>
+            <button type="button" role="tab" data-period-step="3">Repeating grid</button>
+          </div>
+          <div class="lumatone-layout">
+            <div class="lumatone-visual" id="lumatoneVisual">
+            </div>
+            <div class="period-card" id="periodPanels">
+              <article class="period-panel" data-period-panel="0" role="tabpanel">
+                <p class="period-kicker">C → G · count C–D–E–F–G</p>
+                <h3>Pure fifth</h3>
+                <div class="period-math" data-tex="\text{octave}=2:1,\qquad \text{fifth}=3:2" data-display="true"></div>
+                <p>Just intonation uses simple frequency ratios. An octave doubles the frequency. In a pure fifth, G makes three vibrations while C makes two: a 3:2 ratio.</p>
+                <div class="tuning-audition"><button id="pureFifthButton" type="button">▶ Pure 3:2 fifth</button><button id="equalFifthButton" type="button">▶ 12-TET fifth</button></div>
+              </article>
+              <article class="period-panel" data-period-panel="1" role="tabpanel">
+                <p class="period-kicker">C · G · D · A · E · B · F♯ · C♯ · G♯ · D♯ · A♯ · F · C</p>
+                <h3>Twelve fifths</h3>
+                <div class="period-math" data-tex="\frac{(3/2)^{12}}{2^7}\approx1.0136\ne1" data-display="true"></div>
+                <p>Stacking pure fifths is Pythagorean tuning. Twelve pure fifths do not equal seven octaves; the mismatch is the Pythagorean comma.</p>
+              </article>
+              <article class="period-panel" data-period-panel="2" role="tabpanel">
+                <p class="period-kicker">Twelve equal steps per octave</p>
+                <h3>12-tone equal temperament</h3>
+                <div class="period-math" data-tex="\text{semitone}=2^{1/12},\qquad \text{fifth}=2^{7/12}\approx1.4983" data-display="true"></div>
+                <div class="period-math" data-tex="12\cdot7\equiv0\pmod{12}" data-display="true"></div>
+                <p>Each semitone uses the same frequency ratio. A fifth spans seven semitones; twelve fifths return to C, ignoring octaves.</p>
+              </article>
+              <article class="period-panel" data-period-panel="3" role="tabpanel">
+                <p class="period-kicker">Geometry of pitch classes</p>
+                <h3>Repeating grid</h3>
+                <div class="period-math" data-tex="\mathbb{R}^2/\Lambda\cong\mathbb{T}^2" data-display="true"></div>
+                <p><span data-tex="\mathbb{R}^2"></span> is the infinite plane; <span data-tex="\Lambda"></span> collects translations that preserve note names. Identifying the repeating edges turns the grid into the torus <span data-tex="\mathbb{T}^2"></span>.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide warm" id="twomodes" data-title="Isomorphic keyboard" aria-hidden="true">
+          <header class="isomorphic-head"><p class="chapter">ISOMORPHIC KEYBOARD</p><h2>Isomorphic keyboard</h2><p>Same shape. Any key. <a href="https://www.lumatone.io/faq" target="_blank" rel="noreferrer">FAQ</a> · <a href="https://www.lumatone.io/playmodes" target="_blank" rel="noreferrer">Playmodes</a></p></header>
+          <div class="modes-grid">
+            <article class="mode-card classic"><div class="mode-head"><div><h3>Classic</h3><p>melody = a path · a triad = a stretch</p></div></div><div id="classicSnapshot"></div></article>
+            <article class="mode-card harmonic"><div class="mode-head"><div><h3>Harmonic</h3><p>harmonic-table layout · transpose = translate</p></div></div><div id="harmonicSnapshot"></div></article>
+          </div>
+        </section>
+
+        <section class="slide warm demo-slide" id="demo" data-title="Live demo" aria-hidden="true">
+          <header><p class="chapter">LIVE DEMO</p><h2>Two concertos, two wirings</h2></header>
+          <div class="demo-grid">
+            <article class="demo-card melody">
+              <span class="demo-num">DEMO A</span>
+              <h3>Tchaikovsky</h3>
+              <p class="demo-prompt">You play the soloist</p>
+              <a class="enter-app" href="./tonnetz/?demo=melody">Open rehearsal <span>↗</span></a>
+            </article>
+            <article class="demo-card harmony">
+              <span class="demo-num">DEMO B</span>
+              <h3>Mendelssohn</h3>
+              <p class="demo-prompt">You play the chords</p>
+              <a class="enter-app" href="./tonnetz/?demo=harmony">Open rehearsal <span>↗</span></a>
+            </article>
+          </div>
+        </section>
+
+        <section class="slide closing" id="closing" data-title="Closing" aria-hidden="true">
+          <header><p class="chapter">CODA</p><h2>Keep exploring the lattice</h2></header>
+          <p class="aigimon-tagline">Discover, play, and share AI creations.</p>
+          <div class="aigimon-links">
+            <a href="https://www.aigimon.com" target="_blank" rel="noreferrer"><span>aigimon.com</span><b>Explore AIgimon</b><i>↗</i></a>
+            <a href="https://www.aigimon.com/tonnetz/" target="_blank" rel="noreferrer"><span>aigimon.com/tonnetz</span><b>Play Tonnetz</b><i>↗</i></a>
+          </div>
+          <p class="closing-line">Thank you</p>
+        </section>
+
+      </div>
+    </div>
+
+    <nav class="deck-nav" aria-label="Presentation controls">
+      <button id="prevButton" type="button" aria-label="Previous step">←</button>
+      <div class="progress-track"><i id="progressBar"></i></div>
+      <span id="pageCount" aria-live="polite">1 / 11</span>
+      <span id="soundStatus" class="sound-status" aria-live="polite">Sound: select a playable diagram</span>
+      <button id="soundStopButton" class="sound-stop" type="button" aria-label="Stop all demonstration sounds">■</button>
+      <button id="fullscreenButton" type="button" aria-label="Toggle fullscreen">⛶</button>
+      <button id="nextButton" type="button" aria-label="Next step">→</button>
+    </nav>
+    <iframe id="audioEngine" class="audio-engine" src="./tonnetz/?embed=1" title="Tonnetz sound engine" aria-hidden="true" tabindex="-1"></iframe>
+  </main>
+  <script type="module" src="./deck.js"></script>
+</body>
+</html>

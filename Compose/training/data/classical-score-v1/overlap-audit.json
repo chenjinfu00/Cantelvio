@@ -1,0 +1,1719 @@
+{
+ "method": "Conservative composer + BWV / work-number / opus filename match; misses aliases and editions.",
+ "existingPieces": 43036,
+ "newCompositions": 204,
+ "possibleOverlappingCompositions": 10,
+ "possibleHeldoutOverlapCompositions": 1,
+ "warning": "Do not assign train/validation/test for these scores from this audit alone.",
+ "works": [
+  {
+   "compositionKey": "Andrée,_Elfrida/String_Quartet_in_A_major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Arriaga,_Juan_Crisóstomo_de/String_Quartet_No.1_in_D_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Arriaga,_Juan_Crisóstomo_de/String_Quartet_No.2_in_A_major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Arriaga,_Juan_Crisóstomo_de/String_Quartet_No.3_in_E-flat_Major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bach,_Johann_Sebastian/B_Minor_Mass,_BWV.232",
+   "scoreFiles": 24,
+   "matches": 10,
+   "matchingSplits": {
+    "train": 10
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_10_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_11_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_13_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_16_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_18_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_19_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_20_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/bach-js_mass_in_b-minor_bwv-232_23_(c)siu.mid",
+     "split": "train",
+     "reason": "same BWV number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Bach,_Johann_Sebastian/Brandenburg_Concerto_No.3,_BWV.1048",
+   "scoreFiles": 2,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bach,_Johann_Sebastian/Brandenburg_Concerto_No.4,_BWV.1049",
+   "scoreFiles": 3,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bartók,_Béla/String_Quartet_No.1,_Op.7_(Sz.40)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bartók,_Béla/String_Quartet_No.2,_Op.17_(Sz.67)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beach,_Amy/String_Quartet,_Op._89",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beach,_Amy/Symphony_in_E_minor_(Gaelic),_Op.32",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Grosse_Fuge_in_B-flat_major,_Op.133",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.1,_Op.18_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.12,_Op.127",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.13_in_B♭_major,_Op.130",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.14_in_C♯_minor,_Op.131",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.16_in_F_major,_Op.135",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.2,_Op.18_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.3,_Op.18_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.4,_Op.18_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.5,_Op.18_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.6,_Op.18_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/String_Quartet_No.9,_Op.59_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.1,_Op.21",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.2,_Op.36",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.3,_Op.55",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.4,_Op.60",
+   "scoreFiles": 4,
+   "matches": 3,
+   "matchingSplits": {
+    "train": 3
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_4_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_4_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_4_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.5,_Op.67",
+   "scoreFiles": 4,
+   "matches": 9,
+   "matchingSplits": {
+    "train": 9
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_1_(c)galimberti.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_1_(c)unknown.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_2_(c)galimberti.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_2_(c)unknown.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_3-4_(c)galimberti.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_5_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.6,_Op.68",
+   "scoreFiles": 5,
+   "matches": 8,
+   "matchingSplits": {
+    "train": 7,
+    "test": 1
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_1_(c)unknown.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_2_(c)unknown.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_3_(c)unknown.mid",
+     "split": "test",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_4_(c)unknown.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_6_5_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.7,_Op.92",
+   "scoreFiles": 4,
+   "matches": 4,
+   "matchingSplits": {
+    "train": 4
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_7_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_7_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_7_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_7_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.8,_Op.93",
+   "scoreFiles": 4,
+   "matches": 4,
+   "matchingSplits": {
+    "train": 4
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_8_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_8_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_8_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_8_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Beethoven,_Ludwig_van/Symphony_No.9,_Op.125",
+   "scoreFiles": 4,
+   "matches": 4,
+   "matchingSplits": {
+    "train": 4
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_9_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_9_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_9_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/beethoven_symphony_9_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Berg,_Alban/String_Quartet,_Op.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Boccherini,_Luigi/String_Quartet_in_A_major,_G.213_(Op.39)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Borodin,_Alexander/String_Quartet_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Borodin,_Alexander/String_Quartet_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Boulanger,_Lili/D'un_matin_de_printemps",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/Ein_Deutsches_Requiem,_Op.45",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/String_Quartet_No.1,_Op.51_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/String_Quartet_No.2,_Op.51_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/String_Quartet_No.3,_Op.67",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/Symphony_No.1,_Op.68",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/Symphony_No.2,_Op.73",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/Symphony_No.3,_Op.90",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Brahms,_Johannes/Symphony_No.4,_Op.98",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bridge,_Frank/String_Quartet_No.1,_H.70",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bridge,_Frank/String_Quartet_No.2,_H.115",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Bruckner,_Anton/Symphony_No.5,_WAB.105",
+   "scoreFiles": 5,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Busoni,_Ferruccio/String_Quartet_No.1,_Op.19,_BV_208",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Busoni,_Ferruccio/String_Quartet_No.2,_Op.26,_BV_225",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Carreño,_Teresa/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Cherubini,_Luigi/String_Quartet_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Cras,_Jean/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Debussy,_Claude/String_Quartet_in_G_minor,_Op.10",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Delius,_Frederick/String_Quartet_in_E_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dittersdorf,_Carl_Ditters_von/String_Quartet_in_B-flat_major,_Kr.192",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dittersdorf,_Carl_Ditters_von/String_Quartet_in_D_major,_Kr.191",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dittersdorf,_Carl_Ditters_von/String_Quartet_in_G_major,_Kr.193",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvorak,_Antonin/Symphony_No.9",
+   "scoreFiles": 4,
+   "matches": 3,
+   "matchingSplits": {
+    "train": 3
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/dvorak_symphony_9_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/dvorak_symphony_9_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/dvorak_symphony_9_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/Echo_of_Songs,_B.152",
+   "scoreFiles": 12,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.10,_Op.51",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.11,_Op.61",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.12,_Op.96_(“American”)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.14,_Op.105",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.8,_Op.80",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Dvořák,_Antonín/String_Quartet_No.9,_Op.34",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Elgar,_Edward/String_Quartet,_Op.83",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Fauré,_Gabriel/String_Quartet,_Op.121",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Franck,_César/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Glazunov,_Alexander/String_Quartet_No.1,_Op.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Glinka,_Mikhail/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Gossec,_François_Joseph/String_Quartet_in_C_minor,_RH_189",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Gounod,_Charles/String_Quartet_No.3_in_A_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Gouvy,_Théodore/String_Quartet,_Op.16_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Grieg,_Edvard/String_Quartet_No.1,_Op.27",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Franz/Symphony_No.104",
+   "scoreFiles": 1,
+   "matches": 4,
+   "matchingSplits": {
+    "train": 4
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/haydn_symphony_104_1_(c)edwards.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/haydn_symphony_104_2_(c)edwards.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/haydn_symphony_104_3_(c)edwards.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/haydn_symphony_104_4_(c)edwards.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/Die_Worte_des_Erlösers_am_Kreuze,_Hob.III50–56,_Op.51",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_A_major,_Hob.III24,_Op.9_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_A_major,_Hob.III36,_Op.20_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_A_major,_Hob.III7,_Op.2_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major,_Hob.III12,_Op.2_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major,_Hob.III23,_Op.9_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major,_Hob.III5,_Op.1_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major,_Hob.III67,_Op.64_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major,_Hob.III78,_Op.76_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B-flat_major_(“La_Chasse”),_Hob._III1,_Op.1_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_B_minor,_Hob.III68,_Op.64_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III19,_Op.9_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III32,_Op.20_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III6,_Op.1_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III65,_Op.64_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III72,_Op.74_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_C_major,_Hob.III77,_Op.76_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_major,_Hob.III3,_Op.1_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_major,_Hob.III34,_Op.20_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_major,_Hob.III63,_Op.64_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_major,_Hob.III79,_Op.76_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_minor,_Hob.III22,_Op.9_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_D_minor,_Hob.III76,_Op.76_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III2,_Op.1_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III20,_Op.9_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III31,_Op.20_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III64,_Op.64_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III80,_Op.76_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E-flat_major,_Hob.III9,_Op.2_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_E_major,_Hob.III8,_Op.2_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_F_major,_Hob.III73,_Op.74_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_F_minor,_Hob.III35,_Op.20_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_major,_Hob.III21,_Op.9_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_major,_Hob.III4,_Op.1_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_major,_Hob.III66,_Op.64,_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_major,_Hob.III75,_Op.76_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_minor,_Hob.III33,_Op.20_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Haydn,_Joseph/String_Quartet_in_G_minor,_Hob.III74,_Op.74_No.3_(The_Horseman)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Hensel,_Fanny_(Mendelssohn)/String_Quartet_in_E-flat_major,_Op._277",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Hoffmeister,_Franz_Anton/String_Quartet_No.9_in_D_major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Indy,_Vincent_d’/String_Quartet_No.1,_Op.35",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Janáček,_Leoš/String_Quartet_No.1_“Kreutzer_Sonata”",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Janáček,_Leoš/String_Quartet_No.2_“Intimate_Letters”",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Kalliwoda,_Johann_Wenzel/String_Quartet_No.3,_Op.90",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Koechlin,_Charles/String_Quartet_No.1,_Op.51",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Krzyżanowska,_Halina/String_Quartet,_Op.44",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Lalo,_Edouard/String_Quartet,_Op.19",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Maier,_Amanda/String_Quartet_in_A_major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_A_Major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_D_Major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_D_Minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_E_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_F_Major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mayer,_Emilie/String_Quartet_in_G_minor,_Op.14",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mendelssohn,_Felix/String_Quartet_No.1,_Op.12",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mendelssohn,_Felix/String_Quartet_No.2,_Op.13",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mendelssohn,_Felix/String_Quartet_No.3,_Op.44_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mendelssohn,_Felix/String_Quartet_No.4_in_E_minor,_Op.44_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mendelssohn,_Felix/String_Quartet_No.6_in_F_Minor,_Op.80",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Moeran,_Ernest_John/String_Quartet_in_A_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.14_in_G_major,_K.387_(Op._10,_No._1)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.15_in_D_minor,_K.421417b_(Op._10,_No._2)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.16_in_E-flat_major,_K.428421b_(Op._10,_No._4)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.17_in_B-flat_major,_K.458_(Op._10,_No._3)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.18_in_A_major,_K.464_(Op._10,_No._5)",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.19_in_C_major,_K.465_(Op._10,_No._6)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.1_in_G_major,_K.8073f",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.20_in_D_major,_K.499",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.21_in_D_major,_K.575",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.22_in_B-flat_major,_K.589",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.23_in_F_major,_K.590",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.2_in_D_major,_K.155134a",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.3_in_G_major,_K.156_(K._134b)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.4_in_C_major,_K.157",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.5_in_F_major,_K.158",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.6_in_B-flat_major,_K.159",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.7_in_E-flat_major,_K.160159a",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.8_in_F_major,_K.168",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_No.9_in_A_major,_K.169",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/String_Quartet_in_C_major,_K.170",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Mozart,_Wolfgang_Amadeus/Symphony_No.41",
+   "scoreFiles": 4,
+   "matches": 4,
+   "matchingSplits": {
+    "train": 4
+   },
+   "examples": [
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/mozart_symphony_41_551_1_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/mozart_symphony_41_551_2_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/mozart_symphony_41_551_3_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    },
+    {
+     "name": "extracted/SymphonyNet_Dataset/classical/mozart_symphony_41_551_4_(c)cvikl.mid",
+     "split": "train",
+     "reason": "same named work type and number"
+    }
+   ]
+  },
+  {
+   "compositionKey": "Müller-Hermann,_Johanna/String_Quartet,_Op.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Nielsen,_Carl/String_Quartet_No.1,_Op.13",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Onslow,_George/String_Quartet_No.28_in_E-flat_major,_Op.54",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Ravel,_Maurice/String_Quartet_in_F_major",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Reger,_Max/String_Quartet_No.1,_Op.54_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Reger,_Max/String_Quartet_No.2,_Op.54_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Reger,_Max/String_Quartet_No.3,_Op.74",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Reger,_Max/String_Quartet_No.4,_Op.109",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Reger,_Max/String_Quartet_No.5,_Op.121",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_C_major,_Op.1_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_C_minor,_Op.1_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_D_major,_Op.1_No.6",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_E-flat_major,_Op.1_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_G_minor,_Op.1_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Saint-Georges,_Joseph_Bologne/String_Quartet_in_G_minor,_Op.1_No.5",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_A_minor,_D.804,_No.13",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_B-flat_major,_D.36,_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_C_minor,_D.703,_No.12",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_D_minor,_D.810,_No.14_(“Death_and_the_Maiden”)",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_E-flat_major,_D.87,_No.10",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_E_major,_D.353,_No.11",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_G_major,_D.887,_No.15",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/String_Quartet_in_G_minor,_D.18,_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schubert,_Franz/Symphony_No.5,_D.485",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schulhoff,_Erwin/String_Quartet_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schumann,_Robert/String_Quartet_No.1,_Op.41_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schumann,_Robert/String_Quartet_No.2,_Op.41_No.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Schumann,_Robert/String_Quartet_No.3,_Op.41_No.3",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Smetana,_Bedřich/String_Quartet_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Smyth,_Ethel/String_Quartet_in_E_minor",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Spohr,_Louis/String_Quartet_No.1,_Op.4_No.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Stanford,_Charles_Villiers/String_Quartet_No.1,_Op.44",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Stenhammar,_Wilhelm/String_Quartet_No.1,_Op.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Stenhammar,_Wilhelm/String_Quartet_No.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Strauss,_Richard/String_Quartet_in_A_major,_Op.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Suk,_Josef/String_Quartet_No.1,_Op.11",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Tchaikovsky,_Pyotr/Symphony_No.6",
+   "scoreFiles": 4,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Tchaikovsky,_Pyotr_Ilyich/String_Quartet_No.1,_Op.11",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Verdi,_Giuseppe/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Vieuxtemps,_Henri/String_Quartet_No.1,_Op.44",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Viotti,_Giovanni_Battista/String_Quartet_in_E_minor,_W_2a.2",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Viotti,_Giovanni_Battista/String_Quartet_in_G_minor,_W_2a.1",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Wolf,_Hugo/Italian_Serenade",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Wolf,_Hugo/String_Quartet",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Zemlinsky,_Alexander_von/String_Quartet_No.1,_Op.4",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Zemlinsky,_Alexander_von/String_Quartet_No.2,_Op.15",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  },
+  {
+   "compositionKey": "Zemlinsky,_Alexander_von/String_Quartet_No.3,_Op.19",
+   "scoreFiles": 1,
+   "matches": 0,
+   "matchingSplits": {},
+   "examples": []
+  }
+ ]
+}

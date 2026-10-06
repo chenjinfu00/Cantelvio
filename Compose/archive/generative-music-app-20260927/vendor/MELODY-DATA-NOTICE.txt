@@ -1,0 +1,17 @@
+Tonnetz melody model v5 — training-data notice
+
+The model was trained on an original programmatic phrase corpus and selected
+monophonic vocal excerpts from OpenScore/Lieder, licensed CC0 1.0 Universal.
+Source: https://github.com/OpenScore/Lieder
+Pinned commit: 38c5db510224d9facdc4b08d741fc788cfb58ea8
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+Credit: OpenScore Lieder contributors and the composers/editions identified in
+the source repository. No source audio recordings or lyrics were used.
+Piano harmony and key mode are inferred, not human-provided labels. The real
+excerpts are labeled classical; they do not establish jazz, pop or blues realism.
+The 15 held-out works are validation data used for checkpoint selection, not an
+untouched final test set. Prediction and structural metrics do not demonstrate
+listener preference or professional composition quality.
+
+Reproduction and limitations: docs/tonnetz-melody-v5.md in the project source.

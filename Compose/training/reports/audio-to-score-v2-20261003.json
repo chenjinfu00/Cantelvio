@@ -1,0 +1,420 @@
+{
+ "schema": "audio-to-score-eval-1",
+ "bars": 24,
+ "seed": 1,
+ "harmonyModel": true,
+ "simulation": "Evaluate audio_to_score.py on simulated transcriptions of real scores (no audio model involved).\n\nEach score of the AIlegro score database (the Lieder test split, voice + piano, and string quartets) is\n\"performed\" and \"transcribed\" by a simulation, then turned back into a score and compared with the original:\n\n  performance    a tempo that drifts beat by beat (log-tempo AR(1)) with a final ritardando, onset jitter\n                 (chords keep a common onset), notes released early by up to 20% with noisy offsets; grace notes\n                 played as short notes before their principal\n  transcription  MuScriptor-like errors per note: missed (6%), an octave or twelfth ghost (4%), a wrong\n                 neighbouring pitch (2%), a long note split in two at a chunk boundary (2%), another or a spurious\n                 instrument label (4%), plus very short blips (3% of the note count) and extra harmony-like notes\n                 of normal length (2%); no two notes of one instrument on the same pitch at once\n  beats          the true beats (quarters, dotted quarters in compound metre) with 12 ms jitter and the true\n                 downbeats; the hard-beats condition also drops 3% of the beats and adds 1% spurious ones\n  passage work   --fast-errors adds a condition in which notes less than 150 ms from another onset of their\n                 instrument are transcribed worse: missed 12%, wrong neighbour 4%, 12 ms more onset jitter",
+ "results": {
+  "lieder / no cleanup": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 11105,
+   "precision": 0.8584,
+   "recall": 0.8665,
+   "f1": 0.8624,
+   "durationAccuracy": 0.8285,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8548,
+    "shifted": 0.0513,
+    "wrongPitch": 0.0176,
+    "missing": 0.0762
+   },
+   "removed": {}
+  },
+  "lieder / rules": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10575,
+   "precision": 0.9008,
+   "recall": 0.8659,
+   "f1": 0.883,
+   "durationAccuracy": 0.8262,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8548,
+    "shifted": 0.0513,
+    "wrongPitch": 0.0191,
+    "missing": 0.0748
+   },
+   "removed": {
+    "duplicate": 38,
+    "ghost": 272,
+    "blip": 272,
+    "moved: out of range": 257,
+    "moved: more notes than the instrument plays at once": 291
+   }
+  },
+  "lieder / rules + harmony model": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10531,
+   "precision": 0.9024,
+   "recall": 0.8638,
+   "f1": 0.8827,
+   "durationAccuracy": 0.8266,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8534,
+    "shifted": 0.0513,
+    "wrongPitch": 0.0191,
+    "missing": 0.0762
+   },
+   "removed": {
+    "duplicate": 38,
+    "ghost": 272,
+    "blip": 272,
+    "moved: out of range": 257,
+    "moved: more notes than the instrument plays at once": 291,
+    "off-harmony": 45
+   }
+  },
+  "lieder (hard beats) / no cleanup": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 11139,
+   "precision": 0.808,
+   "recall": 0.8181,
+   "f1": 0.813,
+   "durationAccuracy": 0.8287,
+   "metreAccuracy": 0.8667,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8372,
+    "shifted": 0.0308,
+    "wrongPitch": 0.0323,
+    "missing": 0.0997
+   },
+   "removed": {}
+  },
+  "lieder (hard beats) / rules": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10559,
+   "precision": 0.8506,
+   "recall": 0.8165,
+   "f1": 0.8332,
+   "durationAccuracy": 0.8288,
+   "metreAccuracy": 0.8667,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8372,
+    "shifted": 0.0308,
+    "wrongPitch": 0.0323,
+    "missing": 0.0997
+   },
+   "removed": {
+    "duplicate": 40,
+    "ghost": 308,
+    "blip": 291,
+    "moved: out of range": 226,
+    "moved: more notes than the instrument plays at once": 276,
+    "too many voices": 1
+   }
+  },
+  "lieder (hard beats) / rules + harmony model": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10505,
+   "precision": 0.8533,
+   "recall": 0.8148,
+   "f1": 0.8336,
+   "durationAccuracy": 0.829,
+   "metreAccuracy": 0.8667,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8358,
+    "shifted": 0.0308,
+    "wrongPitch": 0.0323,
+    "missing": 0.1012
+   },
+   "removed": {
+    "duplicate": 40,
+    "ghost": 308,
+    "blip": 291,
+    "moved: out of range": 226,
+    "moved: more notes than the instrument plays at once": 276,
+    "off-harmony": 54,
+    "too many voices": 1
+   }
+  },
+  "lieder (fast-passage errors) / no cleanup": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 11099,
+   "precision": 0.8485,
+   "recall": 0.8561,
+   "f1": 0.8523,
+   "durationAccuracy": 0.8205,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8196,
+    "shifted": 0.0499,
+    "wrongPitch": 0.0308,
+    "missing": 0.0997
+   },
+   "removed": {
+    "too many voices": 5
+   }
+  },
+  "lieder (fast-passage errors) / rules": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10542,
+   "precision": 0.8924,
+   "recall": 0.8552,
+   "f1": 0.8734,
+   "durationAccuracy": 0.8179,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8196,
+    "shifted": 0.0499,
+    "wrongPitch": 0.0308,
+    "missing": 0.0997
+   },
+   "removed": {
+    "duplicate": 29,
+    "ghost": 311,
+    "blip": 253,
+    "moved: out of range": 271,
+    "moved: more notes than the instrument plays at once": 301,
+    "too many voices": 2
+   }
+  },
+  "lieder (fast-passage errors) / rules + harmony model": {
+   "pieces": 30,
+   "truthNotes": 11001,
+   "keptNotes": 10485,
+   "precision": 0.8942,
+   "recall": 0.8523,
+   "f1": 0.8728,
+   "durationAccuracy": 0.8177,
+   "metreAccuracy": 0.9,
+   "runs": {
+    "notes": 682,
+    "recall": 0.8167,
+    "shifted": 0.0499,
+    "wrongPitch": 0.0293,
+    "missing": 0.1041
+   },
+   "removed": {
+    "duplicate": 29,
+    "ghost": 311,
+    "blip": 253,
+    "moved: out of range": 271,
+    "moved: more notes than the instrument plays at once": 301,
+    "off-harmony": 58,
+    "too many voices": 2
+   }
+  },
+  "quartets / no cleanup": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3430,
+   "precision": 0.8813,
+   "recall": 0.8762,
+   "f1": 0.8788,
+   "durationAccuracy": 0.8511,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8516,
+    "shifted": 0.0586,
+    "wrongPitch": 0.0165,
+    "missing": 0.0733
+   },
+   "removed": {}
+  },
+  "quartets / rules": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3268,
+   "precision": 0.9244,
+   "recall": 0.8757,
+   "f1": 0.8994,
+   "durationAccuracy": 0.855,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8516,
+    "shifted": 0.0586,
+    "wrongPitch": 0.0147,
+    "missing": 0.0751
+   },
+   "removed": {
+    "blip": 81,
+    "ghost": 90,
+    "moved: out of range": 73,
+    "duplicate": 11,
+    "moved: more notes than the instrument plays at once": 5
+   }
+  },
+  "quartets / rules + harmony model": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3257,
+   "precision": 0.9257,
+   "recall": 0.8739,
+   "f1": 0.8991,
+   "durationAccuracy": 0.8544,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8516,
+    "shifted": 0.0586,
+    "wrongPitch": 0.0147,
+    "missing": 0.0751
+   },
+   "removed": {
+    "blip": 81,
+    "ghost": 90,
+    "moved: out of range": 73,
+    "duplicate": 11,
+    "moved: more notes than the instrument plays at once": 5,
+    "off-harmony": 13
+   }
+  },
+  "quartets (hard beats) / no cleanup": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3445,
+   "precision": 0.789,
+   "recall": 0.7878,
+   "f1": 0.7884,
+   "durationAccuracy": 0.8565,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.826,
+    "shifted": 0.0897,
+    "wrongPitch": 0.011,
+    "missing": 0.0733
+   },
+   "removed": {}
+  },
+  "quartets (hard beats) / rules": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3278,
+   "precision": 0.8264,
+   "recall": 0.7852,
+   "f1": 0.8053,
+   "durationAccuracy": 0.8571,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8187,
+    "shifted": 0.0934,
+    "wrongPitch": 0.011,
+    "missing": 0.0769
+   },
+   "removed": {
+    "ghost": 84,
+    "blip": 86,
+    "moved: out of range": 68,
+    "duplicate": 4,
+    "moved: more notes than the instrument plays at once": 4
+   }
+  },
+  "quartets (hard beats) / rules + harmony model": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3262,
+   "precision": 0.8292,
+   "recall": 0.7841,
+   "f1": 0.806,
+   "durationAccuracy": 0.8569,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8168,
+    "shifted": 0.0916,
+    "wrongPitch": 0.011,
+    "missing": 0.0806
+   },
+   "removed": {
+    "ghost": 84,
+    "blip": 86,
+    "moved: out of range": 68,
+    "off-harmony": 17,
+    "duplicate": 4,
+    "moved: more notes than the instrument plays at once": 4
+   }
+  },
+  "quartets (fast-passage errors) / no cleanup": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3427,
+   "precision": 0.8804,
+   "recall": 0.8745,
+   "f1": 0.8774,
+   "durationAccuracy": 0.8585,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8388,
+    "shifted": 0.0678,
+    "wrongPitch": 0.0183,
+    "missing": 0.0751
+   },
+   "removed": {
+    "too many voices": 1
+   }
+  },
+  "quartets (fast-passage errors) / rules": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3268,
+   "precision": 0.9211,
+   "recall": 0.8725,
+   "f1": 0.8961,
+   "durationAccuracy": 0.8648,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8297,
+    "shifted": 0.0678,
+    "wrongPitch": 0.0256,
+    "missing": 0.0769
+   },
+   "removed": {
+    "blip": 85,
+    "ghost": 81,
+    "moved: out of range": 70,
+    "moved: more notes than the instrument plays at once": 9,
+    "duplicate": 6
+   }
+  },
+  "quartets (fast-passage errors) / rules + harmony model": {
+   "pieces": 10,
+   "truthNotes": 3450,
+   "keptNotes": 3258,
+   "precision": 0.9245,
+   "recall": 0.873,
+   "f1": 0.898,
+   "durationAccuracy": 0.8649,
+   "metreAccuracy": 0.7,
+   "runs": {
+    "notes": 546,
+    "recall": 0.8352,
+    "shifted": 0.0678,
+    "wrongPitch": 0.0183,
+    "missing": 0.0788
+   },
+   "removed": {
+    "blip": 85,
+    "ghost": 81,
+    "moved: out of range": 70,
+    "moved: more notes than the instrument plays at once": 9,
+    "duplicate": 6,
+    "off-harmony": 10
+   }
+  }
+ },
+ "seconds": 18
+}

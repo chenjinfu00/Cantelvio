@@ -1,0 +1,190 @@
+Warm Piano · cancel
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 39, bass 15, melody 22
+
+Download WAV · warm-cancel-41977
+
+{
+  "peak": 0.242485,
+  "peakDbFS": -12.31,
+  "rms": 0.016887,
+  "rmsDbFS": -35.45,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": 0.00000208,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Indie Drive · stress
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 79, bass 32, melody 21
+
+Download WAV · indie-stress-41977
+
+{
+  "peak": 0.566563,
+  "peakDbFS": -4.94,
+  "rms": 0.080461,
+  "rmsDbFS": -21.89,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.0001156,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Open Air · stress
+
+Seed 41977 · C → Am → F → G · 35/35 samples decoded (0 failures)
+
+Events: chords 48, bass 4, melody 13
+
+Download WAV · air-stress-41977
+
+{
+  "peak": 0.499386,
+  "peakDbFS": -6.03,
+  "rms": 0.143034,
+  "rmsDbFS": -16.89,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": 0.00002823,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Indie Drive · harmony
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 79, bass 32, melody 21
+
+Download WAV · indie-harmony-41977
+
+{
+  "peak": 0.214669,
+  "peakDbFS": -13.36,
+  "rms": 0.018906,
+  "rmsDbFS": -34.47,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00000493,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Warm Piano · melody
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 39, bass 15, melody 22
+
+Download WAV · warm-melody-41977
+
+{
+  "peak": 0.146876,
+  "peakDbFS": -16.66,
+  "rms": 0.024692,
+  "rmsDbFS": -32.15,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00000268,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Velvet Jazz · bass
+
+Seed 41977 · C → F6/9 → D♭dim7 → G9 · 35/35 samples decoded (0 failures)
+
+Events: chords 49, bass 16, melody 21
+
+Download WAV · velvet-bass-41977
+
+{
+  "peak": 0.232341,
+  "peakDbFS": -12.68,
+  "rms": 0.039019,
+  "rmsDbFS": -28.17,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00007323,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Open Air · full
+
+Seed 41977 · C → Am → F → G · 35/35 samples decoded (0 failures)
+
+Events: chords 48, bass 4, melody 13
+
+Download WAV · air-full-41977
+
+{
+  "peak": 0.246846,
+  "peakDbFS": -12.15,
+  "rms": 0.062797,
+  "rmsDbFS": -24.04,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00000337,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Indie Drive · full
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 79, bass 32, melody 21
+
+Download WAV · indie-full-41977
+
+{
+  "peak": 0.354573,
+  "peakDbFS": -9.01,
+  "rms": 0.043523,
+  "rmsDbFS": -27.23,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00007679,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Velvet Jazz · full
+
+Seed 41977 · C → F6/9 → D♭dim7 → G9 · 35/35 samples decoded (0 failures)
+
+Events: chords 49, bass 16, melody 21
+
+Download WAV · velvet-full-41977
+
+{
+  "peak": 0.358259,
+  "peakDbFS": -8.92,
+  "rms": 0.05601,
+  "rmsDbFS": -25.03,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00007167,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Warm Piano · full
+
+Seed 41977 · C → Am → Dm → G7 · 35/35 samples decoded (0 failures)
+
+Events: chords 39, bass 15, melody 22
+
+Download WAV · warm-full-41977
+
+{
+  "peak": 0.352803,
+  "peakDbFS": -9.05,
+  "rms": 0.040335,
+  "rmsDbFS": -27.89,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": 0.000011,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}

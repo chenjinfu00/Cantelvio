@@ -1,0 +1,12 @@
+{
+  "downloadDate": "2026-10-04",
+  "source": {
+    "url": "https://github.com/jthickstun/anticipation",
+    "commit": "af37397922665a0fb8d474d7988b0f3755a38d45"
+  },
+  "trainingBackend": {
+    "url": "https://github.com/stanford-crfm/levanter",
+    "branch": "split_lakh",
+    "commit": "99a5c6163e620b1c4d672d63830afb07befc7cf0"
+  }
+}

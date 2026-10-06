@@ -1,0 +1,76 @@
+Open Air · free · full
+
+Seed 41977 · bar1 beat1: C (4 beats of 4) → bar2 beat1: Am (1 beats of 1) → bar2 beat2: F (3 beats of 8) → bar3 beat1: F (4 beats of 8) → bar4 beat1: F (1 beats of 8) → bar4 beat2: G (3 beats of 4) · 35/35 samples decoded (0 failures)
+
+Events: chords 48, bass 6, melody 13
+
+Download WAV · air-free-full-41977
+
+{
+  "peak": 0.255235,
+  "peakDbFS": -11.86,
+  "rms": 0.063231,
+  "rmsDbFS": -23.98,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00001409,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Indie Drive · free · full
+
+Seed 41977 · bar1 beat1: C (4 beats of 4) → bar2 beat1: Am (1 beats of 1) → bar2 beat2: Dm (2 beats of 2) → bar2 beat4: G7 (1 beats of 2) → bar3 beat1: G7 (1 beats of 2) → bar3 beat2: C (2 beats of 2) → bar3 beat4: Am (1 beats of 8) → bar4 beat1: Am (4 beats of 8) · 35/35 samples decoded (0 failures)
+
+Events: chords 77, bass 32, melody 22
+
+Download WAV · indie-free-full-41977
+
+{
+  "peak": 0.371354,
+  "peakDbFS": -8.6,
+  "rms": 0.046004,
+  "rmsDbFS": -26.74,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00007474,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Velvet Jazz · free · full
+
+Seed 41977 · bar1 beat1: C (4 beats of 4) → bar2 beat1: F6/9 (4 beats of 8) → bar3 beat1: F6/9 (4 beats of 8) → bar4 beat1: D♭dim7 (4 beats of 4) · 35/35 samples decoded (0 failures)
+
+Events: chords 49, bass 16, melody 20
+
+Download WAV · velvet-free-full-41977
+
+{
+  "peak": 0.342236,
+  "peakDbFS": -9.31,
+  "rms": 0.056441,
+  "rmsDbFS": -24.97,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": -0.00007414,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}
+Warm Piano · free · full
+
+Seed 41977 · bar1 beat1: C (4 beats of 4) → bar2 beat1: Am (1 beats of 1) → bar2 beat2: Dm (2 beats of 2) → bar2 beat4: G7 (1 beats of 2) → bar3 beat1: G7 (1 beats of 2) → bar3 beat2: C (2 beats of 2) → bar3 beat4: Em (1 beats of 4) → bar4 beat1: Em (3 beats of 4) → bar4 beat4: Am (1 beats of 8) · 35/35 samples decoded (0 failures)
+
+Events: chords 53, bass 19, melody 21
+
+Download WAV · warm-free-full-41977
+
+{
+  "peak": 0.361224,
+  "peakDbFS": -8.84,
+  "rms": 0.043459,
+  "rmsDbFS": -27.24,
+  "clippedSamples": 0,
+  "nonfiniteSamples": 0,
+  "dc": 0.00002438,
+  "last250msPeak": 0,
+  "durationSeconds": 12.435
+}

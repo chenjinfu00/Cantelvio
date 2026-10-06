@@ -1,0 +1,348 @@
+{
+  "baselineCommit": "b6bc3e7aefa4f415408566957b7b1918d32a31af",
+  "siteVersion": 91,
+  "files": [
+    {
+      "source": "public/tonnetz/improvisation.js",
+      "destination": "vendor/improvisation.js",
+      "sha256": "125ef76296b999321a773dc4e0f4a85896a923a8ebd32c1f08e3b1d4d5972a41",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/walking-bass.js",
+      "destination": "vendor/walking-bass.js",
+      "sha256": "5e46b0f2576638f9ac67628de343496ae361ee2ef6276a91d9b2570ac9a6cedb",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/harmony-models.js",
+      "destination": "vendor/lib/harmony-models.js",
+      "sha256": "69e9dccaa5f9d983885ff342805668b17ca518c0a886979e3cca5206cb480149",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/harmony-transformer.js",
+      "destination": "vendor/lib/harmony-transformer.js",
+      "sha256": "03a175b35691930bf28b31202f3e62127c36b90284cd8bcab8808ecce6bb2690",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/chord-vocabulary.js",
+      "destination": "vendor/lib/chord-vocabulary.js",
+      "sha256": "cb51be9f87b0d2434b1e5bf1ace80082aa189331b08fcd90b468af4f0dd6eeb5",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/tonality.js",
+      "destination": "vendor/lib/tonality.js",
+      "sha256": "7903bd95443f89a72d063b1e5dde36d7750504c49401ab06f4133f7560efa30f",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/melody-model.js",
+      "destination": "vendor/lib/melody-model.js",
+      "sha256": "2e24377a1d0d041628dbf20c5d274b14329660b642e2cbfd01e963de0f5621e1",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/lib/melody-transformer-weights.js",
+      "destination": "vendor/lib/melody-transformer-weights.js",
+      "sha256": "de3211e563134661b73222df781e25bcc69127c21cf8d1fc00c2602e342e1512",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/MELODY-DATA-NOTICE.txt",
+      "destination": "vendor/MELODY-DATA-NOTICE.txt",
+      "sha256": "67eed6ca4c03de4ee93827a764da4e3c8645aa0745d0ac62afa9fea59197b0f9",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/A2.mp3",
+      "destination": "media/piano/A2.mp3",
+      "sha256": "20601d890f44a3c22499c7b61f52e571795df1fe5a01fac553dded7b6379e1d4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/A3.mp3",
+      "destination": "media/piano/A3.mp3",
+      "sha256": "8e108fe228e34e32f6b4e61efff732eec53058a9e6f05a8d8e719598b132c4f9",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/A4.mp3",
+      "destination": "media/piano/A4.mp3",
+      "sha256": "a62df24a2c84cea8d18c1fa8aca7c18c877ba2b76a00a591256fa74d3ce54ac3",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/A5.mp3",
+      "destination": "media/piano/A5.mp3",
+      "sha256": "9e5cee1fe9cf68b7193623d46a27c8956e572c1ff234ca0e11599b556050dec6",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/C2.mp3",
+      "destination": "media/piano/C2.mp3",
+      "sha256": "7029a9e84f748433bc33d067ee13d37d0b866768f09ae6c7dac8e2e98e1e53ca",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/C3.mp3",
+      "destination": "media/piano/C3.mp3",
+      "sha256": "bb70dd921d81b3dda561c19b5c029292ae5a6fba1947e364bf274218ce19a9d1",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/C4.mp3",
+      "destination": "media/piano/C4.mp3",
+      "sha256": "689eaa4c2fd7f29a2cc0e386eec462156d523a87d701269e5e2458e66056f4f6",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/C5.mp3",
+      "destination": "media/piano/C5.mp3",
+      "sha256": "2f5b0f7422063010fb379e684bfdf2daa3911dcd2251413d79fa2a53029fdc30",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/C6.mp3",
+      "destination": "media/piano/C6.mp3",
+      "sha256": "0d3232edd13ba69fd5caf4a295060ae0fd533b8a1433ae0a038644d70715c907",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Ds2.mp3",
+      "destination": "media/piano/Ds2.mp3",
+      "sha256": "a106cdec93aa4e767e36809fc9cdaa6b92453fb9f18d5fc28ac4eb0f9f239ecd",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Ds3 2.mp3",
+      "destination": "media/piano/Ds3 2.mp3",
+      "sha256": "4fe73ea3f2c59a1dbfb35cff1d9d8a9e38cb12ef39a91a13083729544cdafed5",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Ds3.mp3",
+      "destination": "media/piano/Ds3.mp3",
+      "sha256": "4fe73ea3f2c59a1dbfb35cff1d9d8a9e38cb12ef39a91a13083729544cdafed5",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Ds4.mp3",
+      "destination": "media/piano/Ds4.mp3",
+      "sha256": "663e8bb3e2d0fa23a30526dcd7ab0e42609c193c07025647ef46badcf81ec211",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Ds5.mp3",
+      "destination": "media/piano/Ds5.mp3",
+      "sha256": "bf71096e653ab7ceca3914b9fd44d8c27fe83c162564c5db34bd06b94eb14b8c",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Fs2 2.mp3",
+      "destination": "media/piano/Fs2 2.mp3",
+      "sha256": "dd34c708274eeba35da1fd99fc31ef904e390ff02f6864aefe8a13261f8a8327",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Fs2.mp3",
+      "destination": "media/piano/Fs2.mp3",
+      "sha256": "dd34c708274eeba35da1fd99fc31ef904e390ff02f6864aefe8a13261f8a8327",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Fs3.mp3",
+      "destination": "media/piano/Fs3.mp3",
+      "sha256": "960fefd90f56608b7edf958dadfeca893cff5744ab9034d61e419401fe45ce9c",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Fs4.mp3",
+      "destination": "media/piano/Fs4.mp3",
+      "sha256": "613652f5c96e35736ce6a46bc4ddb6ba1076d1fb16a35a4c22c14e67efdde57c",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/Fs5.mp3",
+      "destination": "media/piano/Fs5.mp3",
+      "sha256": "ed2fdf543274ea72ddd4eb634a16356531a5f4040b2a60d34fb12a5c72cbf22f",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/NOTICE.txt",
+      "destination": "media/piano/NOTICE.txt",
+      "sha256": "54d238908992ccac10a0e9cd5d4274be19484e997bb1093343f867cffdc2002a",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/SOURCE-README.txt",
+      "destination": "media/piano/SOURCE-README.txt",
+      "sha256": "04ddba91bcafcb4c53dee7b004479f79af47bb92574f06bbe741b00c3ca64e0e",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/piano/manifest.json",
+      "destination": "media/piano/manifest.json",
+      "sha256": "4f7fc6468e80f5d55840300cfc312b35993eb73c8f04d4ce7f9597773a5c03cb",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/As1.mp3",
+      "destination": "media/bass/As1.mp3",
+      "sha256": "45bdecf48711f9f0455b2256d1b1b3bfa41a1950d70eab64ef2a28da6c2e605b",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/As2 2.mp3",
+      "destination": "media/bass/As2 2.mp3",
+      "sha256": "c6f79e3e05bad4e41e2858b3acbd3edbee4e399529a7a97b9ade411080eac4b4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/As2.mp3",
+      "destination": "media/bass/As2.mp3",
+      "sha256": "c6f79e3e05bad4e41e2858b3acbd3edbee4e399529a7a97b9ade411080eac4b4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/Cs2.mp3",
+      "destination": "media/bass/Cs2.mp3",
+      "sha256": "7558885c23cf0a313c9651b7b2e11fd297902bb063db6b003748156ca9c07e9f",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/Cs3.mp3",
+      "destination": "media/bass/Cs3.mp3",
+      "sha256": "5bd48a1633be2aae2d1032e7c304afa98568d947dc0bc0efa630bc2569a4dc7d",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/E1.mp3",
+      "destination": "media/bass/E1.mp3",
+      "sha256": "41fd91721398a47c6afa030feb324a1cd981ffac7da9bd313b775ad4f7b1a24c",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/E2.mp3",
+      "destination": "media/bass/E2.mp3",
+      "sha256": "6a3c12185068beb22fc3225e1f2216f1f7440f4ba32a97dc8476c068df8307e8",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/E3.mp3",
+      "destination": "media/bass/E3.mp3",
+      "sha256": "489482662d6fe265fb306f0acbad35ad775c699c7d7ae5485c3b3f583234d4a7",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/G1.mp3",
+      "destination": "media/bass/G1.mp3",
+      "sha256": "fd14e6e099056b6f0ff4433ef1d86358bffe7916f90c7ed2c6a7e2b0b4186cc6",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/G2.mp3",
+      "destination": "media/bass/G2.mp3",
+      "sha256": "b5990f64a7094c946b0e88a47280649bab1ea0bff8f1ae1c420a97c1c2996cd2",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/NOTICE.txt",
+      "destination": "media/bass/NOTICE.txt",
+      "sha256": "a2bca77e98e6b25113617e76c36f52a856f7580c07a5b4ec8a04a335281f97b5",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/bass/manifest.json",
+      "destination": "media/bass/manifest.json",
+      "sha256": "33ce9aaa7dc9ebbe95740c150cdc3b5ee8f9960b9e6f8c7e9248c027673981f4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/A3 2.mp3",
+      "destination": "media/guitar/A3 2.mp3",
+      "sha256": "b840f271794efc3efcce886d71d1ee57cf6d524b6da1be15b1429f6bc8fe2f45",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/A3.mp3",
+      "destination": "media/guitar/A3.mp3",
+      "sha256": "b840f271794efc3efcce886d71d1ee57cf6d524b6da1be15b1429f6bc8fe2f45",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/A4.mp3",
+      "destination": "media/guitar/A4.mp3",
+      "sha256": "a817ca1ebdbdc32d0011044c41d906438cc1b0358a0adb6373f2f26d140e5cb2",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/C4.mp3",
+      "destination": "media/guitar/C4.mp3",
+      "sha256": "b2252b95bbea34faba9d7800c1ab1c819d548d18d0cbada7882395fdc34e2617",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/C5.mp3",
+      "destination": "media/guitar/C5.mp3",
+      "sha256": "6b0671195f6d82b2fdf8afab8d1883554d2c0fb7d99cc935adc609c2816397f3",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Ds4.mp3",
+      "destination": "media/guitar/Ds4.mp3",
+      "sha256": "0d9d732faa3ec958c9e537a8bcc4421077150362617266636407ee7a93ca11eb",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Ds5 2.mp3",
+      "destination": "media/guitar/Ds5 2.mp3",
+      "sha256": "f8c690e0fa3fd235196673e6ef32a5929534c70bc9eaaa5a7632e39cca263cf4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Ds5.mp3",
+      "destination": "media/guitar/Ds5.mp3",
+      "sha256": "f8c690e0fa3fd235196673e6ef32a5929534c70bc9eaaa5a7632e39cca263cf4",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Fs3.mp3",
+      "destination": "media/guitar/Fs3.mp3",
+      "sha256": "c8ac921a460d64d162a79e0c7174ddabec7b7d501ddcf875efe81c84ae160b8e",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Fs4.mp3",
+      "destination": "media/guitar/Fs4.mp3",
+      "sha256": "ff8045e8c863e3cad7a6094f32b672893ddc98a00de88460ef114d99f3e7c016",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/Fs5.mp3",
+      "destination": "media/guitar/Fs5.mp3",
+      "sha256": "ded100a22902ef51c6ef634dfcefdedd278b96322f5d7b31dd8d2f400b78d0ba",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/NOTICE.txt",
+      "destination": "media/guitar/NOTICE.txt",
+      "sha256": "bc7808e25886780e60e5028ee7906082725d5f10f354f3cac055008817e9344e",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/media/guitar/manifest.json",
+      "destination": "media/guitar/manifest.json",
+      "sha256": "dfcb94ca0cff4dd504a051a6dd6e4ec06c3f1df97fa0f6d5b83f98751aed75eb",
+      "modified": false
+    },
+    {
+      "source": "public/tonnetz/accompaniment.js",
+      "destination": "vendor/accompaniment.js",
+      "sha256": "e4f398e02d23d0ab64db07f9193ce9a832da1f8bf302ae15364938d33b1986af",
+      "modified": false
+    }
+  ]
+}

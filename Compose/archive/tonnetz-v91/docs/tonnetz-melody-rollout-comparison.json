@@ -1,0 +1,218 @@
+{
+  "protocol": {
+    "seeds": 12,
+    "styles": [
+      "pop",
+      "jazz",
+      "blues",
+      "classical",
+      "ambient"
+    ],
+    "bars": 8,
+    "progressions": [
+      [
+        "C",
+        "G",
+        "Am",
+        "F",
+        "C",
+        "G",
+        "F",
+        "C"
+      ],
+      [
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Am7",
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Cmaj7"
+      ],
+      [
+        "C7",
+        "F7",
+        "C7",
+        "G7",
+        "F7",
+        "G7",
+        "C7",
+        "C7"
+      ],
+      [
+        "Am",
+        "F",
+        "Dm",
+        "E7",
+        "Am",
+        "F",
+        "E7",
+        "Am"
+      ]
+    ],
+    "interpretation": "Descriptive free-running measurements, not listening-quality scores. Rhythm/motif recurrence are desired structural signals, not proof of musicality."
+  },
+  "v4": {
+    "styles": {
+      "pop": {
+        "eventsPerBar": 4.46875,
+        "maxConsecutiveAttacks": 9,
+        "phrasesWithFiveRepeatedAttacks": 3,
+        "stepwiseRate": 0.8369304556354916,
+        "repeatRate": 0.23261390887290168,
+        "nonChordRate": 0.32634032634032634,
+        "stepResolutionRate": 0.7714285714285715,
+        "cadenceBreathSeconds": 0.7000722693929179,
+        "rhythmReturnJaccard": 0.6027777777777777,
+        "contourReturnJaccard": 0.23611111111111113,
+        "velocityRange": 0.17914569134783775,
+        "meanBarInferenceMs": 1.9942509270833317,
+        "p95BarInferenceMs": 2.8782919999999876
+      },
+      "jazz": {
+        "eventsPerBar": 6.34375,
+        "maxConsecutiveAttacks": 7,
+        "phrasesWithFiveRepeatedAttacks": 4,
+        "stepwiseRate": 0.8341708542713567,
+        "repeatRate": 0.21105527638190955,
+        "nonChordRate": 0.3973727422003284,
+        "stepResolutionRate": 0.6611570247933884,
+        "cadenceBreathSeconds": 0.7375526034340948,
+        "rhythmReturnJaccard": 0.6078869047619048,
+        "contourReturnJaccard": 0.20684523809523805,
+        "velocityRange": 0.18108053854305375,
+        "meanBarInferenceMs": 2.548822979166665,
+        "p95BarInferenceMs": 3.706707999999992
+      },
+      "blues": {
+        "eventsPerBar": 4.59375,
+        "maxConsecutiveAttacks": 5,
+        "phrasesWithFiveRepeatedAttacks": 1,
+        "stepwiseRate": 0.7062937062937062,
+        "repeatRate": 0.17016317016317017,
+        "nonChordRate": 0.42857142857142855,
+        "stepResolutionRate": 0.5132275132275133,
+        "cadenceBreathSeconds": 0.6999615161885432,
+        "rhythmReturnJaccard": 0.6268849206349206,
+        "contourReturnJaccard": 0.18958333333333335,
+        "velocityRange": 0.1793324715348279,
+        "meanBarInferenceMs": 1.37696570833333,
+        "p95BarInferenceMs": 1.8814159999999447
+      },
+      "classical": {
+        "eventsPerBar": 5.90625,
+        "maxConsecutiveAttacks": 5,
+        "phrasesWithFiveRepeatedAttacks": 2,
+        "stepwiseRate": 0.8108108108108109,
+        "repeatRate": 0.1837837837837838,
+        "nonChordRate": 0.36507936507936506,
+        "stepResolutionRate": 0.7053140096618358,
+        "cadenceBreathSeconds": 0.67507622756866,
+        "rhythmReturnJaccard": 0.6127976190476191,
+        "contourReturnJaccard": 0.32549603174603176,
+        "velocityRange": 0.1815004777194141,
+        "meanBarInferenceMs": 1.9403102916666544,
+        "p95BarInferenceMs": 3.051290999999992
+      },
+      "ambient": {
+        "eventsPerBar": 3.5416666666666665,
+        "maxConsecutiveAttacks": 9,
+        "phrasesWithFiveRepeatedAttacks": 5,
+        "stepwiseRate": 0.7560975609756098,
+        "repeatRate": 0.42073170731707316,
+        "nonChordRate": 0.14705882352941177,
+        "stepResolutionRate": 0.7,
+        "cadenceBreathSeconds": 0.6375001399281873,
+        "rhythmReturnJaccard": 0.6722222222222222,
+        "contourReturnJaccard": 0.13888888888888887,
+        "velocityRange": 0.17983046808471828,
+        "meanBarInferenceMs": 1.0143216354166629,
+        "p95BarInferenceMs": 1.6753749999999172
+      }
+    },
+    "totalEvents": 2386,
+    "meanEventInferenceMs": 0.3570697686504601
+  },
+  "v5": {
+    "styles": {
+      "pop": {
+        "eventsPerBar": 4.78125,
+        "maxConsecutiveAttacks": 3,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.7404921700223713,
+        "repeatRate": 0.17225950782997762,
+        "nonChordRate": 0.2701525054466231,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.8210074428931601,
+        "rhythmReturnJaccard": 0.7435515873015873,
+        "contourReturnJaccard": 0.3034722222222222,
+        "velocityRange": 0.18857614850412016,
+        "meanBarInferenceMs": 3.6841831875000026,
+        "p95BarInferenceMs": 5.2316249999998945
+      },
+      "jazz": {
+        "eventsPerBar": 6.114583333333333,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.7147826086956521,
+        "repeatRate": 0.17565217391304347,
+        "nonChordRate": 0.24361158432708688,
+        "stepResolutionRate": 0.993006993006993,
+        "cadenceBreathSeconds": 0.8502305585071069,
+        "rhythmReturnJaccard": 0.7533234126984126,
+        "contourReturnJaccard": 0.3275793650793651,
+        "velocityRange": 0.19184726274669162,
+        "meanBarInferenceMs": 3.530458312499988,
+        "p95BarInferenceMs": 4.854749999999967
+      },
+      "blues": {
+        "eventsPerBar": 5.135416666666667,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.6943866943866944,
+        "repeatRate": 0.23492723492723494,
+        "nonChordRate": 0.1947261663286004,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.8531767103823674,
+        "rhythmReturnJaccard": 0.7677579365079364,
+        "contourReturnJaccard": 0.3284722222222222,
+        "velocityRange": 0.18865382519081467,
+        "meanBarInferenceMs": 2.8876510729166776,
+        "p95BarInferenceMs": 3.8158330000001115
+      },
+      "classical": {
+        "eventsPerBar": 4.5,
+        "maxConsecutiveAttacks": 3,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.780952380952381,
+        "repeatRate": 0.23809523809523808,
+        "nonChordRate": 0.24305555555555555,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.5852819900573386,
+        "rhythmReturnJaccard": 0.624702380952381,
+        "contourReturnJaccard": 0.20486111111111108,
+        "velocityRange": 0.21497876364783716,
+        "meanBarInferenceMs": 2.5293759270833385,
+        "p95BarInferenceMs": 3.816958999999997
+      },
+      "ambient": {
+        "eventsPerBar": 3.0833333333333335,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.6443661971830986,
+        "repeatRate": 0.1619718309859155,
+        "nonChordRate": 0.20270270270270271,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.7723974709044931,
+        "rhythmReturnJaccard": 0.7833333333333332,
+        "contourReturnJaccard": 0.20833333333333334,
+        "velocityRange": 0.17973945029556715,
+        "meanBarInferenceMs": 1.6119613854166392,
+        "p95BarInferenceMs": 2.6294160000002194
+      }
+    },
+    "totalEvents": 2267,
+    "meanEventInferenceMs": 0.6031709170710181
+  }
+}

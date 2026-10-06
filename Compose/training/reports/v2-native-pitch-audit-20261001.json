@@ -1,0 +1,717 @@
+{
+  "checkpoint": "four-pillar-v2-preview-20261001-step19193",
+  "total": 71,
+  "passed": 71,
+  "rows": [
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 52,
+      "scheduledMidi": 52,
+      "expectedHz": 164.814,
+      "measuredHz": 164.811,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 64,
+      "scheduledMidi": 64,
+      "expectedHz": 329.628,
+      "measuredHz": 329.631,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 36,
+      "scheduledMidi": 36,
+      "expectedHz": 65.406,
+      "measuredHz": 65.41,
+      "cents": 0.09,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 55,
+      "scheduledMidi": 55,
+      "expectedHz": 195.998,
+      "measuredHz": 196,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 64,
+      "scheduledMidi": 64,
+      "expectedHz": 329.628,
+      "measuredHz": 329.631,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 60,
+      "scheduledMidi": 60,
+      "expectedHz": 261.626,
+      "measuredHz": 261.63,
+      "cents": 0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 60,
+      "scheduledMidi": 60,
+      "expectedHz": 261.626,
+      "measuredHz": 261.63,
+      "cents": 0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 60,
+      "scheduledMidi": 60,
+      "expectedHz": 261.626,
+      "measuredHz": 261.63,
+      "cents": 0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 71,
+      "scheduledMidi": 71,
+      "expectedHz": 493.883,
+      "measuredHz": 493.882,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 74,
+      "scheduledMidi": 74,
+      "expectedHz": 587.33,
+      "measuredHz": 587.33,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 77,
+      "scheduledMidi": 77,
+      "expectedHz": 698.456,
+      "measuredHz": 698.457,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 54,
+      "scheduledMidi": 54,
+      "expectedHz": 184.997,
+      "measuredHz": 184.994,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 79,
+      "scheduledMidi": 79,
+      "expectedHz": 783.991,
+      "measuredHz": 783.99,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 76,
+      "scheduledMidi": 76,
+      "expectedHz": 659.255,
+      "measuredHz": 659.254,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 31,
+      "scheduledMidi": 31,
+      "expectedHz": 48.999,
+      "measuredHz": 49,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 48,
+      "scheduledMidi": 48,
+      "expectedHz": 130.813,
+      "measuredHz": 130.811,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 52,
+      "scheduledMidi": 52,
+      "expectedHz": 164.814,
+      "measuredHz": 164.811,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 59,
+      "scheduledMidi": 59,
+      "expectedHz": 246.942,
+      "measuredHz": 246.942,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 40,
+      "scheduledMidi": 40,
+      "expectedHz": 82.407,
+      "measuredHz": 82.411,
+      "cents": 0.09,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 62,
+      "scheduledMidi": 62,
+      "expectedHz": 293.665,
+      "measuredHz": 293.66,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 57,
+      "scheduledMidi": 57,
+      "expectedHz": 220,
+      "measuredHz": 219.995,
+      "cents": -0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 55,
+      "scheduledMidi": 55,
+      "expectedHz": 195.998,
+      "measuredHz": 196,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 76,
+      "scheduledMidi": 76,
+      "expectedHz": 659.255,
+      "measuredHz": 659.254,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 67,
+      "scheduledMidi": 67,
+      "expectedHz": 391.995,
+      "measuredHz": 391.991,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 70,
+      "scheduledMidi": 70,
+      "expectedHz": 466.164,
+      "measuredHz": 466.166,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 67,
+      "scheduledMidi": 67,
+      "expectedHz": 391.995,
+      "measuredHz": 391.991,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 65,
+      "scheduledMidi": 65,
+      "expectedHz": 349.228,
+      "measuredHz": 349.225,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 74,
+      "scheduledMidi": 74,
+      "expectedHz": 587.33,
+      "measuredHz": 587.33,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 29,
+      "scheduledMidi": 29,
+      "expectedHz": 43.654,
+      "measuredHz": 43.656,
+      "cents": 0.11,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 50,
+      "scheduledMidi": 50,
+      "expectedHz": 146.832,
+      "measuredHz": 146.831,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 34,
+      "scheduledMidi": 34,
+      "expectedHz": 58.27,
+      "measuredHz": 58.266,
+      "cents": -0.12,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 61,
+      "scheduledMidi": 61,
+      "expectedHz": 277.183,
+      "measuredHz": 277.18,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 49,
+      "scheduledMidi": 49,
+      "expectedHz": 138.591,
+      "measuredHz": 138.594,
+      "cents": 0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 61,
+      "scheduledMidi": 61,
+      "expectedHz": 277.183,
+      "measuredHz": 277.18,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 73,
+      "scheduledMidi": 73,
+      "expectedHz": 554.365,
+      "measuredHz": 554.37,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 49,
+      "scheduledMidi": 49,
+      "expectedHz": 138.591,
+      "measuredHz": 138.594,
+      "cents": 0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 59,
+      "scheduledMidi": 59,
+      "expectedHz": 246.942,
+      "measuredHz": 246.942,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 56,
+      "scheduledMidi": 56,
+      "expectedHz": 207.652,
+      "measuredHz": 207.657,
+      "cents": 0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 83,
+      "scheduledMidi": 83,
+      "expectedHz": 987.767,
+      "measuredHz": 987.766,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 84,
+      "scheduledMidi": 84,
+      "expectedHz": 1046.502,
+      "measuredHz": 1046.502,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 81,
+      "scheduledMidi": 81,
+      "expectedHz": 880,
+      "measuredHz": 880,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 69,
+      "scheduledMidi": 69,
+      "expectedHz": 440,
+      "measuredHz": 439.999,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 63,
+      "scheduledMidi": 63,
+      "expectedHz": 311.127,
+      "measuredHz": 311.131,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 58,
+      "scheduledMidi": 58,
+      "expectedHz": 233.082,
+      "measuredHz": 233.084,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 58,
+      "scheduledMidi": 58,
+      "expectedHz": 233.082,
+      "measuredHz": 233.084,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 72,
+      "scheduledMidi": 72,
+      "expectedHz": 523.251,
+      "measuredHz": 523.25,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 80,
+      "scheduledMidi": 80,
+      "expectedHz": 830.609,
+      "measuredHz": 830.61,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 68,
+      "scheduledMidi": 68,
+      "expectedHz": 415.305,
+      "measuredHz": 415.304,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 71,
+      "scheduledMidi": 71,
+      "expectedHz": 493.883,
+      "measuredHz": 493.882,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 56,
+      "scheduledMidi": 56,
+      "expectedHz": 207.652,
+      "measuredHz": 207.657,
+      "cents": 0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 72,
+      "scheduledMidi": 72,
+      "expectedHz": 523.251,
+      "measuredHz": 523.25,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 69,
+      "scheduledMidi": 69,
+      "expectedHz": 440,
+      "measuredHz": 439.999,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 44,
+      "scheduledMidi": 44,
+      "expectedHz": 103.826,
+      "measuredHz": 103.824,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 32,
+      "scheduledMidi": 32,
+      "expectedHz": 51.913,
+      "measuredHz": 51.911,
+      "cents": -0.06,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 54,
+      "scheduledMidi": 54,
+      "expectedHz": 184.997,
+      "measuredHz": 184.994,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 78,
+      "scheduledMidi": 78,
+      "expectedHz": 739.989,
+      "measuredHz": 739.984,
+      "cents": -0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 51,
+      "scheduledMidi": 51,
+      "expectedHz": 155.563,
+      "measuredHz": 155.566,
+      "cents": 0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 66,
+      "scheduledMidi": 66,
+      "expectedHz": 369.994,
+      "measuredHz": 369.996,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 62,
+      "scheduledMidi": 62,
+      "expectedHz": 293.665,
+      "measuredHz": 293.66,
+      "cents": -0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 81,
+      "scheduledMidi": 81,
+      "expectedHz": 880,
+      "measuredHz": 880,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 46,
+      "scheduledMidi": 46,
+      "expectedHz": 116.541,
+      "measuredHz": 116.541,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 82,
+      "scheduledMidi": 82,
+      "expectedHz": 932.328,
+      "measuredHz": 932.331,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "woodwinds",
+      "modelMidi": 65,
+      "scheduledMidi": 65,
+      "expectedHz": 349.228,
+      "measuredHz": 349.225,
+      "cents": -0.02,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 43,
+      "scheduledMidi": 43,
+      "expectedHz": 97.999,
+      "measuredHz": 97.999,
+      "cents": 0.01,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 59,
+      "scheduledMidi": 59,
+      "expectedHz": 246.942,
+      "measuredHz": 246.942,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 38,
+      "scheduledMidi": 38,
+      "expectedHz": 73.416,
+      "measuredHz": 73.415,
+      "cents": -0.04,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "low_strings",
+      "modelMidi": 53,
+      "scheduledMidi": 53,
+      "expectedHz": 174.614,
+      "measuredHz": 174.617,
+      "cents": 0.03,
+      "pass": true
+    },
+    {
+      "source": "actual model note",
+      "group": "keys",
+      "modelMidi": 77,
+      "scheduledMidi": 77,
+      "expectedHz": 698.456,
+      "measuredHz": 698.457,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "audio-engine control",
+      "group": "brass",
+      "modelMidi": 69,
+      "scheduledMidi": 69,
+      "expectedHz": 440,
+      "measuredHz": 439.999,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "audio-engine control",
+      "group": "high_strings",
+      "modelMidi": 69,
+      "scheduledMidi": 69,
+      "expectedHz": 440,
+      "measuredHz": 439.999,
+      "cents": 0,
+      "pass": true
+    },
+    {
+      "source": "audio-engine control",
+      "group": "percussion",
+      "modelMidi": 69,
+      "scheduledMidi": 69,
+      "expectedHz": 440,
+      "measuredHz": 439.999,
+      "cents": 0,
+      "pass": true
+    }
+  ]
+}

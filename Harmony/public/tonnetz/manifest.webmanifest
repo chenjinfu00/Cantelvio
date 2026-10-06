@@ -1,0 +1,20 @@
+{
+  "name": "Tonnetz · Isomorphic keyboard",
+  "short_name": "Tonnetz",
+  "description": "A multi-layout, multi-touch isomorphic keyboard instrument designed for iPad",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#061117",
+  "theme_color": "#07141b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

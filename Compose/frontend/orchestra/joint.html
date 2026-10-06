@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171e1b">
+  <title>AIlegro · Joint-model orchestra prototype</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./joint.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="../"><span class="brand-mark">♫</span><span>AI<span class="brand-accent">legro</span><small>JOINT ORCHESTRA</small></span></a>
+      <div class="top-actions"><a class="console-link" href="./" data-en="← Five-model comparison" data-zh="← 返回五组模型对比">← Five-model comparison</a><button id="language" type="button">中文</button></div>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="intro-copy">
+          <p class="overline"><span class="live-dot"></span><span data-en="OLD JOINT MODEL · SIX INSTRUMENT GROUPS" data-zh="旧四轨模型 · 六组乐器">OLD JOINT MODEL · SIX INSTRUMENT GROUPS</span></p>
+          <h1 data-en="Keep the harmony. Grow the orchestra." data-zh="保留旧模型的和声，扩展成管弦乐。">Keep the harmony. Grow the orchestra.</h1>
+          <p class="intro-text" data-en="The original R/H/B/M Transformer still writes the rhythm, real chords, bass and melody. A separate, deterministic prototype distributes those notes among six groups for comparison." data-zh="原来的 R/H/B/M Transformer 仍负责节奏、真实和弦、低音与旋律；一个独立的确定性编配原型把这些音符分给六组乐器，供你对比试听。">The original R/H/B/M Transformer still writes the rhythm, real chords, bass and melody. A separate, deterministic prototype distributes those notes among six groups for comparison.</p>
+        </div>
+        <div class="intro-note"><span class="note-number">PROTOTYPE / 原型</span><span data-en="The six-group mapping is not yet a trained orchestration model. Existing model weights are unchanged. Browser synthesis is a sketch, not final orchestral sound." data-zh="六组分配尚不是训练出来的编配模型。现有权重未改；浏览器音色仅供草稿试听。">The six-group mapping is not yet a trained orchestration model. Existing model weights are unchanged. Browser synthesis is a sketch, not final orchestral sound.</span></div>
+      </section>
+      <div class="joint-layout">
+        <section class="panel">
+          <div class="section-head"><span class="section-number">01</span><div><p class="eyebrow" data-en="MODEL + PERFORMANCE" data-zh="模型与演奏">MODEL + PERFORMANCE</p><h2 data-en="Shape the score" data-zh="设置乐谱">Shape the score</h2></div></div>
+          <div class="joint-controls">
+            <label class="control"><span data-en="Style" data-zh="风格">Style</span><select id="style"><option value="lieder" data-en="Art song · real scores" data-zh="艺术歌曲 · 真实乐谱">Art song · real scores</option><option value="classical" data-en="Classical · synthetic" data-zh="古典 · 合成训练">Classical · synthetic</option><option value="pop" data-en="Pop · synthetic" data-zh="流行 · 合成训练">Pop · synthetic</option><option value="jazz" data-en="Jazz · synthetic" data-zh="爵士 · 合成训练">Jazz · synthetic</option><option value="blues" data-en="Blues/rock · synthetic" data-zh="布鲁斯／摇滚 · 合成训练">Blues/rock · synthetic</option><option value="ambient" data-en="Ambient · synthetic" data-zh="氛围 · 合成训练">Ambient · synthetic</option></select></label>
+            <label class="control"><span data-en="Key" data-zh="调性">Key</span><select id="key"><option value="0">C</option><option value="1">C♯</option><option value="2">D</option><option value="3">E♭</option><option value="4">E</option><option value="5">F</option><option value="6">F♯</option><option value="7">G</option><option value="8">A♭</option><option value="9">A</option><option value="10">B♭</option><option value="11">B</option></select></label>
+            <label class="control"><span data-en="Mode" data-zh="调式">Mode</span><select id="mode"><option value="major" data-en="Major" data-zh="大调">Major</option><option value="minor" data-en="Minor" data-zh="小调">Minor</option></select></label>
+            <label class="control"><span data-en="Chord timing" data-zh="和弦变化">Chord timing</span><select id="changeMode"><option value="free" data-en="Free · model decides" data-zh="自由 · 模型决定">Free · model decides</option><option value="bar" data-en="Every bar" data-zh="每小节">Every bar</option></select></label>
+            <label class="control"><span data-en="Seed" data-zh="随机种子">Seed</span><input id="seed" type="number" value="41977" min="0" max="999999999" step="1"></label>
+            <label class="control"><span><span data-en="Tempo" data-zh="速度">Tempo</span><output id="tempoValue">96 BPM</output></span><input id="tempo" type="range" min="60" max="160" value="96" step="1"></label>
+            <label class="control"><span><span data-en="Harmony temperature" data-zh="和声温度">Harmony temperature</span><output id="harmonyTValue">0.80</output></span><input id="harmonyT" type="range" min="0.5" max="1.3" value="0.8" step="0.05"></label>
+            <label class="control"><span><span data-en="Melody temperature" data-zh="旋律温度">Melody temperature</span><output id="melodyTValue">0.80</output></span><input id="melodyT" type="range" min="0.5" max="1.3" value="0.8" step="0.05"></label>
+            <label class="control"><span><span data-en="Density" data-zh="密度">Density</span><output id="densityValue">0.50</output></span><input id="density" type="range" min="0" max="1" value="0.5" step="0.05"></label>
+          </div>
+          <div class="groups-head"><span data-en="Six instrument groups" data-zh="六组乐器">Six instrument groups</span><small data-en="Auto → On → Off" data-zh="自动 → 开启 → 关闭">Auto → On → Off</small></div>
+          <div id="groupPresets" class="group-presets"><button type="button" data-preset="orchestra" data-en="Orchestra" data-zh="常规编制">Orchestra</button><button type="button" data-preset="strings" data-en="Strings" data-zh="弦乐">Strings</button><button type="button" data-preset="winds" data-en="Winds + brass" data-zh="木管＋铜管">Winds + brass</button><button type="button" data-preset="rhythm" data-en="Percussion + harp" data-zh="打击乐＋竖琴">Percussion + harp</button><button type="button" data-preset="full" data-en="All on" data-zh="全部开启">All on</button></div>
+          <div id="groupControls" class="group-controls"></div>
+          <p class="group-explainer" data-en="On permits a group to play; Off excludes it; Auto varies its presence by bar. During continuous play, group and tempo changes affect the next prepared segment. Other settings require a restart." data-zh="开启允许该组演奏；关闭排除该组；自动会逐小节变换。连续演奏时，乐器组合和速度用于下一段；其他参数需要停止后重新开始。">On permits a group to play; Off excludes it; Auto varies its presence by bar. During continuous play, group and tempo changes affect the next prepared segment. Other settings require a restart.</p>
+        </section>
+        <div class="right-column">
+          <section class="panel live">
+            <div class="section-head live-head"><span class="section-number">02</span><div><p class="eyebrow" data-en="CONTINUOUS PERFORMANCE" data-zh="连续演奏">CONTINUOUS PERFORMANCE</p><h2 data-en="Real chords, continuously" data-zh="真实和弦，持续演奏">Real chords, continuously</h2></div><span id="status" class="status" role="status">Stopped</span></div>
+            <div class="live-actions"><button id="start" class="primary" type="button" data-en="▶ Start continuous play" data-zh="▶ 开始连续演奏">▶ Start continuous play</button><button id="stop" class="secondary" type="button" disabled data-en="■ Stop" data-zh="■ 停止">■ Stop</button><span id="now" class="live-now" data-en="No bars playing" data-zh="尚未播放">No bars playing</span></div>
+            <div class="live-chart-head"><span class="eyebrow" data-en="MODEL CHORDS · 2 × 4 BARS" data-zh="模型直接生成的和弦 · 两排各四小节">MODEL CHORDS · 2 × 4 BARS</span><small data-en="The labels match the H stream, not estimated from notes" data-zh="和弦来自 H 轨，并非从音符推测">The labels match the H stream, not estimated from notes</small></div>
+            <div id="chart" class="live-chart"></div>
+            <p class="live-caveat" data-en="This is an orchestration bridge for listening and comparison. It keeps the old model intact while we evaluate whether a learned six-group layer is worth training." data-zh="这是用于试听比较的编配桥接原型。旧模型保持不变；我们会用它判断是否值得训练六组编配层。">This is an orchestration bridge for listening and comparison. It keeps the old model intact while we evaluate whether a learned six-group layer is worth training.</p>
+          </section>
+          <section class="panel stage">
+            <div class="section-head"><span class="section-number">03</span><div><p class="eyebrow" data-en="EIGHT-BAR PREVIEW" data-zh="八小节试听">EIGHT-BAR PREVIEW</p><h2 data-en="Hear and inspect a passage" data-zh="试听并查看片段">Hear and inspect a passage</h2></div></div>
+            <div class="generation-actions"><button id="preview" class="primary" type="button" data-en="Generate eight bars" data-zh="生成八小节">Generate eight bars</button><a id="wav" class="download disabled" aria-disabled="true" data-en="↓ Download WAV" data-zh="↓ 下载 WAV">↓ Download WAV</a></div>
+            <div class="playback-row"><audio id="player" controls preload="none" aria-label="Joint orchestral preview"></audio></div>
+            <p class="preview-note" data-en="Each row is one group. The note map and chart show the same generated passage." data-zh="每行代表一组乐器；音符图和和弦谱对应同一段生成音乐。">Each row is one group. The note map and chart show the same generated passage.</p>
+            <div class="roll-viewport"><canvas id="roll" aria-label="Six-group note map"></canvas></div>
+            <div id="previewChart" class="live-chart preview-chart"></div>
+          </section>
+        </div>
+      </div>
+      <footer class="page-footer"><p data-en="The original joint model is unchanged. This group arrangement is rule-based and the orchestral timbres are browser sketches. The original model's CC0 score provenance remains separate from the experimental SymphonyNet data." data-zh="旧联合模型未改动。六组编配目前基于规则，管弦音色是浏览器草稿。旧模型的 CC0 乐谱来源与实验性 SymphonyNet 数据彼此独立。">The original joint model is unchanged. This group arrangement is rule-based and the orchestral timbres are browser sketches. The original model's CC0 score provenance remains separate from the experimental SymphonyNet data.</p></footer>
+    </main>
+  </div>
+  <script type="module" src="./joint-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+AIlegro continued joint model — runtime, provenance and training-data notice
+
+Homepage runtime assets (browser inference only):
+- vendor/lib/joint-continued-weights.js: R/H/B/M StructuredJoint backbone,
+  selected from training/runs/joint-continued-expression-v1/best-base.pt,
+  SHA-256 e2bde38d02d0ca957e7841b23a4d7e3502d8aaeb2ba3a8396e1bba08307c6ebd.
+- vendor/lib/joint-expression-weights.js: exact-note expression sidecar,
+  selected at the same step (42,377) from that run's best.pt. This predicts
+  onset and duration fractions, pitch, tuplet ratio label and notated dynamics.
+- vendor/lib/joint-arranger-weights.js: learned six-group note classifier,
+  selected at step 202,600 from
+  training/runs/joint-continued-arrangement-v1/best.pt,
+  SHA-256 c1f72410dacbddd0f96547dcbbc0a363f8c54562783fb499c2386a68eefc2bbe.
+  It assigns already-written notes to groups; it does not generate new voices
+  and has no supervised role or Walk labels.
+
+The previous backbone, vendor/lib/joint-weights.js, remains in the project for
+historical tests and recovery but is not imported by the homepage. Its source
+checkpoint is training/runs/joint-v1/structured/model.pt, SHA-256
+8b269c4a6e4e4abd8ef3e2825743451da9c965155403b53a94115486fcce5059.
+It originated in project-authored synthetic phrases from the earlier rule
+system and OpenScore Lieder. Synthetic pop/jazz/etc conditions are not offered
+in the current UI; future styles should receive separate fine-tuning.
+
+Training data:
+1. Project-authored synthetic phrases for original pretraining.
+2. OpenScore Lieder, CC0 1.0 Universal, for original and continued four-track
+   training and MusicXML-derived expression fields.
+   Source: https://github.com/OpenScore/Lieder
+   Pinned source commit: 38c5db510224d9facdc4b08d741fc788cfb58ea8
+   License: https://creativecommons.org/publicdomain/zero/1.0/
+   Local-key and harmony labels are bundled automatic AugmentedNet analyses.
+   No audio recordings or lyrics were used.
+3. The arrangement classifier also used prepared orchestral MIDI and the
+   project's curated local MIDI selection. Per-file redistribution rights for
+   some MIDI are unresolved. Keep local research/previews separate from any
+   commercial or public model release until provenance is reviewed.
+
+Credit OpenScore Lieder contributors and the composers/editions identified in
+the source repository. The Lieder validation split selected checkpoints; test
+split was not used for training/selection. Model losses and browser parity do
+not establish listener preference, score quality or reliable tuplets in every
+generated passage. MIDI velocity is not a notated dynamic mark.

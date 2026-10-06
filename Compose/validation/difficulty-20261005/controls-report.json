@@ -1,0 +1,14 @@
+{
+  "labels": [
+    "简单",
+    "中等",
+    "专业"
+  ],
+  "default": "medium",
+  "top": 285.546875,
+  "english": [
+    "Easy",
+    "Medium",
+    "Professional"
+  ]
+}

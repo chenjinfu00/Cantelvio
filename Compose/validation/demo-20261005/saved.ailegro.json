@@ -1,0 +1,326 @@
+{
+  "format": "ailegro-score",
+  "version": 2,
+  "id": "demo-accompaniment-sc_la3mo6amfd1l",
+  "meta": {
+    "title": "AIlegro · 旋律与伴奏演示",
+    "subtitle": "欢乐颂旋律 · 可自由修改与试听",
+    "modifiedAt": "2026-10-05T09:58:13.786Z"
+  },
+  "settings": {
+    "concertPitch": false,
+    "defaultTempo": 92,
+    "pageMarginsMm": {"bottom":15,"left":15,"right":15,"top":15},
+    "pageSize": {"heightMm":297,"widthMm":210},
+    "staffSpaceMm": 1.7
+  },
+  "parts": [
+    {
+      "id": "pt_anzwo8svljlo",
+      "instrument": "violin",
+      "name": "小提琴",
+      "abbreviation": "小提",
+      "staves": [
+        {"id":"st_9ko3lt3e7vex","clef":"treble","lines":5}
+      ]
+    },
+    {
+      "id": "pt_bipx8q48vagi",
+      "instrument": "piano",
+      "name": "钢琴",
+      "abbreviation": "钢琴",
+      "staves": [
+        {"id":"st_6h492iyflp25","clef":"treble","lines":5},
+        {"id":"st_9mlohk4l96uq","clef":"bass","lines":5}
+      ]
+    }
+  ],
+  "groups": [
+    {"id":"gr_p2m1z25azgz2","kind":"brace","barlineThrough":true,"firstStaff":"st_6h492iyflp25","lastStaff":"st_9mlohk4l96uq"}
+  ],
+  "measures": [
+    {
+      "id": "m_r071tsm79js6",
+      "timeSig": {"beats":4,"beatType":4},
+      "keySig": {"fifths":0,"mode":"major"},
+      "tempo": [
+        {"id":"tm_rc00yxtbyo54","offset":"0","bpm":92}
+      ]
+    },
+    {"id":"m_5cczwn5308bs"},
+    {"id":"m_u1spvgsookyj"},
+    {"id":"m_z9vpcrzt6yjd"},
+    {"id":"m_jh4k9kfy43n4"},
+    {"id":"m_sdceflnagbp9"},
+    {"id":"m_0t49oi5njdcm"},
+    {"id":"m_jc0zxu1nklux","barline":"final"}
+  ],
+  "content": {
+    "st_6h492iyflp25": {
+      "m_5cczwn5308bs": {
+        "voices": [
+          [
+            {"id":"e_0kxr9q1b49mg","kind":"note","offset":"1/8","duration":"1/8","notes":[{"id":"n_7rfrckpstbaa","pitch":"G5","velocity":90},{"id":"n_du8et1dr3uko","pitch":"E6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_dwvyx0l2jidy","kind":"note","offset":"1/4","duration":"13/64","notes":[{"id":"n_bro16whs9ehx","pitch":"C5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_j6qw7rcubbym","kind":"note","offset":"23/48","duration":"1/64","notes":[{"id":"n_w0m7y23orp94","pitch":"B6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_csvs559msgil","kind":"note","offset":"1/2","duration":"1/128","notes":[{"id":"n_w4ta5dtnj690","pitch":"G4","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_ni9zgx0rmek2","kind":"note","offset":"59/96","duration":"5/96","notes":[{"id":"n_8biil89lzj7d","pitch":"C5","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_fdwz956zgsd2","kind":"note","offset":"2/3","duration":"1/16","notes":[{"id":"n_zpsfjl6dk300","pitch":"E5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_bzdo0fxclqmj","kind":"note","offset":"35/48","duration":"1/96","notes":[{"id":"n_t5fv5lmcem9x","pitch":"G5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_r7bvfsubgved","kind":"note","offset":"71/96","duration":"7/80","notes":[{"id":"n_xy4mq2o1m428","pitch":"C6","velocity":77},{"id":"n_ig74mwenj00b","pitch":"D7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_x6fp8rs5260s","kind":"note","offset":"47/48","duration":"1/40","notes":[{"id":"n_u8ab6r08jbbq","pitch":"A5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_loy6gg7rsvxl","kind":"note","offset":"1/8","duration":"11/80","notes":[{"id":"n_7c8nrvf7edbj","pitch":"G6","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_ohkke9usei1h","kind":"note","offset":"5/12","duration":"1/12","notes":[{"id":"n_kgcsnidmnesw","pitch":"A6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_nkk9k0qh3na6","kind":"note","offset":"1/2","duration":"39/160","notes":[{"id":"n_t4zuuj6p9f1f","pitch":"G5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_n5l7vldgdzwd","kind":"note","offset":"3/4","duration":"1/80","notes":[{"id":"n_33a7h75k2ntu","pitch":"G4","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_x2u3ctcfape0","kind":"note","offset":"23/96","duration":"1/4","notes":[{"id":"n_guhqypd2xjdb","pitch":"G4","velocity":90},{"id":"n_993780iqednp","pitch":"C6","velocity":88},{"id":"n_v8k3comet0z5","pitch":"E6","velocity":90},{"id":"n_iovo81pdi9xb","pitch":"G6","velocity":33},{"id":"n_ni7pxaysh3io","pitch":"C7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_nep3vmg46qye","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_ds29egg1eghv","pitch":"C6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_2g3vv49mo8xh","kind":"note","offset":"3/4","duration":"39/160","notes":[{"id":"n_jyz44s0wl4tl","pitch":"G5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_ldj1dntitzfz","kind":"note","offset":"23/96","duration":"23/96","notes":[{"id":"n_lkc909djizzu","pitch":"E7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_eus1bjmp2kc5","kind":"note","offset":"23/48","duration":"1/96","notes":[{"id":"n_pouwu1o1hx5w","pitch":"C7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_l0c5wl4uhjd7","kind":"note","offset":"1/2","duration":"1/8","notes":[{"id":"n_ly2y8xehrvqe","pitch":"E6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_kxqv7h1j5dud","kind":"note","offset":"5/8","duration":"5/12","notes":[{"id":"n_8y152yuhh5e8","pitch":"C5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ],
+        "tuplets": [
+          {"id":"tu_7tq1i2bang87","voice":0,"offset":"1/4","length":"1/4","actual":3,"normal":2},
+          {"id":"tu_p2nldnm22i7j","voice":1,"offset":"0","length":"1/2","actual":3,"normal":2},
+          {"id":"tu_5y24i544uhft","voice":2,"offset":"0","length":"1/2","actual":3,"normal":2},
+          {"id":"tu_kzqo4sox7rd9","voice":3,"offset":"0","length":"1/2","actual":3,"normal":2}
+        ],
+        "dynamics": [
+          {"id":"dy_4nbwhoid2k06","offset":"59/96","value":"rf","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+        ]
+      },
+      "m_r071tsm79js6": {
+        "voices": [
+          [
+            {"id":"e_8xsghy9gxt97","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_c4u0ywzp0t2b","pitch":"E4","velocity":90},{"id":"n_k2mshvp1q2nk","pitch":"G4","velocity":95},{"id":"n_27dirpsle5vf","pitch":"C5","velocity":90},{"id":"n_abccsluc3gtv","pitch":"G5","velocity":90},{"id":"n_7n5zzmorl1xw","pitch":"C6","velocity":88},{"id":"n_s311abvqzyxq","pitch":"E6","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_t90fh7iu7iwy","kind":"note","offset":"1/4","duration":"23/96","notes":[{"id":"n_yxql2ys4mgnf","pitch":"G5","velocity":94},{"id":"n_rpkgifplb348","pitch":"C6","velocity":95},{"id":"n_9938oyqob1sl","pitch":"E6","velocity":91}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_3rvr5msvvibf","kind":"note","offset":"47/96","duration":"1/96","notes":[{"id":"n_ucrghb7oof74","pitch":"F6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_whq7yhg3xtxy","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_qznqq5qnweit","pitch":"D4","velocity":90},{"id":"n_gps7176m7eru","pitch":"G5","velocity":90},{"id":"n_hvsnsjp8t984","pitch":"B5","velocity":90},{"id":"n_d0w4dq3o8p51","pitch":"D6","velocity":90},{"id":"n_0yf8a3dnykia","pitch":"F7","velocity":90},{"id":"n_yq7vbboq7xm8","pitch":"D8","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_5non0236jt89","kind":"note","offset":"3/4","duration":"3/16","notes":[{"id":"n_bd3z1sc7bipk","pitch":"C5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_yl9mc1v02q1p","kind":"note","offset":"1/4","duration":"3/4","notes":[{"id":"n_l3s6clkde8az","pitch":"G6","velocity":89},{"id":"n_apltdreqco2r","pitch":"C7","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_mp9duhh14q6w","kind":"note","offset":"1/4","duration":"1/192","notes":[{"id":"n_62qxr0917zum","pitch":"E7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_eyne7s7ve5ix","kind":"note","offset":"35/96","duration":"1/80","notes":[{"id":"n_y8wf3q55fusf","pitch":"C7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_riz4753htx39","kind":"note","offset":"47/96","duration":"5/96","notes":[{"id":"n_r1c7777ueqij","pitch":"C6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_5rx7krnx0syf","kind":"note","offset":"3/4","duration":"39/160","notes":[{"id":"n_tovm8vqnvc9v","pitch":"E5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_h4mq44hnha6l","kind":"note","offset":"3/8","duration":"13/80","notes":[{"id":"n_83u8anh4yjey","pitch":"C8","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_00eojg80i1ct","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_lc1bm5in0rk0","pitch":"C6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ],
+        "tuplets": [
+          {"id":"tu_pi7jb33r0wrw","voice":0,"offset":"1/4","length":"1/4","actual":3,"normal":2}
+        ],
+        "dynamics": [
+          {"id":"dy_3qqlu3i9df2y","offset":"0","value":"p","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+          {"id":"dy_s4tvqfmve4yq","offset":"1/4","value":"mp","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+          {"id":"dy_lmj675tj028g","offset":"47/96","value":"p","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+        ]
+      },
+      "m_u1spvgsookyj": {
+        "voices": [
+          [
+            {"id":"e_nsuvhoz04bck","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_9wim9rmlo0ot","pitch":"E4","velocity":90},{"id":"n_x3x63u24y8ml","pitch":"G5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_3symukytrmsa","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_m110neh6ely4","pitch":"F4","velocity":90},{"id":"n_ne96ay4kffq9","pitch":"F5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_qlupdcdfz4ji","kind":"note","offset":"3/4","duration":"11/128","notes":[{"id":"n_xm4gxvjbf57g","pitch":"E4","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_snuc3thjhdbn","kind":"note","offset":"9/10","duration":"1/10","notes":[{"id":"n_3pyhrs13uypn","pitch":"C4","velocity":80}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_4jceezxvkl7b","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_2agp7p97nxc3","pitch":"G4","velocity":90},{"id":"n_io71901c3662","pitch":"G5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_b73k6ri2eih5","kind":"note","offset":"3/4","duration":"5/4","notes":[{"id":"n_jrerdxw258se","pitch":"E5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_us6003y5i3ej","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_fayow8kzb1ae","pitch":"C6","velocity":90},{"id":"n_6a0tz4r2mbd4","pitch":"E6","velocity":91}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_6a7ru40b69dq","kind":"note","offset":"11/12","duration":"1/2","notes":[{"id":"n_vtn9aj661eu4","pitch":"E4","velocity":75}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ],
+        "dynamics": [
+          {"id":"dy_9bei34z8gmn3","offset":"1/4","value":"p","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+          {"id":"dy_u83l55e63x21","offset":"9/10","value":"ppp","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+        ]
+      },
+      "m_z9vpcrzt6yjd": {
+        "voices": [
+          [
+            {"id":"e_rrqa0ooafcqd","kind":"note","offset":"0","duration":"17/48","notes":[{"id":"n_671z9yvywgmu","pitch":"C6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_uj442m2t3ct4","kind":"note","offset":"3/8","duration":"3/40","notes":[{"id":"n_hc44nobk0ukd","pitch":"F5","velocity":95},{"id":"n_z13iokf2xddw","pitch":"B5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_hnztt4h9g0x5","kind":"note","offset":"9/20","duration":"1/120","notes":[{"id":"n_7b9d2i77wbgl","pitch":"C7","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_w9ukzzam1vez","kind":"note","offset":"11/24","duration":"3/128","notes":[{"id":"n_srkbzve9qbfk","pitch":"E5","velocity":88},{"id":"n_4agpdm19iqmf","pitch":"D7","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_0l2h2rhzpxze","kind":"note","offset":"1/2","duration":"3/40","notes":[{"id":"n_1uvrjxpv9289","pitch":"F4","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_qzz2tyo5kn40","kind":"note","offset":"23/40","duration":"3/20","notes":[{"id":"n_xgnpqkwwki3i","pitch":"C4","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_whb0dhvntbzq","kind":"note","offset":"29/40","duration":"1/40","notes":[{"id":"n_uj5x9qm2m9dh","pitch":"C5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_d52vs6tx8h0w","kind":"note","offset":"3/4","duration":"7/96","notes":[{"id":"n_qxv2y68ga6uo","pitch":"F6","velocity":94}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_q213i5g23fux","kind":"note","offset":"9/10","duration":"1/60","notes":[{"id":"n_5a3dxashi4em","pitch":"C4","velocity":90},{"id":"n_9zkcdxcy1x0k","pitch":"C5","velocity":94}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_txkqlvswu2ab","kind":"note","offset":"11/12","duration":"1/12","notes":[{"id":"n_j5wt31h09ov6","pitch":"F5","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [],
+          [
+            {"id":"e_ta7tx0ecmlt6","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_xwissmpzp7e6","pitch":"G4","velocity":88},{"id":"n_4ohl2z9kr2ck","pitch":"C5","velocity":90},{"id":"n_uvfmphj0g1iu","pitch":"G5","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_fp1wm8oj1wsk","kind":"note","offset":"1/4","duration":"23/48","notes":[{"id":"n_7z3vm2t8s4b3","pitch":"E4","velocity":80},{"id":"n_da62lxfvhkgj","pitch":"C5","velocity":30},{"id":"n_groy82h89zj3","pitch":"G5","velocity":30}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_7au4uwnigcxi","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_45n83tefvjb0","pitch":"A#4","velocity":94},{"id":"n_tq0oyfq4t4d1","pitch":"E5","velocity":90},{"id":"n_9gu5vrtblh49","pitch":"A6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_r8rpkkeluq6k","kind":"note","offset":"7/16","duration":"1/40","notes":[{"id":"n_kh689jm63v8j","pitch":"C6","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_cg6pnto61w14","kind":"note","offset":"19/40","duration":"3/128","notes":[{"id":"n_n99nryqk3q8d","pitch":"G4","velocity":88},{"id":"n_9896nr95c8au","pitch":"F6","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_ybv0klyizwhd","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_zxopu0t7gonn","pitch":"F5","velocity":90},{"id":"n_g5o4ybjq5vid","pitch":"D6","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_44i74314o6ta","kind":"note","offset":"3/4","duration":"11/64","notes":[{"id":"n_u1yexqj180hi","pitch":"D6","velocity":95}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ],
+        "tuplets": [
+          {"id":"tu_lkq08bwgcykw","voice":0,"offset":"0","length":"1/2","actual":3,"normal":2},
+          {"id":"tu_4g5ii1zco6e5","voice":0,"offset":"3/4","length":"1/4","actual":3,"normal":2}
+        ],
+        "dynamics": [
+          {"id":"dy_pziw0h74nxpp","offset":"0","value":"p","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+        ]
+      }
+    },
+    "st_9ko3lt3e7vex": {
+      "m_0t49oi5njdcm": {
+        "voices": [
+          [
+            {"id":"e_0kixusnwlr0f","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_m5hbz3yqr89l","pitch":"C5"}]},
+            {"id":"e_1cogg3wf83ck","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_q93zesx7v8s2","pitch":"C5"}]},
+            {"id":"e_ruextey9ryxf","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_pvc9po66lvil","pitch":"D5"}]},
+            {"id":"e_wk61jugtfmn3","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_x86u0fw6og67","pitch":"E5"}]}
+          ]
+        ]
+      },
+      "m_5cczwn5308bs": {
+        "voices": [
+          [
+            {"id":"e_n82054qfx0rd","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_kcwiwq3mpa1d","pitch":"G5"}]},
+            {"id":"e_lmmuetst380m","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_y230mz7lcths","pitch":"F5"}]},
+            {"id":"e_ctexpca8lpxs","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_fgkt28p37id1","pitch":"E5"}]},
+            {"id":"e_u47t116okvv6","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_x631s3297aeg","pitch":"D5"}]}
+          ]
+        ]
+      },
+      "m_jc0zxu1nklux": {
+        "voices": [
+          [
+            {"id":"e_s572c9axx6yn","kind":"note","offset":"0","duration":"3/8","notes":[{"id":"n_72rascfixg1n","pitch":"D5"}]},
+            {"id":"e_76zd0vqv5sek","kind":"note","offset":"3/8","duration":"1/8","notes":[{"id":"n_zroymw3hydmp","pitch":"C5"}]},
+            {"id":"e_42s7huwns7mg","kind":"note","offset":"1/2","duration":"1/2","notes":[{"id":"n_nprcizcz6k4a","pitch":"C5"}]}
+          ]
+        ]
+      },
+      "m_jh4k9kfy43n4": {
+        "voices": [
+          [
+            {"id":"e_6lku40qmr70e","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_wnebw9tay7u9","pitch":"E5"}]},
+            {"id":"e_7t1anasi95ib","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_0toq6ruv3u89","pitch":"E5"}]},
+            {"id":"e_xgkfbzctm1jg","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_dc8fbakz3ih5","pitch":"F5"}]},
+            {"id":"e_m78peoxgo2c8","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_q24ir4ofg20d","pitch":"G5"}]}
+          ]
+        ]
+      },
+      "m_r071tsm79js6": {
+        "voices": [
+          [
+            {"id":"e_y585y7jilrtf","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_g3b70i1dsvpo","pitch":"E5"}]},
+            {"id":"e_g1gup9olfdxl","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_h9hyam0f7s1c","pitch":"E5"}]},
+            {"id":"e_r4xa237gsyib","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_8y53ocx29jmv","pitch":"F5"}]},
+            {"id":"e_oqv53o4id0qj","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_28v2imuyr1fy","pitch":"G5"}]}
+          ]
+        ]
+      },
+      "m_sdceflnagbp9": {
+        "voices": [
+          [
+            {"id":"e_eqgvb89x9yuy","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_qyi93hc1qflj","pitch":"G5"}]},
+            {"id":"e_gttnummjbuc1","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_z5xfz0a1br1f","pitch":"F5"}]},
+            {"id":"e_i2k5uhdlvhgd","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_mxxb98rwwxmk","pitch":"E5"}]},
+            {"id":"e_epvi3crdhnpu","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_1xlvm77kvzf6","pitch":"D5"}]}
+          ]
+        ]
+      },
+      "m_u1spvgsookyj": {
+        "voices": [
+          [
+            {"id":"e_238ro3puwy1r","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_42vevuwblvyn","pitch":"C5"}]},
+            {"id":"e_tvn2o9252gi3","kind":"note","offset":"1/4","duration":"1/4","notes":[{"id":"n_fouuq3l33l08","pitch":"C5"}]},
+            {"id":"e_g41toeym6j7l","kind":"note","offset":"1/2","duration":"1/4","notes":[{"id":"n_hzygaqnceeqh","pitch":"D5"}]},
+            {"id":"e_gfg7p3uv16xc","kind":"note","offset":"3/4","duration":"1/4","notes":[{"id":"n_ukq2dqmlkx30","pitch":"E5"}]}
+          ]
+        ]
+      },
+      "m_z9vpcrzt6yjd": {
+        "voices": [
+          [
+            {"id":"e_36xhvnwvztzm","kind":"note","offset":"0","duration":"3/8","notes":[{"id":"n_09u6b5rvzibp","pitch":"E5"}]},
+            {"id":"e_dc0gkkoi1bmh","kind":"note","offset":"3/8","duration":"1/8","notes":[{"id":"n_5knm4vng5z6j","pitch":"D5"}]},
+            {"id":"e_38wz35cg1942","kind":"note","offset":"1/2","duration":"1/2","notes":[{"id":"n_hj25fthaapih","pitch":"D5"}]}
+          ]
+        ]
+      }
+    },
+    "st_9mlohk4l96uq": {
+      "m_r071tsm79js6": {
+        "voices": [
+          [
+            {"id":"e_6g7oxn6vfk5v","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_e82nghbz941a","pitch":"C2","velocity":95},{"id":"n_6xa2gsr319j4","pitch":"C3","velocity":88}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+            {"id":"e_904ggvvtb0r0","kind":"note","offset":"47/96","duration":"1/192","notes":[{"id":"n_jfumvihva2x7","pitch":"C1","velocity":93}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ],
+          [
+            {"id":"e_83qi4s1w3tza","kind":"note","offset":"47/96","duration":"1/4","notes":[{"id":"n_tt9gazul24ix","pitch":"C3","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ],
+        "tuplets": [
+          {"id":"tu_ks2atryukei7","voice":0,"offset":"1/4","length":"1/4","actual":3,"normal":2}
+        ],
+        "dynamics": [
+          {"id":"dy_6rpjb3ggpaz2","offset":"0","value":"pp","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+          {"id":"dy_hlk3h6xdea2j","offset":"47/96","value":"p","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+        ]
+      },
+      "m_u1spvgsookyj": {
+        "voices": [
+          [
+            {"id":"e_l5wv5vzq6q4q","kind":"note","offset":"0","duration":"1/4","notes":[{"id":"n_g1wkfsl3qzgz","pitch":"C3","velocity":90}],"source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+          ]
+        ]
+      }
+    }
+  },
+  "harmony": [
+    {"id":"ch_frkx6msipolb","measureId":"m_r071tsm79js6","offset":"0","root":{"alter":0,"step":"C"},"quality":"maj","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_q3paj2s0dtmj","measureId":"m_r071tsm79js6","offset":"1/2","root":{"alter":0,"step":"G"},"quality":"dom7","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_lziwcpu4ef8h","measureId":"m_r071tsm79js6","offset":"3/4","root":{"alter":0,"step":"C"},"quality":"maj","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_who0bscen086","measureId":"m_5cczwn5308bs","offset":"1/4","root":{"alter":0,"step":"G"},"quality":"dom7","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_d35ro2q4ja9p","measureId":"m_5cczwn5308bs","offset":"1/2","root":{"alter":0,"step":"C"},"quality":"maj","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_ej2lkh19vh02","measureId":"m_5cczwn5308bs","offset":"3/4","root":{"alter":0,"step":"G"},"quality":"dom7","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_rvrxpr32740p","measureId":"m_u1spvgsookyj","offset":"0","root":{"alter":0,"step":"C"},"quality":"maj","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_3cd7v3olqu3k","measureId":"m_u1spvgsookyj","offset":"1/2","root":{"alter":0,"step":"G"},"quality":"dom7","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_hnwcnuk9kid3","measureId":"m_u1spvgsookyj","offset":"3/4","root":{"alter":0,"step":"C"},"quality":"maj","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"ch_m8r1ps12fta1","measureId":"m_z9vpcrzt6yjd","offset":"1/2","root":{"alter":0,"step":"G"},"quality":"dom7","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+  ],
+  "spanners": [
+    {"id":"sp_q6rro0d88a9y","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_r071tsm79js6","offset":"0"},"end":{"measureId":"m_5cczwn5308bs","offset":"95/192"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_d443711aw5bw","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_5cczwn5308bs","offset":"1/2"},"end":{"measureId":"m_5cczwn5308bs","offset":"65/128"},"direction":"diminuendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_92niskcfr1n6","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_5cczwn5308bs","offset":"2/3"},"end":{"measureId":"m_5cczwn5308bs","offset":"35/48"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_gmw0gsi91tqo","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_5cczwn5308bs","offset":"71/96"},"end":{"measureId":"m_5cczwn5308bs","offset":"397/480"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_x3uyemutxzng","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_u1spvgsookyj","offset":"1/4"},"end":{"measureId":"m_u1spvgsookyj","offset":"1/2"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_x342o394bxo3","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_u1spvgsookyj","offset":"1/2"},"end":{"measureId":"m_u1spvgsookyj","offset":"3/4"},"direction":"diminuendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_wii4iu59i00f","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_u1spvgsookyj","offset":"9/10"},"end":{"measureId":"m_z9vpcrzt6yjd","offset":"17/48"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_90w2vheu4mp0","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_z9vpcrzt6yjd","offset":"3/8"},"end":{"measureId":"m_z9vpcrzt6yjd","offset":"9/20"},"direction":"diminuendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_x5xck19asfmx","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_z9vpcrzt6yjd","offset":"9/20"},"end":{"measureId":"m_z9vpcrzt6yjd","offset":"11/24"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_w3gfoy5e6oe2","kind":"hairpin","staffId":"st_6h492iyflp25","start":{"measureId":"m_z9vpcrzt6yjd","offset":"1/2"},"end":{"measureId":"m_z9vpcrzt6yjd","offset":"1"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}},
+    {"id":"sp_8xrt4ny0al63","kind":"hairpin","staffId":"st_9mlohk4l96uq","start":{"measureId":"m_r071tsm79js6","offset":"47/96"},"end":{"measureId":"m_r071tsm79js6","offset":"95/192"},"direction":"crescendo","source":{"kind":"ai","accepted":true,"model":"four-pillar-v3.1","runId":"ai_49spz2xfxpbd"}}
+  ]
+}

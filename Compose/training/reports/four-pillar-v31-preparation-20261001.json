@@ -1,0 +1,385 @@
+{
+ "schema": "four-pillar-v31-preparation-3",
+ "date": "2026-10-01",
+ "supersedes": "four-pillar-v31-preparation-2 (same day: key-relative v3.1 before the second pass; never trained), itself superseding the absolute-pitch draft -1",
+ "status": "prepared, untrained; start with training/train_four_pillar_v31.sh (7.5 training hours, about 7 h 40 min in all); trains from random initialization; no run directory created; v2 and v3 runs, manifests and hashed code untouched",
+ "files": {
+  "scripts/four_pillar_v31_tonal.py": "60e7b8e55696dd6abf5fd3a0ffcbe12ab43ebbb1beea5464cf0aea83e4f06a95",
+  "scripts/four_pillar_v31_model.py": "bab08413e672da200043db9e8fc5bc0f6cf0bf66afaf443a1db21aaeb6666437",
+  "scripts/four_pillar_v31_data.py": "ff2f6b5fa46d3417dd8040d47541a01f00693cfa7f8d60fd2df51cdb6a1d4ed6",
+  "scripts/four_pillar_v31_time.py": "05149d45cd3879ee692877eac2928eb513f105e8c83833a7197db4bd221dde97",
+  "scripts/four_pillar_v31_sample.py": "182fc114ca9c8294f45b773415dc493925455facde6b6266dd48d238bf41eae5",
+  "scripts/train_four_pillar_v31.py": "0c01d395a7eb4fbb0bcb7d9d06f790a61acf0286e1b22859c78f9a674d5a2452",
+  "scripts/build_four_pillar_v31_time_vocab.py": "72cc459a2e982b40fdb2e8263a13cd215583980f364f41032116bd1371ba7328",
+  "data/four-pillar-v31-time-vocab.json": "5281d69eded4f9fdfc87fb54f4a253eb4ae5207efa223062f08296606ff30aa2",
+  "tests/four-pillar-v31.test.py": "bb01d5b9a8f89ef827dccc64a530c8f9b1e5c3e0b7f77f6faab8ef1a563f4f87",
+  "scripts/four_pillar_v31_midi.py": "fecaf5de918b573ffd62a5713e30e6113134a905e61ed7ffe70152473bf9ceb3",
+  "train_four_pillar_v31.sh": "ece0f461e24a43247c13caa72328f057f6e89e400b1e83a92ebb98253b495bd4"
+ },
+ "pitchCoding": {
+  "rule": "every bar has a local key (tonic, mode); index = pitch - tonic_ref(tonic) + 65 with tonic_ref in MIDI 54..65; pitch = index - 65 + tonic_ref (exact inverse)",
+  "classes": "139 relative indices (any MIDI pitch in any key) + unpitched; inputs add scale degree x mode, sounding octave and the key",
+  "output": "full relative-pitch head + scale-degree head + sounding-octave head + priors (interval from the voice per group, sounding/bass/chord pitch classes, chord-relative, mode scale); classes outside MIDI 0..127 are excluded in training and generation",
+  "evidence": "17,001 target pitches of 44 real windows (five sources, random transposition) decode to the source pitch: 0 mismatches; same melody in C and D has the same codes (test)"
+ },
+ "tonalLabels": {
+  "keys": "KeyTracker for every source: bar pitch-class histograms (lowest note of each onset x1.5), Lieder-derived key profiles, key-signature bonus for scores, Viterbi with fifths-distance change cost",
+  "keyAgreementHeldOutLieder": {
+   "pieces": 187,
+   "bars": "all labelled bars",
+   "exact": 0.786,
+   "sameSignature": 0.829,
+   "changesPerBar": {
+    "tracker": 0.049,
+    "augmentedNet": 0.145
+   }
+  },
+  "chords": "AugmentedNet for aligned Lieder (937 of 1,131); ChordTracker elsewhere: beat segments, 9 qualities covering 99.8% of Lieder labels, bass/diatonic priors, Viterbi",
+  "chordAgreementHeldOutLieder": {
+   "level": "beat",
+   "root": 0.759,
+   "rootAndQuality": 0.67
+  },
+  "note": "labels are estimates, not ground truth; the tracker key regions are steadier than AugmentedNet tonicizations, which matches key-walking in the console",
+  "rule": {
+   "relOffset": 65,
+   "relPitches": 139,
+   "tonicLow": 54,
+   "keyParams": {
+    "evidence": 8.0,
+    "change": 8.0,
+    "fifthsDistance": 1.0,
+    "signature": 0.5,
+    "bassWeight": 0.5,
+    "floor": 0.001
+   },
+   "majorProfile": [
+    0.20797,
+    0.00906,
+    0.09875,
+    0.0134,
+    0.14079,
+    0.09303,
+    0.01613,
+    0.23257,
+    0.01987,
+    0.0827,
+    0.01324,
+    0.07249
+   ],
+   "minorProfile": [
+    0.20535,
+    0.01336,
+    0.10474,
+    0.12924,
+    0.01406,
+    0.0888,
+    0.0212,
+    0.23829,
+    0.07289,
+    0.0202,
+    0.0366,
+    0.05528
+   ],
+   "chordParams": {
+    "outside": 2.0,
+    "bassRoot": 0.1,
+    "bassTone": 0.0,
+    "seventh": 0.3,
+    "change": 0.3,
+    "weakBeatChange": 0.2,
+    "diatonic": 0.1
+   },
+   "coreQualities": [
+    "maj",
+    "min",
+    "dim",
+    "aug",
+    "dom7",
+    "maj7",
+    "min7",
+    "dim7",
+    "half"
+   ]
+  }
+ },
+ "architecture": {
+  "config": {
+   "width": 192,
+   "heads": 6,
+   "layers": 4,
+   "window": 512,
+   "planner_layers": 3,
+   "history_bars": 512,
+   "voices": 64,
+   "time_classes": 384,
+   "attr_hidden": 384,
+   "summary_dim": 78
+  },
+  "parameters": 5014967,
+  "parameterBreakdown": {
+   "inputEmbeddings": 339456,
+   "eventBackbone4Layers": 1779840,
+   "barPlanner3Layers": 1350336,
+   "barControls": 14592,
+   "barObjectives": 11194,
+   "referenceBar": 205017,
+   "attributeDecoder": 1047259,
+   "outputHeads": 267273
+  },
+  "comparison": {
+   "v3": 5348187,
+   "changeVsV3": "-6.2%",
+   "previousV31Draft": 4897310,
+   "v31OutputHeads": 267273
+  },
+  "weightsPtBytes": 20140319,
+  "adamwStatePtBytes": 60499222,
+  "events": "one backbone step per note, chord change or bar end; chord changes precede the notes at their onset; within an onset unpitched notes, then pitched notes from the lowest up (bass before melody)",
+  "decoder": "kind -> onset position in the bar (REMI-style; logits masked to the legal range in training as in generation) -> chord root (relative) -> quality | group -> voice pointer -> pitch -> duration -> expression; chord heads on chord rows and note heads on note rows only; inputs include a note's interval above the chord root and the interval by which its voice reached its previous note",
+  "attention": "rotary in event index, musical time (quarters), beat phase and bar phase; 12 of 16 pairs rotated, 4 content-only; ring-buffer cache of 512 events",
+  "planner": "causal pre-norm transformer over up to 511 completed bars with rotary positions over bar distance (periods 2..256 bars on 8 of 16 pairs); streamed with a cache at generation (one step per bar). Per bar: scale degrees in its key, group shares, density, mean pitch, mode, tonic step, 16-bin onset rhythm, top-voice and bass scale-degree histograms, phrase phases over 4 and 16 bars (78 values)",
+  "barControls": "meter, tempo, key, modulation step, corpus style, requested groups, requested density (learned; groups/density dropped 50%, style 30% in training)",
+  "barObjectives": "next key relative to the current tonic (from the plan), scale degrees, density, register and groups of the bar (plan + modulation)",
+  "initialization": "random (GPT-style normal 0.02; residual outputs, copy biases and priors start at zero); the v2 partial transfer was removed: in short runs on the same windows it trailed random initialization in total loss (lr 3e-4, steps 191-240: 14.01 vs 12.88; lr 1e-3, steps 115-164 where the v2 run stopped: 13.44 vs 12.62), better on pitch early but worse on onsets and durations",
+  "learningRate": "1e-3 default (best of 3e-4 and 1e-3 from scratch in 240-step runs), 300 warmup steps, cosine to 0.1x",
+  "referenceBars": {
+   "selection": "most similar earlier bar within the planner history: Jaccard of key-relative (onset on a 1/24-quarter grid, relative pitch) items >= 0.5, ties to the most recent; otherwise none",
+   "corpusStatistics": "whole pieces (40 Lieder, 40 classical scores, 30 MIDI): about 40% of score bars have Jaccard >= 0.5 with an earlier bar, 22% >= 0.9; most common distances 1, 2, 4, 8, 16 bars, and in classical scores 37% of such references lie 99 or more bars back",
+   "pointer": "column 0 = none, column 1 + h = earlier bar h: scaled dot product of the new bar's plan and earlier planner states plus a learned bias per distance bucket (1, 2, 3, 4, 5-7, 8, 9-15, 16, 17-31, 32, 33-63, 64, 65+); objective bar_ref, weight 0.25",
+   "decoderInputs": "before kind/onset: the reference's next onset and how many of its notes remain at the current onset; after the onset: group, relative pitch and duration of the reference note with the same rank among the notes at that onset, and the scale degrees the reference sounds there; each also a learned copy bias on the onset, group, pitch (per group) and duration logits",
+   "dropout": "the decoder loses its reference in 20% of training bars; the pointer target is kept",
+   "generation": "reference='auto' samples the pointer over the last 511 bars, an integer names a bar, None disables it",
+   "windowShare": "full score sweep: 20,783 of 58,592 window bars (35.5%) have a reference",
+   "alignedAgreement": "44 real windows: for notes in bars with a reference, the aligned reference gives the actual onset 82-93%, pitch 40-84%, duration 69-90% of the time depending on the source"
+  }
+ },
+ "fourPillars": {
+  "harmony": "explicit chord events with key-relative roots and 40 qualities; current chord in every note input and decoder state; chord-relative and chord-tone pitch priors; sounding scale degrees and bass degree; mode scale prior; key and modulation controls and objective",
+  "polyphony": "voice pointer over 64 slots with recency/sounding features; pitch conditioned on the voice, its previous note, the interval that reached it and a group-specific interval prior; onset ordered bass upward; a part that changes instrument group opens a new voice, as in generation",
+  "form": "reference bars (pointer + aligned copy inputs) let a bar restate any of the last 511 bars, far beyond the event window; causal rotary planner over 511 key-relative bar summaries with rhythm, outer-voice and phrase features; every window event trained with its own bar plan; musical-time and bar-phase attention; no section labels exist",
+  "orchestration": "six native groups chosen before voice and pitch, learned group/density requests plus hard masks, sounding-octave pitch head for instrument ranges, next-bar group objective, explicit MIDI drum keys, source-known expression masks; corpus-style condition (classical/contemporary symphony, curated MIDI, Lieder, classical scores), like the joint model style input"
+ },
+ "time": {
+  "vocabulary": 384,
+  "rule": {
+   "preferredDenominators": [
+    1,
+    2,
+    4,
+    3,
+    8,
+    6,
+    16,
+    12,
+    32,
+    24,
+    48,
+    5,
+    10,
+    20,
+    40,
+    7,
+    14,
+    28,
+    56,
+    9,
+    18,
+    36
+   ],
+   "toleranceQuarter": "1/96",
+   "simpleDenominators": [
+    1,
+    2,
+    4,
+    3,
+    8,
+    6,
+    16,
+    12
+   ],
+   "chordWindowQuarter": "1/40",
+   "durationRelative": "1/50",
+   "shortestPerformanceDuration": "1/48",
+   "exactFirst": true,
+   "note": "scores: notated values with a preferred denominator stay exact, others snap to the simplest preferred fraction within tolerance. MIDI: chord spreading within the chord window joins the first onset and near-grid durations snap to simple values first. Vocabulary = most frequent resulting values (zero always included)."
+  },
+  "coverage": {
+   "symphony-classical": {
+    "files": 726,
+    "unsnapped": {},
+    "deltas": 0.994421,
+    "durations": 0.996875,
+    "positions": 0.991676
+   },
+   "symphony-contemporary": {
+    "files": 1500,
+    "unsnapped": {},
+    "deltas": 0.999461,
+    "durations": 0.998937,
+    "positions": 0.99733
+   },
+   "curated-midi": {
+    "files": 117,
+    "unsnapped": {},
+    "deltas": 0.995624,
+    "durations": 0.998081,
+    "positions": 0.992416
+   },
+   "Lieder": {
+    "files": 1131,
+    "unsnapped": {},
+    "deltas": 0.999825,
+    "durations": 0.999728,
+    "positions": 0.999454
+   },
+   "classical-scores": {
+    "files": 303,
+    "unsnapped": {},
+    "deltas": 0.999869,
+    "durations": 0.99926,
+    "positions": 0.999743
+   }
+  }
+ },
+ "evidence": {
+  "environment": "cloud sandbox x86_64 (host speed varies about 20%), Python 3.11.15, torch 2.14.1, numpy 2.4.6; Mac venv: torch 2.14.0",
+  "tests": {
+   "file": "tests/four-pillar-v31.test.py",
+   "passed": 35
+  },
+  "trainingParity": "training forward equals the generation path for every attribute and the reference pointer, including chord events, reference inputs and copy biases (randomized weights)",
+  "kernelParity": "fused generation kernel equals the training modules (inputs, backbone, decoder, copy biases, pitch priors, fused heads)",
+  "plannerStreaming": "cached planner steps equal the full causal pass and, after eviction, a fresh pass over the last 511 bars",
+  "scoreSweep": {
+   "windows": 2868,
+   "scores": 1434,
+   "errors": 0,
+   "decodedOutOfRange": 0,
+   "maskedVoiceTargets": 0,
+   "regroupedVoices": 5,
+   "windowBarsWithReference": "20,783 / 58,592"
+  },
+  "voiceBugFixed": "13 parts in the symphony scores change group mid-piece; in the previous draft their target voice was excluded by the voice mask (one step of a short run logged voice loss 4e35); voice identity now includes the group",
+  "realDataSubset": {
+   "windows": 44,
+   "secondsPerExample": {
+    "symphony-classical": 0.423,
+    "symphony-contemporary": 0.217,
+    "curated-midi": 0.116,
+    "Lieder": 0.131,
+    "classical-scores": 0.269
+   },
+   "previousDraftSameHost": {
+    "symphony-classical": 0.515,
+    "symphony-contemporary": 0.204,
+    "curated-midi": 0.151,
+    "Lieder": 0.121,
+    "classical-scores": 0.232
+   },
+   "decodedPitches": "17,907 checked, 0 not in the source",
+   "batch8": {
+    "events": 4096,
+    "forwardBackwardSeconds2Threads": 1.62,
+    "previousDraftSameHost": 1.9
+   }
+  },
+  "trainer": [
+   "identical losses on a same-seed rerun",
+   "initialize-only, then 3 + 3 resumed steps equals 6 straight steps bitwise at --threads 1",
+   "preflight and the sampling CLI run on a 6-step checkpoint"
+  ],
+  "shortRuns": {
+   "setup": "Lieder + classical scores, batch 4, context 256, 240 steps, seed 7, same windows",
+   "last50Mean": {
+    "previousDraft_scratch_lr1e-3": {
+     "total": 11.71,
+     "onset": 0.873,
+     "pitch": 2.602,
+     "duration": 1.181,
+     "group": 0.454,
+     "voice": 0.86,
+     "chordRoot": 1.892,
+     "chordQuality": 1.686
+    },
+    "thisVersion_scratch_lr1e-3": {
+     "total": 11.73,
+     "onset": 0.699,
+     "pitch": 2.433,
+     "duration": 1.131,
+     "group": 0.432,
+     "voice": 0.838,
+     "chordRoot": 1.851,
+     "chordQuality": 1.67,
+     "barRef": 2.082
+    }
+   },
+   "note": "the total includes the new bar_ref objective (0.25 x 2.08); early training only, no quality claim"
+  },
+  "generationSameHost": {
+   "threads": 1,
+   "128NoteBarSeconds": {
+    "previousDraft": 0.86,
+    "thisVersion": 0.99
+   },
+   "with511BarsOfHistory": {
+    "previousDraft": 1.01,
+    "thisVersion": 0.94
+   },
+   "note": "92 BPM 4/4 bar budget 2.61 s; the planner no longer recomputes 511 bars per bar"
+  },
+  "mps": "untested in the sandbox (no Apple GPU); collated float64 rotary inputs move to MPS as float32; the preflight compares CPU and MPS loss and gradient norm on one full batch before MPS is used",
+  "launcherSandboxTests": [
+   "full flow: tests -> preflight -> step 0 -> training to the budget -> three MIDI samples",
+   "Ctrl-C on the log viewer leaves the detached runner and trainer running (separate process group)",
+   "SIGKILL of the trainer: resumed automatically from the last checkpoint after the retry delay",
+   "stop during training: saved and exited; the next start continued at the next step",
+   "stop while the trainer was starting (SIGINT still ignored): stopped at the first step boundary, saved",
+   "stop during the tests: whole process group ended, no run directory created",
+   "run directory with a manifest but no state.pt: moved aside and re-initialized",
+   "AILEGRO_V31_DEVICE=mps without an Apple GPU: preflight error, CPU preflight and CPU training",
+   "device rule on synthetic preflight results: MPS only with matching loss/gradient norm and >= 20% faster",
+   "bitwise resume (3 + 3 vs 6 steps at --threads 1) and identical same-seed reruns with the patched trainer"
+  ]
+ },
+ "notDone": [
+  "no long training (the user starts it)",
+  "full-data preflight must run on the Mac",
+  "MPS/CUDA untested: run --preflight with --device first",
+  "no held-out evaluation (the approved index is training-only); no musical quality claim",
+  "console adapter (Hold/Every bar/Free, chord edits, Stop, reference choice) not connected yet"
+ ],
+ "commands": {
+  "start": "bash training/train_four_pillar_v31.sh",
+  "status": "bash training/train_four_pillar_v31.sh status",
+  "stop": "bash training/train_four_pillar_v31.sh stop",
+  "sample": "bash training/train_four_pillar_v31.sh sample",
+  "manualTests": ".venv-training/bin/python training/tests/four-pillar-v31.test.py",
+  "manualPreflight": ".venv-training/bin/python -u training/scripts/train_four_pillar_v31.py --output-dir training/runs/four-pillar-v31-ready-20261001 --preflight --device mps",
+  "manualInitialize": ".venv-training/bin/python -u training/scripts/train_four_pillar_v31.py --output-dir training/runs/four-pillar-v31-ready-20261001 --initialize-only --max-seconds 27000",
+  "manualTrain": ".venv-training/bin/python -u training/scripts/train_four_pillar_v31.py --output-dir training/runs/four-pillar-v31-ready-20261001 --resume --max-seconds 27000 --threads 8"
+ },
+ "launcher": {
+  "file": "train_four_pillar_v31.sh",
+  "commands": [
+   "start (default)",
+   "status",
+   "log",
+   "stop",
+   "sample"
+  ],
+  "defaults": {
+   "trainingSeconds": 27000,
+   "checkpointSeconds": 600,
+   "cpuThreads": "performance cores (at most 8)",
+   "mpsThreads": 4,
+   "workers": "trainer default: CPU cores - 2, at most 6",
+   "trainingHours": 7.5,
+   "overhead": "about 10 minutes for tests, preflight, start-up and samples"
+  },
+  "run": "training/runs/four-pillar-v31-ready-20261001",
+  "state": "training/logs/four-pillar-v31-ready-20261001 (train.log, device, preflight JSON, samples)",
+  "retries": "up to 3; an MPS failure switches to CPU",
+  "samples": "16 bars each at 92 BPM, pitch top-p 0.95: symphony-classical in C, Lieder piano in A minor, symphony-contemporary in D with model keys; JSON + MIDI"
+ }
+}

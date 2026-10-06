@@ -1,0 +1,137 @@
+{
+  "protocol": {
+    "seeds": 12,
+    "styles": [
+      "pop",
+      "jazz",
+      "blues",
+      "classical",
+      "ambient"
+    ],
+    "bars": 8,
+    "progressions": [
+      [
+        "C",
+        "G",
+        "Am",
+        "F",
+        "C",
+        "G",
+        "F",
+        "C"
+      ],
+      [
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Am7",
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Cmaj7"
+      ],
+      [
+        "C7",
+        "F7",
+        "C7",
+        "G7",
+        "F7",
+        "G7",
+        "C7",
+        "C7"
+      ],
+      [
+        "Am",
+        "F",
+        "Dm",
+        "E7",
+        "Am",
+        "F",
+        "E7",
+        "Am"
+      ]
+    ],
+    "interpretation": "Descriptive free-running measurements, not listening-quality scores. Rhythm/motif recurrence are desired structural signals, not proof of musicality."
+  },
+  "current": {
+    "styles": {
+      "pop": {
+        "eventsPerBar": 4.78125,
+        "maxConsecutiveAttacks": 3,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.7404921700223713,
+        "repeatRate": 0.17225950782997762,
+        "nonChordRate": 0.2701525054466231,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.8210074428931601,
+        "rhythmReturnJaccard": 0.7435515873015873,
+        "contourReturnJaccard": 0.3034722222222222,
+        "velocityRange": 0.18857614850412016,
+        "meanBarInferenceMs": 4.414651906249999,
+        "p95BarInferenceMs": 13.426500000000033
+      },
+      "jazz": {
+        "eventsPerBar": 6.114583333333333,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.7147826086956521,
+        "repeatRate": 0.17565217391304347,
+        "nonChordRate": 0.24361158432708688,
+        "stepResolutionRate": 0.993006993006993,
+        "cadenceBreathSeconds": 0.8502305585071069,
+        "rhythmReturnJaccard": 0.7533234126984126,
+        "contourReturnJaccard": 0.3275793650793651,
+        "velocityRange": 0.19184726274669162,
+        "meanBarInferenceMs": 3.6423445833333354,
+        "p95BarInferenceMs": 5.2231669999999895
+      },
+      "blues": {
+        "eventsPerBar": 5.135416666666667,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.6943866943866944,
+        "repeatRate": 0.23492723492723494,
+        "nonChordRate": 0.1947261663286004,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.8531767103823674,
+        "rhythmReturnJaccard": 0.7677579365079364,
+        "contourReturnJaccard": 0.3284722222222222,
+        "velocityRange": 0.18865382519081467,
+        "meanBarInferenceMs": 2.9504961145833497,
+        "p95BarInferenceMs": 3.8604579999998805
+      },
+      "classical": {
+        "eventsPerBar": 4.5,
+        "maxConsecutiveAttacks": 3,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.780952380952381,
+        "repeatRate": 0.23809523809523808,
+        "nonChordRate": 0.24305555555555555,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.5852819900573386,
+        "rhythmReturnJaccard": 0.624702380952381,
+        "contourReturnJaccard": 0.20486111111111108,
+        "velocityRange": 0.21497876364783716,
+        "meanBarInferenceMs": 2.585545562500002,
+        "p95BarInferenceMs": 3.906208000000106
+      },
+      "ambient": {
+        "eventsPerBar": 3.0833333333333335,
+        "maxConsecutiveAttacks": 4,
+        "phrasesWithFiveRepeatedAttacks": 0,
+        "stepwiseRate": 0.6443661971830986,
+        "repeatRate": 0.1619718309859155,
+        "nonChordRate": 0.20270270270270271,
+        "stepResolutionRate": 1,
+        "cadenceBreathSeconds": 0.7723974709044931,
+        "rhythmReturnJaccard": 0.7833333333333332,
+        "contourReturnJaccard": 0.20833333333333334,
+        "velocityRange": 0.17973945029556715,
+        "meanBarInferenceMs": 1.6181280416666628,
+        "p95BarInferenceMs": 2.6487919999999576
+      }
+    },
+    "totalEvents": 2267,
+    "meanEventInferenceMs": 0.6441429007498903
+  }
+}

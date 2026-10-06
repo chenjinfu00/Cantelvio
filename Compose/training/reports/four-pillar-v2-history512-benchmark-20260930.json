@@ -1,0 +1,81 @@
+{
+  "method": "same real source and target; one warmup and three forward/backward measurements per separate CPU process; no optimizer updates; macOS ru_maxrss in bytes",
+  "runs": [
+    {
+      "historyBars": 32,
+      "source": "OpenScore String Quartets:StringQuartets-9be3df2ace482130fe031b9e8a647cdf112ed243/scores/Haydn,_Joseph/String_Quartet_in_F_minor,_Hob.III35,_Op.20_No.5/sq8807040.mxl",
+      "targetBar": 519,
+      "parameters": {
+        "total": 6873721,
+        "trainable": 5292412,
+        "frozen_legacy": 1581309
+      },
+      "tokens": 1998,
+      "window": {
+        "historyBars": 32,
+        "knownHistoryBars": 32,
+        "bar": 32,
+        "chunkIndex": 0,
+        "chunkCount": 1,
+        "targetStart": 4761,
+        "targetStop": 4890,
+        "decoderStart": 2891,
+        "completeTargetBar": true,
+        "reachesBarEnd": true,
+        "task": "free",
+        "lockedSourceNotes": [],
+        "harmonySource": null
+      },
+      "preparationSeconds": 0.7250187089957763,
+      "forwardBackwardSeconds": [
+        1.818173083003785,
+        1.4253639580056188,
+        1.099545915996714,
+        1.0114275840023765
+      ],
+      "warmMeanSeconds": 1.1787791526682365,
+      "maxRSSBytes": 1850310656,
+      "noOptimizerUpdates": true,
+      "threads": 6,
+      "torchVersion": "2.14.0"
+    },
+    {
+      "historyBars": 512,
+      "source": "OpenScore String Quartets:StringQuartets-9be3df2ace482130fe031b9e8a647cdf112ed243/scores/Haydn,_Joseph/String_Quartet_in_F_minor,_Hob.III35,_Op.20_No.5/sq8807040.mxl",
+      "targetBar": 519,
+      "parameters": {
+        "total": 6965881,
+        "trainable": 5384572,
+        "frozen_legacy": 1581309
+      },
+      "tokens": 1998,
+      "window": {
+        "historyBars": 512,
+        "knownHistoryBars": 512,
+        "bar": 512,
+        "chunkIndex": 0,
+        "chunkCount": 1,
+        "targetStart": 112791,
+        "targetStop": 112920,
+        "decoderStart": 110921,
+        "completeTargetBar": true,
+        "reachesBarEnd": true,
+        "task": "free",
+        "lockedSourceNotes": [],
+        "harmonySource": null
+      },
+      "preparationSeconds": 1.301649000000907,
+      "forwardBackwardSeconds": [
+        1.7145723749999888,
+        1.3340007920050994,
+        1.0713697910032352,
+        1.035191583003325
+      ],
+      "warmMeanSeconds": 1.1468540553372197,
+      "maxRSSBytes": 2192687104,
+      "noOptimizerUpdates": true,
+      "threads": 6,
+      "torchVersion": "2.14.0"
+    }
+  ]
+}

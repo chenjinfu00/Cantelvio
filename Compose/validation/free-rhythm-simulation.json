@@ -1,0 +1,749 @@
+{
+  "results": [
+    {
+      "scene": "warm",
+      "meter": 3,
+      "bars": 32,
+      "internalChanges": 20,
+      "longSegments": 22,
+      "changes": 27,
+      "notes": 550,
+      "maxPlanMs": 36.75,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 3,
+          "total": 3,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 5,
+          "id": "G7",
+          "uid": 4,
+          "start": 0,
+          "length": 2,
+          "total": 2,
+          "elapsed": 0
+        },
+        {
+          "bar": 5,
+          "id": "C",
+          "uid": 5,
+          "start": 2,
+          "length": 1,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 1
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 2,
+          "total": 6,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "F",
+          "uid": 6,
+          "start": 2,
+          "length": 1,
+          "total": 3,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "warm",
+      "meter": 4,
+      "bars": 32,
+      "internalChanges": 9,
+      "longSegments": 30,
+      "changes": 23,
+      "notes": 605,
+      "maxPlanMs": 33.98,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 4,
+          "total": 4,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 5,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "velvet",
+      "meter": 3,
+      "bars": 32,
+      "internalChanges": 22,
+      "longSegments": 22,
+      "changes": 30,
+      "notes": 575,
+      "maxPlanMs": 28.64,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 3,
+          "total": 3,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 5,
+          "id": "G7",
+          "uid": 4,
+          "start": 0,
+          "length": 2,
+          "total": 2,
+          "elapsed": 0
+        },
+        {
+          "bar": 5,
+          "id": "Cmaj7",
+          "uid": 5,
+          "start": 2,
+          "length": 1,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "Cmaj7",
+          "uid": 5,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 1
+        },
+        {
+          "bar": 7,
+          "id": "Cmaj7",
+          "uid": 5,
+          "start": 0,
+          "length": 2,
+          "total": 6,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "C6/9/E",
+          "uid": 6,
+          "start": 2,
+          "length": 1,
+          "total": 2,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "velvet",
+      "meter": 4,
+      "bars": 32,
+      "internalChanges": 15,
+      "longSegments": 20,
+      "changes": 30,
+      "notes": 718,
+      "maxPlanMs": 31.73,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 4,
+          "total": 4,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 5,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "Cmaj9",
+          "uid": 5,
+          "start": 0,
+          "length": 4,
+          "total": 4,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "indie",
+      "meter": 3,
+      "bars": 32,
+      "internalChanges": 12,
+      "longSegments": 27,
+      "changes": 23,
+      "notes": 790,
+      "maxPlanMs": 25.76,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 3,
+          "total": 3,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 5,
+          "id": "G7",
+          "uid": 4,
+          "start": 0,
+          "length": 2,
+          "total": 2,
+          "elapsed": 0
+        },
+        {
+          "bar": 5,
+          "id": "Bdim7",
+          "uid": 5,
+          "start": 2,
+          "length": 1,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "Bdim7",
+          "uid": 5,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 1
+        },
+        {
+          "bar": 7,
+          "id": "Bdim7",
+          "uid": 5,
+          "start": 0,
+          "length": 2,
+          "total": 6,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 6,
+          "start": 2,
+          "length": 1,
+          "total": 2,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "indie",
+      "meter": 4,
+      "bars": 32,
+      "internalChanges": 20,
+      "longSegments": 26,
+      "changes": 26,
+      "notes": 1012,
+      "maxPlanMs": 24.63,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 4,
+          "total": 4,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 5,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "air",
+      "meter": 3,
+      "bars": 32,
+      "internalChanges": 12,
+      "longSegments": 28,
+      "changes": 24,
+      "notes": 732,
+      "maxPlanMs": 24.12,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 3,
+          "total": 3,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 3
+        },
+        {
+          "bar": 5,
+          "id": "G7",
+          "uid": 4,
+          "start": 0,
+          "length": 2,
+          "total": 2,
+          "elapsed": 0
+        },
+        {
+          "bar": 5,
+          "id": "C",
+          "uid": 5,
+          "start": 2,
+          "length": 1,
+          "total": 6,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 3,
+          "total": 6,
+          "elapsed": 1
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 2,
+          "total": 6,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "Dm",
+          "uid": 6,
+          "start": 2,
+          "length": 1,
+          "total": 3,
+          "elapsed": 0
+        }
+      ]
+    },
+    {
+      "scene": "air",
+      "meter": 4,
+      "bars": 32,
+      "internalChanges": 15,
+      "longSegments": 34,
+      "changes": 24,
+      "notes": 560,
+      "maxPlanMs": 30.54,
+      "first8Bars": [
+        {
+          "bar": 0,
+          "id": "C",
+          "uid": 1,
+          "start": 0,
+          "length": 4,
+          "total": 4,
+          "elapsed": 0
+        },
+        {
+          "bar": 1,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 2,
+          "id": "Am",
+          "uid": 2,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 3,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 4,
+          "id": "F",
+          "uid": 3,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 5,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        },
+        {
+          "bar": 6,
+          "id": "G",
+          "uid": 4,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 4
+        },
+        {
+          "bar": 7,
+          "id": "C",
+          "uid": 5,
+          "start": 0,
+          "length": 4,
+          "total": 8,
+          "elapsed": 0
+        }
+      ]
+    }
+  ],
+  "problems": []
+}

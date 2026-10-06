@@ -1,0 +1,114 @@
+{
+  "errors": [],
+  "levels": [
+    {
+      "label": "简单",
+      "performance": {
+        "difficulty": "easy",
+        "handSpanLimit": 9,
+        "pianoTexture": "broken",
+        "arrangedPianoParts": 1,
+        "before": {
+          "notes": 111,
+          "outOfRange": 2,
+          "maxSimultaneous": 16,
+          "maxHandSpan": 48
+        },
+        "after": {
+          "notes": 28,
+          "outOfRange": 0,
+          "maxSimultaneous": 1,
+          "maxHandSpan": 0
+        }
+      },
+      "seconds": 0.9418999999761581,
+      "notes": 28,
+      "scorePlaybackPitchParity": true,
+      "melodyProtected": true
+    },
+    {
+      "label": "中等",
+      "performance": {
+        "difficulty": "medium",
+        "handSpanLimit": 12,
+        "pianoTexture": "broken",
+        "arrangedPianoParts": 1,
+        "before": {
+          "notes": 111,
+          "outOfRange": 2,
+          "maxSimultaneous": 16,
+          "maxHandSpan": 48
+        },
+        "after": {
+          "notes": 44,
+          "outOfRange": 0,
+          "maxSimultaneous": 1,
+          "maxHandSpan": 0
+        }
+      },
+      "seconds": 0.9588000000119209,
+      "notes": 44,
+      "scorePlaybackPitchParity": true,
+      "melodyProtected": true
+    },
+    {
+      "label": "专业",
+      "performance": {
+        "difficulty": "advanced",
+        "handSpanLimit": 12,
+        "pianoTexture": "broken",
+        "arrangedPianoParts": 1,
+        "before": {
+          "notes": 111,
+          "outOfRange": 2,
+          "maxSimultaneous": 16,
+          "maxHandSpan": 48
+        },
+        "after": {
+          "notes": 84,
+          "outOfRange": 0,
+          "maxSimultaneous": 2,
+          "maxHandSpan": 12
+        }
+      },
+      "seconds": 0.904699999988079,
+      "notes": 84,
+      "scorePlaybackPitchParity": true,
+      "melodyProtected": true
+    }
+  ],
+  "exports": [
+    {
+      "ext": "mid",
+      "bytes": 784
+    },
+    {
+      "ext": "pdf",
+      "bytes": 523500
+    }
+  ],
+  "soundfontPlayback": true,
+  "midiPitchParity": {
+    "equal": true,
+    "notes": 74
+  },
+  "customReach": {
+    "difficulty": "advanced",
+    "handSpanLimit": 7,
+    "pianoTexture": "chords",
+    "arrangedPianoParts": 1,
+    "before": {
+      "notes": 111,
+      "outOfRange": 2,
+      "maxSimultaneous": 16,
+      "maxHandSpan": 48
+    },
+    "after": {
+      "notes": 60,
+      "outOfRange": 0,
+      "maxSimultaneous": 3,
+      "maxHandSpan": 7
+    }
+  },
+  "mobileOverflow": false
+}

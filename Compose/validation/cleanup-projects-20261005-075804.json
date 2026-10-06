@@ -1,0 +1,3426 @@
+{
+  "started_at_utc": "2026-10-05T07:58:04.476532+00:00",
+  "roots": [
+    "/Users/chenjinfu/software develop/AIlegro",
+    "/Users/chenjinfu/software develop/AIlegro Score"
+  ],
+  "status": "complete",
+  "moved_to_trash": [
+    {
+      "original_path": "/Users/chenjinfu/software develop/AIlegro/training/_to_delete",
+      "trash_path": "/Users/chenjinfu/.Trash/AIlegro-cleanup-20261005-075804/AIlegro/training/_to_delete",
+      "file_count": 350,
+      "bytes": 1140313522,
+      "files": [
+        {
+          "path": "_smoke-bundle.tar",
+          "bytes": 59392000,
+          "mtime_ns": 1791069851670384838,
+          "symlink": false
+        },
+        {
+          "path": "_smoke-bundle.tgz",
+          "bytes": 36248732,
+          "mtime_ns": 1791069914545722485,
+          "symlink": false
+        },
+        {
+          "path": "_smoke-groups.py",
+          "bytes": 5954,
+          "mtime_ns": 1791070069557205645,
+          "symlink": false
+        },
+        {
+          "path": "_smoke-lieder-joint.json",
+          "bytes": 672354,
+          "mtime_ns": 1791070088311603476,
+          "symlink": false
+        },
+        {
+          "path": "_smoke-orch.tgz",
+          "bytes": 718798848,
+          "mtime_ns": 1791070065609071158,
+          "symlink": false
+        },
+        {
+          "path": "_smoke-weights.pt",
+          "bytes": 20140319,
+          "mtime_ns": 1791069915312137549,
+          "symlink": false
+        },
+        {
+          "path": "_stage-v31.tgz",
+          "bytes": 22956488,
+          "mtime_ns": 1791164427138744523,
+          "symlink": false
+        },
+        {
+          "path": "_stage-v31b.tgz",
+          "bytes": 2634,
+          "mtime_ns": 1791164452443869193,
+          "symlink": false
+        },
+        {
+          "path": "an-in-map-String.json",
+          "bytes": 35026,
+          "mtime_ns": 1791107022536633044,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch-map-Orchestra.json",
+          "bytes": 16154,
+          "mtime_ns": 1791107028668346784,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch.tgz",
+          "bytes": 21115034,
+          "mtime_ns": 1791107046872600686,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/03aa8ae1a182.mxl",
+          "bytes": 232765,
+          "mtime_ns": 1791107027756514871,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/06df4238b0b1.mxl",
+          "bytes": 364295,
+          "mtime_ns": 1791107028307054380,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/07bd47b30983.mxl",
+          "bytes": 461827,
+          "mtime_ns": 1791107027919571554,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0c21aeca1d21.mxl",
+          "bytes": 202072,
+          "mtime_ns": 1791107027229776110,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0c260ae2c89a.mxl",
+          "bytes": 509592,
+          "mtime_ns": 1791107028284091843,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0ccd38ec1254.mxl",
+          "bytes": 398043,
+          "mtime_ns": 1791107027541781760,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0d01ab63fc2e.mxl",
+          "bytes": 131116,
+          "mtime_ns": 1791107027863211527,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0dc43962820b.mxl",
+          "bytes": 329476,
+          "mtime_ns": 1791107027707663120,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/0f65b065a715.mxl",
+          "bytes": 416050,
+          "mtime_ns": 1791107028033002150,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/100535654760.mxl",
+          "bytes": 47671,
+          "mtime_ns": 1791107027203462478,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/13a990402f8e.mxl",
+          "bytes": 99904,
+          "mtime_ns": 1791107027318915622,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/13c4785d8ead.mxl",
+          "bytes": 158383,
+          "mtime_ns": 1791107028315910869,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/1d77cf886bcc.mxl",
+          "bytes": 148307,
+          "mtime_ns": 1791107028160284461,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/1e996ef05e4f.mxl",
+          "bytes": 172043,
+          "mtime_ns": 1791107027780999496,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/202bd3796fa1.mxl",
+          "bytes": 148332,
+          "mtime_ns": 1791107028253679281,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2037a63822d0.mxl",
+          "bytes": 595609,
+          "mtime_ns": 1791107028203296984,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/20f39b2d9e6e.mxl",
+          "bytes": 134639,
+          "mtime_ns": 1791107027728240607,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2232cd2d30e4.mxl",
+          "bytes": 82287,
+          "mtime_ns": 1791107028519882526,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2a8e15c9def5.mxl",
+          "bytes": 199975,
+          "mtime_ns": 1791107028582459948,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2c0bb26e1d95.mxl",
+          "bytes": 314141,
+          "mtime_ns": 1791107027589318131,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2d977ef7606e.mxl",
+          "bytes": 529901,
+          "mtime_ns": 1791107027623802541,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2e4c0870c551.mxl",
+          "bytes": 291972,
+          "mtime_ns": 1791107027829281536,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/2f907abbffd2.mxl",
+          "bytes": 655867,
+          "mtime_ns": 1791107027471505645,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/31846ea9d582.mxl",
+          "bytes": 27982,
+          "mtime_ns": 1791107027274771847,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/33cc18325918.mxl",
+          "bytes": 164284,
+          "mtime_ns": 1791107027501338747,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/3888a9942cb9.mxl",
+          "bytes": 130806,
+          "mtime_ns": 1791107028000030913,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/3a634ff2e5b9.mxl",
+          "bytes": 146297,
+          "mtime_ns": 1791107027876333489,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/3e682c1a8092.mxl",
+          "bytes": 86343,
+          "mtime_ns": 1791107028005837599,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/408aead8a7b0.mxl",
+          "bytes": 252363,
+          "mtime_ns": 1791107027417712877,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/4128b8f648cd.mxl",
+          "bytes": 363084,
+          "mtime_ns": 1791107027974688284,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/42b5833ec420.mxl",
+          "bytes": 63064,
+          "mtime_ns": 1791107027208545954,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/4349f1c9ec49.mxl",
+          "bytes": 352902,
+          "mtime_ns": 1791107028415396293,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/45e9a9962aa5.mxl",
+          "bytes": 144426,
+          "mtime_ns": 1791107028324995358,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/4d8c6924b898.mxl",
+          "bytes": 158998,
+          "mtime_ns": 1791107027352753030,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/4e5b4aaf80b0.mxl",
+          "bytes": 229670,
+          "mtime_ns": 1791107027558476234,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/50363419afcf.mxl",
+          "bytes": 55835,
+          "mtime_ns": 1791107027261846511,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/58128ec5d951.mxl",
+          "bytes": 20453,
+          "mtime_ns": 1791107027324626725,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/58f90b76810a.mxl",
+          "bytes": 41618,
+          "mtime_ns": 1791107027355866249,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/590646aa60da.mxl",
+          "bytes": 232834,
+          "mtime_ns": 1791107027741782237,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/5cb40651c0af.mxl",
+          "bytes": 173019,
+          "mtime_ns": 1791107027199562506,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/5f477b7db92b.mxl",
+          "bytes": 216478,
+          "mtime_ns": 1791107027659914581,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/64e424d54278.mxl",
+          "bytes": 51961,
+          "mtime_ns": 1791107027327934487,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/67b4b25710be.mxl",
+          "bytes": 61458,
+          "mtime_ns": 1791107027282502332,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/690256cd9707.mxl",
+          "bytes": 177686,
+          "mtime_ns": 1791107028593347819,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/69159875e0d2.mxl",
+          "bytes": 504265,
+          "mtime_ns": 1791107028379984464,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/698c8f721893.mxl",
+          "bytes": 43941,
+          "mtime_ns": 1791107027298515928,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/6a2c61609b9f.mxl",
+          "bytes": 54056,
+          "mtime_ns": 1791107027258043956,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/6cb03d504bdf.mxl",
+          "bytes": 475694,
+          "mtime_ns": 1791107027810761973,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/6ea370003680.mxl",
+          "bytes": 68759,
+          "mtime_ns": 1791107027563813127,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/6fc34bf5ab47.mxl",
+          "bytes": 179667,
+          "mtime_ns": 1791107027271317210,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/6fdecf89db4a.mxl",
+          "bytes": 53268,
+          "mtime_ns": 1791107027243901658,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/70bd92138b27.mxl",
+          "bytes": 191555,
+          "mtime_ns": 1791107027517478927,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/75fb7fb36afe.mxl",
+          "bytes": 301014,
+          "mtime_ns": 1791107028496541113,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/770e0e376bf0.mxl",
+          "bytes": 375130,
+          "mtime_ns": 1791107028437983870,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/7b48503b7577.mxl",
+          "bytes": 516125,
+          "mtime_ns": 1791107028149585800,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/806bd8764923.mxl",
+          "bytes": 178837,
+          "mtime_ns": 1791107027718996575,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/822adaa904ed.mxl",
+          "bytes": 181712,
+          "mtime_ns": 1791107028244632500,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/83691b8c8994.mxl",
+          "bytes": 295737,
+          "mtime_ns": 1791107027434389976,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/83a47cd183bf.mxl",
+          "bytes": 281436,
+          "mtime_ns": 1791107027892614878,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/88ace8a0cb07.mxl",
+          "bytes": 151212,
+          "mtime_ns": 1791107027312774351,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/8b38357e87fc.mxl",
+          "bytes": 827670,
+          "mtime_ns": 1791107028568362150,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/94c06bfb80fc.mxl",
+          "bytes": 647125,
+          "mtime_ns": 1791107028477219755,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/954ab6997dfa.mxl",
+          "bytes": 205688,
+          "mtime_ns": 1791107027770008833,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/a6cf59eada7c.mxl",
+          "bytes": 174683,
+          "mtime_ns": 1791107028170267287,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/af0707c039d9.mxl",
+          "bytes": 145841,
+          "mtime_ns": 1791107027305305576,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/af6fa05e77f3.mxl",
+          "bytes": 77303,
+          "mtime_ns": 1791107027507235684,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/af946d1b2935.mxl",
+          "bytes": 27728,
+          "mtime_ns": 1791107027287471057,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/b40eb9f066c4.mxl",
+          "bytes": 280224,
+          "mtime_ns": 1791107027489829624,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/b5cee7c1f6b5.mxl",
+          "bytes": 305217,
+          "mtime_ns": 1791107027992255927,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/b5ff0432f258.mxl",
+          "bytes": 86122,
+          "mtime_ns": 1791107027344306334,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/b6bb72090636.mxl",
+          "bytes": 25284,
+          "mtime_ns": 1791107027284951840,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/b7656b33de4e.mxl",
+          "bytes": 467200,
+          "mtime_ns": 1791107028232894960,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/c773d71da838.mxl",
+          "bytes": 184086,
+          "mtime_ns": 1791107027336346640,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/c8f3560d5734.mxl",
+          "bytes": 59735,
+          "mtime_ns": 1791107027236581216,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/cb0e3cd49f9d.mxl",
+          "bytes": 213458,
+          "mtime_ns": 1791107028394740931,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/ccb5321ad3cb.mxl",
+          "bytes": 154214,
+          "mtime_ns": 1791107027294903666,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/cfb1b444cc22.mxl",
+          "bytes": 295869,
+          "mtime_ns": 1791107027852006114,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/d1c8b773af45.mxl",
+          "bytes": 70636,
+          "mtime_ns": 1791107027249268301,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/d3db3d902620.mxl",
+          "bytes": 102366,
+          "mtime_ns": 1791107027361903936,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/d68c58aef677.mxl",
+          "bytes": 399370,
+          "mtime_ns": 1791107027684491957,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/dab7c6a035ed.mxl",
+          "bytes": 417646,
+          "mtime_ns": 1791107028347174851,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/dae7b5a93dbd.mxl",
+          "bytes": 397641,
+          "mtime_ns": 1791107028105769191,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/db31bdbe220b.mxl",
+          "bytes": 50898,
+          "mtime_ns": 1791107027278244234,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/e3d7cea808c0.mxl",
+          "bytes": 25200,
+          "mtime_ns": 1791107027321755632,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/e4671775ca6e.mxl",
+          "bytes": 301508,
+          "mtime_ns": 1791107028513305170,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/e84d1ba832dc.mxl",
+          "bytes": 677985,
+          "mtime_ns": 1791107027402914160,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/ef563ef8a13a.mxl",
+          "bytes": 202251,
+          "mtime_ns": 1791107027930672883,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/f1146af4c6d3.mxl",
+          "bytes": 270756,
+          "mtime_ns": 1791107027642167437,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/f1b1ba26d129.mxl",
+          "bytes": 149685,
+          "mtime_ns": 1791107028114657013,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/f8a72b377eb4.mxl",
+          "bytes": 344240,
+          "mtime_ns": 1791107027953063460,
+          "symlink": false
+        },
+        {
+          "path": "an-in-orch/f8acfab08c24.mxl",
+          "bytes": 48220,
+          "mtime_ns": 1791107027253241607,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3-map-Symbolic.json",
+          "bytes": 2288,
+          "mtime_ns": 1791107038128517504,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/04da7af0bab1.xml",
+          "bytes": 4461700,
+          "mtime_ns": 1791107031272654700,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/198dfe8e7f37.xml",
+          "bytes": 10473515,
+          "mtime_ns": 1791107033263962683,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/1fdb7966b37d.xml",
+          "bytes": 14949217,
+          "mtime_ns": 1791107029580873033,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/2c5daa7b408b.xml",
+          "bytes": 6199094,
+          "mtime_ns": 1791107036930573653,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/2ee6280978bf.xml",
+          "bytes": 4554477,
+          "mtime_ns": 1791107038120849186,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/39a99b5a7287.xml",
+          "bytes": 8603217,
+          "mtime_ns": 1791107033837897815,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/4bea94495cb4.xml",
+          "bytes": 10297027,
+          "mtime_ns": 1791107035970557616,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/56ed1743fc6a.xml",
+          "bytes": 14050250,
+          "mtime_ns": 1791107030821035862,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/682c63cb9428.xml",
+          "bytes": 24495091,
+          "mtime_ns": 1791107032691091222,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/6f04ac56db40.xml",
+          "bytes": 2073124,
+          "mtime_ns": 1791107035348616862,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/6f56328c5dcd.xml",
+          "bytes": 2881028,
+          "mtime_ns": 1791107033428554914,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/87548f501bd2.xml",
+          "bytes": 19974847,
+          "mtime_ns": 1791107037900439639,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/946a0d650908.xml",
+          "bytes": 13436391,
+          "mtime_ns": 1791107036636047853,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/a8da7a588719.xml",
+          "bytes": 7966307,
+          "mtime_ns": 1791107034917814929,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/be5ffe317d5b.xml",
+          "bytes": 3890692,
+          "mtime_ns": 1791107035196931427,
+          "symlink": false
+        },
+        {
+          "path": "an-in-s3/f94bf66847e4.xml",
+          "bytes": 9083483,
+          "mtime_ns": 1791107034459011733,
+          "symlink": false
+        },
+        {
+          "path": "an-in.tgz",
+          "bytes": 40275123,
+          "mtime_ns": 1791107041091047645,
+          "symlink": false
+        },
+        {
+          "path": "an-in/00abcc679b5f.mxl",
+          "bytes": 127638,
+          "mtime_ns": 1791107016804857882,
+          "symlink": false
+        },
+        {
+          "path": "an-in/00c4bbe5f850.mxl",
+          "bytes": 370398,
+          "mtime_ns": 1791107017825754001,
+          "symlink": false
+        },
+        {
+          "path": "an-in/015300f3e0ac.mxl",
+          "bytes": 214438,
+          "mtime_ns": 1791107015727863361,
+          "symlink": false
+        },
+        {
+          "path": "an-in/01f3786fd536.mxl",
+          "bytes": 43355,
+          "mtime_ns": 1791107016886867787,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0761d6a8876c.mxl",
+          "bytes": 113068,
+          "mtime_ns": 1791107020308994168,
+          "symlink": false
+        },
+        {
+          "path": "an-in/07ec5dbaf11b.mxl",
+          "bytes": 283520,
+          "mtime_ns": 1791107020127303672,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0836ecf366c4.mxl",
+          "bytes": 83375,
+          "mtime_ns": 1791107017612243978,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0b7363671638.mxl",
+          "bytes": 258221,
+          "mtime_ns": 1791107016151998938,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0bec5d3e4ffc.mxl",
+          "bytes": 308418,
+          "mtime_ns": 1791107022020687944,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0c7ef82a9e14.mxl",
+          "bytes": 126850,
+          "mtime_ns": 1791107018789091048,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0ce299e87378.mxl",
+          "bytes": 29469,
+          "mtime_ns": 1791107016858320940,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0d63d12d9a07.mxl",
+          "bytes": 417616,
+          "mtime_ns": 1791107017139914737,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0fa0c977775e.mxl",
+          "bytes": 276051,
+          "mtime_ns": 1791107017399456875,
+          "symlink": false
+        },
+        {
+          "path": "an-in/0fb0520dc542.mxl",
+          "bytes": 564423,
+          "mtime_ns": 1791107021281362872,
+          "symlink": false
+        },
+        {
+          "path": "an-in/10a13d3a3f4f.mxl",
+          "bytes": 218264,
+          "mtime_ns": 1791107015184544584,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1152a5dadc0d.mxl",
+          "bytes": 516693,
+          "mtime_ns": 1791107020875563025,
+          "symlink": false
+        },
+        {
+          "path": "an-in/11fbc4c027e8.mxl",
+          "bytes": 274682,
+          "mtime_ns": 1791107019163115079,
+          "symlink": false
+        },
+        {
+          "path": "an-in/160974d1566f.mxl",
+          "bytes": 33348,
+          "mtime_ns": 1791107016834923984,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1726eae4b793.mxl",
+          "bytes": 120133,
+          "mtime_ns": 1791107018322074033,
+          "symlink": false
+        },
+        {
+          "path": "an-in/187919c2045d.mxl",
+          "bytes": 155743,
+          "mtime_ns": 1791107018282465981,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1e6f5145b293.mxl",
+          "bytes": 97353,
+          "mtime_ns": 1791107017919171696,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1e72d6cfb320.mxl",
+          "bytes": 270358,
+          "mtime_ns": 1791107022112912885,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1f0f0038d5f9.mxl",
+          "bytes": 463368,
+          "mtime_ns": 1791107016992883900,
+          "symlink": false
+        },
+        {
+          "path": "an-in/1f18fb1abf4e.mxl",
+          "bytes": 428969,
+          "mtime_ns": 1791107019020193423,
+          "symlink": false
+        },
+        {
+          "path": "an-in/207416488853.mxl",
+          "bytes": 116552,
+          "mtime_ns": 1791107022173838802,
+          "symlink": false
+        },
+        {
+          "path": "an-in/269d8d5cabec.mxl",
+          "bytes": 188455,
+          "mtime_ns": 1791107015807990052,
+          "symlink": false
+        },
+        {
+          "path": "an-in/276248d8e650.mxl",
+          "bytes": 309997,
+          "mtime_ns": 1791107021532830524,
+          "symlink": false
+        },
+        {
+          "path": "an-in/27d1120d9f99.mxl",
+          "bytes": 272821,
+          "mtime_ns": 1791107021424478861,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2811c80fe539.mxl",
+          "bytes": 98075,
+          "mtime_ns": 1791107018555427165,
+          "symlink": false
+        },
+        {
+          "path": "an-in/29df4ae6be2d.mxl",
+          "bytes": 156057,
+          "mtime_ns": 1791107018674388281,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2ba3958ca2ba.mxl",
+          "bytes": 253927,
+          "mtime_ns": 1791107019408717878,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2bd127ab26eb.mxl",
+          "bytes": 290831,
+          "mtime_ns": 1791107016938773215,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2c859db752cc.mxl",
+          "bytes": 134643,
+          "mtime_ns": 1791107017640235824,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2ca44d0df7bd.mxl",
+          "bytes": 106882,
+          "mtime_ns": 1791107017902914307,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2d305ae6d24c.mxl",
+          "bytes": 355706,
+          "mtime_ns": 1791107019689650048,
+          "symlink": false
+        },
+        {
+          "path": "an-in/2ffef2890766.mxl",
+          "bytes": 233349,
+          "mtime_ns": 1791107016745174886,
+          "symlink": false
+        },
+        {
+          "path": "an-in/323e0f6536fe.mxl",
+          "bytes": 421495,
+          "mtime_ns": 1791107017769482433,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3295ce6c630f.mxl",
+          "bytes": 80051,
+          "mtime_ns": 1791107018249459035,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3331fcaabce5.mxl",
+          "bytes": 92386,
+          "mtime_ns": 1791107018746228152,
+          "symlink": false
+        },
+        {
+          "path": "an-in/335001e4a8c7.mxl",
+          "bytes": 256321,
+          "mtime_ns": 1791107019846207209,
+          "symlink": false
+        },
+        {
+          "path": "an-in/34e18f6ed447.mxl",
+          "bytes": 184239,
+          "mtime_ns": 1791107015364070324,
+          "symlink": false
+        },
+        {
+          "path": "an-in/364dfdd6c598.mxl",
+          "bytes": 198526,
+          "mtime_ns": 1791107015768543709,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3772002384dc.mxl",
+          "bytes": 152152,
+          "mtime_ns": 1791107017992824823,
+          "symlink": false
+        },
+        {
+          "path": "an-in/37ba63ccaea6.mxl",
+          "bytes": 60971,
+          "mtime_ns": 1791107020022648938,
+          "symlink": false
+        },
+        {
+          "path": "an-in/39aef56b4374.mxl",
+          "bytes": 29388,
+          "mtime_ns": 1791107016845811897,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3c457e4709a9.mxl",
+          "bytes": 147612,
+          "mtime_ns": 1791107018439134434,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3c54ed857c3b.mxl",
+          "bytes": 173526,
+          "mtime_ns": 1791107018608029970,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3e0d89f02c3e.mxl",
+          "bytes": 99985,
+          "mtime_ns": 1791107018726924461,
+          "symlink": false
+        },
+        {
+          "path": "an-in/3ef54911921f.mxl",
+          "bytes": 21934,
+          "mtime_ns": 1791107019995968806,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4100a16065e8.mxl",
+          "bytes": 131006,
+          "mtime_ns": 1791107016766761834,
+          "symlink": false
+        },
+        {
+          "path": "an-in/418f6e0c8f2e.mxl",
+          "bytes": 68414,
+          "mtime_ns": 1791107018042806286,
+          "symlink": false
+        },
+        {
+          "path": "an-in/42dcf3f5da3c.mxl",
+          "bytes": 74519,
+          "mtime_ns": 1791107018483012084,
+          "symlink": false
+        },
+        {
+          "path": "an-in/45c85ebfce01.mxl",
+          "bytes": 239157,
+          "mtime_ns": 1791107019111619111,
+          "symlink": false
+        },
+        {
+          "path": "an-in/49a7bbbbb0a8.mxl",
+          "bytes": 80595,
+          "mtime_ns": 1791107017962885512,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4a4a966d7b5d.mxl",
+          "bytes": 271559,
+          "mtime_ns": 1791107016263389361,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4b2e9d7d33aa.mxl",
+          "bytes": 309894,
+          "mtime_ns": 1791107022362788324,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4b97592c840b.mxl",
+          "bytes": 212862,
+          "mtime_ns": 1791107019332440909,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4c3d0f9f490b.mxl",
+          "bytes": 333129,
+          "mtime_ns": 1791107021977996048,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4c86f623108e.mxl",
+          "bytes": 311049,
+          "mtime_ns": 1791107022524435461,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4f55b9f2feff.mxl",
+          "bytes": 18612,
+          "mtime_ns": 1791107016839962127,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4f96543ea241.mxl",
+          "bytes": 21804,
+          "mtime_ns": 1791107016871625319,
+          "symlink": false
+        },
+        {
+          "path": "an-in/4fd538eaf58b.mxl",
+          "bytes": 417435,
+          "mtime_ns": 1791107020662278753,
+          "symlink": false
+        },
+        {
+          "path": "an-in/521574359d67.mxl",
+          "bytes": 232486,
+          "mtime_ns": 1791107019794511866,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5277260b5adc.mxl",
+          "bytes": 460698,
+          "mtime_ns": 1791107021904553505,
+          "symlink": false
+        },
+        {
+          "path": "an-in/52bf5464d6bc.mxl",
+          "bytes": 392235,
+          "mtime_ns": 1791107017236177025,
+          "symlink": false
+        },
+        {
+          "path": "an-in/52cca22c9a70.mxl",
+          "bytes": 293992,
+          "mtime_ns": 1791107020546906108,
+          "symlink": false
+        },
+        {
+          "path": "an-in/531c15e03725.mxl",
+          "bytes": 37421,
+          "mtime_ns": 1791107016823127652,
+          "symlink": false
+        },
+        {
+          "path": "an-in/534a1e308634.mxl",
+          "bytes": 127916,
+          "mtime_ns": 1791107018858125285,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5383de67b69b.mxl",
+          "bytes": 200747,
+          "mtime_ns": 1791107020410667849,
+          "symlink": false
+        },
+        {
+          "path": "an-in/552170d01416.mxl",
+          "bytes": 235822,
+          "mtime_ns": 1791107015644226366,
+          "symlink": false
+        },
+        {
+          "path": "an-in/56092fd794e1.mxl",
+          "bytes": 206899,
+          "mtime_ns": 1791107021345094006,
+          "symlink": false
+        },
+        {
+          "path": "an-in/560f7f4e6b31.mxl",
+          "bytes": 480164,
+          "mtime_ns": 1791107021799990647,
+          "symlink": false
+        },
+        {
+          "path": "an-in/564fad5ba644.mxl",
+          "bytes": 93782,
+          "mtime_ns": 1791107020341918906,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5851bb5e669f.mxl",
+          "bytes": 249438,
+          "mtime_ns": 1791107021473832989,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5871bf48376b.mxl",
+          "bytes": 53580,
+          "mtime_ns": 1791107020009033350,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5a62c08c6f53.mxl",
+          "bytes": 386954,
+          "mtime_ns": 1791107021605143605,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5b8b4b8da4c6.mxl",
+          "bytes": 134583,
+          "mtime_ns": 1791107018883795248,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5d34860eda19.mxl",
+          "bytes": 186863,
+          "mtime_ns": 1791107019063548738,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5e1bce03c89b.mxl",
+          "bytes": 264611,
+          "mtime_ns": 1791107019195594273,
+          "symlink": false
+        },
+        {
+          "path": "an-in/5f6ad7bc07a3.mxl",
+          "bytes": 276061,
+          "mtime_ns": 1791107019745276906,
+          "symlink": false
+        },
+        {
+          "path": "an-in/608f9c77ccd6.mxl",
+          "bytes": 38422,
+          "mtime_ns": 1791107019495474759,
+          "symlink": false
+        },
+        {
+          "path": "an-in/61f0e7605c11.mxl",
+          "bytes": 183020,
+          "mtime_ns": 1791107015844554594,
+          "symlink": false
+        },
+        {
+          "path": "an-in/633739843aec.mxl",
+          "bytes": 248138,
+          "mtime_ns": 1791107020460313603,
+          "symlink": false
+        },
+        {
+          "path": "an-in/63846584bebd.mxl",
+          "bytes": 72117,
+          "mtime_ns": 1791107020247374791,
+          "symlink": false
+        },
+        {
+          "path": "an-in/638b7819a4cc.mxl",
+          "bytes": 90399,
+          "mtime_ns": 1791107020374952811,
+          "symlink": false
+        },
+        {
+          "path": "an-in/64469ea21934.mxl",
+          "bytes": 304843,
+          "mtime_ns": 1791107016379896593,
+          "symlink": false
+        },
+        {
+          "path": "an-in/674ee93bc2d8.mxl",
+          "bytes": 496238,
+          "mtime_ns": 1791107020819595541,
+          "symlink": false
+        },
+        {
+          "path": "an-in/6ad4cfbfca5e.mxl",
+          "bytes": 520685,
+          "mtime_ns": 1791107022439883504,
+          "symlink": false
+        },
+        {
+          "path": "an-in/6cd3beb5ca66.mxl",
+          "bytes": 380491,
+          "mtime_ns": 1791107021146616286,
+          "symlink": false
+        },
+        {
+          "path": "an-in/6d514d1f8cd2.mxl",
+          "bytes": 195179,
+          "mtime_ns": 1791107020227998808,
+          "symlink": false
+        },
+        {
+          "path": "an-in/71734deab481.mxl",
+          "bytes": 27483,
+          "mtime_ns": 1791107016851801209,
+          "symlink": false
+        },
+        {
+          "path": "an-in/71d09eb8e16f.mxl",
+          "bytes": 74328,
+          "mtime_ns": 1791107019294287695,
+          "symlink": false
+        },
+        {
+          "path": "an-in/746901b38803.mxl",
+          "bytes": 118257,
+          "mtime_ns": 1791107017934950458,
+          "symlink": false
+        },
+        {
+          "path": "an-in/749febb7a69c.mxl",
+          "bytes": 192248,
+          "mtime_ns": 1791107015059031488,
+          "symlink": false
+        },
+        {
+          "path": "an-in/754e3405fac0.mxl",
+          "bytes": 149648,
+          "mtime_ns": 1791107020190749222,
+          "symlink": false
+        },
+        {
+          "path": "an-in/755007f7396e.mxl",
+          "bytes": 276712,
+          "mtime_ns": 1791107016097581210,
+          "symlink": false
+        },
+        {
+          "path": "an-in/775cfbc6c550.mxl",
+          "bytes": 13612,
+          "mtime_ns": 1791107016865499381,
+          "symlink": false
+        },
+        {
+          "path": "an-in/77a72aae8937.mxl",
+          "bytes": 46102,
+          "mtime_ns": 1791107020994563557,
+          "symlink": false
+        },
+        {
+          "path": "an-in/77f58f6d469f.mxl",
+          "bytes": 353122,
+          "mtime_ns": 1791107017330738015,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7861416c2e0d.mxl",
+          "bytes": 279319,
+          "mtime_ns": 1791107015243425202,
+          "symlink": false
+        },
+        {
+          "path": "an-in/78c4d6008fd4.mxl",
+          "bytes": 40409,
+          "mtime_ns": 1791107016815834878,
+          "symlink": false
+        },
+        {
+          "path": "an-in/798c0c95bc21.mxl",
+          "bytes": 67092,
+          "mtime_ns": 1791107020258202120,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7a61b0aed8bc.mxl",
+          "bytes": 79560,
+          "mtime_ns": 1791107019513670321,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7b2ca36088f9.mxl",
+          "bytes": 77153,
+          "mtime_ns": 1791107020276448849,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7be8d48a0617.mxl",
+          "bytes": 246552,
+          "mtime_ns": 1791107017050987516,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7bf3cabc29e3.mxl",
+          "bytes": 279601,
+          "mtime_ns": 1791107016320678432,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7c3ab98be3b9.mxl",
+          "bytes": 89270,
+          "mtime_ns": 1791107019532959637,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7f671b30235d.mxl",
+          "bytes": 237621,
+          "mtime_ns": 1791107021390718579,
+          "symlink": false
+        },
+        {
+          "path": "an-in/7ff2348f1dbf.mxl",
+          "bytes": 315551,
+          "mtime_ns": 1791107021690670356,
+          "symlink": false
+        },
+        {
+          "path": "an-in/8050f1a32d4a.mxl",
+          "bytes": 444394,
+          "mtime_ns": 1791107015610177500,
+          "symlink": false
+        },
+        {
+          "path": "an-in/81b65277dfda.mxl",
+          "bytes": 254772,
+          "mtime_ns": 1791107016429706597,
+          "symlink": false
+        },
+        {
+          "path": "an-in/81fb27bce20d.mxl",
+          "bytes": 51455,
+          "mtime_ns": 1791107020034955022,
+          "symlink": false
+        },
+        {
+          "path": "an-in/82bd150fb64b.mxl",
+          "bytes": 197931,
+          "mtime_ns": 1791107019372124378,
+          "symlink": false
+        },
+        {
+          "path": "an-in/841fea63d90c.mxl",
+          "bytes": 364535,
+          "mtime_ns": 1791107020614504756,
+          "symlink": false
+        },
+        {
+          "path": "an-in/84c3309146ad.mxl",
+          "bytes": 237383,
+          "mtime_ns": 1791107017685705397,
+          "symlink": false
+        },
+        {
+          "path": "an-in/8873f9bad0f8.mxl",
+          "bytes": 192188,
+          "mtime_ns": 1791107015684078836,
+          "symlink": false
+        },
+        {
+          "path": "an-in/88ab22acdf43.mxl",
+          "bytes": 132381,
+          "mtime_ns": 1791107018704622718,
+          "symlink": false
+        },
+        {
+          "path": "an-in/8a17acdbcfe5.mxl",
+          "bytes": 468334,
+          "mtime_ns": 1791107022073688792,
+          "symlink": false
+        },
+        {
+          "path": "an-in/8a210dd4d8e3.mxl",
+          "bytes": 186564,
+          "mtime_ns": 1791107021634621414,
+          "symlink": false
+        },
+        {
+          "path": "an-in/90c8582e18ca.mxl",
+          "bytes": 111154,
+          "mtime_ns": 1791107018640665998,
+          "symlink": false
+        },
+        {
+          "path": "an-in/912293d8e69a.mxl",
+          "bytes": 268148,
+          "mtime_ns": 1791107021857088134,
+          "symlink": false
+        },
+        {
+          "path": "an-in/932b7e64080d.mxl",
+          "bytes": 512008,
+          "mtime_ns": 1791107017506566075,
+          "symlink": false
+        },
+        {
+          "path": "an-in/932cb3d5c402.mxl",
+          "bytes": 98101,
+          "mtime_ns": 1791107018624533693,
+          "symlink": false
+        },
+        {
+          "path": "an-in/93325e7010fd.mxl",
+          "bytes": 197968,
+          "mtime_ns": 1791107018228268254,
+          "symlink": false
+        },
+        {
+          "path": "an-in/93fae5c4e1ce.mxl",
+          "bytes": 295440,
+          "mtime_ns": 1791107021028024380,
+          "symlink": false
+        },
+        {
+          "path": "an-in/94bb05b0d2d1.mxl",
+          "bytes": 327874,
+          "mtime_ns": 1791107016694053669,
+          "symlink": false
+        },
+        {
+          "path": "an-in/950455f74438.mxl",
+          "bytes": 115836,
+          "mtime_ns": 1791107018067927788,
+          "symlink": false
+        },
+        {
+          "path": "an-in/9582b1c069dd.mxl",
+          "bytes": 212452,
+          "mtime_ns": 1791107021062400039,
+          "symlink": false
+        },
+        {
+          "path": "an-in/982ad3bfb493.mxl",
+          "bytes": 269356,
+          "mtime_ns": 1791107019475735816,
+          "symlink": false
+        },
+        {
+          "path": "an-in/9d24c7d9d5bd.mxl",
+          "bytes": 116649,
+          "mtime_ns": 1791107017885852457,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a13ce44b1219.mxl",
+          "bytes": 142515,
+          "mtime_ns": 1791107018118220294,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a4342466c22f.mxl",
+          "bytes": 189736,
+          "mtime_ns": 1791107018018652828,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a5fe197e70ae.mxl",
+          "bytes": 371013,
+          "mtime_ns": 1791107019269478860,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a67575b9042f.mxl",
+          "bytes": 51364,
+          "mtime_ns": 1791107020918104753,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a750c39e6c72.mxl",
+          "bytes": 72464,
+          "mtime_ns": 1791107018136220106,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a8b788898ba0.mxl",
+          "bytes": 205308,
+          "mtime_ns": 1791107019448894141,
+          "symlink": false
+        },
+        {
+          "path": "an-in/a8c1faee16b9.mxl",
+          "bytes": 31388,
+          "mtime_ns": 1791107020979139629,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ac4d312d59cc.mxl",
+          "bytes": 92487,
+          "mtime_ns": 1791107018529941661,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ad49e44e1792.mxl",
+          "bytes": 227674,
+          "mtime_ns": 1791107015102608304,
+          "symlink": false
+        },
+        {
+          "path": "an-in/af5e330106ac.mxl",
+          "bytes": 206291,
+          "mtime_ns": 1791107020074780742,
+          "symlink": false
+        },
+        {
+          "path": "an-in/afd92a6ce6a6.mxl",
+          "bytes": 26535,
+          "mtime_ns": 1791107019487396481,
+          "symlink": false
+        },
+        {
+          "path": "an-in/b38cc5a8a643.mxl",
+          "bytes": 393321,
+          "mtime_ns": 1791107016037026586,
+          "symlink": false
+        },
+        {
+          "path": "an-in/b406a7abf7e4.mxl",
+          "bytes": 25280,
+          "mtime_ns": 1791107016878856093,
+          "symlink": false
+        },
+        {
+          "path": "an-in/b61cfbc72a0a.mxl",
+          "bytes": 97829,
+          "mtime_ns": 1791107021306361707,
+          "symlink": false
+        },
+        {
+          "path": "an-in/b9847ef2a882.mxl",
+          "bytes": 290629,
+          "mtime_ns": 1791107016208777674,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ba4b7d085cb6.mxl",
+          "bytes": 359583,
+          "mtime_ns": 1791107015483690025,
+          "symlink": false
+        },
+        {
+          "path": "an-in/bccc7a41fbe4.mxl",
+          "bytes": 268493,
+          "mtime_ns": 1791107019645143396,
+          "symlink": false
+        },
+        {
+          "path": "an-in/bdbbcb5f0877.mxl",
+          "bytes": 69401,
+          "mtime_ns": 1791107021082764276,
+          "symlink": false
+        },
+        {
+          "path": "an-in/bf2025daca8a.mxl",
+          "bytes": 133404,
+          "mtime_ns": 1791107018162785197,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c04554b46674.mxl",
+          "bytes": 108008,
+          "mtime_ns": 1791107018944870707,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c08dd756a8ce.mxl",
+          "bytes": 146629,
+          "mtime_ns": 1791107019914812611,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c239429f2eb4.mxl",
+          "bytes": 160378,
+          "mtime_ns": 1791107019948310101,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c24ab7013732.mxl",
+          "bytes": 191378,
+          "mtime_ns": 1791107018919404328,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c2e241722558.mxl",
+          "bytes": 171770,
+          "mtime_ns": 1791107018354573727,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c33694daeac8.mxl",
+          "bytes": 372085,
+          "mtime_ns": 1791107016471921492,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c4d146f64530.mxl",
+          "bytes": 174739,
+          "mtime_ns": 1791107019984871976,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c63520821348.mxl",
+          "bytes": 260295,
+          "mtime_ns": 1791107021217953197,
+          "symlink": false
+        },
+        {
+          "path": "an-in/c98363f9c851.mxl",
+          "bytes": 265089,
+          "mtime_ns": 1791107015299286810,
+          "symlink": false
+        },
+        {
+          "path": "an-in/d1d90257c0f9.mxl",
+          "bytes": 20458,
+          "mtime_ns": 1791107016828410171,
+          "symlink": false
+        },
+        {
+          "path": "an-in/d3450bcdcfe4.mxl",
+          "bytes": 159284,
+          "mtime_ns": 1791107020162134791,
+          "symlink": false
+        },
+        {
+          "path": "an-in/d4954f588302.mxl",
+          "bytes": 68298,
+          "mtime_ns": 1791107020099441827,
+          "symlink": false
+        },
+        {
+          "path": "an-in/d56b1dba3afc.mxl",
+          "bytes": 419144,
+          "mtime_ns": 1791107021739643107,
+          "symlink": false
+        },
+        {
+          "path": "an-in/d90066643423.mxl",
+          "bytes": 210149,
+          "mtime_ns": 1791107017558334419,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dbf6ed502f85.mxl",
+          "bytes": 108445,
+          "mtime_ns": 1791107020360366844,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dbf7076ddc58.mxl",
+          "bytes": 108267,
+          "mtime_ns": 1791107015328103492,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dc641c1f0245.mxl",
+          "bytes": 335079,
+          "mtime_ns": 1791107015935616697,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dd38cb93d111.mxl",
+          "bytes": 131223,
+          "mtime_ns": 1791107015966332177,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dd6b84e146e8.mxl",
+          "bytes": 42737,
+          "mtime_ns": 1791107020967520423,
+          "symlink": false
+        },
+        {
+          "path": "an-in/de287e1c857d.mxl",
+          "bytes": 177409,
+          "mtime_ns": 1791107019883065002,
+          "symlink": false
+        },
+        {
+          "path": "an-in/dfd3c089ed11.mxl",
+          "bytes": 115054,
+          "mtime_ns": 1791107016783738851,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e000d9f393d8.mxl",
+          "bytes": 240096,
+          "mtime_ns": 1791107015412266780,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e26586288f0e.mxl",
+          "bytes": 199313,
+          "mtime_ns": 1791107022148207839,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e2b3dcadf2fc.mxl",
+          "bytes": 233727,
+          "mtime_ns": 1791107015136161460,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e3324640fc0b.mxl",
+          "bytes": 461339,
+          "mtime_ns": 1791107022259899305,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e44a42450d99.mxl",
+          "bytes": 169954,
+          "mtime_ns": 1791107017596214798,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e450273548be.mxl",
+          "bytes": 223030,
+          "mtime_ns": 1791107021183860288,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e49519778031.mxl",
+          "bytes": 120765,
+          "mtime_ns": 1791107018581215003,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e4f8031716ba.mxl",
+          "bytes": 106420,
+          "mtime_ns": 1791107018379086811,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e5b42f76a19c.mxl",
+          "bytes": 378084,
+          "mtime_ns": 1791107015555836397,
+          "symlink": false
+        },
+        {
+          "path": "an-in/e6429b0f56f4.mxl",
+          "bytes": 83320,
+          "mtime_ns": 1791107020287897555,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ec96373615ed.mxl",
+          "bytes": 164230,
+          "mtime_ns": 1791107018195891102,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f4eb07822ecb.mxl",
+          "bytes": 98727,
+          "mtime_ns": 1791107020326358144,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f5924c22c11d.mxl",
+          "bytes": 262803,
+          "mtime_ns": 1791107015896645022,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f5ed4bdd4269.mxl",
+          "bytes": 824652,
+          "mtime_ns": 1791107020746613041,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f624b276a887.mxl",
+          "bytes": 291673,
+          "mtime_ns": 1791107016571656666,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f6fd37720a57.mxl",
+          "bytes": 211049,
+          "mtime_ns": 1791107016518055816,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f7940c959f1c.mxl",
+          "bytes": 158947,
+          "mtime_ns": 1791107019231250021,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f88c1b67bdfb.mxl",
+          "bytes": 66813,
+          "mtime_ns": 1791107020952591913,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f8ab78362385.mxl",
+          "bytes": 527678,
+          "mtime_ns": 1791107016625934852,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f93efa2493ed.mxl",
+          "bytes": 226505,
+          "mtime_ns": 1791107020491423918,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f952659ccf3c.mxl",
+          "bytes": 165515,
+          "mtime_ns": 1791107017443852360,
+          "symlink": false
+        },
+        {
+          "path": "an-in/f9e74e8eb302.mxl",
+          "bytes": 98634,
+          "mtime_ns": 1791107018090078489,
+          "symlink": false
+        },
+        {
+          "path": "an-in/fd3f72ce0d32.mxl",
+          "bytes": 161984,
+          "mtime_ns": 1791107018829133894,
+          "symlink": false
+        },
+        {
+          "path": "an-in/fe4090096274.mxl",
+          "bytes": 85118,
+          "mtime_ns": 1791107017860758996,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ff88180326f4.mxl",
+          "bytes": 235048,
+          "mtime_ns": 1791107019582481682,
+          "symlink": false
+        },
+        {
+          "path": "an-in/ffffddf91bd9.mxl",
+          "bytes": 41777,
+          "mtime_ns": 1791107020932373636,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q.tgz",
+          "bytes": 164762,
+          "mtime_ns": 1791153803472235879,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/00abcc679b5f.json",
+          "bytes": 21305,
+          "mtime_ns": 1791135513002252019,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/00c4bbe5f850.json",
+          "bytes": 61029,
+          "mtime_ns": 1791135772780952735,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/015300f3e0ac.json",
+          "bytes": 52637,
+          "mtime_ns": 1791135755839865401,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/01f3786fd536.json",
+          "bytes": 4681,
+          "mtime_ns": 1791135516076305057,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0761d6a8876c.json",
+          "bytes": 24107,
+          "mtime_ns": 1791135702988524632,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/07ec5dbaf11b.json",
+          "bytes": 43961,
+          "mtime_ns": 1791135829768831055,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0836ecf366c4.json",
+          "bytes": 14488,
+          "mtime_ns": 1791135524127965089,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0bec5d3e4ffc.json",
+          "bytes": 61602,
+          "mtime_ns": 1791135760128569019,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0c7ef82a9e14.json",
+          "bytes": 32100,
+          "mtime_ns": 1791135547439476696,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0ce299e87378.json",
+          "bytes": 2942,
+          "mtime_ns": 1791135831371969506,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0d63d12d9a07.json",
+          "bytes": 63373,
+          "mtime_ns": 1791135990626409886,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/0fa0c977775e.json",
+          "bytes": 59297,
+          "mtime_ns": 1791135830675833910,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/e450273548be.json",
+          "bytes": 41401,
+          "mtime_ns": 1791136491335860981,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/e49519778031.json",
+          "bytes": 27856,
+          "mtime_ns": 1791136646591634736,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/e4f8031716ba.json",
+          "bytes": 19943,
+          "mtime_ns": 1791136439075677176,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/e6429b0f56f4.json",
+          "bytes": 14886,
+          "mtime_ns": 1791136426414493531,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/ec96373615ed.json",
+          "bytes": 37794,
+          "mtime_ns": 1791136623426864509,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f4eb07822ecb.json",
+          "bytes": 16102,
+          "mtime_ns": 1791136417659686969,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f5924c22c11d.json",
+          "bytes": 54624,
+          "mtime_ns": 1791136373372183835,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f624b276a887.json",
+          "bytes": 82547,
+          "mtime_ns": 1791136309909276338,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f6fd37720a57.json",
+          "bytes": 40269,
+          "mtime_ns": 1791136170908069831,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f7940c959f1c.json",
+          "bytes": 42346,
+          "mtime_ns": 1791136282533313503,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f88c1b67bdfb.json",
+          "bytes": 13555,
+          "mtime_ns": 1791136123948139650,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f8ab78362385.json",
+          "bytes": 162,
+          "mtime_ns": 1791136181554577907,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f93efa2493ed.json",
+          "bytes": 41538,
+          "mtime_ns": 1791136116582264971,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f952659ccf3c.json",
+          "bytes": 42402,
+          "mtime_ns": 1791136179436943372,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/f9e74e8eb302.json",
+          "bytes": 23774,
+          "mtime_ns": 1791136078548306640,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/fd3f72ce0d32.json",
+          "bytes": 34851,
+          "mtime_ns": 1791136141746448330,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/fe4090096274.json",
+          "bytes": 17971,
+          "mtime_ns": 1791136064226929686,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/ff88180326f4.json",
+          "bytes": 55425,
+          "mtime_ns": 1791136110215092032,
+          "symlink": false
+        },
+        {
+          "path": "an-out-q/ffffddf91bd9.json",
+          "bytes": 8701,
+          "mtime_ns": 1791136053920520707,
+          "symlink": false
+        },
+        {
+          "path": "catalog-copy.json",
+          "bytes": 346756,
+          "mtime_ns": 1791108034161590670,
+          "symlink": false
+        },
+        {
+          "path": "maps.tgz",
+          "bytes": 7988,
+          "mtime_ns": 1791107046878684499,
+          "symlink": false
+        }
+      ]
+    }
+  ],
+  "deleted_generated_directories": [
+    {
+      "path": "/Users/chenjinfu/software develop/AIlegro Score/apps/web/dist",
+      "file_count": 49,
+      "bytes": 64573239,
+      "reason": "Ignored output or Vite/Vitest cache; regenerable from preserved source and installed dependencies",
+      "files": [
+        {
+          "path": "assets/catalog-DyQ0OeS2.js",
+          "bytes": 25941,
+          "mtime_ns": 1791101113260607208,
+          "symlink": false
+        },
+        {
+          "path": "assets/catalog-DyQ0OeS2.js.map",
+          "bytes": 101813,
+          "mtime_ns": 1791101113262813469,
+          "symlink": false
+        },
+        {
+          "path": "assets/dist-vmXbLoZ8.js",
+          "bytes": 430490,
+          "mtime_ns": 1791101113260816959,
+          "symlink": false
+        },
+        {
+          "path": "assets/dist-vmXbLoZ8.js.map",
+          "bytes": 1297784,
+          "mtime_ns": 1791101113263145096,
+          "symlink": false
+        },
+        {
+          "path": "assets/html2canvas-F4kE4nBb.js",
+          "bytes": 199532,
+          "mtime_ns": 1791101113261427629,
+          "symlink": false
+        },
+        {
+          "path": "assets/html2canvas-F4kE4nBb.js.map",
+          "bytes": 627646,
+          "mtime_ns": 1791101113263831349,
+          "symlink": false
+        },
+        {
+          "path": "assets/index-31iTzNMu.js",
+          "bytes": 705414,
+          "mtime_ns": 1791101113260139206,
+          "symlink": false
+        },
+        {
+          "path": "assets/index-31iTzNMu.js.map",
+          "bytes": 2586533,
+          "mtime_ns": 1791101113264989855,
+          "symlink": false
+        },
+        {
+          "path": "assets/index-CWKj_M23.css",
+          "bytes": 17561,
+          "mtime_ns": 1791101113268081579,
+          "symlink": false
+        },
+        {
+          "path": "assets/index.es-CU-ciMvO.js",
+          "bytes": 151459,
+          "mtime_ns": 1791101113261727714,
+          "symlink": false
+        },
+        {
+          "path": "assets/index.es-CU-ciMvO.js.map",
+          "bytes": 637766,
+          "mtime_ns": 1791101113266254153,
+          "symlink": false
+        },
+        {
+          "path": "assets/jspdf.es.min-DrViUzOV.js",
+          "bytes": 399485,
+          "mtime_ns": 1791101113262021674,
+          "symlink": false
+        },
+        {
+          "path": "assets/jspdf.es.min-DrViUzOV.js.map",
+          "bytes": 1298216,
+          "mtime_ns": 1791101113267053824,
+          "symlink": false
+        },
+        {
+          "path": "assets/midi-ChiSCdrC.js",
+          "bytes": 32169,
+          "mtime_ns": 1791101113262191299,
+          "symlink": false
+        },
+        {
+          "path": "assets/midi-ChiSCdrC.js.map",
+          "bytes": 117657,
+          "mtime_ns": 1791101113267644535,
+          "symlink": false
+        },
+        {
+          "path": "assets/pdf-CtxMSf4y.js",
+          "bytes": 1712,
+          "mtime_ns": 1791101113262360217,
+          "symlink": false
+        },
+        {
+          "path": "assets/pdf-CtxMSf4y.js.map",
+          "bytes": 4349,
+          "mtime_ns": 1791101113267762578,
+          "symlink": false
+        },
+        {
+          "path": "assets/purify.es-Bvo9QlJ8.js",
+          "bytes": 28133,
+          "mtime_ns": 1791101113262517634,
+          "symlink": false
+        },
+        {
+          "path": "assets/purify.es-Bvo9QlJ8.js.map",
+          "bytes": 129503,
+          "mtime_ns": 1791101113267848078,
+          "symlink": false
+        },
+        {
+          "path": "assets/spessasynth_processor.min-Do8nRWPC.js",
+          "bytes": 402596,
+          "mtime_ns": 1791101113268257330,
+          "symlink": false
+        },
+        {
+          "path": "assets/svg2pdf.es.min-Bu36QkqT.js",
+          "bytes": 86285,
+          "mtime_ns": 1791101113262669218,
+          "symlink": false
+        },
+        {
+          "path": "assets/svg2pdf.es.min-Bu36QkqT.js.map",
+          "bytes": 240762,
+          "mtime_ns": 1791101113267974120,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/A2.mp3",
+          "bytes": 81678,
+          "mtime_ns": 1791101112645995468,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/A3.mp3",
+          "bytes": 74526,
+          "mtime_ns": 1791101112646956848,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/A4.mp3",
+          "bytes": 61148,
+          "mtime_ns": 1791101112647714769,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/A5.mp3",
+          "bytes": 45747,
+          "mtime_ns": 1791101112648619856,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/C2.mp3",
+          "bytes": 110357,
+          "mtime_ns": 1791101112649569861,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/C3.mp3",
+          "bytes": 78036,
+          "mtime_ns": 1791101112650230948,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/C4.mp3",
+          "bytes": 78718,
+          "mtime_ns": 1791101112651137619,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/C5.mp3",
+          "bytes": 68920,
+          "mtime_ns": 1791101112652187541,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/C6.mp3",
+          "bytes": 28065,
+          "mtime_ns": 1791101112652851378,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Ds2.mp3",
+          "bytes": 110796,
+          "mtime_ns": 1791101112654077967,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Ds3.mp3",
+          "bytes": 78717,
+          "mtime_ns": 1791101112654812555,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Ds4.mp3",
+          "bytes": 73519,
+          "mtime_ns": 1791101112655508016,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Ds5.mp3",
+          "bytes": 58179,
+          "mtime_ns": 1791101112656357854,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Fs2.mp3",
+          "bytes": 102320,
+          "mtime_ns": 1791101112657264525,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Fs3.mp3",
+          "bytes": 77933,
+          "mtime_ns": 1791101112658187738,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Fs4.mp3",
+          "bytes": 68219,
+          "mtime_ns": 1791101112658760700,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/Fs5.mp3",
+          "bytes": 51597,
+          "mtime_ns": 1791101112659165410,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/NOTICE.txt",
+          "bytes": 828,
+          "mtime_ns": 1791101112659551328,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/SOURCE-README.txt",
+          "bytes": 1883,
+          "mtime_ns": 1791101112659839788,
+          "symlink": false
+        },
+        {
+          "path": "audio/salamander/manifest.json",
+          "bytes": 3269,
+          "mtime_ns": 1791101112660278916,
+          "symlink": false
+        },
+        {
+          "path": "audio/soundfonts/MuseScore_General.sf3",
+          "bytes": 39900972,
+          "mtime_ns": 1791101112719781175,
+          "symlink": false
+        },
+        {
+          "path": "audio/soundfonts/MuseScore_General_License.md",
+          "bytes": 3419,
+          "mtime_ns": 1791101112723162109,
+          "symlink": false
+        },
+        {
+          "path": "audio/soundfonts/MuseScore_General_Sample_Sources.csv",
+          "bytes": 12817,
+          "mtime_ns": 1791101112723923655,
+          "symlink": false
+        },
+        {
+          "path": "favicon.svg",
+          "bytes": 568,
+          "mtime_ns": 1791101112724304240,
+          "symlink": false
+        },
+        {
+          "path": "fonts/LXGWWenKai-OFL.txt",
+          "bytes": 5176,
+          "mtime_ns": 1791101112725887873,
+          "symlink": false
+        },
+        {
+          "path": "fonts/LXGWWenKaiLite-Regular.ttf",
+          "bytes": 13872424,
+          "mtime_ns": 1791101112744905428,
+          "symlink": false
+        },
+        {
+          "path": "index.html",
+          "bytes": 602,
+          "mtime_ns": 1791101113268861750,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "path": "/Users/chenjinfu/software develop/AIlegro Score/apps/web/node_modules/.vite",
+      "file_count": 32,
+      "bytes": 9517149,
+      "reason": "Ignored output or Vite/Vitest cache; regenerable from preserved source and installed dependencies",
+      "files": [
+        {
+          "path": "deps/@tonejs_midi.js",
+          "bytes": 59159,
+          "mtime_ns": 1791100600126956856,
+          "symlink": false
+        },
+        {
+          "path": "deps/@tonejs_midi.js.map",
+          "bytes": 111750,
+          "mtime_ns": 1791100600131791881,
+          "symlink": false
+        },
+        {
+          "path": "deps/_metadata.json",
+          "bytes": 2730,
+          "mtime_ns": 1791100600138331455,
+          "symlink": false
+        },
+        {
+          "path": "deps/html2canvas-CnbFJZGR.js",
+          "bytes": 332140,
+          "mtime_ns": 1791100600129658578,
+          "symlink": false
+        },
+        {
+          "path": "deps/html2canvas-CnbFJZGR.js.map",
+          "bytes": 610290,
+          "mtime_ns": 1791100600131979923,
+          "symlink": false
+        },
+        {
+          "path": "deps/immer.js",
+          "bytes": 43522,
+          "mtime_ns": 1791100600127405275,
+          "symlink": false
+        },
+        {
+          "path": "deps/immer.js.map",
+          "bytes": 83636,
+          "mtime_ns": 1791100600132126466,
+          "symlink": false
+        },
+        {
+          "path": "deps/index.es-CpC6auX2.js",
+          "bytes": 323219,
+          "mtime_ns": 1791100600130308290,
+          "symlink": false
+        },
+        {
+          "path": "deps/index.es-CpC6auX2.js.map",
+          "bytes": 612355,
+          "mtime_ns": 1791100600132298966,
+          "symlink": false
+        },
+        {
+          "path": "deps/jspdf.es.min-CM8ftt7V.js",
+          "bytes": 634122,
+          "mtime_ns": 1791100600131194586,
+          "symlink": false
+        },
+        {
+          "path": "deps/jspdf.es.min-CM8ftt7V.js.map",
+          "bytes": 1268598,
+          "mtime_ns": 1791100600132634093,
+          "symlink": false
+        },
+        {
+          "path": "deps/jspdf.js",
+          "bytes": 568,
+          "mtime_ns": 1791100600127552067,
+          "symlink": false
+        },
+        {
+          "path": "deps/package.json",
+          "bytes": 23,
+          "mtime_ns": 1791100599987367399,
+          "symlink": false
+        },
+        {
+          "path": "deps/purify.es-BlLV5BJq.js",
+          "bytes": 84357,
+          "mtime_ns": 1791100600131547129,
+          "symlink": false
+        },
+        {
+          "path": "deps/purify.es-BlLV5BJq.js.map",
+          "bytes": 128409,
+          "mtime_ns": 1791100600132917678,
+          "symlink": false
+        },
+        {
+          "path": "deps/react-dom.js",
+          "bytes": 15159,
+          "mtime_ns": 1791100600127818402,
+          "symlink": false
+        },
+        {
+          "path": "deps/react-dom.js.map",
+          "bytes": 26825,
+          "mtime_ns": 1791100600133143429,
+          "symlink": false
+        },
+        {
+          "path": "deps/react-dom_client.js",
+          "bytes": 911965,
+          "mtime_ns": 1791100600128036195,
+          "symlink": false
+        },
+        {
+          "path": "deps/react-dom_client.js.map",
+          "bytes": 1665185,
+          "mtime_ns": 1791100600133541931,
+          "symlink": false
+        },
+        {
+          "path": "deps/react.js",
+          "bytes": 39797,
+          "mtime_ns": 1791100600128228612,
+          "symlink": false
+        },
+        {
+          "path": "deps/react.js.map",
+          "bytes": 71635,
+          "mtime_ns": 1791100600134044517,
+          "symlink": false
+        },
+        {
+          "path": "deps/react_jsx-dev-runtime.js",
+          "bytes": 10820,
+          "mtime_ns": 1791100600128485989,
+          "symlink": false
+        },
+        {
+          "path": "deps/react_jsx-dev-runtime.js.map",
+          "bytes": 18657,
+          "mtime_ns": 1791100600134204226,
+          "symlink": false
+        },
+        {
+          "path": "deps/react_jsx-runtime.js",
+          "bytes": 11311,
+          "mtime_ns": 1791100600128838949,
+          "symlink": false
+        },
+        {
+          "path": "deps/react_jsx-runtime.js.map",
+          "bytes": 19545,
+          "mtime_ns": 1791100600134895396,
+          "symlink": false
+        },
+        {
+          "path": "deps/rolldown-runtime-7_rZTKki.js",
+          "bytes": 1793,
+          "mtime_ns": 1791100600131665922,
+          "symlink": false
+        },
+        {
+          "path": "deps/spessasynth___lib.js",
+          "bytes": 803426,
+          "mtime_ns": 1791100600129068658,
+          "symlink": false
+        },
+        {
+          "path": "deps/spessasynth___lib.js.map",
+          "bytes": 1264596,
+          "mtime_ns": 1791100600135280273,
+          "symlink": false
+        },
+        {
+          "path": "deps/svg2pdf__js.js",
+          "bytes": 123949,
+          "mtime_ns": 1791100600129232659,
+          "symlink": false
+        },
+        {
+          "path": "deps/svg2pdf__js.js.map",
+          "bytes": 232652,
+          "mtime_ns": 1791100600135570483,
+          "symlink": false
+        },
+        {
+          "path": "deps/zustand.js",
+          "bytes": 1932,
+          "mtime_ns": 1791100600129504285,
+          "symlink": false
+        },
+        {
+          "path": "deps/zustand.js.map",
+          "bytes": 3024,
+          "mtime_ns": 1791100600135821151,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "path": "/Users/chenjinfu/software develop/AIlegro Score/node_modules/.vite",
+      "file_count": 1,
+      "bytes": 1374,
+      "reason": "Ignored output or Vite/Vitest cache; regenerable from preserved source and installed dependencies",
+      "files": [
+        {
+          "path": "vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+          "bytes": 1374,
+          "mtime_ns": 1791101111972258095,
+          "symlink": false
+        }
+      ]
+    }
+  ],
+  "protected_file_count": 191,
+  "protected_file_metadata": {
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v31-ready-20261001/weights.pt": [
+      20140319,
+      1791051166322812377
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/MuScriptor-large-1.3B/model.safetensors": [
+      5465642136,
+      1786522279230653927
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/.venv-training/bin/python": [
+      6007856,
+      1786240363352378434
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/DOWNLOAD_MANIFEST.json": [
+      13456,
+      1791099815253930493
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/JOINT-DEVELOPMENT-PLAN.md": [
+      13349,
+      1791185948404132597
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/open-source/SOURCE_MANIFEST.json": [
+      2972,
+      1791101678799184279
+    ],
+    "/Users/chenjinfu/software develop/AIlegro Score/apps/web/public/audio/soundfonts/MuseScore_General.sf3": [
+      39900972,
+      1791100404237613844
+    ],
+    "/Users/chenjinfu/software develop/AIlegro Score/apps/web/public/fonts/LXGWWenKaiLite-Regular.ttf": [
+      13872424,
+      1791100334634324221
+    ],
+    "/Users/chenjinfu/software develop/AIlegro Score/package-lock.json": [
+      155286,
+      1791100205131573975
+    ],
+    "/Users/chenjinfu/software develop/AIlegro Score/docs/open-source-integration-plan.md": [
+      8957,
+      1791185948404427349
+    ],
+    "/Users/chenjinfu/software develop/AIlegro Score/out/claude-m3ai10-nf.bundle": [
+      2139,
+      1791096761062341351
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-800k/config.json": [
+      1963,
+      1791098094397240538
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-800k/README.md": [
+      739,
+      1791098093971605296
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-800k/.gitattributes": [
+      1477,
+      1791098093476603146
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-800k/pytorch_model.bin": [
+      1438866529,
+      1791098952083251714
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-100k/config.json": [
+      1962,
+      1791097639822655821
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-100k/README.md": [
+      738,
+      1791097639266043633
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-100k/.gitattributes": [
+      1477,
+      1791097638815805952
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-100k/pytorch_model.bin": [
+      512433185,
+      1791097728867578102
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-800k/config.json": [
+      1962,
+      1791097780676920560
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-800k/README.md": [
+      696,
+      1791097780295631265
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-800k/.gitattributes": [
+      1477,
+      1791097780301854084
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-800k/pytorch_model.bin": [
+      512433185,
+      1791098113478623861
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-200k/config.json": [
+      1963,
+      1791098087522919364
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-200k/README.md": [
+      739,
+      1791098086640058649
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-200k/.gitattributes": [
+      1477,
+      1791098085712541306
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-200k/pytorch_model.bin": [
+      1438866529,
+      1791099074280645081
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-100k/config.json": [
+      1963,
+      1791098117079651685
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-100k/README.md": [
+      738,
+      1791098116505099509
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-100k/.gitattributes": [
+      1477,
+      1791098116030823716
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-100k/pytorch_model.bin": [
+      3120594081,
+      1791099615707442682
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-100k/config.json": [
+      1963,
+      1791097921059814610
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-100k/README.md": [
+      739,
+      1791097920549572957
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-100k/.gitattributes": [
+      1477,
+      1791097920137992447
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-medium-100k/pytorch_model.bin": [
+      1438866529,
+      1791098683592258093
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-inter-100k/config.json": [
+      1962,
+      1791097782143297275
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-inter-100k/README.md": [
+      701,
+      1791097781567613503
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-inter-100k/.gitattributes": [
+      1477,
+      1791097781062654333
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-inter-100k/pytorch_model.bin": [
+      447911969,
+      1791098092618083819
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-100k/config.json": [
+      1962,
+      1791097779852037196
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-100k/README.md": [
+      696,
+      1791097779435592123
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-100k/.gitattributes": [
+      1477,
+      1791097779427165169
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-ar-100k/pytorch_model.bin": [
+      512433185,
+      1791098084692623056
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-800k/model.safetensors": [
+      3120598456,
+      1791099812382650400
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-800k/config.json": [
+      1977,
+      1791098686390420655
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-800k/README.md": [
+      1054,
+      1791098685983434319
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-large-800k/.gitattributes": [
+      1519,
+      1791098685431058350
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-800k/config.json": [
+      1962,
+      1791097730651734418
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-800k/README.md": [
+      738,
+      1791097730233507628
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-800k/.gitattributes": [
+      1477,
+      1791097729810176856
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/Anticipatory-Music-Transformer/models/music-small-800k/pytorch_model.bin": [
+      512433185,
+      1791097918972553716
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-ready-20261001/weights.pt": [
+      21434627,
+      1790845993972638608
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-ready-20261001/state.pt": [
+      21584001,
+      1790845993953992490
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-ready-20261001/.writer.lock": [
+      0,
+      1790845993874638710
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-ready-20261001/manifest.json": [
+      10563,
+      1790845993875150587
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-preview-20261001-step19193/state.pt": [
+      71118967,
+      1790841682220232598
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-preview-20261001-step19193/manifest.json": [
+      5396,
+      1790804087597226205
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-preview-20261001-step19193/PREVIEW.json": [
+      363,
+      1790841833199935859
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-continued-20260930/state.pt": [
+      71118967,
+      1790841682220232598
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-continued-20260930/.writer.lock": [
+      0,
+      1790804086662203698
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-continued-20260930/manifest.json": [
+      5396,
+      1790804087597226205
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-continued-20260930/metrics.jsonl": [
+      29805179,
+      1790841682223541195
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-pilot-20260929/best.pt": [
+      26265365,
+      1790711580949110746
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-pilot-20260929/state.pt": [
+      60132456,
+      1790711615450302327
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-pilot-20260929/manifest.json": [
+      21470,
+      1790711339924451224
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-pilot-20260929/metrics.jsonl": [
+      3210,
+      1790711615454120711
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v2-20261003/weights.pt": [
+      3504102,
+      1791018320047447967
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v2-20261003/tune.log": [
+      176,
+      1791018325949323168
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v2-20261003/checkpoint.pt": [
+      10541197,
+      1791018325254312536
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v2-20261003/train.log": [
+      8764,
+      1791018325603704029
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-smoke-20261001/weights.pt": [
+      21434627,
+      1790845717156389806
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-smoke-20261001/state.pt": [
+      64470349,
+      1790845717135629764
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-smoke-20261001/.writer.lock": [
+      0,
+      1790845661282593638
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-smoke-20261001/manifest.json": [
+      10563,
+      1790845661283048723
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-smoke-20261001/metrics.jsonl": [
+      3537,
+      1790845717076675566
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v1-nokey-20261003/train.log": [
+      3235,
+      1791014970085214473
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-20260930/state.pt": [
+      71119031,
+      1790794888150766362
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-20260930/.writer.lock": [
+      0,
+      1790755285273962354
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-20260930/manifest.json": [
+      5212,
+      1790755286050946204
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v2-history512-20260930/metrics.jsonl": [
+      31234966,
+      1790794888152303994
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-all-data-20260930/manifest.json": [
+      3830,
+      1790747531648939969
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v1-all-data-20260930/metrics.jsonl": [
+      184,
+      1790747898958284717
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-verified-20261001/weights.pt": [
+      21434627,
+      1790846198198119574
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-verified-20261001/state.pt": [
+      64470349,
+      1790846198175157522
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-verified-20261001/.writer.lock": [
+      0,
+      1790846022600405147
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-verified-20261001/manifest.json": [
+      10563,
+      1790846022601070941
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-verified-20261001/metrics.jsonl": [
+      1734,
+      1790846198109573881
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-verified-smoke-20261001/weights.pt": [
+      21434627,
+      1790845945280715101
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-verified-smoke-20261001/state.pt": [
+      64470285,
+      1790845945260815146
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-verified-smoke-20261001/.writer.lock": [
+      0,
+      1790845944916115622
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-verified-smoke-20261001/manifest.json": [
+      10563,
+      1790845944916584999
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-verified-smoke-20261001/metrics.jsonl": [
+      875,
+      1790845945196983637
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-arrangement-v1/provenance.json": [
+      1281,
+      1790646597830467254
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-arrangement-v1/best.pt": [
+      932315,
+      1790659199454054498
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-arrangement-v1/local-midi-manifest.json": [
+      28894,
+      1790646597831514758
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-arrangement-v1/local-midi-selection.json": [
+      44322,
+      1790646597832169219
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-arrangement-v1/state.pt": [
+      2805087,
+      1790660997993267502
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/note-filler-v1-20261004/log.json": [
+      7716,
+      1791096649512590553
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/note-filler-v1-20261004/weights.pt": [
+      2353769,
+      1791096649114739124
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/note-filler-v1-20261004/tuning.json": [
+      1603,
+      1791096649878064307
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-smoke-20261001/weights.pt": [
+      21434627,
+      1790845849335567594
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-smoke-20261001/state.pt": [
+      64470285,
+      1790845849319068111
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-smoke-20261001/.writer.lock": [
+      0,
+      1790845849052310237
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-smoke-20261001/manifest.json": [
+      10563,
+      1790845849052798197
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v3-final-smoke-20261001/metrics.jsonl": [
+      875,
+      1790845849256791941
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v31-ready-20261001/state.pt": [
+      60635798,
+      1791051166298806572
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v31-ready-20261001/.writer.lock": [
+      0,
+      1790884575827745667
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v31-ready-20261001/manifest.json": [
+      6471,
+      1790884575828243084
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-v31-ready-20261001/metrics.jsonl": [
+      69421938,
+      1791051166226857450
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-expression-v1/metrics.json": [
+      178661,
+      1790646556529108036
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-expression-v1/best-base.pt": [
+      6420491,
+      1790646556464926333
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-expression-v1/provenance.json": [
+      850,
+      1790632151040711494
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-expression-v1/best.pt": [
+      316351,
+      1790646556449516358
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-continued-expression-v1/state.pt": [
+      20379512,
+      1790646556519285207
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/learning-curves.png": [
+      170197,
+      1790583264444025914
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/REPORT.md": [
+      9250,
+      1790583205271062509
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/structured.log": [
+      5031,
+      1790536632727120501
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/STATUS.md": [
+      877,
+      1790583205639942153
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/benchmark.json": [
+      206,
+      1790583206092439934
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute-basic.log": [
+      5036,
+      1790536623809686257
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/evaluation-interim.json": [
+      3066,
+      1790536623280418298
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute.log": [
+      5041,
+      1790583258101279007
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/stream-curves.png": [
+      189194,
+      1790583265476696542
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-params.log": [
+      5044,
+      1790583260101595094
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/evaluation.json": [
+      6076,
+      1790583257477241993
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v1-20261003/weights.pt": [
+      3482290,
+      1791014964398923481
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v1-20261003/tune.log": [
+      176,
+      1791014969700119673
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v1-20261003/checkpoint.pt": [
+      10475261,
+      1791014968976981165
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/harmonizer-v1-20261003/train.log": [
+      7870,
+      1791014969327246908
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/four-pillar-bootstrap-v0/init.pt": [
+      7691075,
+      1790679593696964239
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/demo/build.py": [
+      3880,
+      1790538127167326817
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/demo/ailegro-joint-demo.html": [
+      1629651,
+      1790538126427611320
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/demo/demo-data.json": [
+      90878,
+      1790537921936559190
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/demo/template.html": [
+      23640,
+      1790538126806619681
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-params/model.pt": [
+      6488127,
+      1790583261821682361
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-params/training.json": [
+      7453,
+      1790583262234670779
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/ailegro-blind.html": [
+      1628045,
+      1790583207723270083
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/blind-data.json": [
+      63640,
+      1790583208184625760
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/build_blind_page.py": [
+      6416,
+      1790583208991989854
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/README.md": [
+      1365,
+      1790583206502000476
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/blind-template.html": [
+      42068,
+      1790583208594005134
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute-basic/model.pt": [
+      2080633,
+      1790536625147281942
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute-basic/training.json": [
+      7349,
+      1790536625513627457
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/pop-joint.wav": [
+      890014,
+      1790536631898953467
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/samples.json": [
+      7455,
+      1790536632346497683
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/pop-joint.mid": [
+      1243,
+      1790536630929988757
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-melody.wav": [
+      1164014,
+      1790536628713857614
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-joint.mid": [
+      1428,
+      1790536626426098155
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-real.wav": [
+      1164014,
+      1790536630260411039
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-melody.mid": [
+      1297,
+      1790536628001881106
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-joint.wav": [
+      1164014,
+      1790536627501231799
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/samples/lieder-real.mid": [
+      1387,
+      1790536629230489771
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute/model.pt": [
+      2095274,
+      1790583259285521784
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/flat-compute/training.json": [
+      7449,
+      1790583259661320521
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/structured/model.pt": [
+      6400591,
+      1790536634662599753
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/structured/training.json": [
+      7354,
+      1790536635085367612
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/interrupted/flat-params-interrupted-1.log": [
+      610,
+      1790583262615575321
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/interrupted/flat-params-interrupted-2.log": [
+      2267,
+      1790583263069479888
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/interrupted/flat-params-interrupted-3.log": [
+      1989,
+      1790583263468622436
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/interrupted/flat-compute-interrupted.log": [
+      4752,
+      1790536625911985750
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-C4.mp3": [
+      54346,
+      1790583218777007340
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-Cs3.mp3": [
+      42522,
+      1790583211336451548
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-As1.mp3": [
+      42522,
+      1790583209461907012
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-Cs2.mp3": [
+      42522,
+      1790583210636236532
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-C5.mp3": [
+      54346,
+      1790583219537901636
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-As2.mp3": [
+      42522,
+      1790583209960127371
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-C6.mp3": [
+      54345,
+      1790583252309529921
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-C2.mp3": [
+      54346,
+      1790583217278845016
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-E1.mp3": [
+      42522,
+      1790583211863660649
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-C3.mp3": [
+      54346,
+      1790583218016815837
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-E2.mp3": [
+      42522,
+      1790583212579718455
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-E3.mp3": [
+      42522,
+      1790583213437765553
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-A5.mp3": [
+      54346,
+      1790583216763989910
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-A4.mp3": [
+      54346,
+      1790583216338817081
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-A3.mp3": [
+      54346,
+      1790583215767382324
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-G1.mp3": [
+      42522,
+      1790583214065022958
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-A2.mp3": [
+      54346,
+      1790583215240092641
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/bass-G2.mp3": [
+      42522,
+      1790583214606991596
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Ds2.mp3": [
+      54346,
+      1790583252877321745
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Ds3.mp3": [
+      54346,
+      1790583253418090207
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Fs3.mp3": [
+      54346,
+      1790583255974048379
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Fs2.mp3": [
+      54346,
+      1790583255440459686
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Ds4.mp3": [
+      54346,
+      1790583254234530602
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Ds5.mp3": [
+      54346,
+      1790583254870988440
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Fs5.mp3": [
+      54346,
+      1790583257020312210
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/joint-v1/blind/samples/piano-Fs4.mp3": [
+      54346,
+      1790583256430385661
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/backups/joint-v1-before-new-data-20260928/model.pt": [
+      6400591,
+      1790536634662599753
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/backups/joint-v1-before-new-data-20260928/training.json": [
+      7354,
+      1790536635085367612
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/backups/joint-v1-before-new-data-20260928/joint-weights.js": [
+      8446354,
+      1790545313967968791
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/backups/joint-v1-before-new-data-20260928/README.md": [
+      1143,
+      1790623194213965479
+    ],
+    "/Users/chenjinfu/software develop/AIlegro/training/runs/old-models-tmp/four-pillar-v31-step45225/weights.pt": [
+      20140319,
+      1790911601448679153
+    ]
+  },
+  "retained": [
+    "All source code and uncommitted work",
+    "All model snapshots and training checkpoints outside explicitly marked _to_delete staging",
+    "Original scores, recordings, dataset archives and license notices",
+    "Python environments and npm package dependencies",
+    "Historical project snapshots and validation records",
+    "Score out/claude-m3ai10-nf.bundle: Git backup"
+  ],
+  "verification": {
+    "protected_files_unchanged": true,
+    "active_weight_sha256": "fb4cceb07aa7ad4b87166a1e8e514c8e636836e7b685c6bf7804c591ace57443",
+    "score_git_status_unchanged": true,
+    "service_healthy": true,
+    "model": "four-pillar-v3.1",
+    "trash_inventory_unchanged": true
+  },
+  "summary": {
+    "files_moved_to_trash": 350,
+    "bytes_moved_to_trash": 1140313522,
+    "generated_files_deleted": 82,
+    "generated_bytes_deleted": 74091762
+  },
+  "finished_at_utc": "2026-10-05T07:58:04.615155+00:00"
+}

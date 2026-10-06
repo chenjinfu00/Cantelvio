@@ -1,0 +1,7 @@
+{
+  "allArchiveMembersVerified": 46526,
+  "isolatedLoadWithoutOldCheckpoint": true,
+  "trainingRegressionTests": 10,
+  "realSourcePreflightChecks": 8,
+  "noWeightUpdates": true
+}

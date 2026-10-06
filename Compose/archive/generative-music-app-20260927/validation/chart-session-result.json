@@ -1,0 +1,120 @@
+{
+  "passed": true,
+  "bars": 96,
+  "modeChanges": 4,
+  "promotions": 20,
+  "sample": [
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 0,
+      "baseBar": 0,
+      "segments": [
+        [
+          1,
+          "C",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 1,
+      "baseBar": 0,
+      "segments": [
+        [
+          2,
+          "Em",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 2,
+      "baseBar": 0,
+      "segments": [
+        [
+          2,
+          "Em",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 3,
+      "baseBar": 0,
+      "segments": [
+        [
+          3,
+          "F/A",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 4,
+      "baseBar": 4,
+      "segments": [
+        [
+          4,
+          "G",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 5,
+      "baseBar": 4,
+      "segments": [
+        [
+          4,
+          "G",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 6,
+      "baseBar": 4,
+      "segments": [
+        [
+          5,
+          "C",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "changeMode": "free",
+      "meter": 4,
+      "bar": 7,
+      "baseBar": 4,
+      "segments": [
+        [
+          5,
+          "C",
+          0,
+          4
+        ]
+      ]
+    }
+  ]
+}

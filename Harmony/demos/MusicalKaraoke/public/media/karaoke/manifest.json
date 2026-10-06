@@ -1,0 +1,965 @@
+{
+  "version": 1,
+  "sampleRate": 44100,
+  "description": "Original formant synthesis. Synthetic singing demonstrations, not human recordings.",
+  "generator": "scripts/build-karaoke-voices.py",
+  "clips": {
+    "hum": {
+      "src": "hum.wav",
+      "duration": 2.8,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 2.6,
+          "label": "Hum",
+          "midis": [
+            48
+          ],
+          "vowel": "mm"
+        }
+      ]
+    },
+    "ah": {
+      "src": "ah.wav",
+      "duration": 2.2,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 2.0,
+          "label": "AH",
+          "midis": [
+            48
+          ],
+          "vowel": "ah"
+        }
+      ]
+    },
+    "oo": {
+      "src": "oo.wav",
+      "duration": 2.2,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 2.0,
+          "label": "OO",
+          "midis": [
+            52
+          ],
+          "vowel": "oo"
+        }
+      ]
+    },
+    "doo": {
+      "src": "doo.wav",
+      "duration": 1.6,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.4,
+          "label": "DOO",
+          "midis": [
+            55
+          ],
+          "vowel": "doo"
+        }
+      ]
+    },
+    "mm": {
+      "src": "mm.wav",
+      "duration": 2.2,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 2.0,
+          "label": "MM",
+          "midis": [
+            55
+          ],
+          "vowel": "mm"
+        }
+      ]
+    },
+    "call": {
+      "src": "call.wav",
+      "duration": 5.2,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 0.65,
+          "label": "C",
+          "midis": [
+            48
+          ],
+          "vowel": "doo"
+        },
+        {
+          "time": 0.8,
+          "duration": 0.65,
+          "label": "D",
+          "midis": [
+            50
+          ],
+          "vowel": "doo"
+        },
+        {
+          "time": 1.6,
+          "duration": 0.65,
+          "label": "E",
+          "midis": [
+            52
+          ],
+          "vowel": "doo"
+        },
+        {
+          "time": 2.5,
+          "duration": 2.7,
+          "label": "Your turn",
+          "midis": [],
+          "vowel": null,
+          "kind": "response"
+        }
+      ]
+    },
+    "choir": {
+      "src": "choir.wav",
+      "duration": 24.0,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1,
+          "label": "3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 1,
+          "duration": 1,
+          "label": "2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 2,
+          "duration": 1,
+          "label": "1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 3,
+          "duration": 2.7,
+          "label": "AH \u00b7 C",
+          "midis": [
+            48
+          ],
+          "vowel": "ah"
+        },
+        {
+          "time": 6,
+          "duration": 2.7,
+          "label": "OO \u00b7 E",
+          "midis": [
+            52
+          ],
+          "vowel": "oo"
+        },
+        {
+          "time": 9,
+          "duration": 2.7,
+          "label": "MM \u00b7 G",
+          "midis": [
+            55
+          ],
+          "vowel": "mm"
+        },
+        {
+          "time": 12,
+          "duration": 3.7,
+          "label": "Together",
+          "midis": [
+            48,
+            52,
+            55
+          ],
+          "vowel": "choir",
+          "vowels": [
+            "ah",
+            "oo",
+            "mm"
+          ]
+        },
+        {
+          "time": 16,
+          "duration": 1.6,
+          "label": "Together",
+          "midis": [
+            48,
+            52,
+            55
+          ],
+          "vowel": "choir",
+          "vowels": [
+            "ah",
+            "oo",
+            "mm"
+          ]
+        },
+        {
+          "time": 18,
+          "duration": 1.6,
+          "label": "Together",
+          "midis": [
+            48,
+            52,
+            55
+          ],
+          "vowel": "choir",
+          "vowels": [
+            "ah",
+            "oo",
+            "mm"
+          ]
+        },
+        {
+          "time": 20,
+          "duration": 4,
+          "label": "Your turn",
+          "midis": [],
+          "vowel": null,
+          "kind": "response"
+        }
+      ]
+    },
+    "part-1-practice": {
+      "src": "part-1-practice.wav",
+      "duration": 17.6,
+      "cues": [
+        {
+          "time": 0.0,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 1/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 0.8,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 1/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 1.6,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 1/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 2.4,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 1/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 0,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 4.0,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 1/2",
+          "midis": [
+            47
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 1,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 5.6,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 1/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 2,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 7.2,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 1/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 3,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 8.8,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 2/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 9.6,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 2/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 10.4,
+          "duration": 0.8,
+          "label": "Voice 1 \u00b7 Practice 2/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "1"
+        },
+        {
+          "time": 11.2,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 2/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 0,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 12.8,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 2/2",
+          "midis": [
+            47
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 1,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 14.4,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 2/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 2,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 16.0,
+          "duration": 1.4,
+          "label": "Voice 1 \u00b7 Practice 2/2",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "voice": "1",
+          "step": 3,
+          "round": 2,
+          "kind": "practice"
+        }
+      ]
+    },
+    "part-2-practice": {
+      "src": "part-2-practice.wav",
+      "duration": 17.6,
+      "cues": [
+        {
+          "time": 0.0,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 1/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 0.8,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 1/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 1.6,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 1/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 2.4,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 1/2",
+          "midis": [
+            52
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 0,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 4.0,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 1/2",
+          "midis": [
+            50
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 1,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 5.6,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 1/2",
+          "midis": [
+            52
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 2,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 7.2,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 1/2",
+          "midis": [
+            53
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 3,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 8.8,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 2/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 9.6,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 2/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 10.4,
+          "duration": 0.8,
+          "label": "Voice 2 \u00b7 Practice 2/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "2"
+        },
+        {
+          "time": 11.2,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 2/2",
+          "midis": [
+            52
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 0,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 12.8,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 2/2",
+          "midis": [
+            50
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 1,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 14.4,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 2/2",
+          "midis": [
+            52
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 2,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 16.0,
+          "duration": 1.4,
+          "label": "Voice 2 \u00b7 Practice 2/2",
+          "midis": [
+            53
+          ],
+          "vowel": "ah",
+          "voice": "2",
+          "step": 3,
+          "round": 2,
+          "kind": "practice"
+        }
+      ]
+    },
+    "part-3-practice": {
+      "src": "part-3-practice.wav",
+      "duration": 17.6,
+      "cues": [
+        {
+          "time": 0.0,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 1/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 0.8,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 1/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 1.6,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 1/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 2.4,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 1/2",
+          "midis": [
+            55
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 0,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 4.0,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 1/2",
+          "midis": [
+            55
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 1,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 5.6,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 1/2",
+          "midis": [
+            57
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 2,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 7.2,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 1/2",
+          "midis": [
+            57
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 3,
+          "round": 1,
+          "kind": "practice"
+        },
+        {
+          "time": 8.8,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 2/2 \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 9.6,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 2/2 \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 10.4,
+          "duration": 0.8,
+          "label": "Voice 3 \u00b7 Practice 2/2 \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count",
+          "voice": "3"
+        },
+        {
+          "time": 11.2,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 2/2",
+          "midis": [
+            55
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 0,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 12.8,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 2/2",
+          "midis": [
+            55
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 1,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 14.4,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 2/2",
+          "midis": [
+            57
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 2,
+          "round": 2,
+          "kind": "practice"
+        },
+        {
+          "time": 16.0,
+          "duration": 1.4,
+          "label": "Voice 3 \u00b7 Practice 2/2",
+          "midis": [
+            57
+          ],
+          "vowel": "ah",
+          "voice": "3",
+          "step": 3,
+          "round": 2,
+          "kind": "practice"
+        }
+      ]
+    },
+    "parts-together": {
+      "src": "parts-together-audience.wav",
+      "duration": 8.8,
+      "cues": [
+        {
+          "time": 0.0,
+          "duration": 0.8,
+          "label": "All together \u00b7 3",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 0.8,
+          "duration": 0.8,
+          "label": "All together \u00b7 2",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 1.6,
+          "duration": 0.8,
+          "label": "All together \u00b7 1",
+          "midis": [],
+          "vowel": null,
+          "kind": "count"
+        },
+        {
+          "time": 2.4,
+          "duration": 1.6,
+          "label": "Sing together",
+          "midis": [],
+          "vowel": null,
+          "step": 0,
+          "kind": "response"
+        },
+        {
+          "time": 4.0,
+          "duration": 1.6,
+          "label": "Sing together",
+          "midis": [],
+          "vowel": null,
+          "step": 1,
+          "kind": "response"
+        },
+        {
+          "time": 5.6,
+          "duration": 1.6,
+          "label": "Sing together",
+          "midis": [],
+          "vowel": null,
+          "step": 2,
+          "kind": "response"
+        },
+        {
+          "time": 7.2,
+          "duration": 1.6,
+          "label": "Sing together",
+          "midis": [],
+          "vowel": null,
+          "step": 3,
+          "kind": "response"
+        }
+      ]
+    },
+    "voice-note-47": {
+      "src": "voice-note-47.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            47
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-48": {
+      "src": "voice-note-48.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            48
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-50": {
+      "src": "voice-note-50.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            50
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-52": {
+      "src": "voice-note-52.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            52
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-53": {
+      "src": "voice-note-53.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            53
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-55": {
+      "src": "voice-note-55.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            55
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "voice-note-57": {
+      "src": "voice-note-57.wav",
+      "duration": 1.4,
+      "cues": [
+        {
+          "time": 0,
+          "duration": 1.25,
+          "label": "Voice",
+          "midis": [
+            57
+          ],
+          "vowel": "ah",
+          "kind": "note"
+        }
+      ]
+    },
+    "parts-answer": {
+      "src": "parts-answer.wav",
+      "duration": 6.4,
+      "cues": [
+        {
+          "time": 0.0,
+          "duration": 1.4,
+          "label": "The answer \u00b7 C",
+          "midis": [
+            48,
+            52,
+            55
+          ],
+          "vowel": "ah",
+          "step": 0,
+          "kind": "answer"
+        },
+        {
+          "time": 1.6,
+          "duration": 1.4,
+          "label": "The answer \u00b7 G",
+          "midis": [
+            47,
+            50,
+            55
+          ],
+          "vowel": "ah",
+          "step": 1,
+          "kind": "answer"
+        },
+        {
+          "time": 3.2,
+          "duration": 1.4,
+          "label": "The answer \u00b7 Am",
+          "midis": [
+            48,
+            52,
+            57
+          ],
+          "vowel": "ah",
+          "step": 2,
+          "kind": "answer"
+        },
+        {
+          "time": 4.8,
+          "duration": 1.4,
+          "label": "The answer \u00b7 F",
+          "midis": [
+            48,
+            53,
+            57
+          ],
+          "vowel": "ah",
+          "step": 3,
+          "kind": "answer"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,205 @@
+{
+ "schema": "four-pillar-v31-tasks-eval-1",
+ "checkpointStep": 45225,
+ "note": "training-set windows (no held-out split): compare conditions; listen to the MIDI files",
+ "parts": {
+  "windows": 96,
+  "removed": {
+   "full": {
+    "kind": 0.1017,
+    "onset": 0.1318,
+    "chord_root": 1.2438,
+    "chord_quality": 0.9656,
+    "group": 0.1196,
+    "voice": 0.2459,
+    "pitch": 0.8131,
+    "duration": 0.4137,
+    "notes": 1.8258
+   },
+   "planner": {
+    "kind": 0.1029,
+    "onset": 0.1364,
+    "chord_root": 1.543,
+    "chord_quality": 1.2798,
+    "group": 0.128,
+    "voice": 0.2601,
+    "pitch": 0.8444,
+    "duration": 0.4248,
+    "notes": 1.8966
+   },
+   "reference": {
+    "kind": 0.1047,
+    "onset": 0.1462,
+    "chord_root": 1.4164,
+    "chord_quality": 1.0487,
+    "group": 0.1291,
+    "voice": 0.2467,
+    "pitch": 0.9837,
+    "duration": 0.4694,
+    "notes": 2.0798
+   },
+   "planner+reference": {
+    "kind": 0.1053,
+    "onset": 0.151,
+    "chord_root": 1.7869,
+    "chord_quality": 1.3806,
+    "group": 0.1384,
+    "voice": 0.2632,
+    "pitch": 1.0199,
+    "duration": 0.4824,
+    "notes": 2.1602
+   },
+   "controls": {
+    "kind": 0.1028,
+    "onset": 0.1346,
+    "chord_root": 1.2474,
+    "chord_quality": 0.9669,
+    "group": 0.1288,
+    "voice": 0.2463,
+    "pitch": 0.8143,
+    "duration": 0.4174,
+    "notes": 1.8442
+   }
+  }
+ },
+ "accompany": {
+  "melody locked": {
+   "clash": 0.2456,
+   "doubled": 0.4082,
+   "unison": 0.0575,
+   "chordTone": 0.5275,
+   "accompanimentNotesPerBar": 20.5764,
+   "logp": -3.8215,
+   "pieces": 18,
+   "secondsPerPiece": 0.53
+  },
+  "melody locked, best of 8": {
+   "clash": 0.1368,
+   "doubled": 0.6508,
+   "unison": 0.0665,
+   "chordTone": 0.731,
+   "accompanimentNotesPerBar": 22.2153,
+   "logp": -2.3568,
+   "pieces": 18,
+   "secondsPerPiece": 4.3
+  },
+  "melody locked, best of 32": {
+   "clash": 0.0813,
+   "doubled": 0.683,
+   "unison": 0.0586,
+   "chordTone": 0.8351,
+   "accompanimentNotesPerBar": 20.4792,
+   "logp": -1.9092,
+   "pieces": 12,
+   "secondsPerPiece": 15.84
+  },
+  "melody + chords locked": {
+   "clash": 0.1056,
+   "doubled": 0.6459,
+   "unison": 0.1235,
+   "chordTone": 0.875,
+   "accompanimentNotesPerBar": 25.0972,
+   "logp": -4.8161,
+   "pieces": 18,
+   "secondsPerPiece": 0.57
+  },
+  "melody + chords locked, best of 8": {
+   "clash": 0.1019,
+   "doubled": 0.7214,
+   "unison": 0.1177,
+   "chordTone": 0.875,
+   "accompanimentNotesPerBar": 28.4306,
+   "logp": -3.3819,
+   "pieces": 18,
+   "secondsPerPiece": 5.17
+  },
+  "melody locked, piano may double the voice first": {
+   "clash": 0.1854,
+   "doubled": 0.5326,
+   "unison": 0.4568,
+   "chordTone": 0.5428,
+   "accompanimentNotesPerBar": 21.5903,
+   "logp": -3.5895,
+   "pieces": 18,
+   "secondsPerPiece": 0.51
+  },
+  "melody locked, piano may double the voice first, best of 8": {
+   "clash": 0.1112,
+   "doubled": 0.822,
+   "unison": 0.7372,
+   "chordTone": 0.7296,
+   "accompanimentNotesPerBar": 25.8889,
+   "logp": -1.9447,
+   "pieces": 18,
+   "secondsPerPiece": 4.6
+  },
+  "real Lieder (voice vs piano)": {
+   "clash": 0.0788,
+   "doubled": 0.6722,
+   "unison": 0.4296,
+   "chordTone": 0.9026,
+   "voiceNotes": 9449
+  }
+ },
+ "melodyFromChords": {
+  "locked chords": {
+   "strongBeatChordTones": 0.9297,
+   "notes": 370
+  },
+  "the model's own chords": {
+   "strongBeatChordTones": 0.928,
+   "notes": 264
+  }
+ },
+ "orchestrate": {
+  "groups not requested": {
+   "model": 0.6988,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.8458,
+   "doublingsPerBar": 0.0,
+   "notes": 1006,
+   "bars": 40
+  },
+  "groups requested": {
+   "model": 0.7078,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.8708,
+   "doublingsPerBar": 0.0,
+   "notes": 1006,
+   "bars": 40
+  },
+  "groups requested, light doublings (AIlegro Score)": {
+   "model": 0.6769,
+   "registerOfContext": 0.66,
+   "chance": 0.3509,
+   "groupsUsedPerBar": 0.9542,
+   "doublingsPerBar": 11.82,
+   "notes": 1006,
+   "bars": 40
+  }
+ },
+ "motif": {
+  "restate: bank reference": 0.5673,
+  "restate: none": 0.0798,
+  "sequence +1: synthetic full texture": 0.5121,
+  "sequence +1: none": 0.0567,
+  "sequence +1: synthetic top line": 0.2357,
+  "invert: synthetic top line": 0.2385,
+  "invert: top line + lower accompaniment": 0.2924,
+  "invert: none": 0.0616,
+  "fragment: synthetic full texture": 0.4049,
+  "diminish: synthetic full texture": 0.3052,
+  "windows": 39
+ },
+ "sectionSeconds": {
+  "parts": 30,
+  "accompany": 481,
+  "chords": 6,
+  "orchestrate": 178,
+  "motif": 45
+ },
+ "seconds": 740,
+ "assembled": "sections run separately with the same code on 2026-10-03 (container restarts cut the single run); the real-Lieder reference row is deterministic and comes from the run before"
+}

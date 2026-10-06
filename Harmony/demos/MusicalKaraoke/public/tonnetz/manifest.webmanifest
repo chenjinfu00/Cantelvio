@@ -1,0 +1,20 @@
+{
+  "name": "Tonnetz · 调性网络",
+  "short_name": "Tonnetz",
+  "description": "为 iPad 设计的多布局、多点触控调性网络乐器",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#061117",
+  "theme_color": "#07141b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

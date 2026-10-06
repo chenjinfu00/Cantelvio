@@ -1,0 +1,289 @@
+{
+  "schema": "ailegro-visible-midi-library-exclusions-v1",
+  "count": 28,
+  "quarantinedCount": 9,
+  "alreadyMissingCount": 19,
+  "sourceSelectionSha256": "a4c7490f0161e87d75663dd153121b132c2f3a636254815e4d2a888081be1308",
+  "files": [
+    {
+      "file": "001 - tchai_op35-1.mid",
+      "sourceRelativePath": "software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-1.mid",
+      "sha256": "d1f909fd75918d61af6a457621d540e91637df4223ee4d452be86c14bc5f095c",
+      "bytes": 19343,
+      "multiGroup": true,
+      "reason": "Incomplete or alternate export of the same Tchaikovsky concerto; retain the complete orchestral 003 copy.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-1.mid"
+    },
+    {
+      "file": "002 - tchai_op35-2.mid",
+      "sourceRelativePath": "software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-2.mid",
+      "sha256": "22c6c11ccade18d8121e6487cde20d18a84be3c8ca3cab4bb2c7c4123421ca8d",
+      "bytes": 129125,
+      "multiGroup": true,
+      "reason": "Incomplete or alternate export of the same Tchaikovsky concerto; retain the complete orchestral 003 copy.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/software develop/Tonnetz/demos/MusicalKaraoke/tmp/concerto-sources/tchaikovsky-midi/tchai_op35-2.mid"
+    },
+    {
+      "file": "004 - Chopin_Op21_Mvt1_Piano_Editable_Draft.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Movement_1_Maestoso/Piano_Editable_Backup/Chopin_Op21_Mvt1_Piano_Editable_Draft.mid",
+      "sha256": "3134cd413d1c9f0d6f589b5e80df1bff306745354227df9442c0b86b178372bc",
+      "bytes": 74532,
+      "multiGroup": false,
+      "reason": "Draft or isolated piano/orchestra stems of Chopin Op.21 movement I; retain the complete 145 score.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Movement_1_Maestoso/Piano_Editable_Backup/Chopin_Op21_Mvt1_Piano_Editable_Draft.mid"
+    },
+    {
+      "file": "005 - Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid",
+      "sha256": "31f41c81a74701f3c0bca21f31cac4c8e1236bd2d3a66dc7ce038da21a9e4df5",
+      "bytes": 56703,
+      "multiGroup": true,
+      "reason": "Draft or isolated piano/orchestra stems of Chopin Op.21 movement I; retain the complete 145 score.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid"
+    },
+    {
+      "file": "006 - Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid",
+      "sha256": "2928945da63d7db2846f33b6a4bf6f2180a743252f66dcbe139c859c1da53de9",
+      "bytes": 49678,
+      "multiGroup": false,
+      "reason": "Draft or isolated piano/orchestra stems of Chopin Op.21 movement I; retain the complete 145 score.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid"
+    },
+    {
+      "file": "009 - Tchaikovsky_Op35_Mvt1_Private_Reference.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/local_sources/Tchaikovsky_Op35_Mvt1_Private_Reference.mid",
+      "sha256": "857f3e143e65fbb82cb5abfc7bd84530983f652a4a6c74e9446d4feb5e816b45",
+      "bytes": 116551,
+      "multiGroup": true,
+      "reason": "Alternate private performance and its extracted piano/violin stems; retain the complete scored 003 version of this composition.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/local_sources/Tchaikovsky_Op35_Mvt1_Private_Reference.mid"
+    },
+    {
+      "file": "010 - Tchaikovsky_Op35_Mvt1_Piano_Reference.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Piano_Reference.mid",
+      "sha256": "779d8cc83fd547be9debcdcf979070f7cf59994704b702a8e76263ad22811f4d",
+      "bytes": 60560,
+      "multiGroup": false,
+      "reason": "Alternate private performance and its extracted piano/violin stems; retain the complete scored 003 version of this composition.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Piano_Reference.mid"
+    },
+    {
+      "file": "011 - Tchaikovsky_Op35_Mvt1_Solo_Violin.mid",
+      "sourceRelativePath": "work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Solo_Violin.mid",
+      "sha256": "7cc5921b2eaf947c9b80fb9c18b423c04e8472af0b32c187047cdf2d983f44ae",
+      "bytes": 44954,
+      "multiGroup": false,
+      "reason": "Alternate private performance and its extracted piano/violin stems; retain the complete scored 003 version of this composition.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/work_in_cloud/基金申请/2026 NWO-XS soloconcreto/Tchaikovsky_Op35_Mvt1/runtime_midi/Tchaikovsky_Op35_Mvt1_Solo_Violin.mid"
+    },
+    {
+      "file": "012 - op10_no01_piano_violin_arrangement.mid",
+      "sourceRelativePath": "曲谱&编曲/op10_no01_piano_violin_arrangement.mid",
+      "sha256": "059fdc29b53ce440c4f6bbb0cb35edc1ba0dc9d6b1b145f97b6e5866ef00b4ac",
+      "bytes": 11854,
+      "multiGroup": true,
+      "reason": "AI-generated violin arrangement rejected by the user; retain the ordinary piano copy 013 (renamed for clarity).",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/op10_no01_piano_violin_arrangement.mid"
+    },
+    {
+      "file": "014 - op10_no01_piano_violin_final.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op10_No01/op10_no01_piano_violin_final.mid",
+      "sha256": "a2fb145ec94233285865236457f046518e7cafe9033f5c801573d42fd444f4d2",
+      "bytes": 12885,
+      "multiGroup": true,
+      "reason": "AI-generated violin arrangement rejected by the user; retain the ordinary piano copy 013 (renamed for clarity).",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op10_No01/op10_no01_piano_violin_final.mid"
+    },
+    {
+      "file": "015 - op25_no11_kunstderfuge_finley.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_kunstderfuge_finley.mid",
+      "sha256": "b8e858f1600fa04898c8475b682d569db073552cfdd205f3e6ee6fb47ae4fb47",
+      "bytes": 28347,
+      "multiGroup": false,
+      "reason": "Removed manually by the user during this review as unsuitable for training; do not restore into the active library.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_kunstderfuge_finley.mid"
+    },
+    {
+      "file": "016 - op25_no11_piano_violin_refined_draft_from_midi_import.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_piano_violin_refined_draft_from_midi_import.mid",
+      "sha256": "4815494064974046b4b11d88cb9538ef1b924bb1d44808a83cb40cba108489ed",
+      "bytes": 35109,
+      "multiGroup": true,
+      "reason": "Unfinished violin arrangement derived from the original piano etude; its piano source was also manually excluded later.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/Chopin_Etudes_Violin/Op25_No11/op25_no11_piano_violin_refined_draft_from_midi_import.mid"
+    },
+    {
+      "file": "018 - chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid",
+      "sha256": "25e7bd792d3c589ef038ca801b4f654c626c84444368a528e60e8dabbb2d6975",
+      "bytes": 11683,
+      "multiGroup": false,
+      "reason": "Alternate edited-note/beaming versions of the same etude; retain the ordinary Mutopia source 017.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid"
+    },
+    {
+      "file": "019 - chopin_op10_no2_mutopia_thirds_beamed.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_thirds_beamed.mid",
+      "sha256": "3c8282706a34c1c9c3c3283cf80ae681f6f094d117e8d9d8bf9e2b89098c8609",
+      "bytes": 11683,
+      "multiGroup": false,
+      "reason": "Alternate edited-note/beaming versions of the same etude; retain the ordinary Mutopia source 017.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/chopin_op10_no2_mutopia_thirds_beamed.mid"
+    },
+    {
+      "file": "022 - 白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/output/midi/白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid",
+      "sha256": "265603cf96309d7a5394bb26d34049b645b0d7d6d7026887036d2b07df23c2b4",
+      "bytes": 87591,
+      "multiGroup": true,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/output/midi/白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid"
+    },
+    {
+      "file": "023 - 白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid",
+      "sha256": "9924200c2bdb1a164d7b573bd191c55f1ced498a4156c24aadc12ec71080c7dc",
+      "bytes": 54118,
+      "multiGroup": true,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid"
+    },
+    {
+      "file": "024 - 白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid",
+      "sha256": "c0db0c5665b049023ebbb33bd0948be4c6dd4d46f0dccd6e5d4f1db29830f938",
+      "bytes": 35386,
+      "multiGroup": true,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/06_piano/白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid"
+    },
+    {
+      "file": "025 - Climax_v7.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Climax_v7.mid",
+      "sha256": "422ccd0ee607feeef8d77b54c848388aea68f603aeb1465b43a08e2cd509cec6",
+      "bytes": 1637,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Climax_v7.mid"
+    },
+    {
+      "file": "026 - Opening_v7.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Opening_v7.mid",
+      "sha256": "0a854f03a0cefd85456271db37e1b44b33b3c8fe975d004e72e415f45d88d922",
+      "bytes": 1589,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/07_rebuild_20260906/Opening_v7.mid"
+    },
+    {
+      "file": "027 - Final_climax_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Final_climax_v8.mid",
+      "sha256": "84a8d2f2efbff64e0f7437cc095f47dccfe8e984820b46d24723b7230bbc8be0",
+      "bytes": 2812,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Final_climax_v8.mid"
+    },
+    {
+      "file": "028 - Lyrical_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Lyrical_v8.mid",
+      "sha256": "5f59a8935d4108a7fbdcf846a7fd6e439ef34a8f63e971f7b5fb9181cc1b40b8",
+      "bytes": 1694,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Lyrical_v8.mid"
+    },
+    {
+      "file": "029 - Opening_and_theme_v8.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Opening_and_theme_v8.mid",
+      "sha256": "db567091a50d21e70e4c56ac2aca33cc951d70c276ed976d347cf1ac0c8621b1",
+      "bytes": 4755,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/08_rebuild_from_reference/Opening_and_theme_v8.mid"
+    },
+    {
+      "file": "030 - White_Dove_Piano_v10.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/handoff_archive/White_Dove_Piano_v10.mid",
+      "sha256": "c8ec76b8479eec1b679159aee59ceab3f312138fa5622f5b93bb3e802094be77",
+      "bytes": 24630,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/handoff_archive/White_Dove_Piano_v10.mid"
+    },
+    {
+      "file": "031 - score_roundtrip.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/score_roundtrip.mid",
+      "sha256": "a2138fbf9a6c0cb08f30b234ce0d071ad9b1023d3841c4da55daae556b6ee95d",
+      "bytes": 18911,
+      "multiGroup": false,
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/挪德卡莱/白鸽之诗 Song of the White Dove/work/10_editable_edition/score_roundtrip.mid"
+    },
+    {
+      "file": "032 - 冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/Triumph on the Ice/output/midi/冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid",
+      "sha256": "1ec5a66f55f9f46053c86acc24b705ec7293d1f9356464577a46667510b6e181",
+      "bytes": 107452,
+      "multiGroup": true,
+      "reason": "Model-transcription-derived orchestral draft/variant, not a verified reference score.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/至冬/Triumph on the Ice/output/midi/冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid"
+    },
+    {
+      "file": "033 - Snezhnaya_conductor_score_draft.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_draft.mid",
+      "sha256": "7b4f47056050428b56cb061ecdcacac61d5641f7c7dc20b42d02976fe71f8e94",
+      "bytes": 90345,
+      "multiGroup": true,
+      "reason": "Model-transcription-derived orchestral draft/variant, not a verified reference score.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_draft.mid"
+    },
+    {
+      "file": "034 - Snezhnaya_conductor_score_piano_sustain.mid",
+      "sourceRelativePath": "曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_piano_sustain.mid",
+      "sha256": "34ab753f283593d1ff6338cbb20d7f2477b622dd25cab2327743c9a32a69630d",
+      "bytes": 86601,
+      "multiGroup": true,
+      "reason": "Model-transcription-derived orchestral draft/variant, not a verified reference score.",
+      "disposition": "already-missing-from-visible",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/我的编曲&打谱/原神编曲/至冬/至冬 Snezhnaya/Snezhnaya_conductor_score_piano_sustain.mid"
+    },
+    {
+      "file": "050 - Brave Song (piano + viola).mid",
+      "sourceRelativePath": "曲谱&编曲/本地曲谱/动漫/Brave Song/Brave Song (piano + viola).mid",
+      "sha256": "f78bef1eb1cbba0d73cdf4ba8af239522798a441452d26ec89b9243698da57a1",
+      "bytes": 26702,
+      "multiGroup": true,
+      "reason": "Alternative piano-plus-viola arrangement of Brave Song; retain the plain piano 051 copy as the ordinary representative.",
+      "disposition": "moved-to-quarantine",
+      "recoverableUpstream": "../local-midi-curated-v1/files/曲谱&编曲/本地曲谱/动漫/Brave Song/Brave Song (piano + viola).mid"
+    }
+  ]
+}

@@ -1,0 +1,463 @@
+[
+  {
+    "id": "maj",
+    "suffix": "",
+    "intervals": [
+      0,
+      4,
+      7
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "min",
+    "suffix": "m",
+    "intervals": [
+      0,
+      3,
+      7
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "dim",
+    "suffix": "dim",
+    "intervals": [
+      0,
+      3,
+      6
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "aug",
+    "suffix": "aug",
+    "intervals": [
+      0,
+      4,
+      8
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "sus2",
+    "suffix": "sus2",
+    "intervals": [
+      0,
+      2,
+      7
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "sus4",
+    "suffix": "sus4",
+    "intervals": [
+      0,
+      5,
+      7
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "power",
+    "suffix": "5",
+    "intervals": [
+      0,
+      7
+    ],
+    "group": "triad"
+  },
+  {
+    "id": "six",
+    "suffix": "6",
+    "intervals": [
+      0,
+      4,
+      7,
+      9
+    ],
+    "group": "sixth"
+  },
+  {
+    "id": "min6",
+    "suffix": "m6",
+    "intervals": [
+      0,
+      3,
+      7,
+      9
+    ],
+    "group": "sixth"
+  },
+  {
+    "id": "six9",
+    "suffix": "6/9",
+    "intervals": [
+      0,
+      4,
+      7,
+      9,
+      2
+    ],
+    "group": "sixth"
+  },
+  {
+    "id": "dom7",
+    "suffix": "7",
+    "intervals": [
+      0,
+      4,
+      7,
+      10
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "maj7",
+    "suffix": "maj7",
+    "intervals": [
+      0,
+      4,
+      7,
+      11
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "min7",
+    "suffix": "m7",
+    "intervals": [
+      0,
+      3,
+      7,
+      10
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "minmaj7",
+    "suffix": "mMaj7",
+    "intervals": [
+      0,
+      3,
+      7,
+      11
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "dim7",
+    "suffix": "dim7",
+    "intervals": [
+      0,
+      3,
+      6,
+      9
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "half",
+    "suffix": "ø7",
+    "intervals": [
+      0,
+      3,
+      6,
+      10
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "sus7",
+    "suffix": "7sus4",
+    "intervals": [
+      0,
+      5,
+      7,
+      10
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "sus27",
+    "suffix": "7sus2",
+    "intervals": [
+      0,
+      2,
+      7,
+      10
+    ],
+    "group": "seventh"
+  },
+  {
+    "id": "add9",
+    "suffix": "add9",
+    "intervals": [
+      0,
+      4,
+      7,
+      2
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "minadd9",
+    "suffix": "madd9",
+    "intervals": [
+      0,
+      3,
+      7,
+      2
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "add11",
+    "suffix": "add11",
+    "intervals": [
+      0,
+      4,
+      7,
+      5
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "dom9",
+    "suffix": "9",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      2
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "maj9",
+    "suffix": "maj9",
+    "intervals": [
+      0,
+      4,
+      7,
+      11,
+      2
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "min9",
+    "suffix": "m9",
+    "intervals": [
+      0,
+      3,
+      7,
+      10,
+      2
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "dom11",
+    "suffix": "11",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      2,
+      5
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "min11",
+    "suffix": "m11",
+    "intervals": [
+      0,
+      3,
+      7,
+      10,
+      2,
+      5
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "dom13",
+    "suffix": "13",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      2,
+      5,
+      9
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "maj13",
+    "suffix": "maj13",
+    "intervals": [
+      0,
+      4,
+      7,
+      11,
+      2,
+      5,
+      9
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "min13",
+    "suffix": "m13",
+    "intervals": [
+      0,
+      3,
+      7,
+      10,
+      2,
+      5,
+      9
+    ],
+    "group": "extension"
+  },
+  {
+    "id": "dom7b5",
+    "suffix": "7♭5",
+    "intervals": [
+      0,
+      4,
+      6,
+      10
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom7s5",
+    "suffix": "7♯5",
+    "intervals": [
+      0,
+      4,
+      8,
+      10
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom7b9",
+    "suffix": "7♭9",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      1
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom7s9",
+    "suffix": "7♯9",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      3
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom7s11",
+    "suffix": "7♯11",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      6
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom7b13",
+    "suffix": "7♭13",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      8
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom9s11",
+    "suffix": "9♯11",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      2,
+      6
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "dom13b9",
+    "suffix": "13♭9",
+    "intervals": [
+      0,
+      4,
+      7,
+      10,
+      1,
+      9
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "maj7s11",
+    "suffix": "maj7♯11",
+    "intervals": [
+      0,
+      4,
+      7,
+      11,
+      6
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "maj9s11",
+    "suffix": "maj9♯11",
+    "intervals": [
+      0,
+      4,
+      7,
+      11,
+      2,
+      6
+    ],
+    "group": "altered"
+  },
+  {
+    "id": "minmaj9",
+    "suffix": "mMaj9",
+    "intervals": [
+      0,
+      3,
+      7,
+      11,
+      2
+    ],
+    "group": "extension"
+  }
+]

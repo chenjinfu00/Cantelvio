@@ -1,0 +1,170 @@
+{
+ "schema": "four-pillar-v31-parts-labelled-1",
+ "about": "eval_four_pillar_v31_tasks.py --sections parts with the chord targets of training (AugmentedNet for aligned Lieder, ChordTracker otherwise), for the weights of step 45,225 and 101,129",
+ "step45225": {
+  "windows": 96,
+  "chordTargets": "AugmentedNet for aligned Lieder, ChordTracker otherwise",
+  "removed": {
+   "full": {
+    "kind": 0.0993,
+    "onset": 0.1316,
+    "chord_root": 0.6859,
+    "chord_quality": 0.4023,
+    "group": 0.1192,
+    "voice": 0.2442,
+    "pitch": 0.827,
+    "duration": 0.4126,
+    "notes": 1.8339
+   },
+   "planner": {
+    "kind": 0.1003,
+    "onset": 0.1364,
+    "chord_root": 0.9341,
+    "chord_quality": 0.6722,
+    "group": 0.1274,
+    "voice": 0.2585,
+    "pitch": 0.8609,
+    "duration": 0.4238,
+    "notes": 1.9073
+   },
+   "reference": {
+    "kind": 0.1022,
+    "onset": 0.146,
+    "chord_root": 0.8154,
+    "chord_quality": 0.4471,
+    "group": 0.1286,
+    "voice": 0.245,
+    "pitch": 1.0096,
+    "duration": 0.4685,
+    "notes": 2.0999
+   },
+   "planner+reference": {
+    "kind": 0.1027,
+    "onset": 0.1509,
+    "chord_root": 1.1102,
+    "chord_quality": 0.7375,
+    "group": 0.1377,
+    "voice": 0.2616,
+    "pitch": 1.0479,
+    "duration": 0.482,
+    "notes": 2.1828
+   },
+   "controls": {
+    "kind": 0.1002,
+    "onset": 0.1344,
+    "chord_root": 0.6873,
+    "chord_quality": 0.4072,
+    "group": 0.1283,
+    "voice": 0.2446,
+    "pitch": 0.8281,
+    "duration": 0.4162,
+    "notes": 1.8518
+   }
+  },
+  "bySource": {
+   "Lieder": {
+    "kind": 0.1066,
+    "onset": 0.1386,
+    "chord_root": 0.3161,
+    "chord_quality": 0.1438,
+    "group": 0.0001,
+    "voice": 0.2345,
+    "pitch": 0.821,
+    "duration": 0.3498
+   },
+   "classical-scores": {
+    "kind": 0.0934,
+    "onset": 0.1259,
+    "chord_root": 0.9702,
+    "chord_quality": 0.601,
+    "group": 0.2029,
+    "voice": 0.2521,
+    "pitch": 0.8318,
+    "duration": 0.4636
+   }
+  }
+ },
+ "step101129": {
+  "windows": 96,
+  "chordTargets": "AugmentedNet for aligned Lieder, ChordTracker otherwise",
+  "removed": {
+   "full": {
+    "kind": 0.0972,
+    "onset": 0.1282,
+    "chord_root": 0.5148,
+    "chord_quality": 0.287,
+    "group": 0.1165,
+    "voice": 0.238,
+    "pitch": 0.8052,
+    "duration": 0.407,
+    "notes": 1.7921
+   },
+   "planner": {
+    "kind": 0.0997,
+    "onset": 0.1337,
+    "chord_root": 0.921,
+    "chord_quality": 0.6775,
+    "group": 0.1273,
+    "voice": 0.2536,
+    "pitch": 0.8544,
+    "duration": 0.4228,
+    "notes": 1.8915
+   },
+   "reference": {
+    "kind": 0.0999,
+    "onset": 0.1421,
+    "chord_root": 0.6024,
+    "chord_quality": 0.3323,
+    "group": 0.1255,
+    "voice": 0.2391,
+    "pitch": 0.9835,
+    "duration": 0.4611,
+    "notes": 2.0512
+   },
+   "planner+reference": {
+    "kind": 0.1019,
+    "onset": 0.148,
+    "chord_root": 1.1067,
+    "chord_quality": 0.7659,
+    "group": 0.1375,
+    "voice": 0.2568,
+    "pitch": 1.0374,
+    "duration": 0.479,
+    "notes": 2.1606
+   },
+   "controls": {
+    "kind": 0.0981,
+    "onset": 0.1297,
+    "chord_root": 0.5163,
+    "chord_quality": 0.2908,
+    "group": 0.1259,
+    "voice": 0.2382,
+    "pitch": 0.8059,
+    "duration": 0.4098,
+    "notes": 1.8076
+   }
+  },
+  "bySource": {
+   "Lieder": {
+    "kind": 0.104,
+    "onset": 0.1331,
+    "chord_root": 0.1955,
+    "chord_quality": 0.0839,
+    "group": 0.0002,
+    "voice": 0.2259,
+    "pitch": 0.7971,
+    "duration": 0.3453
+   },
+   "classical-scores": {
+    "kind": 0.0917,
+    "onset": 0.1243,
+    "chord_root": 0.7602,
+    "chord_quality": 0.4431,
+    "group": 0.1983,
+    "voice": 0.2478,
+    "pitch": 0.8119,
+    "duration": 0.4571
+   }
+  }
+ }
+}

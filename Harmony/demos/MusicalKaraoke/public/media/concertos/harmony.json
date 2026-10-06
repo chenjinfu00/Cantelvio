@@ -1,0 +1,674 @@
+{
+  "id": "harmony",
+  "composer": "Mendelssohn",
+  "label": "You play the chords",
+  "mode": "harmonic",
+  "duration": 58.8,
+  "beatSeconds": 0.6,
+  "excerpt": "Movement I, m.1–24 and the first half of m.25 (letter A), quarter=100 rehearsal tempo.",
+  "source": "Hans Sitt / Ernst Eulenburg score, printed pp.2–3. Violin line transcribed from the public-domain score; chord cues are a simplified harmonic reduction, not an orchestral transcription.",
+  "guide": [
+    {
+      "time": 0.0,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 1,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 2.4,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 2,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 4.8,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 3,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 7.2,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 4,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 9.6,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 5,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 12.0,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 6,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 14.4,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 7,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 16.8,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 8,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 19.2,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 9,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 21.6,
+      "duration": 2.4,
+      "name": "B7",
+      "bar": 10,
+      "coords": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "midis": [
+        59,
+        63,
+        66,
+        69
+      ]
+    },
+    {
+      "time": 24.0,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 11,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 26.4,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 12,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 28.8,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 13,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 31.2,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 14,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 33.6,
+      "duration": 2.4,
+      "name": "E7",
+      "bar": 15,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        68,
+        71,
+        74
+      ]
+    },
+    {
+      "time": 36.0,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 16,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 38.4,
+      "duration": 2.4,
+      "name": "B7",
+      "bar": 17,
+      "coords": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "midis": [
+        59,
+        63,
+        66,
+        69
+      ]
+    },
+    {
+      "time": 40.8,
+      "duration": 2.4,
+      "name": "Em",
+      "bar": 18,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    },
+    {
+      "time": 43.2,
+      "duration": 2.4,
+      "name": "E7",
+      "bar": 19,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        68,
+        71,
+        74
+      ]
+    },
+    {
+      "time": 45.6,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 20,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 48.0,
+      "duration": 2.4,
+      "name": "E",
+      "bar": 21,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "midis": [
+        64,
+        68,
+        71
+      ]
+    },
+    {
+      "time": 50.4,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 22,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 52.8,
+      "duration": 2.4,
+      "name": "Am",
+      "bar": 23,
+      "coords": [
+        [
+          -1,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "midis": [
+        57,
+        60,
+        64
+      ]
+    },
+    {
+      "time": 55.2,
+      "duration": 2.4,
+      "name": "B7",
+      "bar": 24,
+      "coords": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "midis": [
+        59,
+        63,
+        66,
+        69
+      ]
+    },
+    {
+      "time": 57.6,
+      "duration": 1.2,
+      "name": "Em",
+      "bar": 25,
+      "coords": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "midis": [
+        64,
+        67,
+        71
+      ]
+    }
+  ],
+  "files": {
+    "backing": {
+      "file": "mendelssohn-backing.ogg",
+      "duration": 60.0,
+      "peak": 0.72
+    },
+    "reference": {
+      "file": "mendelssohn-reference.ogg",
+      "duration": 60.0,
+      "peak": 0.72
+    }
+  }
+}

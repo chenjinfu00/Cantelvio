@@ -1,0 +1,3376 @@
+{
+ "format": "ailegro-score",
+ "version": 2,
+ "id": "demo-accompaniment-sc_ekzwkuwytns1",
+ "meta": {
+  "title": "AIlegro · 旋律与伴奏演示",
+  "subtitle": "欢乐颂旋律 · 可自由修改与试听"
+ },
+ "settings": {
+  "concertPitch": false,
+  "defaultTempo": 92,
+  "pageMarginsMm": {
+   "bottom": 15,
+   "left": 15,
+   "right": 15,
+   "top": 15
+  },
+  "pageSize": {
+   "heightMm": 297,
+   "widthMm": 210
+  },
+  "staffSpaceMm": 1.7
+ },
+ "parts": [
+  {
+   "id": "pt_oun96wdbfkio",
+   "instrument": "violin",
+   "name": "小提琴",
+   "abbreviation": "小提",
+   "staves": [
+    {
+     "id": "st_3hf9110ovjyk",
+     "clef": "treble",
+     "lines": 5
+    }
+   ]
+  },
+  {
+   "id": "pt_kspbxzrte4l6",
+   "instrument": "piano",
+   "name": "钢琴",
+   "abbreviation": "钢琴",
+   "staves": [
+    {
+     "id": "st_iw4ocwbw39x2",
+     "clef": "treble",
+     "lines": 5
+    },
+    {
+     "id": "st_ultgy13vc0fr",
+     "clef": "bass",
+     "lines": 5
+    }
+   ]
+  }
+ ],
+ "groups": [
+  {
+   "id": "gr_tldwcjtwvdba",
+   "kind": "brace",
+   "barlineThrough": true,
+   "firstStaff": "st_iw4ocwbw39x2",
+   "lastStaff": "st_ultgy13vc0fr"
+  }
+ ],
+ "measures": [
+  {
+   "id": "m_hi70z56gqhaa",
+   "timeSig": {
+    "beats": 4,
+    "beatType": 4
+   },
+   "keySig": {
+    "fifths": 0,
+    "mode": "major"
+   },
+   "tempo": [
+    {
+     "id": "tm_scyq02e2kkmy",
+     "offset": {
+      "n": 0,
+      "d": 1
+     },
+     "bpm": 92
+    }
+   ]
+  },
+  {
+   "id": "m_6x2k7ttesvvt"
+  },
+  {
+   "id": "m_a0odejk2i9pq"
+  },
+  {
+   "id": "m_u2t0obx189t1"
+  },
+  {
+   "id": "m_1s765p8kuvc2"
+  },
+  {
+   "id": "m_pfdecs2j2p9o"
+  },
+  {
+   "id": "m_cts1zy2edi5n"
+  },
+  {
+   "id": "m_wtgoskze0592",
+   "barline": "final"
+  }
+ ],
+ "content": {
+  "st_3hf9110ovjyk": {
+   "m_1s765p8kuvc2": {
+    "voices": [
+     [
+      {
+       "id": "e_3sf6d2usyexi",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_eoi8iksed5tg",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_3ryv6dbdwdw6",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_ydv2b6z1xusp",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_7znko169cyju",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_fecewyjma35i",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_k544dwzjtkwg",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_73pmp0ju5x1p",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_6x2k7ttesvvt": {
+    "voices": [
+     [
+      {
+       "id": "e_z4k0o2g7ke8n",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_22wc3ibv5qor",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_jz9e932liabr",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_di444rllar6t",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_belqaogdp66r",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_6tuagg1e3kwz",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_68w9zwwilvqm",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_w9lv68zsiui2",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_a0odejk2i9pq": {
+    "voices": [
+     [
+      {
+       "id": "e_1cb2n5ug64wx",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_n74i46u326bq",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_elb58fyspfu3",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_o456ewkeq7pt",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_m12lupokuuq3",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_dcx9a2j2o5vk",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_xr0wgnnsq8w3",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_cxqlbut2xsys",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_cts1zy2edi5n": {
+    "voices": [
+     [
+      {
+       "id": "e_xpjmzxhiqkcu",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_3hmrghccer16",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_vrmrgxw7gvyp",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_b97jy7pmnyo4",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_nb7wrzs8n76h",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_gho9kak64q68",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_3z2rapr442vu",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_m539wzv9bsgi",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_hi70z56gqhaa": {
+    "voices": [
+     [
+      {
+       "id": "e_1lu61n5e2g20",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_jgqaa099g1w0",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_bywsxsapeao9",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_t7kn7qzjivc7",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_te79hw4np8s9",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_4cpee5ewo1q5",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_faf6ucsjdoce",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_i88mcnppsiby",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_pfdecs2j2p9o": {
+    "voices": [
+     [
+      {
+       "id": "e_hck5ihttw8bs",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_a07a4kh60tzq",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_bd5oxd6z03ze",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_tnjd7ry9rxwg",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_ekurhs2nj4eu",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_nj80w62qfh02",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_i82xp6sgizzq",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_po65122ctvk0",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_u2t0obx189t1": {
+    "voices": [
+     [
+      {
+       "id": "e_kn791l2tfu2k",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 3,
+        "d": 8
+       },
+       "notes": [
+        {
+         "id": "n_t4vkzs7bshxf",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_eetucrxh3ys9",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 8
+       },
+       "notes": [
+        {
+         "id": "n_qrral861eckd",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_h0r9caz3svdz",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_7y5ikhg4qpgh",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   },
+   "m_wtgoskze0592": {
+    "voices": [
+     [
+      {
+       "id": "e_lkycye1tl1iu",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 3,
+        "d": 8
+       },
+       "notes": [
+        {
+         "id": "n_6oep3qj0d2fk",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_3mgkezd3wk2g",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 8
+       },
+       "notes": [
+        {
+         "id": "n_4n9i7f038fbm",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      },
+      {
+       "id": "e_n260ldp902ri",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_3bvvzivevjx8",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         }
+        }
+       ]
+      }
+     ]
+    ]
+   }
+  },
+  "st_iw4ocwbw39x2": {
+   "m_hi70z56gqhaa": {
+    "voices": [
+     [
+      {
+       "id": "e_yp9lc8ox89nx",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_fazezz6glydu",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_v950t01535ov",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_yhduxs26qtnm",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_nk85gk12b0l9",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_vn8l64bqbyck",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_edl83uf4hqcr",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_chd2a6hmzkc7",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_n3n23rw6925t",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_k0sku3b46wb0",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_mtebcwfbw68r",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_q6h3wa0lu1wv",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_1vl1tu2fdayg",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_cipok3hjlkhr",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_vit2dedfy1bu",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_mz18vjwy37k3",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_0d20y7zismmj",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_g1xefruoxwq1",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_s0bjnhmtdywo",
+       "kind": "note",
+       "offset": {
+        "n": 9,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_jwzeswm8b7ia",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_j2nupm6oibnt",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_92ewqc9osh0i",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_14gnw667v3xm",
+       "kind": "note",
+       "offset": {
+        "n": 11,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_r7lno3qkzonn",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_8iletxjcz9ro",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_21848a6s0y48",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_hy2ky2ah64jg",
+       "kind": "note",
+       "offset": {
+        "n": 13,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_ikuf1h985l55",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_3andq7f2ugwg",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_6rpe0uowmhri",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_wu0ik4f9e7rj",
+       "kind": "note",
+       "offset": {
+        "n": 15,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_hnxmy5nki9il",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ],
+    "dynamics": [
+     {
+      "id": "dy_nvahk91ys9n4",
+      "offset": {
+       "n": 0,
+       "d": 1
+      },
+      "value": "mp",
+      "source": {
+       "kind": "ai",
+       "model": "four-pillar-v3.1",
+       "runId": "ai_j568q7l4pfxr",
+       "accepted": false
+      }
+     }
+    ]
+   },
+   "m_6x2k7ttesvvt": {
+    "voices": [
+     [
+      {
+       "id": "e_anxvspxhlnrj",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_wknbzw2lkxu3",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_1f129vhjslu2",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_b2oisvtafhm8",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_0kdrgpneux0a",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_cyiqzczxyc8v",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_i8ap301vnnog",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_sr945c6z2cgh",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_kjjsz4qbvl0r",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_1xtxd330ptgc",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_0czye5sqt39e",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_em3y9lv6cpjy",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_gv6yzjoqldik",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_8xh9hqzl5wal",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_gx3ygdwf3l03",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_kbzg7oc2g3as",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_p8pzspwuqeri",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_cicpy90pw5c4",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_0znu55j572k1",
+       "kind": "note",
+       "offset": {
+        "n": 9,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_u8ez5u6epmpf",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_gb08rcl8rqbw",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_h28we89hm70h",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_65auyxij9k5k",
+       "kind": "note",
+       "offset": {
+        "n": 11,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_3ckyj0sa4i6v",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_odhkted6nqyv",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_l1hh8uil94ih",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_grunkj9qd778",
+       "kind": "note",
+       "offset": {
+        "n": 13,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_9e6jna9qaxnz",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_nceg25uhz3v8",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_5ttjpo4o8mdg",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_vp1bd0r22fai",
+       "kind": "note",
+       "offset": {
+        "n": 15,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_w4her0g3fhba",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   },
+   "m_a0odejk2i9pq": {
+    "voices": [
+     [
+      {
+       "id": "e_gofuzetas5sy",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_ujqera3gvmu6",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_8gk9syc8lg1b",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_wg5nai7p4vke",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_68wx40cw7wqv",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_6v3onb5ngvgq",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_y6o9poqmmn6u",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_ulswexeg7jbr",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_crgub1wticup",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_3rkhlbgwdb3d",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_l5r338xc79oy",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_v35fh033jpkd",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_0uv3s0rotjm0",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_b8c73igqztpy",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_jsarq9pkqiy2",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_pizcpjktge1m",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_lj5sraogmazu",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_nau947w8k8vw",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_eb1avaxr6mz3",
+       "kind": "note",
+       "offset": {
+        "n": 9,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_a9iq40qe4ff6",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_cgv5v1a5uecf",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_732y7i8y401o",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_tcm58kz628c4",
+       "kind": "note",
+       "offset": {
+        "n": 11,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_zp3xvky3xfam",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_ej0ik3kscx0j",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_z2oubwrr64li",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_b3jsfhycwhrl",
+       "kind": "note",
+       "offset": {
+        "n": 13,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_btm4pg9evg3v",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_87en25g7rq7q",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_cpvxvsweg03z",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_xb6s20a2ewdr",
+       "kind": "note",
+       "offset": {
+        "n": 15,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_dnsx8xbrldvd",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   },
+   "m_u2t0obx189t1": {
+    "voices": [
+     [
+      {
+       "id": "e_f1tnkg6y68qr",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_kyjpkooh7hn3",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_99q4v18v32hj",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_w97a70qvzqxg",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_7idnh9lzujqv",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_saoq250xr3by",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_q81h1gd5mu8d",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_9m64oai800b1",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_eb8s817g7awe",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_cvegkpdd26pn",
+         "pitch": {
+          "step": "E",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_agxqq1u0fho3",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_kb9k2xuzkyta",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_k3t2y0c4f74h",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_4b4aj0hgebv0",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_a60nu29hd4js",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_uie1er0noon8",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_bd9w6hn1vut8",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_5kihgqab17eb",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_tocncdnzp0zw",
+       "kind": "note",
+       "offset": {
+        "n": 9,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_xbd68d2kp32c",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_vhcgqbww5xra",
+       "kind": "note",
+       "offset": {
+        "n": 5,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_er2n5oayfhld",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_brbgsy9js6lk",
+       "kind": "note",
+       "offset": {
+        "n": 11,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_43lu7k42oi9i",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_qo7xxs7z2gu9",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_6crznokv8n5v",
+         "pitch": {
+          "step": "F",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 66
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_rvv0w6u093kx",
+       "kind": "note",
+       "offset": {
+        "n": 13,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_v3qtiynrxah4",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_adg3eonfsqgp",
+       "kind": "note",
+       "offset": {
+        "n": 7,
+        "d": 8
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_6g8tnybug0sf",
+         "pitch": {
+          "step": "D",
+          "alter": 0,
+          "octave": 5
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_fzi251k41xu1",
+       "kind": "note",
+       "offset": {
+        "n": 15,
+        "d": 16
+       },
+       "duration": {
+        "n": 1,
+        "d": 16
+       },
+       "notes": [
+        {
+         "id": "n_p0h7zxbuom2e",
+         "pitch": {
+          "step": "B",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 59
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   }
+  },
+  "st_ultgy13vc0fr": {
+   "m_hi70z56gqhaa": {
+    "voices": [
+     [
+      {
+       "id": "e_2tp5zg2940tj",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_4haxk2lf3a90",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_vgs3p1z59s8a",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_vjx0f2ct5e68",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_5x6fvo3v2b9j",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 2
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_xfdh1fq2j7oa",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_sni311l0zcac",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_eyx9zu2kl6wz",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ],
+    "dynamics": [
+     {
+      "id": "dy_4g37xqsjoacc",
+      "offset": {
+       "n": 0,
+       "d": 1
+      },
+      "value": "mp",
+      "source": {
+       "kind": "ai",
+       "model": "four-pillar-v3.1",
+       "runId": "ai_j568q7l4pfxr",
+       "accepted": false
+      }
+     }
+    ]
+   },
+   "m_6x2k7ttesvvt": {
+    "voices": [
+     [
+      {
+       "id": "e_imwayopyw32u",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_ssw9i5upchox",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_o9wbn7ea10vm",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_fpdedx14mk5e",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_dgvi5ueeuaao",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 2
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_s1j0rfg2doit",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_2y4h4nyikqcz",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_fy625ylxx8vw",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_vc0ngo1da9hb",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_fxrrq6py9avv",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 2
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_b2erd99bx1ma",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   },
+   "m_a0odejk2i9pq": {
+    "voices": [
+     [
+      {
+       "id": "e_efzvowon2p8f",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_x96quheqpypl",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_f0j9ocgs7xvd",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_qlkbjjeuoor5",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 2
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_k400ojmqlygt",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_pefygurbqi4c",
+       "kind": "note",
+       "offset": {
+        "n": 3,
+        "d": 4
+       },
+       "duration": {
+        "n": 1,
+        "d": 4
+       },
+       "notes": [
+        {
+         "id": "n_reeeuy8zry90",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   },
+   "m_u2t0obx189t1": {
+    "voices": [
+     [
+      {
+       "id": "e_5riqrtq12kas",
+       "kind": "note",
+       "offset": {
+        "n": 0,
+        "d": 1
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_643jum6e4vt9",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_tssflj7syzou",
+         "pitch": {
+          "step": "C",
+          "alter": 0,
+          "octave": 4
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      },
+      {
+       "id": "e_iixzrgfkbyo9",
+       "kind": "note",
+       "offset": {
+        "n": 1,
+        "d": 2
+       },
+       "duration": {
+        "n": 1,
+        "d": 2
+       },
+       "notes": [
+        {
+         "id": "n_jansw0yyoi05",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 2
+         },
+         "velocity": 56
+        },
+        {
+         "id": "n_9l9ssl5vabhb",
+         "pitch": {
+          "step": "G",
+          "alter": 0,
+          "octave": 3
+         },
+         "velocity": 48
+        }
+       ],
+       "source": {
+        "kind": "ai",
+        "model": "four-pillar-v3.1",
+        "runId": "ai_j568q7l4pfxr",
+        "accepted": false
+       }
+      }
+     ]
+    ]
+   }
+  }
+ },
+ "harmony": [
+  {
+   "id": "ch_c3eti0314lbo",
+   "measureId": "m_hi70z56gqhaa",
+   "offset": {
+    "n": 0,
+    "d": 1
+   },
+   "root": {
+    "alter": 0,
+    "step": "C"
+   },
+   "quality": "maj",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_qttcva7djjcb",
+   "measureId": "m_hi70z56gqhaa",
+   "offset": {
+    "n": 1,
+    "d": 2
+   },
+   "root": {
+    "alter": 0,
+    "step": "G"
+   },
+   "quality": "dom7",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_6uu07u0sgnha",
+   "measureId": "m_hi70z56gqhaa",
+   "offset": {
+    "n": 3,
+    "d": 4
+   },
+   "root": {
+    "alter": 0,
+    "step": "C"
+   },
+   "quality": "maj",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_px8ea1xjo8yt",
+   "measureId": "m_6x2k7ttesvvt",
+   "offset": {
+    "n": 1,
+    "d": 4
+   },
+   "root": {
+    "alter": 0,
+    "step": "G"
+   },
+   "quality": "dom7",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_ypv1q08vflrq",
+   "measureId": "m_6x2k7ttesvvt",
+   "offset": {
+    "n": 1,
+    "d": 2
+   },
+   "root": {
+    "alter": 0,
+    "step": "C"
+   },
+   "quality": "maj",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_2t4ejpoqx7dg",
+   "measureId": "m_6x2k7ttesvvt",
+   "offset": {
+    "n": 3,
+    "d": 4
+   },
+   "root": {
+    "alter": 0,
+    "step": "G"
+   },
+   "quality": "dom7",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_bf5324abj1q3",
+   "measureId": "m_a0odejk2i9pq",
+   "offset": {
+    "n": 0,
+    "d": 1
+   },
+   "root": {
+    "alter": 0,
+    "step": "C"
+   },
+   "quality": "maj",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_5zgqpumaaqs5",
+   "measureId": "m_a0odejk2i9pq",
+   "offset": {
+    "n": 1,
+    "d": 2
+   },
+   "root": {
+    "alter": 0,
+    "step": "G"
+   },
+   "quality": "dom7",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_0mp5wpp3w0uz",
+   "measureId": "m_a0odejk2i9pq",
+   "offset": {
+    "n": 3,
+    "d": 4
+   },
+   "root": {
+    "alter": 0,
+    "step": "C"
+   },
+   "quality": "maj",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  },
+  {
+   "id": "ch_sgi10qz9wcz8",
+   "measureId": "m_u2t0obx189t1",
+   "offset": {
+    "n": 1,
+    "d": 2
+   },
+   "root": {
+    "alter": 0,
+    "step": "G"
+   },
+   "quality": "dom7",
+   "source": {
+    "kind": "ai",
+    "accepted": true,
+    "model": "four-pillar-v3.1",
+    "runId": "ai_mi8btz4w4o6g"
+   }
+  }
+ ],
+ "spanners": []
+}

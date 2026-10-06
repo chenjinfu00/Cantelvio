@@ -1,0 +1,218 @@
+[
+  {
+    "beat": "BAR 16 · 2/4",
+    "cards": [
+      "NOWEm/Biii64 · BC major2 bars",
+      "+1 · NextAmvi · AC major2 bars",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextGsus4/CVsus4/C · CC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 16 · 3/4",
+    "cards": [
+      "NOWEm/Biii64 · BC major2 bars",
+      "+1 · NextAmvi · AC major2 bars",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextGsus4/CVsus4/C · CC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 16 · 4/4",
+    "cards": [
+      "NOWEm/Biii64 · BC major2 bars",
+      "+1 · NextAmvi · AC major2 bars",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextGsus4/CVsus4/C · CC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 17 · 1/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 17 · 2/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 17 · 3/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 17 · 4/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 18 · 1/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 18 · 2/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 18 · 3/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 18 · 4/4",
+    "cards": [
+      "NOWAmvi · AC major2 bars",
+      "+1 · NextDmii · DC major2 beats",
+      "+2 · NextGsus4/CVsus4/C · CC major2 beats",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  },
+  {
+    "beat": "BAR 19 · 1/4",
+    "cards": [
+      "NOWDmii · DC major2 beats",
+      "+1 · ScheduledGsus4/CVsus4/C · CC major2 beats",
+      "+2 · NextCI · CC major2 bars",
+      "+3 · NextFIV · FC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 19 · 2/4",
+    "cards": [
+      "NOWDmii · DC major2 beats",
+      "+1 · ScheduledGsus4/CVsus4/C · CC major2 beats",
+      "+2 · NextCI · CC major2 bars",
+      "+3 · NextFIV · FC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 19 · 3/4",
+    "cards": [
+      "NOWGsus4/CVsus4/C · CC major2 beats",
+      "+1 · NextCI · CC major2 bars",
+      "+2 · NextFIV · FC major2 beats",
+      "+3 · NextDmii · DC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 19 · 4/4",
+    "cards": [
+      "NOWGsus4/CVsus4/C · CC major2 beats",
+      "+1 · NextCI · CC major2 bars",
+      "+2 · NextFIV · FC major2 beats",
+      "+3 · NextDmii · DC major2 beats"
+    ]
+  },
+  {
+    "beat": "BAR 20 · 1/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 20 · 2/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 20 · 3/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 20 · 4/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 21 · 1/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 21 · 2/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 21 · 3/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 21 · 4/4",
+    "cards": [
+      "NOWCI · CC major2 bars",
+      "+1 · NextFIV · FC major2 beats",
+      "+2 · NextDmii · DC major2 beats",
+      "+3 · NextG/BV6 · BC major1 bar"
+    ]
+  },
+  {
+    "beat": "BAR 22 · 1/4",
+    "cards": [
+      "NOWFIV · FC major2 beats",
+      "+1 · ScheduledDmii · DC major2 beats",
+      "+2 · NextG/BV6 · BC major1 bar",
+      "+3 · NextCI · CC major2 bars"
+    ]
+  }
+]

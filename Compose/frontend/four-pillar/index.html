@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17231d">
+  <title>AIlegro · Four-pillar v2</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <a class="brand" href="/">AIlegro <span>←</span></a>
+      <button id="language" type="button" class="minor">中文</button>
+    </header>
+    <div class="intro compact-intro">
+      <p class="eyebrow" data-en="EXPERIMENTAL LISTENING ROOM · FOUR-PILLAR V2" data-zh="实验试听室 · 四大件 V2">EXPERIMENTAL LISTENING ROOM · FOUR-PILLAR V2</p>
+      <h1 data-en="Keep the music going." data-zh="让新模型持续写下去。">Keep the music going.</h1>
+      <p class="lede" data-en="Two original bars prompt the trained v2 model. It freely generates the next two bars: timing, duration, voices and pitches." data-zh="用原谱两小节提示已训练的 v2 模型，再自由续写两小节：节奏、时值、声部与音高均由模型生成。">Two original bars prompt the trained v2 model. It freely generates the next two bars: timing, duration, voices and pitches.</p>
+    </div>
+    <div class="workspace">
+      <section class="panel controls" aria-label="Generation controls">
+        <div class="panel-heading"><span class="section-no">01</span><h2 data-en="Set the prompt" data-zh="设置试听">Set the prompt</h2></div>
+        <label class="field"><span data-en="Score prompt" data-zh="提示谱例">Score prompt</span><select id="prompt"></select></label>
+        <div class="grid-two">
+          <label class="field"><span data-en="Seed" data-zh="随机种子">Seed</span><input id="seed" type="number" min="0" max="999999999" step="1" value="41977"></label>
+          <label class="field"><span data-en="Playback tempo" data-zh="播放速度">Playback tempo</span><input id="tempo" type="number" min="60" max="160" step="1" value="96"></label>
+        </div>
+        <label class="field"><span><span data-en="Generation temperature" data-zh="生成温度">Generation temperature</span> <output id="temperatureValue">0.95</output></span><input id="temperature" type="range" min="0.6" max="1.3" step="0.05" value="0.95"></label>
+        <input id="useLegacy" type="checkbox" hidden>
+        <fieldset class="groups"><legend data-en="Allowed groups" data-zh="允许的乐器组">Allowed groups</legend><div id="groups"></div></fieldset>
+        <button id="generate" class="primary" type="button" data-en="Generate & listen" data-zh="生成并试听">Generate & listen</button>
+        <p id="status" role="status" aria-live="polite" data-state="idle" data-en="Ready · first render may take up to five minutes." data-zh="就绪 · 首次生成可能需要最长五分钟。">Ready · first render may take up to five minutes.</p>
+      </section>
+      <section class="panel live-panel" aria-label="Continuous performance">
+        <div class="panel-heading"><span class="section-no">02</span><h2 data-en="Continuous performance" data-zh="连续演奏">Continuous performance</h2></div>
+        <p class="live-intro" data-en="Start from two score bars, then keep composing four bars at a time. Tempo, temperature and group changes apply to the next unprepared segment." data-zh="从原谱两小节开始，每次继续写四小节。速度、温度与乐器组调整用于尚未生成的下一段。">Start from two score bars, then keep composing four bars at a time. Tempo, temperature and group changes apply to the next unprepared segment.</p>
+        <div class="live-actions"><button id="liveStart" class="primary" type="button" data-en="▶ Start continuous play" data-zh="▶ 开始连续演奏">▶ Start continuous play</button><button id="liveStop" class="minor" type="button" disabled data-en="■ Stop" data-zh="■ 停止">■ Stop</button></div>
+        <p id="liveStatus" role="status" aria-live="polite"></p>
+        <div class="live-chart-head"><span id="liveNow"></span><small data-en="Estimated harmony · audio-clock playhead" data-zh="根据音符推测和弦 · 指针跟随声音">Estimated harmony · audio-clock playhead</small></div>
+        <div id="liveChart" class="live-chart" aria-label="Eight-bar estimated chord chart"></div>
+        <p class="live-caveat" data-en="The lower four bars move up after the upper row finishes. If local generation is slower than playback, it waits and resumes automatically. Changing prompt or seed starts a new piece." data-zh="上排播完后，下排四小节上移。若本机生成慢于播放，会等待并自动继续。更换提示谱例或种子会开始新曲。">The lower four bars move up after the upper row finishes. If local generation is slower than playback, it waits and resumes automatically. Changing prompt or seed starts a new piece.</p>
+      </section>
+      <section class="panel listening" aria-label="Listening result">
+        <div class="panel-heading"><span class="section-no">03</span><h2 data-en="Listen & compare" data-zh="试听与对照">Listen & compare</h2></div>
+        <div class="legend"><span class="swatch source"></span><span data-en="Original prompt" data-zh="原谱提示">Original prompt</span><span class="swatch model"></span><span data-en="Model continuation" data-zh="模型续写">Model continuation</span></div>
+        <div id="scoreWrap" class="score-wrap"><canvas id="roll" height="290" aria-label="Four-bar note roll"></canvas></div>
+        <div class="player-row"><audio id="player" controls preload="none"></audio><a id="download" class="download disabled" aria-disabled="true" data-en="Download WAV" data-zh="下载 WAV">Download WAV</a></div>
+        <p id="summary" class="summary" data-en="Choose a score prompt and generate a short continuation." data-zh="选择提示谱例，生成一段短续写。">Choose a score prompt and generate a short continuation.</p>
+        <div class="notice"><strong data-en="Trained v2 · 512-bar history" data-zh="已训练 v2 · 512 小节历史">Trained v2 · 512-bar history</strong><p data-en="20,134 training steps. These prompts come from the training corpus. Playback uses simple synthesized sounds. Sampling has a 128-note limit per generated bar; unpitched notes without drum identity are omitted from audio." data-zh="训练完成 20,134 步。提示来自训练语料，试听使用简化合成音色。每个生成小节最多 128 个音符；缺少鼓身份的无固定音高音符不参与音频播放。">20,134 training steps. These prompts come from the training corpus. Playback uses simple synthesized sounds. Sampling has a 128-note limit per generated bar; unpitched notes without drum identity are omitted from audio.</p></div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

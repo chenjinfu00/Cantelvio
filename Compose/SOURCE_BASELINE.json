@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "preparedOn": "2026-09-26",
+  "productName": "AIlegro",
+  "stage": "preparation-only; no app implementation or deployment",
+  "baseline": {
+    "product": "Tonnetz",
+    "siteVersion": 91,
+    "sourceCommit": "b6bc3e7aefa4f415408566957b7b1918d32a31af",
+    "localRoot": "tonnetz-workbench",
+    "allListedModulesMatchPublishedSourceCheckout": true
+  },
+  "policy": {
+    "freezeWeightsForFirstExtraction": true,
+    "doNotEditTonnetzDuringPrototype": true,
+    "newAppMustHaveIndependentAudioAndSessionState": true,
+    "assetUrlsMustBeResolvedFromNewAppBase": true,
+    "reuseDoesNotMeanAllAPIsAreAlreadyDecoupled": true
+  },
+  "modules": [
+    {
+      "path": "tonnetz-workbench/public/tonnetz/app.js",
+      "bytes": 89586,
+      "sha256": "fade46b3e4613354976d0870f16a4e618e830e154bc772330cb1bc4c92843bbe"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/accompaniment.js",
+      "bytes": 26571,
+      "sha256": "e4f398e02d23d0ab64db07f9193ce9a832da1f8bf302ae15364938d33b1986af"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/improvisation.js",
+      "bytes": 10867,
+      "sha256": "125ef76296b999321a773dc4e0f4a85896a923a8ebd32c1f08e3b1d4d5972a41"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/arrangement-random.js",
+      "bytes": 4119,
+      "sha256": "0248c937ea7c9ae50ea621c05ad9b3b78de426c089a5a878ec495c99f01670f4"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/chord-lookahead.js",
+      "bytes": 3436,
+      "sha256": "7130246f7a2d7766be0d8a7fb0b639bcffa05b2116fb261ef9b41a98364784da"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/harmony-models.js",
+      "bytes": 11991,
+      "sha256": "69e9dccaa5f9d983885ff342805668b17ca518c0a886979e3cca5206cb480149"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/harmony-transformer.js",
+      "bytes": 2481348,
+      "sha256": "03a175b35691930bf28b31202f3e62127c36b90284cd8bcab8808ecce6bb2690"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/melody-model.js",
+      "bytes": 4046,
+      "sha256": "2e24377a1d0d041628dbf20c5d274b14329660b642e2cbfd01e963de0f5621e1"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/melody-transformer-weights.js",
+      "bytes": 4069023,
+      "sha256": "de3211e563134661b73222df781e25bcc69127c21cf8d1fc00c2602e342e1512"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/chord-vocabulary.js",
+      "bytes": 7638,
+      "sha256": "cb51be9f87b0d2434b1e5bf1ace80082aa189331b08fcd90b468af4f0dd6eeb5"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/lib/tonality.js",
+      "bytes": 2745,
+      "sha256": "7903bd95443f89a72d063b1e5dde36d7750504c49401ab06f4133f7560efa30f"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/workbench.js",
+      "bytes": 54989,
+      "sha256": "93b64949a6072e81b27c8d06290b76f73f4847bcd8082ddd83df2ee23d9ff5a8"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/workbench-data.js",
+      "bytes": 5820,
+      "sha256": "923b3f1f4b72f08fd2078e0d849f47ceddc3b52595f83ebb14d1792bac87f28b"
+    },
+    {
+      "path": "tonnetz-workbench/public/tonnetz/MELODY-DATA-NOTICE.txt",
+      "bytes": 970,
+      "sha256": "67eed6ca4c03de4ee93827a764da4e3c8645aa0745d0ac62afa9fea59197b0f9"
+    }
+  ],
+  "audioNotices": [
+    {
+      "family": "piano",
+      "notice": "tonnetz-workbench/public/tonnetz/media/piano/NOTICE.txt",
+      "sha256": "54d238908992ccac10a0e9cd5d4274be19484e997bb1093343f867cffdc2002a",
+      "packaging_rule": "Keep notice, source credits and asset manifest when copied. Preserve stated attribution."
+    },
+    {
+      "family": "bass",
+      "notice": "tonnetz-workbench/public/tonnetz/media/bass/NOTICE.txt",
+      "sha256": "a2bca77e98e6b25113617e76c36f52a856f7580c07a5b4ec8a04a335281f97b5",
+      "packaging_rule": "Keep notice, source credits and asset manifest when copied. Preserve stated attribution."
+    },
+    {
+      "family": "guitar",
+      "notice": "tonnetz-workbench/public/tonnetz/media/guitar/NOTICE.txt",
+      "sha256": "bc7808e25886780e60e5028ee7906082725d5f10f354f3cac055008817e9344e",
+      "packaging_rule": "Keep notice, source credits and asset manifest when copied. Preserve stated attribution."
+    }
+  ]
+}

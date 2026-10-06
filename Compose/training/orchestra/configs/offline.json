@@ -1,0 +1,29 @@
+{
+ "name": "offline",
+ "model": {
+  "d": 512,
+  "heads": 8,
+  "layers": 10,
+  "ff": 2048,
+  "dropout": 0.1,
+  "pitch": "rotary",
+  "register": true
+ },
+ "train": {
+  "max_len": 2048,
+  "batch": 8,
+  "lr": 0.0006,
+  "min_lr": 3e-05,
+  "warmup": 2000,
+  "steps": 150000,
+  "eval_every": 2000,
+  "eval_windows": 128,
+  "save_every": 500,
+  "log_every": 100,
+  "workers": 3,
+  "transpose": [
+   -6,
+   5
+  ]
+ }
+}

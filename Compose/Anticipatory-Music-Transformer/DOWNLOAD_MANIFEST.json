@@ -1,0 +1,398 @@
+{
+  "sourceRepository": "https://github.com/jthickstun/anticipation",
+  "models": [
+    {
+      "repo": "stanford-crfm/music-small-100k",
+      "revision": "6bfe1a64a8400710943195803af05862ab976210",
+      "metadata": "metadata/music-small-100k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.0005235839635133743
+        },
+        {
+          "path": "README.md",
+          "size": 738,
+          "lfsSha256": null,
+          "sha256": "ff4dda4ba081f7035b5f12dcc6315a61ce4203cf782154fb8f38671b61193db2",
+          "verified": true,
+          "seconds": 0.0005748330149799585
+        },
+        {
+          "path": "config.json",
+          "size": 1962,
+          "lfsSha256": null,
+          "sha256": "098c05bfde504e944acab3b88aa86f6d6fe6a4f199adae7c5b03ed25a84d7f29",
+          "verified": true,
+          "seconds": 0.0003945000353269279
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 512433185,
+          "lfsSha256": "c866bcf3c0326692b2e5bb48870d5235b843f923699b8165ae50801df0bb978c",
+          "sha256": "c866bcf3c0326692b2e5bb48870d5235b843f923699b8165ae50801df0bb978c",
+          "verified": true,
+          "seconds": 0.8335379170021042
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-small-800k",
+      "revision": "fa800530aa1126dd6b58b38f3bdb8fcec9c9d4f5",
+      "metadata": "metadata/music-small-800k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.0005302909994497895
+        },
+        {
+          "path": "README.md",
+          "size": 738,
+          "lfsSha256": null,
+          "sha256": "073b27063e3221423adeb59d59c944ad4739191df419d87f9cd78bfd5a8ffcc9",
+          "verified": true,
+          "seconds": 0.0003749160096049309
+        },
+        {
+          "path": "config.json",
+          "size": 1962,
+          "lfsSha256": null,
+          "sha256": "098c05bfde504e944acab3b88aa86f6d6fe6a4f199adae7c5b03ed25a84d7f29",
+          "verified": true,
+          "seconds": 0.00035375001607462764
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 512433185,
+          "lfsSha256": "45af5006d529a19af3654c729192c072f3aeb9e7e13e9eaf92c19bfd7c87e4d8",
+          "sha256": "45af5006d529a19af3654c729192c072f3aeb9e7e13e9eaf92c19bfd7c87e4d8",
+          "verified": true,
+          "seconds": 140.59912720904686
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-small-ar-100k",
+      "revision": "bd5b0073434af12a0702b02f1d3db84b8fc729ca",
+      "metadata": "metadata/music-small-ar-100k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.40723404102027416
+        },
+        {
+          "path": "README.md",
+          "size": 696,
+          "lfsSha256": null,
+          "sha256": "92d5c7db50fa0ce7c22e1d3df42af6a41c572c7f416def3a433ef7bc93d81096",
+          "verified": true,
+          "seconds": 0.4108427080209367
+        },
+        {
+          "path": "config.json",
+          "size": 1962,
+          "lfsSha256": null,
+          "sha256": "098c05bfde504e944acab3b88aa86f6d6fe6a4f199adae7c5b03ed25a84d7f29",
+          "verified": true,
+          "seconds": 0.42377291701268405
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 512433185,
+          "lfsSha256": "04fc5404e28187e042b65a49fc0e008172be9b2e92fabb3b92eaf2590c1a9e91",
+          "sha256": "04fc5404e28187e042b65a49fc0e008172be9b2e92fabb3b92eaf2590c1a9e91",
+          "verified": true,
+          "seconds": 305.7203930830001
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-small-ar-800k",
+      "revision": "d141adc97569dbb138b3aa7245f93d89ca403baf",
+      "metadata": "metadata/music-small-ar-800k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.4584876250009984
+        },
+        {
+          "path": "README.md",
+          "size": 696,
+          "lfsSha256": null,
+          "sha256": "d9900fcd01f5b5acfa33cab4bacbca407129a56da4c43b5f9b2be5ab0192e62f",
+          "verified": true,
+          "seconds": 0.44272370799444616
+        },
+        {
+          "path": "config.json",
+          "size": 1962,
+          "lfsSha256": null,
+          "sha256": "098c05bfde504e944acab3b88aa86f6d6fe6a4f199adae7c5b03ed25a84d7f29",
+          "verified": true,
+          "seconds": 0.37891904200660065
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 512433185,
+          "lfsSha256": "7c3d22ed12de352122e63dd77f690c9c484ec3e08b886aceda3f91091308f007",
+          "sha256": "7c3d22ed12de352122e63dd77f690c9c484ec3e08b886aceda3f91091308f007",
+          "verified": true,
+          "seconds": 334.06506837497
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-small-ar-inter-100k",
+      "revision": "ff26341294e8a8262c8a7475a2f2de92ae64f610",
+      "metadata": "metadata/music-small-ar-inter-100k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.38365841703489423
+        },
+        {
+          "path": "README.md",
+          "size": 701,
+          "lfsSha256": null,
+          "sha256": "30afa94c86b2405b4b5af2caa8a31043cd8aff1dfac79004665eade07e3749f1",
+          "verified": true,
+          "seconds": 0.5086356670362875
+        },
+        {
+          "path": "config.json",
+          "size": 1962,
+          "lfsSha256": null,
+          "sha256": "1a20eb0838860f7ed6a20a1b62711ec8d2803dfdcc4a6bcc053c383cd0b8d732",
+          "verified": true,
+          "seconds": 0.569399916974362
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 447911969,
+          "lfsSha256": "09c4bd5ddd0158df7459c76c13e121408b046199c3b43cb85e7c52c3557620ee",
+          "sha256": "09c4bd5ddd0158df7459c76c13e121408b046199c3b43cb85e7c52c3557620ee",
+          "verified": true,
+          "seconds": 310.8803914579912
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-medium-100k",
+      "revision": "917320913ca67a099bd84cffbde455ade894f0eb",
+      "metadata": "metadata/music-medium-100k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.5188124169944786
+        },
+        {
+          "path": "README.md",
+          "size": 739,
+          "lfsSha256": null,
+          "sha256": "208f87f2e37626a526a09f269dec94cb99e80a651b5866ca737af648ff7f1b17",
+          "verified": true,
+          "seconds": 0.40800795902032405
+        },
+        {
+          "path": "config.json",
+          "size": 1963,
+          "lfsSha256": null,
+          "sha256": "bb4fd12b049da737be15b61e959aa913ab5a1982b256530dd05247dbf1b0b737",
+          "verified": true,
+          "seconds": 0.509248916991055
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 1438866529,
+          "lfsSha256": "01b8a4087c48ba1c5f18a7a5719d07a2152c332ff254793c329158bc7cda1502",
+          "sha256": "01b8a4087c48ba1c5f18a7a5719d07a2152c332ff254793c329158bc7cda1502",
+          "verified": true,
+          "seconds": 763.8486038339906
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-medium-200k",
+      "revision": "43f874dd08cb57d58594c039efb03ebab5a14879",
+      "metadata": "metadata/music-medium-200k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.5350685419980437
+        },
+        {
+          "path": "README.md",
+          "size": 739,
+          "lfsSha256": null,
+          "sha256": "09a56ccaa7e9900de1ca87117da25c77d2bc4f0700f583f7ab524f9dc098c9e5",
+          "verified": true,
+          "seconds": 0.9255690419813618
+        },
+        {
+          "path": "config.json",
+          "size": 1963,
+          "lfsSha256": null,
+          "sha256": "bb4fd12b049da737be15b61e959aa913ab5a1982b256530dd05247dbf1b0b737",
+          "verified": true,
+          "seconds": 0.8797666250029579
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 1438866529,
+          "lfsSha256": "0049f3dda1c6989a1a7c768bd2a307c6d72bb8722c3b3e66fe91f6cf2106416b",
+          "sha256": "0049f3dda1c6989a1a7c768bd2a307c6d72bb8722c3b3e66fe91f6cf2106416b",
+          "verified": true,
+          "seconds": 988.0624420829699
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-medium-800k",
+      "revision": "93b6eb7e09bad33be6cb2ebd50ce5279cbfde7f6",
+      "metadata": "metadata/music-medium-800k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 0.4478944170405157
+        },
+        {
+          "path": "README.md",
+          "size": 739,
+          "lfsSha256": null,
+          "sha256": "fe32d056115e9af36972cab12fb1e500c32adcc3c93904a38e22458f5fc7ce9a",
+          "verified": true,
+          "seconds": 0.4922328750253655
+        },
+        {
+          "path": "config.json",
+          "size": 1963,
+          "lfsSha256": null,
+          "sha256": "bb4fd12b049da737be15b61e959aa913ab5a1982b256530dd05247dbf1b0b737",
+          "verified": true,
+          "seconds": 0.4241766670020297
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 1438866529,
+          "lfsSha256": "7af65dbabb2f6b7df9df03c2ea5b1909b74043591ba578fb663d80fcf82241ad",
+          "sha256": "7af65dbabb2f6b7df9df03c2ea5b1909b74043591ba578fb663d80fcf82241ad",
+          "verified": true,
+          "seconds": 858.974950874981
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-large-100k",
+      "revision": "0ae11521e5dc4a50c69dfb4b692f04c6afc0c388",
+      "metadata": "metadata/music-large-100k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1477,
+          "lfsSha256": null,
+          "sha256": "db7c0371f46f0840b8f25794c1e3321c9b5820a8cb6ba9694a46fc64b8fae5a6",
+          "verified": true,
+          "seconds": 1.6532768339966424
+        },
+        {
+          "path": "README.md",
+          "size": 738,
+          "lfsSha256": null,
+          "sha256": "2dbc07e789e49194a562d541275f635f02521710820cc3b8a5d44e6cd5ba2d8a",
+          "verified": true,
+          "seconds": 0.47237462498014793
+        },
+        {
+          "path": "config.json",
+          "size": 1963,
+          "lfsSha256": null,
+          "sha256": "d778e5e1bddf6af47ca646e4a529bb8fd45d3650fa2d61a1d40eeb504fbd813e",
+          "verified": true,
+          "seconds": 0.5733461250201799
+        },
+        {
+          "path": "pytorch_model.bin",
+          "size": 3120594081,
+          "lfsSha256": "02f422f6ace87a48c8e78f9dee47eee09ecd3777214dd3d38a61272749912472",
+          "sha256": "02f422f6ace87a48c8e78f9dee47eee09ecd3777214dd3d38a61272749912472",
+          "verified": true,
+          "seconds": 1501.551837542036
+        }
+      ]
+    },
+    {
+      "repo": "stanford-crfm/music-large-800k",
+      "revision": "e206a88d4658661c2757573eae724d5b27213824",
+      "metadata": "metadata/music-large-800k.json",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1519,
+          "lfsSha256": null,
+          "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+          "verified": true,
+          "seconds": 0.5141280420357361
+        },
+        {
+          "path": "README.md",
+          "size": 1054,
+          "lfsSha256": null,
+          "sha256": "276146c810dc229fcac8cb23a32ae5038f4ced41f3d958237cf62715447b8bc8",
+          "verified": true,
+          "seconds": 0.5458359170006588
+        },
+        {
+          "path": "config.json",
+          "size": 1977,
+          "lfsSha256": null,
+          "sha256": "2ece2a78b4d9b48aca5dbc36e15779520e540ddec7eedf524dcdfa276b9a5046",
+          "verified": true,
+          "seconds": 0.4054821250028908
+        },
+        {
+          "path": "model.safetensors",
+          "size": 3120598456,
+          "lfsSha256": "83fb8b9546eacce77a90bb10006b3f569ba342361dce046d078cf2429975e09f",
+          "sha256": "83fb8b9546eacce77a90bb10006b3f569ba342361dce046d078cf2429975e09f",
+          "verified": true,
+          "seconds": 1128.8504079169943
+        }
+      ]
+    }
+  ],
+  "complete": true,
+  "failures": [],
+  "downloadedBytes": 13055478862
+}

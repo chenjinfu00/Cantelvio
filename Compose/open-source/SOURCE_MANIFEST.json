@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-04",
+  "sources": [
+    {
+      "name": "AugmentedNet",
+      "url": "https://github.com/napulen/AugmentedNet.git",
+      "commit": "46d3475651346fd9053db29bc2bfb7943a869b74",
+      "commitDate": "2023-11-27T21:40:06-05:00",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "PDMX",
+      "url": "https://github.com/pnlong/PDMX.git",
+      "commit": "7abbd6d926d2df94129034eba81c10069c9dcbc4",
+      "commitDate": "2026-08-04T11:49:54-07:00",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "basic-pitch",
+      "url": "https://github.com/spotify/basic-pitch.git",
+      "commit": "fa5997af0a8210982619003269994a1be25eddf3",
+      "commitDate": "2025-11-13T15:40:45+01:00",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "partitura",
+      "url": "https://github.com/CPJKU/partitura.git",
+      "commit": "427ff875bd5a49a0eec894fdd7c6631ed7f597ea",
+      "commitDate": "2026-05-25T10:45:36+09:00",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    }
+  ],
+  "datasets": [
+    {
+      "name": "MusicNet",
+      "record": 5120004,
+      "url": "https://zenodo.org/records/5120004",
+      "files": [
+        {
+          "name": "musicnet_metadata.csv",
+          "bytes": 43775,
+          "md5": "1caef62cee9c875235e62aac368b49d8",
+          "sha256": "1308d938bafb594e3b0471f2bdda3630da352f881857f265f92114cf398de7ca",
+          "verified": true
+        },
+        {
+          "name": "musicnet_midis.tar.gz",
+          "bytes": 2601302,
+          "md5": "b5fa98a113bfc51c8a445def9f24dc7e",
+          "sha256": "943cc47731ec5f397bd6fbab4dff78342472890cd484bd30ffb2e16047eef908",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "PDMX",
+      "record": 15571083,
+      "url": "https://zenodo.org/records/15571083",
+      "files": [
+        {
+          "name": "PDMX.csv",
+          "bytes": 225399738,
+          "md5": "30392ccf38bb63ce70e7afae70f9c88c",
+          "sha256": "fc2187e7e09185f4b28be57b6478a96a1243a037f8fd13624f17de2d8bfd44bd",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Winterreise",
+      "record": 5139893,
+      "url": "https://zenodo.org/records/5139893",
+      "files": [
+        {
+          "name": "Schubert_Winterreise_Dataset_v2-0.zip",
+          "bytes": 506943733,
+          "md5": "d3a48422a90bf177ef89349725042978",
+          "sha256": "bd6528edd0d46c92d7c436fa69f210f7fffb028c56ce24a91ef35597704fd1ee",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "PDMX contains metadata and selected index only; scores not downloaded.",
+    "MusicNet contains metadata and MIDI only; audio not downloaded.",
+    "Winterreise v2.0 includes conflicting SC06 licensing statements; prefer HU33 and retain original notices.",
+    "AugmentedNet runtime and reannotation not yet run.",
+    "Partitura and Basic Pitch cloned for evaluation; not connected to production."
+  ]
+}

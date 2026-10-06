@@ -1,0 +1,16 @@
+node_modules/
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+.tmp/
+.venv-training/
+training/runs/
+training/logs/
+training/data/sources/extracted/
+training/data/local-midi-curated-v1/
+training/data/MIDI-Library/

@@ -1,0 +1,4 @@
+{"name": "tiny",
+ "model": {"d": 128, "heads": 2, "layers": 2, "ff": 256, "dropout": 0.1, "pitch": "rotary", "register": true},
+ "train": {"max_len": 256, "batch": 8, "lr": 2e-3, "warmup": 20, "steps": 120, "eval_every": 40, "eval_windows": 32,
+           "save_every": 40, "log_every": 20, "workers": 1}}

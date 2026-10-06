@@ -1,0 +1,1421 @@
+{
+  "id": "melody",
+  "composer": "Tchaikovsky",
+  "label": "You play the soloist",
+  "mode": "classic",
+  "duration": 54.36293,
+  "beatSeconds": 0.75,
+  "excerpt": "Movement I, m.23–41, ending before the last-beat pickup in m.41.",
+  "source": "Mutopia-2017/11/06-466; Will Oram; Eulenburg 1920; public domain.",
+  "sourceUrl": "https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=466",
+  "guide": [
+    {
+      "time": 0.23809,
+      "duration": 0.2381,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 0.47619,
+      "duration": 0.71428,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 1.19047,
+      "duration": 0.2381,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 1.42857,
+      "duration": 0.2381,
+      "midis": [
+        61
+      ],
+      "name": "C♯4"
+    },
+    {
+      "time": 1.66666,
+      "duration": 0.2381,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 1.90476,
+      "duration": 0.23529,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 2.14005,
+      "duration": 0.23529,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 2.37535,
+      "duration": 0.23529,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 2.61064,
+      "duration": 0.17647,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 2.78711,
+      "duration": 0.17647,
+      "midis": [
+        79
+      ],
+      "name": "G5"
+    },
+    {
+      "time": 2.96358,
+      "duration": 0.17647,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 3.14005,
+      "duration": 0.17647,
+      "midis": [
+        85
+      ],
+      "name": "C♯6"
+    },
+    {
+      "time": 3.31652,
+      "duration": 0.35294,
+      "midis": [
+        88
+      ],
+      "name": "E6"
+    },
+    {
+      "time": 3.66946,
+      "duration": 0.35294,
+      "midis": [
+        86
+      ],
+      "name": "D6"
+    },
+    {
+      "time": 4.02241,
+      "duration": 0.35294,
+      "midis": [
+        85
+      ],
+      "name": "C♯6"
+    },
+    {
+      "time": 4.37535,
+      "duration": 0.35294,
+      "midis": [
+        82
+      ],
+      "name": "B♭5"
+    },
+    {
+      "time": 4.72829,
+      "duration": 0.35294,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 5.08123,
+      "duration": 0.35294,
+      "midis": [
+        80
+      ],
+      "name": "A♭5"
+    },
+    {
+      "time": 5.43417,
+      "duration": 0.35294,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 5.78711,
+      "duration": 0.35294,
+      "midis": [
+        82
+      ],
+      "name": "B♭5"
+    },
+    {
+      "time": 6.14005,
+      "duration": 0.625,
+      "midis": [
+        83
+      ],
+      "name": "B5"
+    },
+    {
+      "time": 6.76505,
+      "duration": 0.0386,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 6.80549,
+      "duration": 0.0386,
+      "midis": [
+        83
+      ],
+      "name": "B5"
+    },
+    {
+      "time": 6.84593,
+      "duration": 0.35294,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 7.19887,
+      "duration": 0.35294,
+      "midis": [
+        80
+      ],
+      "name": "A♭5"
+    },
+    {
+      "time": 7.55182,
+      "duration": 0.70588,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 8.2577,
+      "duration": 0.35294,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 8.61064,
+      "duration": 0.35294,
+      "midis": [
+        75
+      ],
+      "name": "E♭5"
+    },
+    {
+      "time": 8.96358,
+      "duration": 0.625,
+      "midis": [
+        78
+      ],
+      "name": "F♯5"
+    },
+    {
+      "time": 9.58858,
+      "duration": 0.0386,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 9.62902,
+      "duration": 0.0386,
+      "midis": [
+        78
+      ],
+      "name": "F♯5"
+    },
+    {
+      "time": 9.66946,
+      "duration": 0.35294,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 10.0224,
+      "duration": 0.35294,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 10.37534,
+      "duration": 0.35294,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 10.72828,
+      "duration": 0.35294,
+      "midis": [
+        68
+      ],
+      "name": "A♭4"
+    },
+    {
+      "time": 11.08123,
+      "duration": 0.35294,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 11.43417,
+      "duration": 0.35294,
+      "midis": [
+        70
+      ],
+      "name": "B♭4"
+    },
+    {
+      "time": 11.78711,
+      "duration": 0.35294,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 12.14005,
+      "duration": 0.70588,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 12.84593,
+      "duration": 0.27206,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 13.11799,
+      "duration": 0.07904,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 13.19887,
+      "duration": 0.375,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 13.94887,
+      "duration": 1.5,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 15.44887,
+      "duration": 0.1875,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 15.63637,
+      "duration": 0.1875,
+      "midis": [
+        62
+      ],
+      "name": "D4"
+    },
+    {
+      "time": 15.82387,
+      "duration": 0.1875,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 16.01137,
+      "duration": 0.1875,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 16.19887,
+      "duration": 1.125,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 17.32387,
+      "duration": 0.375,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 17.69887,
+      "duration": 0.75,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 18.44887,
+      "duration": 0.66406,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 19.11293,
+      "duration": 0.08398,
+      "midis": [
+        59
+      ],
+      "name": "B3"
+    },
+    {
+      "time": 19.19887,
+      "duration": 0.375,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 19.94887,
+      "duration": 1.3125,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 21.26137,
+      "duration": 0.1875,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 21.44887,
+      "duration": 0.1875,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 21.63637,
+      "duration": 0.1875,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 21.82387,
+      "duration": 0.1875,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 22.01137,
+      "duration": 0.1875,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 22.19887,
+      "duration": 1.125,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 23.32387,
+      "duration": 0.125,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 23.44887,
+      "duration": 0.125,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 23.57387,
+      "duration": 0.125,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 23.69887,
+      "duration": 0.375,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 24.07387,
+      "duration": 0.375,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 24.44887,
+      "duration": 0.375,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 24.82387,
+      "duration": 0.375,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 25.19887,
+      "duration": 0.375,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 25.57387,
+      "duration": 0.375,
+      "midis": [
+        79
+      ],
+      "name": "G5"
+    },
+    {
+      "time": 25.94887,
+      "duration": 1.125,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 27.07387,
+      "duration": 0.375,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 27.44887,
+      "duration": 0.375,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 27.82387,
+      "duration": 0.375,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 28.19887,
+      "duration": 0.375,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 28.57387,
+      "duration": 0.375,
+      "midis": [
+        79
+      ],
+      "name": "G5"
+    },
+    {
+      "time": 28.94887,
+      "duration": 1.0,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 29.94887,
+      "duration": 0.25,
+      "midis": [
+        68
+      ],
+      "name": "A♭4"
+    },
+    {
+      "time": 30.19887,
+      "duration": 0.25,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 30.44887,
+      "duration": 0.25,
+      "midis": [
+        70
+      ],
+      "name": "B♭4"
+    },
+    {
+      "time": 30.69887,
+      "duration": 0.25,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 30.94887,
+      "duration": 0.25,
+      "midis": [
+        70
+      ],
+      "name": "B♭4"
+    },
+    {
+      "time": 31.19887,
+      "duration": 0.25,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 31.44887,
+      "duration": 0.25,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 31.69887,
+      "duration": 0.25,
+      "midis": [
+        78
+      ],
+      "name": "F♯5"
+    },
+    {
+      "time": 31.94887,
+      "duration": 0.9375,
+      "midis": [
+        68
+      ],
+      "name": "A♭4"
+    },
+    {
+      "time": 32.88637,
+      "duration": 0.1875,
+      "midis": [
+        63
+      ],
+      "name": "E♭4"
+    },
+    {
+      "time": 33.07387,
+      "duration": 0.1875,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 33.26137,
+      "duration": 0.1875,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 33.44887,
+      "duration": 0.1875,
+      "midis": [
+        68
+      ],
+      "name": "A♭4"
+    },
+    {
+      "time": 33.63637,
+      "duration": 0.1875,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 33.82387,
+      "duration": 0.1875,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 34.01137,
+      "duration": 0.1875,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 34.19887,
+      "duration": 0.9375,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 35.13637,
+      "duration": 0.1875,
+      "midis": [
+        77
+      ],
+      "name": "F5"
+    },
+    {
+      "time": 35.32387,
+      "duration": 0.1875,
+      "midis": [
+        78
+      ],
+      "name": "F♯5"
+    },
+    {
+      "time": 35.51137,
+      "duration": 0.1875,
+      "midis": [
+        80
+      ],
+      "name": "A♭5"
+    },
+    {
+      "time": 35.69887,
+      "duration": 0.375,
+      "midis": [
+        81
+      ],
+      "name": "A5"
+    },
+    {
+      "time": 36.07387,
+      "duration": 0.28125,
+      "midis": [
+        83
+      ],
+      "name": "B5"
+    },
+    {
+      "time": 36.35512,
+      "duration": 0.09375,
+      "midis": [
+        83
+      ],
+      "name": "B5"
+    },
+    {
+      "time": 36.44887,
+      "duration": 1.125,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 37.57387,
+      "duration": 0.1875,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 37.85512,
+      "duration": 0.09375,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 37.94887,
+      "duration": 1.125,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 39.07387,
+      "duration": 0.1875,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 39.35512,
+      "duration": 0.09375,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 39.44887,
+      "duration": 0.375,
+      "midis": [
+        61
+      ],
+      "name": "C♯4"
+    },
+    {
+      "time": 39.82387,
+      "duration": 0.1875,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 40.10512,
+      "duration": 0.09375,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 40.19887,
+      "duration": 0.375,
+      "midis": [
+        59
+      ],
+      "name": "B3"
+    },
+    {
+      "time": 40.57387,
+      "duration": 0.1875,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 40.85512,
+      "duration": 0.09375,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 40.94887,
+      "duration": 0.375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 41.32387,
+      "duration": 0.1875,
+      "midis": [
+        61
+      ],
+      "name": "C♯4"
+    },
+    {
+      "time": 41.60512,
+      "duration": 0.09375,
+      "midis": [
+        61
+      ],
+      "name": "C♯4"
+    },
+    {
+      "time": 41.69887,
+      "duration": 0.375,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 42.07387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 42.35512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 42.44887,
+      "duration": 0.375,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 42.82387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 43.10512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 43.19887,
+      "duration": 0.375,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 43.57387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 43.85512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 43.94887,
+      "duration": 0.375,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 44.32387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 44.60512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 44.69887,
+      "duration": 0.375,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 45.07387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 45.35512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 45.44887,
+      "duration": 0.375,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 45.82387,
+      "duration": 0.1875,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 46.10512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 46.19887,
+      "duration": 0.375,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 46.57387,
+      "duration": 0.1875,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 46.85512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 46.94887,
+      "duration": 0.375,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 47.32387,
+      "duration": 0.1875,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 47.60512,
+      "duration": 0.09375,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 47.69887,
+      "duration": 0.125,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 47.82387,
+      "duration": 0.125,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 47.94887,
+      "duration": 0.125,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 48.07387,
+      "duration": 0.125,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 48.19887,
+      "duration": 0.125,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 48.32387,
+      "duration": 0.125,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 48.44887,
+      "duration": 0.125,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 48.57387,
+      "duration": 0.125,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 48.69887,
+      "duration": 0.125,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 48.82387,
+      "duration": 0.125,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 48.94887,
+      "duration": 0.125,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 49.07387,
+      "duration": 0.125,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 49.19887,
+      "duration": 0.125,
+      "midis": [
+        56
+      ],
+      "name": "A♭3"
+    },
+    {
+      "time": 49.32387,
+      "duration": 0.125,
+      "midis": [
+        57
+      ],
+      "name": "A3"
+    },
+    {
+      "time": 49.44887,
+      "duration": 0.125,
+      "midis": [
+        58
+      ],
+      "name": "B♭3"
+    },
+    {
+      "time": 49.57387,
+      "duration": 0.125,
+      "midis": [
+        59
+      ],
+      "name": "B3"
+    },
+    {
+      "time": 49.69887,
+      "duration": 0.125,
+      "midis": [
+        60
+      ],
+      "name": "C4"
+    },
+    {
+      "time": 49.82387,
+      "duration": 0.125,
+      "midis": [
+        61
+      ],
+      "name": "C♯4"
+    },
+    {
+      "time": 49.94887,
+      "duration": 0.125,
+      "midis": [
+        62
+      ],
+      "name": "D4"
+    },
+    {
+      "time": 50.07387,
+      "duration": 0.125,
+      "midis": [
+        63
+      ],
+      "name": "E♭4"
+    },
+    {
+      "time": 50.19887,
+      "duration": 0.125,
+      "midis": [
+        64
+      ],
+      "name": "E4"
+    },
+    {
+      "time": 50.32387,
+      "duration": 0.125,
+      "midis": [
+        65
+      ],
+      "name": "F4"
+    },
+    {
+      "time": 50.44887,
+      "duration": 0.125,
+      "midis": [
+        66
+      ],
+      "name": "F♯4"
+    },
+    {
+      "time": 50.57387,
+      "duration": 0.125,
+      "midis": [
+        67
+      ],
+      "name": "G4"
+    },
+    {
+      "time": 50.69887,
+      "duration": 0.125,
+      "midis": [
+        68
+      ],
+      "name": "A♭4"
+    },
+    {
+      "time": 50.82387,
+      "duration": 0.125,
+      "midis": [
+        69
+      ],
+      "name": "A4"
+    },
+    {
+      "time": 50.94887,
+      "duration": 0.125,
+      "midis": [
+        70
+      ],
+      "name": "B♭4"
+    },
+    {
+      "time": 51.07387,
+      "duration": 0.125,
+      "midis": [
+        71
+      ],
+      "name": "B4"
+    },
+    {
+      "time": 51.19887,
+      "duration": 0.125,
+      "midis": [
+        72
+      ],
+      "name": "C5"
+    },
+    {
+      "time": 51.32387,
+      "duration": 0.125,
+      "midis": [
+        73
+      ],
+      "name": "C♯5"
+    },
+    {
+      "time": 51.44887,
+      "duration": 0.1875,
+      "midis": [
+        74
+      ],
+      "name": "D5"
+    },
+    {
+      "time": 51.63637,
+      "duration": 0.1875,
+      "midis": [
+        75
+      ],
+      "name": "E♭5"
+    },
+    {
+      "time": 51.82387,
+      "duration": 0.1875,
+      "midis": [
+        76
+      ],
+      "name": "E5"
+    },
+    {
+      "time": 52.01137,
+      "duration": 0.1875,
+      "midis": [
+        77
+      ],
+      "name": "F5"
+    },
+    {
+      "time": 52.19887,
+      "duration": 0.375,
+      "midis": [
+        62,
+        69,
+        78
+      ],
+      "name": "D4 · A4 · F♯5"
+    },
+    {
+      "time": 52.94887,
+      "duration": 1.41406,
+      "midis": [
+        62,
+        69,
+        78
+      ],
+      "name": "D4 · A4 · F♯5"
+    }
+  ],
+  "files": {
+    "backing": {
+      "file": "tchaikovsky-backing.ogg",
+      "duration": 55.563,
+      "peak": 0.72
+    },
+    "reference": {
+      "file": "tchaikovsky-reference.ogg",
+      "duration": 55.563,
+      "peak": 0.72
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "trained": true,
+  "seed": 926734,
+  "steps": 1600,
+  "selectedStep": 200,
+  "optimizer": "AdamW",
+  "learningRate": 0.0016,
+  "dropout": 0.08,
+  "labelSmoothing": 0.025,
+  "trainingPhraseCount": 4800,
+  "validationPhraseCount": 512,
+  "parameterCount": 204391,
+  "coveredChordInversions": 2172,
+  "trainingMetricSubsetPhrases": 512,
+  "trainingMetrics": {
+    "crossEntropy": 2.723158,
+    "perplexity": 15.22834,
+    "top1": 0.312836,
+    "inversionTop1": 0.684896,
+    "targets": 8375
+  },
+  "validationMetrics": {
+    "crossEntropy": 3.100083,
+    "perplexity": 22.199798,
+    "top1": 0.263314,
+    "inversionTop1": 0.676296,
+    "targets": 8412
+  },
+  "unigramValidationCrossEntropy": 4.305644,
+  "initialValidationCrossEntropy": 6.393985,
+  "corpus": "Original synthetic major/minor phrase grammar; no real-music recordings or corpus",
+  "split": "Held-out degree templates and disjoint exact sequences",
+  "conditioning": "relative root, chord quality, inversion, key mode, style, up to 24 previous chords",
+  "qualityOrder": [
+    "maj",
+    "min",
+    "dim",
+    "aug",
+    "sus2",
+    "sus4",
+    "power",
+    "six",
+    "min6",
+    "six9",
+    "dom7",
+    "maj7",
+    "min7",
+    "minmaj7",
+    "dim7",
+    "half",
+    "sus7",
+    "sus27",
+    "add9",
+    "minadd9",
+    "add11",
+    "dom9",
+    "maj9",
+    "min9",
+    "dom11",
+    "min11",
+    "dom13",
+    "maj13",
+    "min13",
+    "dom7b5",
+    "dom7s5",
+    "dom7b9",
+    "dom7s9",
+    "dom7s11",
+    "dom7b13",
+    "dom9s11",
+    "dom13b9",
+    "maj7s11",
+    "maj9s11",
+    "minmaj9"
+  ],
+  "curve": [
+    {
+      "step": 200,
+      "crossEntropy": 3.100083,
+      "perplexity": 22.199798,
+      "top1": 0.263314,
+      "inversionTop1": 0.676296,
+      "targets": 8412
+    },
+    {
+      "step": 400,
+      "crossEntropy": 3.242517,
+      "perplexity": 25.59808,
+      "top1": 0.260342,
+      "inversionTop1": 0.674513,
+      "targets": 8412
+    },
+    {
+      "step": 600,
+      "crossEntropy": 3.275591,
+      "perplexity": 26.458856,
+      "top1": 0.27223,
+      "inversionTop1": 0.672611,
+      "targets": 8412
+    },
+    {
+      "step": 800,
+      "crossEntropy": 3.294208,
+      "perplexity": 26.956054,
+      "top1": 0.270447,
+      "inversionTop1": 0.674394,
+      "targets": 8412
+    },
+    {
+      "step": 1000,
+      "crossEntropy": 3.331448,
+      "perplexity": 27.978836,
+      "top1": 0.271874,
+      "inversionTop1": 0.672492,
+      "targets": 8412
+    },
+    {
+      "step": 1200,
+      "crossEntropy": 3.339898,
+      "perplexity": 28.216261,
+      "top1": 0.274727,
+      "inversionTop1": 0.672967,
+      "targets": 8412
+    },
+    {
+      "step": 1400,
+      "crossEntropy": 3.394035,
+      "perplexity": 29.785906,
+      "top1": 0.274845,
+      "inversionTop1": 0.672848,
+      "targets": 8412
+    },
+    {
+      "step": 1600,
+      "crossEntropy": 3.384517,
+      "perplexity": 29.503732,
+      "top1": 0.27544,
+      "inversionTop1": 0.673918,
+      "targets": 8412
+    }
+  ]
+}

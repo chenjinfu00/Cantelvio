@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "initialMs": 35,
+  "initialQueueCount": 8,
+  "checks": [
+    "bounded async fill",
+    "no render inference",
+    "future edit preserves prefix",
+    "new key cancels stale task",
+    "no onset inference",
+    "immutable history",
+    "interruption resets chart"
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "phase": "preflight",
+  "pool": {
+    "symphony-classical": 726,
+    "symphony-contemporary": 44514,
+    "curated-midi": 117,
+    "Lieder": 1131,
+    "classical-scores": 303
+  },
+  "checks": {
+    "symphony-classical": {
+      "identity": "extracted/SymphonyNet_Dataset/classical/dvorak_symphony_9_3_(c)cvikl.mid",
+      "shift": 3,
+      "transform": "whole-excerpt-shift",
+      "tokens": 733,
+      "completeTargetBar": true,
+      "loss": 14.351290702819824,
+      "objectives": {
+        "event": {
+          "loss": 8.635287284851074,
+          "known": 369
+        },
+        "voice_pointer": {
+          "loss": 3.080148935317993,
+          "known": 52
+        },
+        "motif_recall": {
+          "loss": 2.422902822494507,
+          "known": 4
+        },
+        "form_summary": {
+          "loss": 0.3236868977546692,
+          "known": 80
+        },
+        "group_activity": {
+          "loss": 0.7279086112976074,
+          "known": 24
+        },
+        "midi_velocity": {
+          "loss": 1.2035800218582153,
+          "known": 52
+        },
+        "tempo_change": {
+          "loss": 0.6705551147460938,
+          "known": 4
+        },
+        "tempo_delta": {
+          "loss": 0.8829142451286316,
+          "known": 4
+        },
+        "motif_pitch_shift": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "motif_log_duration": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "phrase_strength": {
+          "loss": 0.6817407608032227,
+          "known": 8
+        },
+        "tempo_level": {
+          "loss": 31.075279235839844,
+          "known": 4
+        }
+      },
+      "known": {
+        "event": 369,
+        "voice_pointer": 52,
+        "motif_recall": 4,
+        "form_summary": 80,
+        "group_activity": 24,
+        "midi_velocity": 52,
+        "tempo_change": 4,
+        "tempo_delta": 4,
+        "motif_pitch_shift": 0,
+        "motif_log_duration": 0,
+        "phrase_strength": 8,
+        "tempo_level": 4
+      }
+    },
+    "symphony-contemporary": {
+      "identity": "extracted/SymphonyNet_Dataset/contemporary/2433711.mid",
+      "shift": 1,
+      "transform": "whole-excerpt-shift",
+      "tokens": 561,
+      "completeTargetBar": true,
+      "loss": 13.295782089233398,
+      "objectives": {
+        "event": {
+          "loss": 8.703898429870605,
+          "known": 316
+        },
+        "voice_pointer": {
+          "loss": 2.3447940349578857,
+          "known": 35
+        },
+        "motif_recall": {
+          "loss": 2.5970609188079834,
+          "known": 4
+        },
+        "form_summary": {
+          "loss": 0.34319180250167847,
+          "known": 80
+        },
+        "group_activity": {
+          "loss": 0.7413635849952698,
+          "known": 24
+        },
+        "midi_velocity": {
+          "loss": 1.1921632289886475,
+          "known": 35
+        },
+        "tempo_change": {
+          "loss": 0.7292782068252563,
+          "known": 4
+        },
+        "tempo_delta": {
+          "loss": 0.4250364303588867,
+          "known": 4
+        },
+        "motif_pitch_shift": {
+          "loss": 0.4778347611427307,
+          "known": 2
+        },
+        "motif_log_duration": {
+          "loss": 0.02331162989139557,
+          "known": 2
+        },
+        "phrase_strength": {
+          "loss": 0.4717509150505066,
+          "known": 8
+        },
+        "tempo_level": {
+          "loss": 25.11593246459961,
+          "known": 4
+        }
+      },
+      "known": {
+        "event": 316,
+        "voice_pointer": 35,
+        "motif_recall": 4,
+        "form_summary": 80,
+        "group_activity": 24,
+        "midi_velocity": 35,
+        "tempo_change": 4,
+        "tempo_delta": 4,
+        "motif_pitch_shift": 2,
+        "motif_log_duration": 2,
+        "phrase_strength": 8,
+        "tempo_level": 4
+      }
+    },
+    "curated-midi": {
+      "identity": "091 - Rewrite v2 - Lenno Liu.mid",
+      "shift": -6,
+      "transform": "whole-excerpt-shift",
+      "tokens": 262,
+      "completeTargetBar": true,
+      "loss": 12.522823333740234,
+      "objectives": {
+        "event": {
+          "loss": 8.558494567871094,
+          "known": 157
+        },
+        "voice_pointer": {
+          "loss": 1.4505704641342163,
+          "known": 15
+        },
+        "motif_recall": {
+          "loss": 2.445013999938965,
+          "known": 4
+        },
+        "form_summary": {
+          "loss": 0.3422466218471527,
+          "known": 80
+        },
+        "group_activity": {
+          "loss": 0.6993635296821594,
+          "known": 24
+        },
+        "midi_velocity": {
+          "loss": 1.5459136962890625,
+          "known": 15
+        },
+        "tempo_change": {
+          "loss": 0.6401302814483643,
+          "known": 4
+        },
+        "tempo_delta": {
+          "loss": 0.9906085729598999,
+          "known": 4
+        },
+        "motif_pitch_shift": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "motif_log_duration": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "phrase_strength": {
+          "loss": 0.4775071442127228,
+          "known": 8
+        },
+        "tempo_level": {
+          "loss": 27.976564407348633,
+          "known": 4
+        }
+      },
+      "known": {
+        "event": 157,
+        "voice_pointer": 15,
+        "motif_recall": 4,
+        "form_summary": 80,
+        "group_activity": 24,
+        "midi_velocity": 15,
+        "tempo_change": 4,
+        "tempo_delta": 4,
+        "motif_pitch_shift": 0,
+        "motif_log_duration": 0,
+        "phrase_strength": 8,
+        "tempo_level": 4
+      }
+    },
+    "Lieder": {
+      "identity": "lc5995407",
+      "shift": -1,
+      "transform": "whole-excerpt-shift",
+      "tokens": 210,
+      "completeTargetBar": true,
+      "loss": 11.861146926879883,
+      "objectives": {
+        "event": {
+          "loss": 8.870539665222168,
+          "known": 196
+        },
+        "voice_pointer": {
+          "loss": 2.3673155307769775,
+          "known": 14
+        },
+        "key_direction": {
+          "loss": 3.0206480026245117,
+          "known": 4
+        },
+        "motif_recall": {
+          "loss": 2.2816245555877686,
+          "known": 4
+        },
+        "form_summary": {
+          "loss": 0.31908535957336426,
+          "known": 80
+        },
+        "motif_pitch_shift": {
+          "loss": 0.14459846913814545,
+          "known": 4
+        },
+        "motif_log_duration": {
+          "loss": 0.39492321014404297,
+          "known": 4
+        }
+      },
+      "known": {
+        "event": 196,
+        "voice_pointer": 14,
+        "key_direction": 4,
+        "motif_recall": 4,
+        "form_summary": 80,
+        "motif_pitch_shift": 4,
+        "motif_log_duration": 4
+      }
+    },
+    "classical-scores": {
+      "identity": "OpenScore String Quartets:StringQuartets-9be3df2ace482130fe031b9e8a647cdf112ed243/scores/Mayer,_Emilie/String_Quartet_in_G_minor,_Op.14/sq7095930.mxl",
+      "shift": 6,
+      "transform": "whole-excerpt-shift",
+      "tokens": 145,
+      "completeTargetBar": true,
+      "loss": 11.20097541809082,
+      "objectives": {
+        "event": {
+          "loss": 8.887404441833496,
+          "known": 137
+        },
+        "voice_pointer": {
+          "loss": 1.3840278387069702,
+          "known": 8
+        },
+        "key_direction": {
+          "loss": 2.9054436683654785,
+          "known": 4
+        },
+        "motif_recall": {
+          "loss": 2.27787446975708,
+          "known": 4
+        },
+        "form_summary": {
+          "loss": 0.35034817457199097,
+          "known": 80
+        },
+        "motif_pitch_shift": {
+          "loss": 29.733949661254883,
+          "known": 3
+        },
+        "motif_log_duration": {
+          "loss": 0.8761751651763916,
+          "known": 3
+        }
+      },
+      "known": {
+        "event": 137,
+        "voice_pointer": 8,
+        "key_direction": 4,
+        "motif_recall": 4,
+        "form_summary": 80,
+        "motif_pitch_shift": 3,
+        "motif_log_duration": 3
+      }
+    }
+  },
+  "noValidation": true,
+  "noWeightUpdate": true,
+  "seconds": 10.0
+}

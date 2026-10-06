@@ -1,0 +1,23 @@
+{
+  "schema": "ailegro-midi-tempo-evidence-v1",
+  "notes": [
+    "Only explicit MIDI FF 51 tempo meta-events are counted.",
+    "A MIDI without a tempo event has unknown source tempo; 120 BPM is a playback default.",
+    "Existing SymphonyNet bar tempo buckets and note velocity buckets are unchanged.",
+    "MIDI velocity is not equivalent to a score dynamic mark or calibrated acoustic loudness."
+  ],
+  "sources": {
+    "SymphonyNet": {
+      "files": 43036,
+      "withExplicitTempo": 43036,
+      "withExplicitTempoChanges": 23438,
+      "events": 513563
+    },
+    "MIDI-Library": {
+      "files": 117,
+      "withExplicitTempo": 117,
+      "withExplicitTempoChanges": 62,
+      "events": 2385
+    }
+  }
+}

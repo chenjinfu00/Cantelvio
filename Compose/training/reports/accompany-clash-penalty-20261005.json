@@ -1,0 +1,82 @@
+{
+ "K8-pen0": {
+  "clash": 0.1721,
+  "doubled": 0.6223,
+  "unison": 0.1259,
+  "chordTone": 0.7403,
+  "accompanimentNotesPerBar": 26.2083,
+  "logp": -2.5784
+ },
+ "K8-pen1": {
+  "clash": 0.1335,
+  "doubled": 0.6406,
+  "unison": 0.089,
+  "chordTone": 0.7781,
+  "accompanimentNotesPerBar": 26.7708,
+  "logp": -2.5943
+ },
+ "K8-pen2": {
+  "clash": 0.098,
+  "doubled": 0.6205,
+  "unison": 0.086,
+  "chordTone": 0.7833,
+  "accompanimentNotesPerBar": 27.7188,
+  "logp": -2.6662
+ },
+ "K8-pen4": {
+  "clash": 0.0756,
+  "doubled": 0.6316,
+  "unison": 0.086,
+  "chordTone": 0.7833,
+  "accompanimentNotesPerBar": 27.2396,
+  "logp": -2.7331
+ },
+ "K8-pen8": {
+  "clash": 0.0731,
+  "doubled": 0.6172,
+  "unison": 0.0766,
+  "chordTone": 0.7785,
+  "accompanimentNotesPerBar": 27.0729,
+  "logp": -2.7795
+ },
+ "K32-pen0": {
+  "clash": 0.0989,
+  "doubled": 0.5939,
+  "unison": 0.067,
+  "chordTone": 0.8628,
+  "accompanimentNotesPerBar": 22.1667,
+  "logp": -1.7788
+ },
+ "K32-pen1": {
+  "clash": 0.0641,
+  "doubled": 0.6352,
+  "unison": 0.0698,
+  "chordTone": 0.8472,
+  "accompanimentNotesPerBar": 22.5625,
+  "logp": -1.8171
+ },
+ "K32-pen2": {
+  "clash": 0.0547,
+  "doubled": 0.6223,
+  "unison": 0.0698,
+  "chordTone": 0.8476,
+  "accompanimentNotesPerBar": 22.5208,
+  "logp": -1.8447
+ },
+ "K32-pen4": {
+  "clash": 0.0265,
+  "doubled": 0.6253,
+  "unison": 0.0813,
+  "chordTone": 0.8372,
+  "accompanimentNotesPerBar": 22.0417,
+  "logp": -1.9214
+ },
+ "K32-pen8": {
+  "clash": 0.0119,
+  "doubled": 0.601,
+  "unison": 0.0744,
+  "chordTone": 0.8688,
+  "accompanimentNotesPerBar": 22.5312,
+  "logp": -1.9776
+ }
+}

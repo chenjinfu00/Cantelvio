@@ -1,0 +1,25 @@
+{
+  "v4": {
+    "pitchCE": 3.3405101424553187,
+    "durationCE": 2.5262660142371205,
+    "affinityBCE": 0.6272767445084833,
+    "pitchTop1": 0.2239448751076658,
+    "durationTop1": 0.4470284237726098,
+    "events": 4644
+  },
+  "v5": {
+    "pitchCE": 2.042790954221845,
+    "durationCE": 1.0879146763212613,
+    "affinityBCE": 0.5198643673708683,
+    "pitchTop1": 0.3318260120585702,
+    "durationTop1": 0.6018518518518519,
+    "events": 4644
+  },
+  "trainRealUnigramPitchCE": 2.7755112648010254,
+  "protocol": {
+    "split": "Composition-level held-out15works",
+    "events": "identical first64events of each excerpt",
+    "leakage": "no validation compositions in training; these works were used for checkpoint selection, so this is validation, not an untouched test",
+    "interpretation": "Teacher-forced prediction only; inferred harmony; no perceptual quality claim"
+  }
+}

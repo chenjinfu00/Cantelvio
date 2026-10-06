@@ -1,0 +1,8 @@
+Electric guitar samples from tonejs-instruments, curated/edited by N. P. Brosowsky.
+Original electric guitar recordings credited to Karoryfer.
+Source: https://github.com/nbrosowsky/tonejs-instruments/tree/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/samples/guitar-electric
+Credits: https://github.com/nbrosowsky/tonejs-instruments/blob/622c2f1c32c8cfce4158ddc3eb26e518ddef37e5/sample-source-info.txt
+License: Creative Commons Attribution 3.0 Unported (CC BY 3.0).
+https://creativecommons.org/licenses/by/3.0/
+Selected nine MP3 files copied unchanged. Tonnetz performs pitch shifting, mild saturation, filtering and envelope shaping at playback.
+No upstream JavaScript loader is bundled.

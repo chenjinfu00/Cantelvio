@@ -1,0 +1,251 @@
+{
+ "schema": "harmonizer-v1-eval-1",
+ "harmonizer": "training/runs/harmonizer-v1-20261003/weights.pt",
+ "harmonizerStep": 3500,
+ "parameters": 865248,
+ "validation": {
+  "step": 0.3838,
+  "beat": 0.3863,
+  "beatRoot": 0.4616,
+  "beatFamily": 0.4349,
+  "steps": 79067
+ },
+ "accuracy": {
+  "harmonizer": {
+   "exact": 0.3691,
+   "root": 0.4432,
+   "family": 0.4188,
+   "beats": 15379
+  },
+  "harmonizer (argmax per step)": {
+   "exact": 0.3609,
+   "root": 0.4348,
+   "family": 0.4099,
+   "beats": 15379
+  },
+  "rule harmonizer (key signature as major key)": {
+   "exact": 0.277,
+   "root": 0.3532,
+   "family": 0.3303,
+   "beats": 15379
+  },
+  "tonic triad (key signature as major key)": {
+   "exact": 0.2315,
+   "root": 0.2678,
+   "family": 0.2531,
+   "beats": 15379
+  },
+  "rule harmonizer (true local key, reference)": {
+   "exact": 0.3927,
+   "root": 0.4819,
+   "family": 0.4586,
+   "beats": 15379
+  },
+  "tonic triad (true local key, reference)": {
+   "exact": 0.3684,
+   "root": 0.4068,
+   "family": 0.3903,
+   "beats": 15379
+  }
+ },
+ "tunes": {
+  "chords": {
+   "ode-to-joy": {
+    "agreementWithHumanChordsPerBeat": 0.6562,
+    "bars": [
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "1:A7",
+      "2:D",
+      "3:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "2:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "1:A7",
+      "2:D",
+      "3:A7"
+     ],
+     [
+      "0:D",
+      "2:A7",
+      "3:D"
+     ],
+     [
+      "0:A7",
+      "1:D"
+     ]
+    ]
+   },
+   "twinkle": {
+    "agreementWithHumanChordsPerBeat": 0.6875,
+    "bars": [
+     [
+      "0:C"
+     ],
+     [
+      "0:F",
+      "2:C"
+     ],
+     [
+      "0:F",
+      "2:C"
+     ],
+     [
+      "0:G7",
+      "2:C"
+     ],
+     [
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ],
+     [
+      "0:C",
+      "2:G7"
+     ]
+    ]
+   },
+   "lightly-row": {
+    "agreementWithHumanChordsPerBeat": 0.875,
+    "bars": [
+     [
+      "0:C"
+     ],
+     [
+      "0:G7"
+     ],
+     [
+      "0:C",
+      "1:G7",
+      "2:C",
+      "3:G7"
+     ],
+     [
+      "0:C"
+     ],
+     [],
+     [
+      "0:G7"
+     ],
+     [
+      "0:C"
+     ],
+     []
+    ]
+   }
+  },
+  "accompaniment": {
+   "melody locked": {
+    "clash": 0.2572,
+    "doubled": 0.4073,
+    "unison": 0.0385,
+    "chordTone": 0.5198,
+    "accompanimentNotesPerBar": 20.1562,
+    "pieces": 12,
+    "secondsPerPiece": 0.51
+   },
+   "melody locked, best of 8": {
+    "clash": 0.1177,
+    "doubled": 0.6413,
+    "unison": 0.0546,
+    "chordTone": 0.7247,
+    "accompanimentNotesPerBar": 19.4792,
+    "pieces": 12,
+    "secondsPerPiece": 4.21
+   },
+   "melody + harmonizer chords": {
+    "clash": 0.1347,
+    "doubled": 0.7231,
+    "unison": 0.2214,
+    "chordTone": 0.9833,
+    "accompanimentNotesPerBar": 35.1458,
+    "pieces": 12,
+    "secondsPerPiece": 0.78
+   },
+   "melody + harmonizer chords, best of 8": {
+    "clash": 0.0614,
+    "doubled": 0.6851,
+    "unison": 0.1925,
+    "chordTone": 0.9944,
+    "accompanimentNotesPerBar": 28.9167,
+    "pieces": 12,
+    "secondsPerPiece": 5.56
+   },
+   "melody + human chords": {
+    "clash": 0.1062,
+    "doubled": 0.6674,
+    "unison": 0.1268,
+    "chordTone": 0.875,
+    "accompanimentNotesPerBar": 22.6667,
+    "pieces": 12,
+    "secondsPerPiece": 0.53
+   },
+   "melody + human chords, best of 8": {
+    "clash": 0.0925,
+    "doubled": 0.7284,
+    "unison": 0.1051,
+    "chordTone": 0.875,
+    "accompanimentNotesPerBar": 26.6146,
+    "pieces": 12,
+    "secondsPerPiece": 4.94
+   }
+  }
+ },
+ "lieder": {
+  "windows": 60,
+  "candidates": 4,
+  "seconds": 251,
+  "conditions": {
+   "no chords (v3.1 decides)": {
+    "clash": 0.1949,
+    "doubled": 0.5075,
+    "unison": 0.1315,
+    "chordTone": 0.6865,
+    "agreeWithAugmentedNet": 0.3003,
+    "agreeRootWithAugmentedNet": 0.375,
+    "vocalNotes": 867
+   },
+   "harmonizer chords": {
+    "clash": 0.143,
+    "doubled": 0.5732,
+    "unison": 0.1442,
+    "chordTone": 0.8402,
+    "agreeWithAugmentedNet": 0.319,
+    "agreeRootWithAugmentedNet": 0.4052,
+    "vocalNotes": 867
+   },
+   "AugmentedNet chords": {
+    "clash": 0.1811,
+    "doubled": 0.5675,
+    "unison": 0.1569,
+    "chordTone": 0.7992,
+    "agreeWithAugmentedNet": 0.931,
+    "agreeRootWithAugmentedNet": 0.9353,
+    "vocalNotes": 867
+   }
+  }
+ },
+ "seconds": 454
+}

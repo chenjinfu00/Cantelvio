@@ -1,0 +1,48 @@
+{
+  "schema": "ailegro-midi-library-curation-v1",
+  "reviewDate": "2026-09-29",
+  "sourceSelectionSha256": "a4c7490f0161e87d75663dd153121b132c2f3a636254815e4d2a888081be1308",
+  "renames": {"013 - chp-10-01.mid": "013 - chopin-op10-no1.mid"},
+  "excludedGroups": [
+    {
+      "reason": "Incomplete or alternate export of the same Tchaikovsky concerto; retain the complete orchestral 003 copy.",
+      "files": ["001 - tchai_op35-1.mid", "002 - tchai_op35-2.mid"]
+    },
+    {
+      "reason": "Draft or isolated piano/orchestra stems of Chopin Op.21 movement I; retain the complete 145 score.",
+      "files": ["004 - Chopin_Op21_Mvt1_Piano_Editable_Draft.mid", "005 - Chopin_Op21_Mvt1_Orchestra_Only_Finley.mid", "006 - Chopin_Op21_Mvt1_Solo_Piano_Reference_Finley.mid"]
+    },
+    {
+      "reason": "Alternate private performance and its extracted piano/violin stems; retain the complete scored 003 version of this composition.",
+      "files": ["009 - Tchaikovsky_Op35_Mvt1_Private_Reference.mid", "010 - Tchaikovsky_Op35_Mvt1_Piano_Reference.mid", "011 - Tchaikovsky_Op35_Mvt1_Solo_Violin.mid"]
+    },
+    {
+      "reason": "AI-generated violin arrangement rejected by the user; retain the ordinary piano copy 013 (renamed for clarity).",
+      "files": ["012 - op10_no01_piano_violin_arrangement.mid", "014 - op10_no01_piano_violin_final.mid"]
+    },
+    {
+      "reason": "Removed manually by the user during this review as unsuitable for training; do not restore into the active library.",
+      "files": ["015 - op25_no11_kunstderfuge_finley.mid"]
+    },
+    {
+      "reason": "Unfinished violin arrangement derived from the original piano etude; its piano source was also manually excluded later.",
+      "files": ["016 - op25_no11_piano_violin_refined_draft_from_midi_import.mid"]
+    },
+    {
+      "reason": "Alternate edited-note/beaming versions of the same etude; retain the ordinary Mutopia source 017.",
+      "files": ["018 - chopin_op10_no2_mutopia_chromatic_thirds_beamed.mid", "019 - chopin_op10_no2_mutopia_thirds_beamed.mid"]
+    },
+    {
+      "reason": "Model-assisted White Dove transcription family: incomplete sections, overlapping orchestrations/reductions and later round-trip. The hand-edited v10 is also from a model transcription and not fully listening-verified; exclude the family from training rather than silently choose a draft.",
+      "files": ["022 - 白鸽之诗_Song_of_the_White_Dove_总谱节奏底稿_v2.mid", "023 - 白鸽之诗_钢琴完整织体_六轨声部排程_v28.mid", "024 - 白鸽之诗_钢琴独奏缩编_双手单谱表分轨_v9.mid", "025 - Climax_v7.mid", "026 - Opening_v7.mid", "027 - Final_climax_v8.mid", "028 - Lyrical_v8.mid", "029 - Opening_and_theme_v8.mid", "030 - White_Dove_Piano_v10.mid", "031 - score_roundtrip.mid"]
+    },
+    {
+      "reason": "Model-transcription-derived orchestral draft/variant, not a verified reference score.",
+      "files": ["032 - 冰湖的凯旋礼_Triumph_on_the_Ice_总谱_节奏修正版_v2.mid", "033 - Snezhnaya_conductor_score_draft.mid", "034 - Snezhnaya_conductor_score_piano_sustain.mid"]
+    },
+    {
+      "reason": "Alternative piano-plus-viola arrangement of Brave Song; retain the plain piano 051 copy as the ordinary representative.",
+      "files": ["050 - Brave Song (piano + viola).mid"]
+    }
+  ]
+}

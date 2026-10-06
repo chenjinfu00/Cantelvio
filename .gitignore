@@ -1,0 +1,50 @@
+# Cantelvio monorepo. Each module keeps its own .gitignore too (Compose/, Score/, Stage/).
+# Rule of thumb: source, docs, small manifests and the small browser models go in Git;
+# large model weights, third-party checkouts, raw/derived training data and local environments do not
+# (their manifests record where they come from and their SHA-256).
+
+# OS / editors / environments
+.DS_Store
+node_modules/
+__pycache__/
+*.py[cod]
+.venv*/
+.env
+.env.*
+!.env.example
+
+# Backups of the pre-monorepo Git directories (2026-10-06)
+/_git-backup-*/
+
+# Compose: third-party models and checkouts (re-download with the scripts/manifests kept beside them)
+/Compose/Anticipatory-Music-Transformer/models/
+/Compose/Anticipatory-Music-Transformer/source/
+/Compose/Anticipatory-Music-Transformer/training-backend/
+/Compose/MuScriptor-large-1.3B/model.safetensors
+/Compose/MuScriptor-large-1.3B/muscriptor-source/
+/Compose/open-source/sources/
+/Compose/open-source/datasets/
+
+# Compose: training outputs and data (runs/ and logs/ are ignored by Compose/.gitignore)
+/Compose/training/_to_delete/
+/Compose/training/orchestra/work/
+/Compose/training/data/sources/
+/Compose/training/data/**/*.npz
+/Compose/training/data/**/*.npy
+/Compose/training/data/**/*.sqlite
+/Compose/training/data/**/*.mid
+/Compose/training/data/**/*.midi
+/Compose/training/data/**/*.musicxml
+/Compose/training/data/**/*.mxl
+/Compose/training/data/**/*.xml
+/Compose/training/data/**/*.tar.gz
+/Compose/training/data/**/*.zip
+/Compose/training/checkpoints/**/*.pt
+/Compose/training/data/**/*.jsonl.gz
+/Compose/training/data/four-pillar-midi-all-train-v1.json
+/Compose/training/data/four-pillar-v2-source-hashes.json
+/Compose/training/alice-preparation/upload-inventory.json
+/Compose/validation/**/*.wav
+
+# Harmony: local working copies of source material
+/Harmony/demos/MusicalKaraoke/tmp/

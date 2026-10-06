@@ -1,0 +1,50 @@
+{
+  "errors": [],
+  "chordSequenceUnchanged": true,
+  "mainModel": {
+    "name": "four-pillar-v3.1",
+    "checkpoint": "training/runs/four-pillar-v31-ready-20261001/weights.pt",
+    "sha256": "fb4cceb07aa7ad4b87166a1e8e514c8e636836e7b685c6bf7804c591ace57443",
+    "step": 101129
+  },
+  "performance": {
+    "difficulty": "medium",
+    "handSpanLimit": 12,
+    "pianoTexture": "model",
+    "arrangedPianoParts": 0,
+    "before": {
+      "notes": 111,
+      "outOfRange": 2,
+      "maxSimultaneous": 16,
+      "maxHandSpan": 48
+    },
+    "after": {
+      "notes": 61,
+      "outOfRange": 0,
+      "maxSimultaneous": 3,
+      "maxHandSpan": 12
+    }
+  },
+  "velocities": [
+    90,
+    95,
+    88,
+    91,
+    89,
+    93,
+    80,
+    75,
+    30,
+    94
+  ],
+  "dynamics": [
+    "p",
+    "pp",
+    "rf",
+    "sf",
+    "ppp",
+    "fp"
+  ],
+  "playback": true,
+  "undo": true
+}

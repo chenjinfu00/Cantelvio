@@ -1,0 +1,23 @@
+{
+  "current": {
+    "pitchCE": 2.042790954221845,
+    "durationCE": 1.0879146763212613,
+    "affinityBCE": 0.5198643673708683,
+    "pitchTop1": 0.3318260120585702,
+    "durationTop1": 0.6018518518518519,
+    "events": 4644
+  },
+  "trainRealUnigramPitchCE": 2.7755112648010254,
+  "protocol": {
+    "events": "identical first 64 events per held-out excerpt",
+    "works": {
+      "train": 116,
+      "validation": 15
+    },
+    "excerpts": {
+      "train": 899,
+      "validation": 150
+    },
+    "interpretation": "Validation used for checkpoint selection; inferred harmony; no perceptual quality claim"
+  }
+}

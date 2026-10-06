@@ -1,0 +1,98 @@
+[
+  {
+    "file": "validation/audio/ailegro-air-free-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -11.862,
+    "rmsDbFS": -23.983,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -1.5e-05,
+      -1.45e-05
+    ],
+    "channelRmsDbFS": [
+      -24.018,
+      -23.949
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.0,
+    "lastActiveSeconds": 11.0,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "validation/audio/ailegro-indie-free-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -8.605,
+    "rmsDbFS": -26.746,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.607e-05,
+      -7.456e-05
+    ],
+    "channelRmsDbFS": [
+      -26.956,
+      -26.545
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.5,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "validation/audio/ailegro-velvet-free-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -9.314,
+    "rmsDbFS": -24.97,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.47e-05,
+      -7.408e-05
+    ],
+    "channelRmsDbFS": [
+      -25.201,
+      -24.75
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.0,
+    "lastActiveSeconds": 10.7,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "validation/audio/ailegro-warm-free-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -8.845,
+    "rmsDbFS": -27.241,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      2.661e-05,
+      2.144e-05
+    ],
+    "channelRmsDbFS": [
+      -28.178,
+      -26.47
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.6,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  }
+]

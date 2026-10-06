@@ -1,0 +1,13 @@
+{
+  "errors": [],
+  "firstPlaybackSeconds": 30.457,
+  "live": {
+    "running": true,
+    "bars": 8,
+    "frame": 4,
+    "voices": 25,
+    "error": null,
+    "groups": 6
+  },
+  "stopped": true
+}

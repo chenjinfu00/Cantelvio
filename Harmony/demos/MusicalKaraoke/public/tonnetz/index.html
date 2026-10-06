@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#07141b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tonnetz" />
+    <meta name="description" content="Tonnetz 调性网络：为 iPad 设计的多点触控等距键盘乐器" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./app.css?v=20" />
+    <title>Tonnetz · 调性网络</title>
+  </head>
+  <body>
+    <main class="instrument" id="instrument">
+      <section class="play-surface" aria-label="等距键盘演奏区">
+        <div id="keyboardViewport" class="keyboard-viewport">
+          <div id="keyboard" class="keyboard" role="group" aria-label="八键列等距六边形键盘"></div>
+        </div>
+        <div id="keyboardOverview" class="keyboard-overview" aria-hidden="true">
+          <canvas id="overviewCanvas"></canvas>
+          <div id="overviewWindow" class="overview-window" aria-hidden="true"></div>
+        </div>
+        <div id="performanceToggles" class="performance-toggles" aria-label="演奏快捷控制">
+          <label class="performance-layout-select">
+            <span>键盘模式</span>
+            <select id="layoutSelect" aria-label="选择键盘模式">
+              <option value="classic">经典</option>
+              <option value="melodic">旋律</option>
+              <option value="harmonic">和声</option>
+            </select>
+          </label>
+          <button id="mainSustainButton" class="performance-toggle-button" type="button" aria-pressed="false" aria-label="开启延音">
+            <span class="toggle-light" aria-hidden="true"></span>
+            <span>延音</span>
+          </button>
+          <button id="glissandoButton" class="performance-toggle-button" type="button" aria-pressed="false" aria-label="开启滑奏">
+            <span class="toggle-light" aria-hidden="true"></span>
+            <span>滑奏</span>
+          </button>
+        </div>
+      </section>
+
+      <button id="settingsHandle" class="settings-handle" type="button" aria-controls="settingsSheet" aria-expanded="false" aria-label="上滑打开设置">
+        <span aria-hidden="true"></span>
+      </button>
+
+      <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
+
+      <aside id="settingsSheet" class="settings-sheet" aria-label="乐器设置" aria-hidden="true">
+        <button id="sheetGrabber" class="sheet-grabber" type="button" aria-label="下滑关闭设置"><span aria-hidden="true"></span></button>
+
+        <div class="sheet-header">
+          <div>
+            <strong>Tonnetz · 调性网络</strong>
+            <small><span class="pulse" aria-hidden="true"></span> <span id="layoutName">Classic</span> · <span id="intervalHint">横向全音 · 斜向半音</span></small>
+          </div>
+          <div id="noteReadout" class="note-readout" aria-live="polite">
+            <span class="note-name">触碰琴键开始</span>
+            <span class="note-detail">支持多指和滑奏</span>
+          </div>
+          <button id="closeSettings" class="done-button" type="button">完成</button>
+        </div>
+
+        <div class="controls sheet-controls" aria-label="乐器控制">
+          <div class="count-control column-count-control" aria-label="横向按键列数">
+            <span>横向列数</span>
+            <div>
+              <button id="columnsMin" class="bound-button" type="button" aria-label="最少横向列数">Min</button>
+              <button id="columnsDown" type="button" aria-label="减少横向列数">−</button>
+              <strong id="columnsValue">13</strong>
+              <button id="columnsUp" type="button" aria-label="增加横向列数">＋</button>
+              <button id="columnsMax" class="bound-button" type="button" aria-label="最多横向列数">Max</button>
+            </div>
+          </div>
+
+          <div class="count-control" aria-label="纵向按键数">
+            <span>纵向键数</span>
+            <div>
+              <button id="rowsDown" type="button" aria-label="减少纵向键数">−</button>
+              <strong id="rowsValue">8</strong>
+              <button id="rowsUp" type="button" aria-label="增加纵向键数">＋</button>
+            </div>
+          </div>
+
+          <div class="count-control" aria-label="琴键大小">
+            <span>琴键大小</span>
+            <div>
+              <button id="keyScaleDown" type="button" aria-label="缩小琴键">−</button>
+              <strong id="keyScaleValue">100%</strong>
+              <button id="keyScaleUp" type="button" aria-label="放大琴键">＋</button>
+            </div>
+          </div>
+
+          <div class="count-control" aria-label="导航条高度">
+            <span>导航高度</span>
+            <div>
+              <button id="overviewHeightDown" type="button" aria-label="降低导航条高度">−</button>
+              <strong id="overviewHeightValue">72px</strong>
+              <button id="overviewHeightUp" type="button" aria-label="增加导航条高度">＋</button>
+            </div>
+          </div>
+
+          <div class="count-control" aria-label="导航条宽度">
+            <span>导航宽度</span>
+            <div>
+              <button id="overviewWidthDown" type="button" aria-label="缩窄导航条">−</button>
+              <strong id="overviewWidthValue">100%</strong>
+              <button id="overviewWidthUp" type="button" aria-label="加宽导航条">＋</button>
+            </div>
+          </div>
+
+          <label class="control-select">
+            <span>琴键皮肤</span>
+            <select id="skinSelect" aria-label="选择琴键皮肤">
+              <option value="tonnetz">调性网络 · 深海</option>
+              <option value="piano">钢琴 · 黑白</option>
+              <option value="wood">原声 · 胡桃木</option>
+            </select>
+          </label>
+
+          <label class="control-select">
+            <span>音色</span>
+            <select id="voiceSelect" aria-label="选择音色">
+              <optgroup label="内置 · 即时">
+                <option value="concert">演奏钢琴</option>
+                <option value="epiano">复古电钢</option>
+                <option value="bell">玻璃钟</option>
+                <option value="organ">暖风琴</option>
+                <option value="pad">星云 Pad</option>
+              </optgroup>
+              <optgroup label="采样 · 管弦乐团">
+                <option value="sample-piano">采样三角钢琴</option>
+                <option value="strings">弦乐组 · 四声部音域分配</option>
+                <option value="winds">管乐组 · 智能分配</option>
+                <option value="violin">小提琴</option>
+                <option value="viola">中提琴</option>
+                <option value="cello">大提琴</option>
+                <option value="contrabass">低音提琴</option>
+                <option value="harp">竖琴</option>
+                <option value="flute">长笛</option>
+                <option value="oboe">双簧管</option>
+                <option value="clarinet">单簧管</option>
+                <option value="bassoon">巴松</option>
+                <option value="horn">圆号</option>
+                <option value="trumpet">小号</option>
+                <option value="trombone">长号</option>
+                <option value="tuba">大号</option>
+                <option value="timpani">定音鼓</option>
+              </optgroup>
+            </select>
+          </label>
+
+          <div id="ensembleLegend" class="ensemble-legend" hidden aria-live="polite"></div>
+
+          <div class="transpose-control" aria-label="移调">
+            <button id="octaveDown" class="mini-button" type="button" aria-label="降低一个八度">−</button>
+            <span><small>八度</small><strong id="octaveValue">0</strong></span>
+            <button id="octaveUp" class="mini-button" type="button" aria-label="升高一个八度">＋</button>
+          </div>
+
+          <label class="volume-control">
+            <span>音量</span>
+            <input id="volumeSlider" type="range" min="0" max="100" value="72" aria-label="音量" />
+          </label>
+
+          <button id="labelsButton" class="labels-button" type="button" aria-pressed="true">隐藏音名</button>
+          <button id="panicButton" class="panic-button" type="button">停止全部声音</button>
+        </div>
+
+        <p class="sheet-tip">滑奏开启：多指均可滑奏 · 琴面位置仅从上方导航窗口拖动 · 采样音色来自 <a href="https://github.com/gleitz/midi-js-soundfonts" target="_blank" rel="noreferrer">Musyng Kite SoundFont</a></p>
+      </aside>
+
+      <div id="startOverlay" class="start-overlay">
+        <button id="startButton" type="button">
+          <span class="start-icon" aria-hidden="true">♪</span>
+          <strong>轻触启用声音</strong>
+          <small>低延迟音色与空间混响 · 建议佩戴耳机</small>
+        </button>
+      </div>
+
+      <div id="rotateHint" class="rotate-hint" aria-hidden="true">
+        <span>↻</span>
+        <strong>请将 iPad 横过来</strong>
+        <small>横屏能容纳完整琴键</small>
+      </div>
+
+      <aside id="rehearsalPanel" class="rehearsal-panel" hidden aria-label="Rehearsal controls">
+        <div class="rehearsal-topline">
+          <a class="back-to-deck" href="../#demo">← Back to live demo</a>
+          <span id="rehearsalRole">CONCERTO REHEARSAL</span>
+          <button id="rehearsalCollapse" type="button" aria-expanded="true">Collapse</button>
+        </div>
+        <div class="rehearsal-body">
+          <div class="rehearsal-copy">
+            <p id="rehearsalKicker">LOADING CONCERTO EXCERPT</p>
+            <h1 id="rehearsalTitle">Preparing rehearsal…</h1>
+            <p id="rehearsalStatus">Loading the score guide and audio.</p>
+          </div>
+          <div class="step-card">
+            <span>Current</span><strong id="currentStep">—</strong>
+            <i>Next</i><b id="nextStep">—</b>
+            <small id="stepCount">0 / 0</small>
+          </div>
+          <div class="rehearsal-actions">
+            <button id="practicePrev" type="button" disabled>Previous cue</button>
+            <button id="practiceNext" type="button" disabled>Next cue</button>
+            <button id="practiceDemo" type="button" disabled>Play along</button>
+            <button id="practiceListen" type="button" disabled>Listen</button>
+            <button id="practiceStop" class="stop" type="button" disabled>Stop</button>
+          </div>
+          <div id="countIn" class="count-in" aria-live="assertive"></div>
+          <div class="track-controls">
+            <label class="file-button">Import local audio<input id="trackFile" type="file" accept="audio/*"></label>
+            <span id="trackName">Built-in concerto audio</span>
+            <label>Speed<select id="trackSpeed"><option value="0.7">70%</option><option value="0.75">75%</option><option value="0.8">80%</option><option value="1" selected>100%</option></select></label>
+            <button id="trackPlay" type="button" disabled>Continue</button>
+            <button id="trackPause" type="button" disabled>Pause</button>
+            <button id="trackRestart" type="button" disabled>Restart</button>
+            <button id="trackStop" type="button" disabled>Stop</button>
+            <button id="restorePractice" type="button" hidden>Restore concerto excerpt</button>
+          </div>
+          <p id="trackNotice" class="track-notice">Play along uses the backing track; Listen uses the reference mix. The highlighted cue follows the audio clock.</p>
+        </div>
+      </aside>
+    </main>
+
+    <script src="./app.js?v=19"></script>
+    <script type="module" src="./rehearsal.js?v=4"></script>
+  </body>
+</html>

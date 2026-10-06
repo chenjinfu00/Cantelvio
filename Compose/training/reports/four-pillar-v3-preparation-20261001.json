@@ -1,0 +1,363 @@
+{
+  "schema": "v3-preparation-verification-1",
+  "parameters": 5348187,
+  "weightsBytes": 21434627,
+  "initializedStateBytes": 21584001,
+  "trainedStateBytes": 64470349,
+  "copiedV2Parameters": 3253434,
+  "copiedPercent": 60.8324652821601,
+  "preparedRun": "training/runs/four-pillar-v3-ready-20261001",
+  "preparedStep": 0,
+  "resumeVerifiedStep": 2,
+  "unitTests": 9,
+  "sourcePreflight": {
+    "symphony-classical": {
+      "loss": 45.84772491455078,
+      "events": 256,
+      "objectives": {
+        "group": {
+          "loss": 1.5072689056396484,
+          "known": 14
+        },
+        "pitch": {
+          "loss": 4.410128116607666,
+          "known": 14
+        },
+        "voice": {
+          "loss": 4.572109699249268,
+          "known": 14
+        },
+        "delta_num": {
+          "loss": 5.927554607391357,
+          "known": 14
+        },
+        "delta_den": {
+          "loss": 5.54044246673584,
+          "known": 14
+        },
+        "duration_num": {
+          "loss": 6.067727088928223,
+          "known": 14
+        },
+        "duration_den": {
+          "loss": 6.264410972595215,
+          "known": 14
+        },
+        "velocity": {
+          "loss": 4.939965724945068,
+          "known": 14
+        },
+        "drum_identity": {
+          "loss": 5.236323833465576,
+          "known": 1
+        },
+        "event_kind": {
+          "loss": 1.3817946910858154,
+          "known": 14
+        },
+        "harmony_root": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "harmony_quality": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "dynamic": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "accent": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "wedge": {
+          "loss": 0.0,
+          "known": 0
+        }
+      }
+    },
+    "symphony-contemporary": {
+      "loss": 38.93248748779297,
+      "events": 256,
+      "objectives": {
+        "group": {
+          "loss": 1.509718656539917,
+          "known": 8
+        },
+        "pitch": {
+          "loss": 4.410900592803955,
+          "known": 8
+        },
+        "voice": {
+          "loss": 4.442368507385254,
+          "known": 8
+        },
+        "delta_num": {
+          "loss": 3.7766683101654053,
+          "known": 8
+        },
+        "delta_den": {
+          "loss": 6.202870845794678,
+          "known": 8
+        },
+        "duration_num": {
+          "loss": 5.798801422119141,
+          "known": 16
+        },
+        "duration_den": {
+          "loss": 5.624152183532715,
+          "known": 16
+        },
+        "velocity": {
+          "loss": 5.840207099914551,
+          "known": 8
+        },
+        "drum_identity": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "event_kind": {
+          "loss": 1.3268030881881714,
+          "known": 8
+        },
+        "harmony_root": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "harmony_quality": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "dynamic": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "accent": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "wedge": {
+          "loss": 0.0,
+          "known": 0
+        }
+      }
+    },
+    "curated-midi": {
+      "loss": 43.794429779052734,
+      "events": 256,
+      "objectives": {
+        "group": {
+          "loss": 2.52652645111084,
+          "known": 3
+        },
+        "pitch": {
+          "loss": 5.418982982635498,
+          "known": 3
+        },
+        "voice": {
+          "loss": 5.775167942047119,
+          "known": 3
+        },
+        "delta_num": {
+          "loss": 4.716227054595947,
+          "known": 3
+        },
+        "delta_den": {
+          "loss": 6.477653980255127,
+          "known": 3
+        },
+        "duration_num": {
+          "loss": 6.611690044403076,
+          "known": 3
+        },
+        "duration_den": {
+          "loss": 5.02363920211792,
+          "known": 3
+        },
+        "velocity": {
+          "loss": 5.561524868011475,
+          "known": 3
+        },
+        "drum_identity": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "event_kind": {
+          "loss": 1.6830183267593384,
+          "known": 3
+        },
+        "harmony_root": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "harmony_quality": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "dynamic": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "accent": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "wedge": {
+          "loss": 0.0,
+          "known": 0
+        }
+      }
+    },
+    "Lieder": {
+      "loss": 36.28581237792969,
+      "events": 67,
+      "objectives": {
+        "group": {
+          "loss": 2.106203317642212,
+          "known": 7
+        },
+        "pitch": {
+          "loss": 4.426599502563477,
+          "known": 9
+        },
+        "voice": {
+          "loss": 3.347520112991333,
+          "known": 9
+        },
+        "delta_num": {
+          "loss": 6.195852279663086,
+          "known": 9
+        },
+        "delta_den": {
+          "loss": 5.839602947235107,
+          "known": 9
+        },
+        "duration_num": {
+          "loss": 6.941349506378174,
+          "known": 9
+        },
+        "duration_den": {
+          "loss": 5.979074001312256,
+          "known": 9
+        },
+        "velocity": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "drum_identity": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "event_kind": {
+          "loss": 1.449611783027649,
+          "known": 9
+        },
+        "harmony_root": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "harmony_quality": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "dynamic": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "accent": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "wedge": {
+          "loss": -0.0,
+          "known": 0
+        }
+      }
+    },
+    "classical-scores": {
+      "loss": 38.83572769165039,
+      "events": 256,
+      "objectives": {
+        "group": {
+          "loss": 1.6588002443313599,
+          "known": 15
+        },
+        "pitch": {
+          "loss": 4.153224945068359,
+          "known": 15
+        },
+        "voice": {
+          "loss": 4.119692802429199,
+          "known": 15
+        },
+        "delta_num": {
+          "loss": 5.033051490783691,
+          "known": 15
+        },
+        "delta_den": {
+          "loss": 5.8046555519104,
+          "known": 15
+        },
+        "duration_num": {
+          "loss": 6.608360290527344,
+          "known": 15
+        },
+        "duration_den": {
+          "loss": 6.038238525390625,
+          "known": 15
+        },
+        "velocity": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "drum_identity": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "event_kind": {
+          "loss": 1.0973740816116333,
+          "known": 15
+        },
+        "harmony_root": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "harmony_quality": {
+          "loss": -0.0,
+          "known": 0
+        },
+        "dynamic": {
+          "loss": 4.322331428527832,
+          "known": 15
+        },
+        "accent": {
+          "loss": 0.0,
+          "known": 0
+        },
+        "wedge": {
+          "loss": -0.0,
+          "known": 0
+        }
+      }
+    }
+  },
+  "rejections": {},
+  "sampling": {
+    "bars": 8,
+    "notes": 4,
+    "trainingStep": 2,
+    "qualityValidated": false
+  },
+  "parentCheckpointUntouched": true,
+  "readySourceHashesVerified": true,
+  "longTrainingStarted": false,
+  "webRuntimeStill": "v2 step 19193",
+  "remaining": [
+    "production active-note/tie and voice registry",
+    "v3 console control/edit/stop adapter",
+    "drum-aware browser rendering",
+    "trained long-session latency",
+    "held-out musical/listening evaluation"
+  ]
+}

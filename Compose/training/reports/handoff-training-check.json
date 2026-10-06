@@ -1,0 +1,17 @@
+{
+  "harmonyParameters": 204391,
+  "melodyParameters": 349325,
+  "harmonyProbeMaxError": 9.5367431640625e-07,
+  "melodyProbeMaxError": 7.450580596923828e-09,
+  "realWorks": {
+    "train": 116,
+    "validation": 15
+  },
+  "realExcerpts": {
+    "train": 899,
+    "validation": 150
+  },
+  "backwardPasses": 2,
+  "rawArchiveSHA256": "verified",
+  "harmonyCheckpointReconstructed": true
+}

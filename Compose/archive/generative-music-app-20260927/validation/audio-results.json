@@ -1,0 +1,242 @@
+[
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-air-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -12.152,
+    "rmsDbFS": -24.043,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -3.82e-06,
+      -4.43e-06
+    ],
+    "channelRmsDbFS": [
+      -24.072,
+      -24.014
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.0,
+    "lastActiveSeconds": 11.0,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-air-stress-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -6.032,
+    "rmsDbFS": -16.892,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      2.944e-05,
+      2.37e-05
+    ],
+    "channelRmsDbFS": [
+      -16.935,
+      -16.849
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.0,
+    "lastActiveSeconds": 11.1,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-indie-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -9.006,
+    "rmsDbFS": -27.228,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.781e-05,
+      -7.692e-05
+    ],
+    "channelRmsDbFS": [
+      -27.372,
+      -27.088
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.5,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-indie-harmony-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -13.365,
+    "rmsDbFS": -34.472,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -6.45e-06,
+      -6.58e-06
+    ],
+    "channelRmsDbFS": [
+      -34.253,
+      -34.703
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.3,
+    "internalQuietWindowRatio": 0.0784,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-indie-stress-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -4.935,
+    "rmsDbFS": -21.889,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -0.00011859,
+      -0.00011455
+    ],
+    "channelRmsDbFS": [
+      -22.03,
+      -21.753
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.5,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-velvet-bass-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -12.678,
+    "rmsDbFS": -28.177,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.237e-05,
+      -7.237e-05
+    ],
+    "channelRmsDbFS": [
+      -28.177,
+      -28.177
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.5,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-velvet-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -8.916,
+    "rmsDbFS": -25.037,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.231e-05,
+      -7.181e-05
+    ],
+    "channelRmsDbFS": [
+      -25.267,
+      -24.818
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.0,
+    "lastActiveSeconds": 10.7,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-warm-cancel-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -12.307,
+    "rmsDbFS": -35.451,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      1.3e-06,
+      2.77e-06
+    ],
+    "channelRmsDbFS": [
+      -36.419,
+      -34.661
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 2.1,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-warm-full-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -9.05,
+    "rmsDbFS": -27.889,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      9.04e-06,
+      1.248e-05
+    ],
+    "channelRmsDbFS": [
+      -29.582,
+      -26.673
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 10.6,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  },
+  {
+    "file": "/Users/chenjinfu/Library/Mobile Documents/com~apple~CloudDocs/\u66f2\u8c31&\u7f16\u66f2/\u6211\u7684\u7f16\u66f2&\u6253\u8c31/volta/generative-music-app/validation/audio/ailegro-warm-melody-41977.wav",
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 12.435,
+    "allFinite": true,
+    "peakDbFS": -16.662,
+    "rmsDbFS": -32.152,
+    "clippedSampleCount": 0,
+    "dcOffsetPerChannel": [
+      -7.82e-06,
+      2.5e-06
+    ],
+    "channelRmsDbFS": [
+      -35.968,
+      -30.153
+    ],
+    "tailLastHalfSecondPeakDbFS": -240.0,
+    "firstActiveSeconds": 0.1,
+    "lastActiveSeconds": 9.8,
+    "internalQuietWindowRatio": 0.0,
+    "audibleSignal": true,
+    "integrityPass": true
+  }
+]

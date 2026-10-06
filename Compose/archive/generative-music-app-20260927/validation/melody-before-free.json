@@ -1,0 +1,2346 @@
+[
+  {
+    "scene": "warm",
+    "beats": 3,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "c73608c832b77e19768b9cca4a23d79bc188a62f8a5f30590238003c23352ec9",
+        "eventCount": 4,
+        "contextEvents": 4
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b9fb47d6dedcfc0c7f9c3c9469e423a3b395a1e9072cef4130a1435e6775f40d",
+        "eventCount": 5,
+        "contextEvents": 9
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "9bcc3ad8aa8d759a07ff718e1c0deee55b898bf046ae878833b28a7f9fa92d37",
+        "eventCount": 4,
+        "contextEvents": 13
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "94de7a32fd7070b67de27dcfeed241c808cc8e3983603683e1c7ae6ddbd093bb",
+        "eventCount": 3,
+        "contextEvents": 17
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "edde17cca4d321a3bac493b9cc34ed37598445b239cc44d499e5c997eb9ac0e0",
+        "eventCount": 4,
+        "contextEvents": 21
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "bc4b9438043c66418e26163c910ca3f0d2c6c4259b38920a074f164f02cb091a",
+        "eventCount": 5,
+        "contextEvents": 26
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "5671482b0c409960cf94e5cec2efa511de344b0565c485ca6770b715edcfbee7",
+        "eventCount": 4,
+        "contextEvents": 30
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "0f2d36ff26440250b1bb58e8d6e459bbee1edd8064bcc71df8ba053d2aed0c26",
+        "eventCount": 3,
+        "contextEvents": 34
+      }
+    ]
+  },
+  {
+    "scene": "warm",
+    "beats": 4,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "be0fb08d9de38779c38f9aaeb1fe689fdce9eee7c9cd2171b7be2195630ad7a1",
+        "eventCount": 5,
+        "contextEvents": 5
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "995b8571399e19451fba66d1e424fff0713d8dae12813ebabca7e81eaf35d3ff",
+        "eventCount": 5,
+        "contextEvents": 10
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "2fbf021a1a19257a5cc892e4ce0fd4eecbd96f7247c726f9d2efdba06bbe4184",
+        "eventCount": 5,
+        "contextEvents": 15
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "14cbd0121661ff27c43f02569e058ad1b2478c9ca708210a65560843b06b1239",
+        "eventCount": 4,
+        "contextEvents": 20
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "5deb4526b6d01cfc290f48abcc41eacf3999c3cc0c7717a3c2dc053d03c4fbdd",
+        "eventCount": 5,
+        "contextEvents": 25
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "4639bcd3dbaa183bbf6e713acf6f88822c9922ea9be3d59016030ccd20d79855",
+        "eventCount": 5,
+        "contextEvents": 30
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "a09801cb1e86c8e48ce0dd2e447a0fa7e223ae7abf8928110058bac7778ce9b2",
+        "eventCount": 5,
+        "contextEvents": 35
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "pop",
+          "instrument": "piano",
+          "density": 0.55,
+          "feel": 0.65,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.78,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "193b6ac774dcc8fe28d5489b894531430742d5e1ffa674992fecf8533930c0cb",
+        "eventCount": 4,
+        "contextEvents": 40
+      }
+    ]
+  },
+  {
+    "scene": "velvet",
+    "beats": 3,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "aa33d346e8ded88c800a2b8ca42af81a44528726dd650b34947c161c28b9842c",
+        "eventCount": 5,
+        "contextEvents": 5
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "ee10325e3e7f45500a7499786b80aef25d95aa7743a23b969b0d2c18fadc425c",
+        "eventCount": 4,
+        "contextEvents": 10
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "340244599dbd2177873ea56b695128e7778335ea1d0723088cb32cec49195f57",
+        "eventCount": 5,
+        "contextEvents": 15
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "d0a66722e05d1ba2536f235971033c30ad372e079cd6b26a1628e2e7d8f62413",
+        "eventCount": 3,
+        "contextEvents": 19
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "afa34ac9a8953817733b7b65d52425a0fadfdb4292aab4828b28b05f9e6b2e1d",
+        "eventCount": 5,
+        "contextEvents": 24
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "500f06ce427547b0f036cc20379eb3501ff88ce9df8495247f305935e3fa1392",
+        "eventCount": 5,
+        "contextEvents": 29
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "0f3e13b14c6e67c45658678ce556c91b6d1b2a8c29ce85c8ca28ee591c89351e",
+        "eventCount": 5,
+        "contextEvents": 34
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "a46a9e0ecf1da9219a25f82426638b319d2a3c8a27b05dd8cb771f574853e580",
+        "eventCount": 3,
+        "contextEvents": 38
+      }
+    ]
+  },
+  {
+    "scene": "velvet",
+    "beats": 4,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "de06333e39f0e2eb9cb8102fe7c3344b990369e88a8f38f4723bf05ac67864b8",
+        "eventCount": 7,
+        "contextEvents": 7
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "e6033c8fd13be7f4e8fba8dc855a57cc6d91bed41742bfed1c6da9ecaa839ab6",
+        "eventCount": 7,
+        "contextEvents": 14
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "bab7dada1f4edea3c07f7887aa1bcc084508aa1419a21ddcd87730877e0a0d85",
+        "eventCount": 7,
+        "contextEvents": 21
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "f136501e7c27d7f02c05b663a625826cfe4d828edfcad8bca69350b61923d80a",
+        "eventCount": 4,
+        "contextEvents": 26
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "288d549e6916200841b0d05d38d714187e38c25c0242cc4a10b36fce16070bb5",
+        "eventCount": 7,
+        "contextEvents": 33
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "f605bead9e1749255d3303e00f1f8e5a4c414b1a586adc5ee21c2dcd44fdcef3",
+        "eventCount": 7,
+        "contextEvents": 40
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b42c5390b4ddf5c9fdae17af2b7f84ec8214e80b3138ea6a25b036cb6727b10b",
+        "eventCount": 6,
+        "contextEvents": 47
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "jazz",
+          "instrument": "reed-lead",
+          "density": 0.5,
+          "feel": 0.72,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.8,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "1115741aa96f3da06def3c7f9276ae20effe4cd78fccc208e0b31db801b64bd4",
+        "eventCount": 4,
+        "contextEvents": 52
+      }
+    ]
+  },
+  {
+    "scene": "indie",
+    "beats": 3,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "860c0deed07d36886c88c56cd6a669ff961dc273a1fde9bb78eff91cb2c20bcd",
+        "eventCount": 4,
+        "contextEvents": 4
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "2ca956c762a0da45477d1285e3597ac5f982a6d13883e592a21cffecd81522ad",
+        "eventCount": 5,
+        "contextEvents": 9
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "6492b0797e2ec9930bae32267a7c9cfffe21e0283bc3eb923b389e68703b9230",
+        "eventCount": 4,
+        "contextEvents": 13
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "599e04adc163b7d39bff6fae394a9b8395aaeb27d1b07506a632f49ad8dbf5e9",
+        "eventCount": 3,
+        "contextEvents": 17
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "30d01f051cb97bd931a0aa7dc2ff853a3e39a213ee2d6baf934ccec7eb0d0a78",
+        "eventCount": 4,
+        "contextEvents": 21
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "e9d5f19e91ef9cae34b17cf4b3159d815acdc362b4407dd029883750be17a8b9",
+        "eventCount": 4,
+        "contextEvents": 26
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "51bbd4ee7c7857ee70c5380ae16b21ff9830a456cc2fffa9596330a04ef68cde",
+        "eventCount": 4,
+        "contextEvents": 30
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "7413a1159bcf7162ca2db2cd1009b0592c59036029b4b09d65de1f27e69d5d26",
+        "eventCount": 3,
+        "contextEvents": 34
+      }
+    ]
+  },
+  {
+    "scene": "indie",
+    "beats": 4,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "5da7b99bf98784b9de2b680b7c7d7cf9e742f8d7a0f77127735f052666275edd",
+        "eventCount": 5,
+        "contextEvents": 5
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "a9fd9f38595ffe12e90d5698d2c34266d42cc25bf7d9fe2f2bfb3dbd99fc1f32",
+        "eventCount": 6,
+        "contextEvents": 11
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b537850c7dca2e7ade31744b53cb0f554df3d8f08df69a5ddcf904214d3e451f",
+        "eventCount": 5,
+        "contextEvents": 16
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b232fa3328e3b3df4f7caf643fe0c7f22843a3ae62982cc525b9c795eb3f6d7e",
+        "eventCount": 4,
+        "contextEvents": 21
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "9e29f57d9e6c00f7ed5ea31578c834d8c0c524bc1980c57cdf8d2a55f891dfb2",
+        "eventCount": 6,
+        "contextEvents": 27
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "06176445cd1ec4a85bfc7716620101424742e6e585d55d476ff602d2dad2ad27",
+        "eventCount": 6,
+        "contextEvents": 33
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "bc963d08a5c0e887ac3c3349841935753f9c48f2a7e42306a5352b34641ec513",
+        "eventCount": 5,
+        "contextEvents": 38
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "blues",
+          "instrument": "electric-guitar",
+          "density": 0.6,
+          "feel": 0.55,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.82,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "518f6d9fed93494801cffc00d00e7bc7f91da2cb55174d6f6246d46abd32a437",
+        "eventCount": 4,
+        "contextEvents": 43
+      }
+    ]
+  },
+  {
+    "scene": "air",
+    "beats": 3,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b8285f0999c4d3c8dc60d05708c62c83189edea89ae2b68339e01da5b8485480",
+        "eventCount": 3,
+        "contextEvents": 3
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "cdc7ae4858edbc0da97049e1010b6335baa9e4e18b4870a7c29033e799195e37",
+        "eventCount": 3,
+        "contextEvents": 6
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "b89112618acee78bb49606004a5b1a56514f48080ebbc1909fdf6f09aff849d9",
+        "eventCount": 3,
+        "contextEvents": 9
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "12c9d111aa8ec603c63644afd2edf07d3b4e3af1812b2c1c8dbad3c579d85567",
+        "eventCount": 3,
+        "contextEvents": 13
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "6146d4789c82d532bdc4a3b91b18f668955d682a8ecdbda6acc7c1fedb8d701f",
+        "eventCount": 3,
+        "contextEvents": 16
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "5ce15354076de886a51c96b9026ea41e79207799b7180adc8cf16e51caa7fac4",
+        "eventCount": 3,
+        "contextEvents": 19
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "fd47c1d73cfcf61d77c347624070d5a2e9724967cdd3d402e8b17f34db07f6f0",
+        "eventCount": 3,
+        "contextEvents": 22
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 3,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "7c469681b6091f7c16bc35c1002c492535c3e80daa65957cb962810e99fe90cf",
+        "eventCount": 3,
+        "contextEvents": 26
+      }
+    ]
+  },
+  {
+    "scene": "air",
+    "beats": 4,
+    "seed": 20260926,
+    "bars": [
+      {
+        "chord": [
+          48,
+          64,
+          67
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 0,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            45,
+            60,
+            64
+          ],
+          "chordId": "C",
+          "nextChordId": "Am",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "afb88c59a51224c23a2b781177628434fdcfa1928ca6f62cc082e4a21d00a1ae",
+        "eventCount": 3,
+        "contextEvents": 3
+      },
+      {
+        "chord": [
+          45,
+          60,
+          64
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 1,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            50,
+            57,
+            60,
+            65
+          ],
+          "chordId": "Am",
+          "nextChordId": "Dm7",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "9db57c5f61c0e9fb8374956fba4385f092926f7d1a7be37e16de3bb4544f92ac",
+        "eventCount": 3,
+        "contextEvents": 6
+      },
+      {
+        "chord": [
+          50,
+          57,
+          60,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 2,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            55,
+            59,
+            62,
+            65
+          ],
+          "chordId": "Dm7",
+          "nextChordId": "G7",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "9b9b4a8dd990d445b802448aca79dff3ce81242ce1220d72bf9fa8556cfef5dd",
+        "eventCount": 3,
+        "contextEvents": 9
+      },
+      {
+        "chord": [
+          55,
+          59,
+          62,
+          65
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 3,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            52,
+            55,
+            60
+          ],
+          "chordId": "G7",
+          "nextChordId": "C/E",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "977f0c829804113fb19fbf68b3b107f15b6b1b284b433771495616b339dc0b88",
+        "eventCount": 4,
+        "contextEvents": 14
+      },
+      {
+        "chord": [
+          52,
+          55,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 4,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            53,
+            57,
+            60
+          ],
+          "chordId": "C/E",
+          "nextChordId": "F",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "bd3e579bdbcd1454cefe5017d2dd1ddf08f83437dadd94ffacb5d4547dd7e7ad",
+        "eventCount": 3,
+        "contextEvents": 17
+      },
+      {
+        "chord": [
+          53,
+          57,
+          60
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 5,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            47,
+            53,
+            55,
+            62
+          ],
+          "chordId": "F",
+          "nextChordId": "G7/B",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "606532c9633e596875a78aed9d0581bcb2be451eecd46b0bef4f2a9a0e7cf6c7",
+        "eventCount": 3,
+        "contextEvents": 20
+      },
+      {
+        "chord": [
+          47,
+          53,
+          55,
+          62
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 6,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "G7/B",
+          "nextChordId": "C",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "7ff3af5cea4e11d30bb5d4a607c07e7f6874e29531bbc6338ac60ef065266028",
+        "eventCount": 3,
+        "contextEvents": 23
+      },
+      {
+        "chord": [
+          48,
+          52,
+          55
+        ],
+        "options": {
+          "enabled": true,
+          "style": "ambient",
+          "instrument": "bell",
+          "density": 0.3,
+          "feel": 0.5,
+          "bpm": 92,
+          "beatsPerBar": 4,
+          "bar": 7,
+          "key": {
+            "tonic": 0,
+            "mode": "major"
+          },
+          "nextChord": [
+            48,
+            52,
+            55
+          ],
+          "chordId": "C",
+          "nextChordId": "C",
+          "temperature": 0.64,
+          "rhythm": "auto",
+          "pattern": "motif",
+          "register": "middle"
+        },
+        "eventHash": "1b268b0eeb402f6c4d61244f594c1eb26582fd51d0b0c1ee8571eeda4d3d4047",
+        "eventCount": 4,
+        "contextEvents": 28
+      }
+    ]
+  }
+]

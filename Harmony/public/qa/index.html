@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" data-i18n-pending>
+  <head><base href="/tonnetz/"><script src="/qa/meter.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#07141b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tonnetz" />
+    <meta name="description" content="Tonnetz: a multi-touch isomorphic keyboard instrument designed for iPad" data-i18n-content="meta.description" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./vendor/katex/katex.min.css" />
+    <style>html[data-i18n-pending] body{visibility:hidden}</style>
+    <script src="./i18n.js?v=1"></script>
+    <link rel="stylesheet" href="./app.css?v=20" />
+    <link rel="stylesheet" href="./learn.css?v=1" />
+    <link rel="stylesheet" href="./workbench.css?v=11" />
+    <title>Tonnetz · Isomorphic keyboard</title>
+  </head>
+  <body>
+    <main class="instrument" id="instrument">
+      <section class="play-surface" aria-label="Isomorphic keyboard performance surface" data-i18n-aria-label="aria.playSurface">
+        <div id="keyboardViewport" class="keyboard-viewport">
+          <div id="keyboard" class="keyboard" role="group" aria-label="Eight-column isomorphic hexagonal keyboard" data-i18n-aria-label="aria.keyboardInitial"></div>
+        </div>
+        <div id="keyboardOverview" class="keyboard-overview" aria-hidden="true">
+          <canvas id="overviewCanvas"></canvas>
+          <div id="overviewWindow" class="overview-window" aria-hidden="true"></div>
+        </div>
+        <div id="performanceToggles" class="performance-toggles" aria-label="Performance shortcuts" data-i18n-aria-label="aria.performanceControls">
+          <label class="performance-layout-select">
+            <span data-i18n="label.keyboardLayout">Keyboard layout</span>
+            <select id="layoutSelect" aria-label="Choose keyboard layout" data-i18n-aria-label="aria.selectLayout">
+              <option value="classic" data-i18n="layout.classic">Classic</option>
+              <option value="melodic" data-i18n="layout.melodic">Melodic</option>
+              <option value="harmonic" data-i18n="layout.harmonic">Harmonic</option>
+            </select>
+          </label>
+          <button id="mainSustainButton" class="performance-toggle-button" type="button" aria-pressed="false" aria-label="Turn sustain on" data-i18n-aria-label="aria.sustainOn">
+            <span class="toggle-light" aria-hidden="true"></span>
+            <span data-i18n="label.sustain">Sustain</span>
+          </button>
+          <button id="glissandoButton" class="performance-toggle-button" type="button" aria-pressed="false" aria-label="Turn glissando on" data-i18n-aria-label="aria.glissandoOn">
+            <span class="toggle-light" aria-hidden="true"></span>
+            <span data-i18n="label.glissando">Glissando</span>
+          </button>
+        </div>
+      </section>
+
+      <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
+
+      <aside id="settingsSheet" class="settings-sheet" aria-label="Instrument settings" data-i18n-aria-label="aria.instrumentSettings" aria-hidden="true">
+        <button id="sheetGrabber" class="sheet-grabber" type="button" aria-label="Swipe down to close settings" data-i18n-aria-label="aria.closeSettingsSwipe"><span aria-hidden="true"></span></button>
+        <div class="sheet-header">
+          <div>
+            <strong data-i18n="app.title">Tonnetz · Isomorphic keyboard</strong>
+            <small><span class="pulse" aria-hidden="true"></span> <span id="layoutName">Classic</span> · <span id="intervalHint">Horizontal whole tones · vertical semitones</span></small>
+          </div>
+          <div id="noteReadout" class="note-readout" aria-live="polite">
+            <span class="note-name" data-i18n="readout.touch">Touch a key to begin</span>
+            <span class="note-detail" data-i18n="readout.multi">Multi-touch and glissando supported</span>
+          </div>
+          <button id="closeSettings" class="done-button" type="button" data-i18n="action.done">Done</button>
+        </div>
+
+        <div class="controls sheet-controls" aria-label="Instrument controls" data-i18n-aria-label="aria.instrumentControls">
+          <div class="count-control column-count-control" aria-label="Horizontal key columns" data-i18n-aria-label="aria.columns">
+            <span data-i18n="label.columns">Columns</span>
+            <div>
+              <button id="columnsMin" class="bound-button" type="button" aria-label="Use the fewest horizontal columns" data-i18n-aria-label="aria.columnsMin">Min</button>
+              <button id="columnsDown" type="button" aria-label="Decrease horizontal columns" data-i18n-aria-label="aria.columnsDown">−</button>
+              <strong id="columnsValue">13</strong>
+              <button id="columnsUp" type="button" aria-label="Increase horizontal columns" data-i18n-aria-label="aria.columnsUp">＋</button>
+              <button id="columnsMax" class="bound-button" type="button" aria-label="Use the most horizontal columns" data-i18n-aria-label="aria.columnsMax">Max</button>
+            </div>
+          </div>
+          <div class="count-control" aria-label="Vertical key count" data-i18n-aria-label="aria.rows">
+            <span data-i18n="label.rows">Rows</span>
+            <div><button id="rowsDown" type="button" aria-label="Decrease vertical keys" data-i18n-aria-label="aria.rowsDown">−</button><strong id="rowsValue">8</strong><button id="rowsUp" type="button" aria-label="Increase vertical keys" data-i18n-aria-label="aria.rowsUp">＋</button></div>
+          </div>
+          <div class="count-control" aria-label="Key size" data-i18n-aria-label="aria.keySize">
+            <span data-i18n="label.keySize">Key size</span>
+            <div><button id="keyScaleDown" type="button" aria-label="Make keys smaller" data-i18n-aria-label="aria.keySizeDown">−</button><strong id="keyScaleValue">100%</strong><button id="keyScaleUp" type="button" aria-label="Make keys larger" data-i18n-aria-label="aria.keySizeUp">＋</button></div>
+          </div>
+          <div class="count-control" aria-label="Navigator height" data-i18n-aria-label="aria.navigatorHeight">
+            <span data-i18n="label.navigatorHeight">Navigator height</span>
+            <div><button id="overviewHeightDown" type="button" aria-label="Decrease navigator height" data-i18n-aria-label="aria.navigatorHeightDown">−</button><strong id="overviewHeightValue">72px</strong><button id="overviewHeightUp" type="button" aria-label="Increase navigator height" data-i18n-aria-label="aria.navigatorHeightUp">＋</button></div>
+          </div>
+          <div class="count-control" aria-label="Navigator width" data-i18n-aria-label="aria.navigatorWidth">
+            <span data-i18n="label.navigatorWidth">Navigator width</span>
+            <div><button id="overviewWidthDown" type="button" aria-label="Make navigator narrower" data-i18n-aria-label="aria.navigatorWidthDown">−</button><strong id="overviewWidthValue">100%</strong><button id="overviewWidthUp" type="button" aria-label="Make navigator wider" data-i18n-aria-label="aria.navigatorWidthUp">＋</button></div>
+          </div>
+          <label class="control-select">
+            <span data-i18n="label.keySkin">Key skin</span>
+            <select id="skinSelect" aria-label="Choose key skin" data-i18n-aria-label="aria.selectSkin">
+              <option value="tonnetz" data-i18n="skin.tonnetz">Tonnetz · Deep sea</option>
+              <option value="piano" data-i18n="skin.piano">Piano · Black &amp; white</option>
+              <option value="wood" data-i18n="skin.wood">Acoustic · Walnut</option>
+            </select>
+          </label>
+          <label class="control-select">
+            <span data-i18n="label.voice">Voice</span>
+            <select id="voiceSelect" aria-label="Choose voice" data-i18n-aria-label="aria.selectVoice">
+              <optgroup label="Built in · Instant" data-i18n-label="voiceGroup.builtIn">
+                <option value="concert" data-i18n="voice.concert">Concert piano</option><option value="epiano" data-i18n="voice.epiano">Vintage electric piano</option><option value="bell" data-i18n="voice.bell">Glass bell</option><option value="organ" data-i18n="voice.organ">Warm organ</option><option value="pad" data-i18n="voice.pad">Nebula pad</option>
+              </optgroup>
+              <optgroup label="Sampled · Orchestra" data-i18n-label="voiceGroup.sampled">
+                <option value="sample-piano" data-i18n="voice.sample-piano">Sampled grand piano</option><option value="strings" data-i18n="voice.strings">Strings · Four-part range mapping</option><option value="winds" data-i18n="voice.winds">Winds · Smart mapping</option><option value="violin" data-i18n="voice.violin">Violin</option><option value="viola" data-i18n="voice.viola">Viola</option><option value="cello" data-i18n="voice.cello">Cello</option><option value="contrabass" data-i18n="voice.contrabass">Double bass</option><option value="harp" data-i18n="voice.harp">Harp</option><option value="flute" data-i18n="voice.flute">Flute</option><option value="oboe" data-i18n="voice.oboe">Oboe</option><option value="clarinet" data-i18n="voice.clarinet">Clarinet</option><option value="bassoon" data-i18n="voice.bassoon">Bassoon</option><option value="horn" data-i18n="voice.horn">French horn</option><option value="trumpet" data-i18n="voice.trumpet">Trumpet</option><option value="trombone" data-i18n="voice.trombone">Trombone</option><option value="tuba" data-i18n="voice.tuba">Tuba</option><option value="timpani" data-i18n="voice.timpani">Timpani</option>
+              </optgroup>
+            </select>
+          </label>
+          <label class="control-select language-control">
+            <span data-i18n="label.language">Language</span>
+            <select id="languageSelect" aria-label="Choose language" data-i18n-aria-label="aria.selectLanguage"><option value="en">English</option><option value="zh-CN">中文</option></select>
+          </label>
+          <div id="ensembleLegend" class="ensemble-legend" hidden aria-live="polite"></div>
+          <div class="transpose-control" aria-label="Transpose" data-i18n-aria-label="aria.transpose">
+            <button id="octaveDown" class="mini-button" type="button" aria-label="Lower one octave" data-i18n-aria-label="aria.octaveDown">−</button>
+            <span><small data-i18n="label.octave">Octave</small><strong id="octaveValue">0</strong></span>
+            <button id="octaveUp" class="mini-button" type="button" aria-label="Raise one octave" data-i18n-aria-label="aria.octaveUp">＋</button>
+          </div>
+          <label class="volume-control"><span data-i18n="label.volume">Volume</span><input id="volumeSlider" type="range" min="0" max="100" value="72" aria-label="Volume" data-i18n-aria-label="aria.volume" /></label>
+          <button id="labelsButton" class="labels-button" type="button" aria-pressed="true" data-i18n="action.hideLabels">Hide note names</button>
+          <button id="panicButton" class="panic-button" type="button" data-i18n="action.stopAll">Stop all sounds</button>
+        </div>
+        <p class="sheet-tip"><span data-i18n="tip.glissando">Glissando on: every finger can slide</span> · <span data-i18n="tip.navigator">Move the keyboard only from the navigator above</span> · <span data-i18n="tip.samples">Sampled voices from</span> <a href="https://github.com/gleitz/midi-js-soundfonts" target="_blank" rel="noreferrer">Musyng Kite SoundFont</a></p>
+      </aside>
+
+      <div id="startOverlay" class="start-overlay"><button id="startButton" type="button"><span class="start-icon" aria-hidden="true">♪</span><strong data-i18n="start.enable">Tap to enable sound</strong><small data-i18n="start.detail">Low-latency voices and spatial reverb · Headphones recommended</small></button></div>
+      <div id="rotateHint" class="rotate-hint" aria-hidden="true"><span>↻</span><strong data-i18n="rotate.title">Rotate your iPad</strong><small data-i18n="rotate.detail">Landscape fits the complete keyboard</small></div>
+
+      <div id="performanceDock" class="performance-dock">
+        <button id="settingsHandle" class="settings-handle" type="button" aria-controls="settingsSheet" aria-expanded="false" aria-label="Swipe up to open settings" data-i18n-aria-label="aria.openSettings">
+          <span class="settings-icon" aria-hidden="true">⚙</span>
+          <b id="settingsHandleLabel" class="settings-handle-label">Settings</b>
+        </button>
+        <section id="wbQuick" class="wb-quick" aria-label="Performance controls"></section>
+        <section id="wbTimeline" class="wb-timeline" aria-label="Current and next three chords"></section>
+        <button id="wbToggle" class="wb-toggle" type="button" aria-controls="wbBody" aria-expanded="false" aria-label="Expand accompaniment">
+          <span class="wb-mark" aria-hidden="true">♫</span>
+          <span class="wb-title">Accompaniment</span>
+          <span class="wb-chevron" aria-hidden="true">⌃</span>
+        </button>
+        <p id="wbStatus" class="wb-status" role="status" aria-live="polite" hidden></p>
+      </div>
+      <section id="wbChordEditor" class="wb-chord-editor" role="dialog" aria-modal="false" hidden></section>
+      <div id="wbBackdrop" class="wb-backdrop" aria-hidden="true"></div>
+      <aside id="harmonyWorkbench" class="wb" aria-label="Harmony workbench" aria-hidden="true" inert>
+        <div id="wbBody" class="wb-body">
+          <button id="wbGrabber" class="wb-grabber" type="button" aria-label="Close accompaniment"><span aria-hidden="true"></span></button>
+          <nav class="wb-tabs" role="tablist" aria-label="Workbench sections">
+            <button type="button" role="tab" data-wb-tab="accompaniment" aria-selected="true">Accompaniment</button>
+            <button type="button" role="tab" data-wb-tab="harmony" aria-selected="false">Harmony</button>
+            <button type="button" role="tab" data-wb-tab="learn" aria-selected="false">Learn</button>
+          </nav>
+          <div class="wb-panel-scroll">
+            <section id="wbAccompaniment" class="wb-panel is-active" role="tabpanel" data-wb-panel="accompaniment"></section>
+            <section id="wbHarmony" class="wb-panel" role="tabpanel" data-wb-panel="harmony" hidden></section>
+            <section id="wbLearn" class="wb-panel" role="tabpanel" data-wb-panel="learn" hidden></section>
+          </div>
+        </div>
+      </aside>
+    </main>
+    <script src="./app.js?v=21"></script>
+    <script src="./vendor/katex/katex.min.js"></script>
+    <script type="module" src="./workbench.js?v=12"></script>
+  </body>
+</html>

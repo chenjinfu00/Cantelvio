@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171e1b">
+  <title>AIlegro · Orchestral Listening Room</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="AIlegro home"><span class="brand-mark">♫</span><span>AI<span class="brand-accent">legro</span><small>ORCHESTRAL LAB</small></span></a>
+      <div class="top-actions">
+        <a class="console-link" href="../" data-en="← Performance console" data-zh="← 返回演奏台">← Performance console</a>
+        <button id="language" type="button" aria-label="Switch language">中文</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="intro-copy">
+          <p class="overline"><span class="live-dot"></span><span data-en="LOCAL EXPERIMENT · FIVE CHECKPOINTS" data-zh="本地实验 · 五组模型">LOCAL EXPERIMENT · FIVE CHECKPOINTS</span></p>
+          <h1 data-en="A listening room for five musical minds." data-zh="在这里，听听五个模型的想法。">A listening room for five musical minds.</h1>
+          <p class="intro-text" data-en="Choose a trained orchestral Transformer, generate a fresh passage, and hear it beside the others under the same settings." data-zh="选择一个已训练的管弦乐 Transformer，用相同设置现场生成，再切换模型对比试听。">Choose a trained orchestral Transformer, generate a fresh passage, and hear it beside the others under the same settings.</p>
+        </div>
+        <div class="intro-note"><span class="note-number">01 / 05</span><span data-en="The notes come from the selected model. The sound is a lightweight browser sketch, not final orchestral playback." data-zh="音符来自所选模型；声音是浏览器里的简化合成预览，不是最终管弦乐音色。">The notes come from the selected model. The sound is a lightweight browser sketch, not final orchestral playback.</span></div>
+      </section>
+
+      <div class="workspace">
+        <aside class="model-panel panel">
+          <div class="section-head"><span class="section-number">01</span><div><p class="eyebrow" data-en="SELECT A CHECKPOINT" data-zh="选择模型">SELECT A CHECKPOINT</p><h2 data-en="The five models" data-zh="五组模型">The five models</h2></div></div>
+          <div id="modelList" class="model-list" role="group" aria-label="Models"></div>
+          <p class="model-note" data-en="Validation loss is a training metric (lower is better), not a listening score. Pitch targets differ across families." data-zh="验证损失只是训练指标（越低越好），不是听感评分；两类模型的音高预测目标也不同。">Validation loss is a training metric (lower is better), not a listening score. Pitch targets differ across families.</p>
+        </aside>
+
+        <div class="right-column">
+          <section class="controls panel">
+            <div class="section-head"><span class="section-number">02</span><div><p class="eyebrow" data-en="SHARED SETTINGS" data-zh="统一对比设置">SHARED SETTINGS</p><h2 data-en="Shape the passage" data-zh="设置生成片段">Shape the passage</h2></div></div>
+            <div class="controls-grid">
+              <label class="control"><span data-en="Length" data-zh="长度">Length</span><select id="bars"><option value="4">4 bars</option><option value="8" selected>8 bars</option><option value="16">16 bars</option></select></label>
+              <label class="control"><span data-en="Seed" data-zh="随机种子">Seed</span><span class="seed-row"><input id="seed" type="number" value="41977" min="0" max="999999999" step="1"><button id="randomSeed" type="button" aria-label="New random seed" title="New random seed">↻</button></span></label>
+              <label class="control"><span><span data-en="Tempo" data-zh="速度">Tempo</span><output id="tempoValue">96 BPM</output></span><input id="tempo" type="range" min="60" max="160" value="96" step="1"></label>
+              <label class="control"><span><span data-en="Pitch temperature" data-zh="音高温度">Pitch temperature</span><output id="temperatureValue">0.90</output></span><input id="temperature" type="range" min="0.6" max="1.3" value="0.9" step="0.05"></label>
+              <label class="control"><span><span data-en="Note variety (top-p)" data-zh="音符变化范围 (top-p)">Note variety (top-p)</span><output id="topPValue">0.95</output></span><input id="topP" type="range" min="0.75" max="1" value="0.95" step="0.05"></label>
+            </div>
+            <div class="groups-head"><span data-en="Instrument groups" data-zh="乐器组">Instrument groups</span><small data-en="Tap to cycle: Auto → On → Off" data-zh="点击切换：自动 → 开启 → 关闭">Tap to cycle: Auto → On → Off</small></div>
+            <div id="groupPresets" class="group-presets" role="group" aria-label="Group combinations"><button type="button" data-preset="orchestra" data-en="Orchestra" data-zh="常规编制">Orchestra</button><button type="button" data-preset="strings" data-en="Strings" data-zh="弦乐">Strings</button><button type="button" data-preset="winds" data-en="Winds + brass" data-zh="管乐＋铜管">Winds + brass</button><button type="button" data-preset="rhythm" data-en="Percussion + harp" data-zh="打击乐＋竖琴">Percussion + harp</button><button type="button" data-preset="full" data-en="All on" data-zh="全部开启">All on</button></div>
+            <div id="groupControls" class="group-controls" role="group" aria-label="Instrument groups"></div>
+            <p class="group-explainer" data-en="On makes a group available, not guaranteed in every bar. Off excludes it; Auto lets the model decide per bar. Tempo is rounded to the model's nearest tempo bucket." data-zh="“开启”表示允许模型使用，不保证每小节都发声；“关闭”会排除该组；“自动”由模型逐小节决定。速度会量化到模型最接近的档位。">On makes a group available, not guaranteed in every bar. Off excludes it; Auto lets the model decide per bar. Tempo is rounded to the model's nearest tempo bucket.</p>
+            <div class="generation-actions"><button id="generate" class="primary" type="button" data-en="Generate selected model" data-zh="用当前模型生成">Generate selected model</button><button id="generateAll" class="secondary" type="button" data-en="Generate all five" data-zh="生成五组对比">Generate all five</button></div>
+            <p class="fine-print" data-en="Same seed and controls make the comparison reproducible; they do not force the models to play the same notes." data-zh="相同种子与设置让实验可复现，但不会强迫五个模型写出相同音符。">Same seed and controls make the comparison reproducible; they do not force the models to play the same notes.</p>
+          </section>
+
+          <section class="live panel">
+            <div class="section-head live-head"><span class="section-number">03</span><div><p class="eyebrow" data-en="CONTINUOUS PERFORMANCE" data-zh="连续演奏">CONTINUOUS PERFORMANCE</p><h2 data-en="Keep the music going" data-zh="让音乐持续生成">Keep the music going</h2></div><span id="liveStatus" class="status" role="status" aria-live="polite" data-en="Stopped" data-zh="已停止">Stopped</span></div>
+            <p class="live-intro" data-en="Start once; the selected model keeps writing four bars ahead. Tempo, note variety and the six-group combination take effect on upcoming bars. Switching model or seed starts a new piece." data-zh="点击开始后，所选模型会持续提前写出下四小节。速度、音符变化范围和六组乐器组合会用于后续小节；换模型或随机种子则从新作品开始。">Start once; the selected model keeps writing four bars ahead. Tempo, note variety and the six-group combination take effect on upcoming bars. Switching model or seed starts a new piece.</p>
+            <div class="live-actions"><button id="liveStart" class="primary" type="button" data-en="▶ Start continuous play" data-zh="▶ 开始连续演奏">▶ Start continuous play</button><button id="liveStop" class="secondary" type="button" disabled data-en="■ Stop" data-zh="■ 停止">■ Stop</button><span id="liveNow" class="live-now" data-en="No bars playing" data-zh="尚未播放">No bars playing</span></div>
+            <div class="live-chart-head"><span class="eyebrow" data-en="ESTIMATED HARMONY · 2 × 4 BARS" data-zh="推测和声 · 两排各四小节">ESTIMATED HARMONY · 2 × 4 BARS</span><small data-en="Analyzed from notes; not a chord output of this model" data-zh="从音符分析得出，并非该模型直接输出的和弦">Analyzed from notes; not a chord output of this model</small></div>
+            <div id="liveChart" class="live-chart" aria-label="Estimated chord chart"></div>
+            <p class="live-caveat" data-en="The model writes actual notes continuously; these chord names are approximate. New controls may take up to one queued four-bar segment to be heard. Keep this page open while playing." data-zh="模型在连续生成真实音符；和弦名称只是近似分析。新设置可能要等已排队的四小节播放后才听到。播放时请保持页面打开。">The model writes actual notes continuously; these chord names are approximate. New controls may take up to one queued four-bar segment to be heard. Keep this page open while playing.</p>
+          </section>
+
+          <section class="stage panel">
+            <div class="section-head stage-head"><span class="section-number">04</span><div><p class="eyebrow" data-en="ONE-OFF COMPARISON" data-zh="单次生成对比">ONE-OFF COMPARISON</p><h2 id="stageTitle">Rotary + augmentation</h2></div><span id="status" class="status" role="status" aria-live="polite">Ready to generate</span></div>
+            <div class="playback-row"><audio id="player" controls preload="none" aria-label="Generated music"></audio><div class="download-actions"><a id="midiDownload" class="download disabled" aria-disabled="true" data-en="↓ MIDI" data-zh="↓ 下载 MIDI">↓ MIDI</a><a id="wavDownload" class="download disabled" aria-disabled="true" data-en="↓ WAV" data-zh="↓ 下载 WAV">↓ WAV</a></div></div>
+            <div class="view-bar"><div><span class="eyebrow" data-en="SCORE MAP" data-zh="音符图">SCORE MAP</span><p data-en="Each lane is an instrument group. Color and length show who plays when." data-zh="每条轨道对应一个乐器组；色块的位置与长度表示发声时间。">Each lane is an instrument group. Color and length show who plays when.</p></div><label class="sound-mode"><span data-en="Playback" data-zh="试听音色">Playback</span><select id="soundMode"><option value="ensemble">Orchestral sketch</option><option value="piano">Piano reduction</option></select></label></div>
+            <div id="rollViewport" class="roll-viewport"><div id="rollInner" class="roll-inner"><canvas id="roll" aria-label="Generated score map"></canvas><div id="playhead" class="playhead" aria-hidden="true"></div></div></div>
+            <p id="hoverInfo" class="hover-info" data-en="Hover over a note to inspect it. Click the map to seek." data-zh="悬停查看音符；点击音符图可以跳转播放位置。">Hover over a note to inspect it. Click the map to seek.</p>
+            <div id="metrics" class="metrics"><div><strong>—</strong><span data-en="NOTES" data-zh="音符">NOTES</span></div><div><strong>—</strong><span data-en="BARS" data-zh="小节">BARS</span></div><div><strong>—</strong><span data-en="ACTIVE GROUPS" data-zh="发声乐器组">ACTIVE GROUPS</span></div></div>
+          </section>
+        </div>
+      </div>
+
+      <section class="joint-entry panel">
+        <div class="section-head"><span class="section-number">06</span><div><p class="eyebrow" data-en="PRESERVE THE OLD MODEL" data-zh="保留旧模型">PRESERVE THE OLD MODEL</p><h2 data-en="Try the joint-model orchestral bridge" data-zh="试听旧联合模型的管弦乐桥接原型">Try the joint-model orchestral bridge</h2></div></div>
+        <p data-en="The existing R/H/B/M model writes real chords, bass and melody; a separate, untrained mapping distributes its notes to six groups. Compare its musical foundation with the five new checkpoints without changing any weights." data-zh="原有 R/H/B/M 模型直接写出和弦、低音和旋律；一个独立、尚未训练的映射把音符分给六组乐器。可与五组新检查点比较音乐骨架，且不修改任何权重。">The existing R/H/B/M model writes real chords, bass and melody; a separate, untrained mapping distributes its notes to six groups. Compare its musical foundation with the five new checkpoints without changing any weights.</p>
+        <a class="joint-entry-link" href="./joint.html" data-en="Open joint-model orchestra →" data-zh="打开旧模型管弦乐试听 →">Open joint-model orchestra →</a>
+      </section>
+
+      <footer class="page-footer"><p data-en="Research / personal preview. The source MIDI dataset has unclear per-file licensing; these experimental outputs are not a commercial release." data-zh="研究／个人试听。源 MIDI 数据集的单曲授权尚不明确；这些实验输出并非商业发行版本。">Research / personal preview. The source MIDI dataset has unclear per-file licensing; these experimental outputs are not a commercial release.</p><p><a href="../training/orchestra/README.md" data-en="How the models were trained ↗" data-zh="模型训练说明 ↗">How the models were trained ↗</a></p></footer>
+    </main>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

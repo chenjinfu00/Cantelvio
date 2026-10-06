@@ -1,0 +1,24 @@
+{
+  "formalTrainingStarted": false,
+  "optimizerUpdates": 0,
+  "model": "untrained revised v2",
+  "purpose": "exercise a nonempty real-network decode path, not a quality selection",
+  "attempts": [
+    {
+      "seed": 0,
+      "generatedNotes": 0
+    },
+    {
+      "seed": 1,
+      "generatedNotes": 2
+    }
+  ],
+  "seconds": 0.29,
+  "codecRoundtrip": true,
+  "resourceClosures": [
+    {
+      "bar": 1,
+      "reason": "max-notes closure"
+    }
+  ]
+}

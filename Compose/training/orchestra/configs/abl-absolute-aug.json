@@ -1,0 +1,27 @@
+{
+ "name": "abl-absolute-aug",
+ "model": {
+  "d": 256,
+  "heads": 4,
+  "layers": 4,
+  "ff": 1024,
+  "dropout": 0.1,
+  "pitch": "absolute"
+ },
+ "train": {
+  "max_len": 1024,
+  "batch": 16,
+  "lr": 0.001,
+  "warmup": 300,
+  "steps": 6000,
+  "eval_every": 500,
+  "eval_windows": 192,
+  "save_every": 250,
+  "log_every": 50,
+  "workers": 3,
+  "transpose": [
+   -6,
+   5
+  ]
+ }
+}

@@ -1,0 +1,8 @@
+{
+  "vendorManifestFiles": 57,
+  "ailegroHTTPFiles": 71,
+  "tonnetzHTTPFiles": 136,
+  "unchangedRuntimeFiles": 213,
+  "rebuiltCorpus": "byte-identical",
+  "preMigrationFilesVerified": 2067
+}

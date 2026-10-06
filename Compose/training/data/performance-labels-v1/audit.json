@@ -1,0 +1,58 @@
+{
+  "schema": "ailegro-performance-labels-v1",
+  "status": "candidate only; not used by existing trainers",
+  "eventCoordinates": "zero-based source measure index and rational quarter-note offset",
+  "sourceCounts": {
+    "OpenScore Lieder": {
+      "scores": 1131,
+      "scoresWithNumericTempo": 1035,
+      "scoresWithTempoChanges": 276,
+      "scoresWithSoundDynamics": 1084,
+      "tempoEvents": 2178,
+      "soundDynamicsEvents": 19801,
+      "conflictingTempoPositions": 18,
+      "unparsedMetronomes": 3,
+      "wordDirections": 16355
+    },
+    "OpenScore Orchestra / Hauptstimme": {
+      "scores": 91,
+      "scoresWithNumericTempo": 87,
+      "scoresWithTempoChanges": 38,
+      "scoresWithSoundDynamics": 77,
+      "tempoEvents": 261,
+      "soundDynamicsEvents": 12547,
+      "conflictingTempoPositions": 4,
+      "unparsedMetronomes": 0,
+      "wordDirections": 18894
+    },
+    "OpenScore String Quartets": {
+      "scores": 196,
+      "scoresWithNumericTempo": 196,
+      "scoresWithTempoChanges": 184,
+      "scoresWithSoundDynamics": 196,
+      "tempoEvents": 4900,
+      "soundDynamicsEvents": 57469,
+      "conflictingTempoPositions": 22,
+      "unparsedMetronomes": 13,
+      "wordDirections": 47978
+    },
+    "S3 Symbolic Symphony Set": {
+      "scores": 16,
+      "scoresWithNumericTempo": 15,
+      "scoresWithTempoChanges": 8,
+      "scoresWithSoundDynamics": 16,
+      "tempoEvents": 122,
+      "soundDynamicsEvents": 4727,
+      "conflictingTempoPositions": 0,
+      "unparsedMetronomes": 0,
+      "wordDirections": 6966
+    }
+  },
+  "notes": [
+    "Only explicit numeric MusicXML sound tempo or numeric metronome marks are tempo labels.",
+    "No numeric tempo means missing label, never an invented 120 BPM target.",
+    "sound-dynamics values are MusicXML performance percentages, not MIDI velocities.",
+    "Printed dynamics and wedges remain in lieder-expression-v1 and classical-score-v1.",
+    "Classical scores have no approved train/validation/test split and cannot train the current model yet."
+  ]
+}

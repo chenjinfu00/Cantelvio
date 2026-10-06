@@ -1,0 +1,104 @@
+{
+  "errors": [],
+  "tasks": [
+    {
+      "preset": "accompaniment",
+      "id": "ai_49spz2xfxpbd",
+      "notes": 96,
+      "seconds": 0.8515,
+      "warnings": [
+        "accompaniment: best of 4 per bar; melody log-probability per note -6.42",
+        "chords of 4 bars from the AIlegro harmonizer (read from the given melody); edit the chord symbols and generate with given chords to change them",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened",
+        "overlapping notes in one voice were shortened"
+      ],
+      "candidateCount": 3,
+      "editorUntouched": true,
+      "acceptedValid": true
+    },
+    {
+      "preset": "continue",
+      "id": "ai_tav4pm1fpzih",
+      "notes": 39,
+      "seconds": 0.16759999996423722,
+      "warnings": [
+        "chords of 8 context bars estimated by the AIlegro chord tracker"
+      ],
+      "candidateCount": 1,
+      "editorUntouched": true,
+      "acceptedValid": true
+    },
+    {
+      "preset": "chords",
+      "id": "ai_j1xw3fclfi2d",
+      "notes": 37,
+      "seconds": 0.0745,
+      "warnings": [],
+      "candidateCount": 1,
+      "editorUntouched": true,
+      "acceptedValid": true
+    },
+    {
+      "preset": "motif",
+      "id": "ai_kgknfcgnekh6",
+      "notes": 14,
+      "seconds": 0.08109999996423721,
+      "warnings": [
+        "motif development (bar: plan): 5: restates bar 4; 6: sequence +1 step(s) of bar 4; 7: fragments bar 4; 8: free bar after bar 4",
+        "chords of 4 context bars estimated by the AIlegro chord tracker"
+      ],
+      "candidateCount": 1,
+      "editorUntouched": true,
+      "acceptedValid": true
+    },
+    {
+      "preset": "orchestrate",
+      "id": "ai_3lppbi1y70mk",
+      "notes": 21,
+      "seconds": 0.08680000001192092,
+      "warnings": [
+        "orchestration: groups chosen per given note; doublings light"
+      ],
+      "candidateCount": 1,
+      "editorUntouched": true,
+      "acceptedValid": true
+    }
+  ],
+  "downloads": [
+    {
+      "file": "AIlegro-·-旋律与伴奏演示.mid",
+      "bytes": 1190
+    },
+    {
+      "file": "AIlegro-·-旋律与伴奏演示.pdf",
+      "bytes": 569485
+    }
+  ],
+  "hubOverflow": false,
+  "acceptedScope": {
+    "from": 0,
+    "to": 3,
+    "parts": [
+      "pt_bipx8q48vagi"
+    ],
+    "chords": true
+  },
+  "partialAccept": {
+    "melodyProtected": true,
+    "unselectedBarsProtected": true,
+    "undoRestores": true,
+    "playback": true
+  },
+  "save": true,
+  "analysis": true
+}

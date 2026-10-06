@@ -1,0 +1,130 @@
+[
+  {
+    "beat": "BAR 16 · 1/4",
+    "chartScroll": 627,
+    "head": 114.234375,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 17 · 1/4",
+    "chartScroll": 0,
+    "head": 50.5234375,
+    "measure": {
+      "left": 41,
+      "right": 265
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 18 · 1/4",
+    "chartScroll": 163,
+    "head": 116.8359375,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 19 · 1/4",
+    "chartScroll": 395,
+    "head": 114.6484375,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 20 · 1/4",
+    "chartScroll": 627,
+    "head": 110.96875,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 21 · 1/4",
+    "chartScroll": 0,
+    "head": 47.2578125,
+    "measure": {
+      "left": 41,
+      "right": 265
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 22 · 1/4",
+    "chartScroll": 163,
+    "head": 112.5703125,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  },
+  {
+    "beat": "BAR 23 · 1/4",
+    "chartScroll": 395,
+    "head": 118.859375,
+    "measure": {
+      "left": 110,
+      "right": 334
+    },
+    "rows": 2,
+    "scrollY": 865,
+    "sounding": 1,
+    "viewport": {
+      "left": 41,
+      "right": 334
+    }
+  }
+]

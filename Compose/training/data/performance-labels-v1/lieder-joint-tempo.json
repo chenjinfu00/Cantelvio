@@ -1,0 +1,18 @@
+{
+  "schema": "ailegro-joint-tempo-features-v1",
+  "corpusSha256": "50c24a5862a6684ff54099ee30f39dc325c18eb9fa255030e3da908b87ac0cb9",
+  "sidecarSha256": "5eae1630e3b4b5e5653f969c53a47ae2bd9128972ad0fa14e3e1f67e107ced70",
+  "pieces": 1131,
+  "steps": 809992,
+  "knownSteps": 733803,
+  "changeSteps": 2132,
+  "skipped": {
+    "conflicting position": 36
+  },
+  "notes": [
+    "qpm is NaN when no explicit mark is active",
+    "known masks the tempo supervision, not the music tokens",
+    "at non-grid marks the next sixteenth step receives the new QPM",
+    "original Lieder work-level split is preserved by piece order"
+  ]
+}
