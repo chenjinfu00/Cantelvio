@@ -1,11 +1,20 @@
 """Read every local PDF page; persist conservative display bounds, never edit PDFs."""
 import json
+import os
 from pathlib import Path
 import fitz
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-LIBRARY = ROOT / '本地曲谱'
+def library_root():
+    candidates = [Path(os.environ['VOLTA_LIBRARY'])] if os.environ.get('VOLTA_LIBRARY') else [ROOT.parent/'本地曲谱', ROOT/'本地曲谱']
+    for candidate in candidates:
+        if (candidate/'曲谱库数据'/'manifest.json').exists() or (candidate/'manifest.json').exists():
+            return candidate.resolve()
+    raise FileNotFoundError('找不到本地曲谱；请用 VOLTA_LIBRARY 指定曲谱库根目录')
+
+LIBRARY = library_root()
+DATA = LIBRARY/'曲谱库数据' if (LIBRARY/'曲谱库数据').exists() else LIBRARY
 VERSION = 1
 
 def page_bounds(page):
@@ -23,8 +32,8 @@ def page_bounds(page):
     return [round(float(value), 6) for value in box]
 
 def main():
-    files = json.loads((LIBRARY/'manifest.json').read_text())['files']
-    out = LIBRARY/'fit'
+    files = json.loads((DATA/'manifest.json').read_text())['files']
+    out = DATA/'fit'
     out.mkdir(exist_ok=True)
     summary = {'version': VERSION, 'pdfs': 0, 'pages': 0, 'failed': []}
     for index, (identity, relative) in enumerate(files.items(), 1):
@@ -47,7 +56,7 @@ def main():
             summary['failed'].append({'id': identity, 'error': str(error)[:150]})
         if index % 10 == 0 or index == len(files):
             print(f"Checked {index}/{len(files)} PDFs; {summary['pages']} pages; {len(summary['failed'])} failures", flush=True)
-    (LIBRARY/'fit-summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2))
+    (DATA/'fit-summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2))
     print(json.dumps({key:value for key,value in summary.items() if key != 'failed'}), flush=True)
 
 if __name__ == '__main__':

@@ -40,11 +40,13 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from 'react';
+import { flushSync } from 'react-dom';
 import * as actions from '../state/actions';
 import { type Selection, getStore, useEditor } from '../state/store';
 import { previewMidi } from '../playback/player';
 
 const PX_PER_MM = 96 / 25.4;
+const FLOW_PADDING_PX = 16;
 
 let canvasCtx: CanvasRenderingContext2D | null = null;
 const browserMeasure: TextMeasurer = (text, size, family, weight, italic) => {
@@ -136,15 +138,46 @@ export function ScoreView() {
   const playhead = useEditor((s) => s.playhead);
   const containerRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<{ page: number; hit: Hit } | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [printing, setPrinting] = useState(false);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) setViewportWidth(Math.floor(entry.contentRect.width));
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // Browser printing always uses paper geometry, including when editing in a flowing view.
+  useEffect(() => {
+    const before = () => flushSync(() => setPrinting(true));
+    const after = () => setPrinting(false);
+    window.addEventListener('beforeprint', before);
+    window.addEventListener('afterprint', after);
+    return () => {
+      window.removeEventListener('beforeprint', before);
+      window.removeEventListener('afterprint', after);
+    };
+  }, []);
+
+  const mode = printing ? 'page' : view.mode;
+  const flowWidthMm =
+    mode === 'seamless' && viewportWidth > 0
+      ? Math.max(40, (viewportWidth - FLOW_PADDING_PX * 2) / (PX_PER_MM * view.zoom))
+      : undefined;
 
   const layout: ScoreLayout = useMemo(
     () =>
       layoutScore(doc, {
         concertPitch: view.concertPitch,
-        mode: view.mode,
+        mode,
+        ...(flowWidthMm !== undefined ? { pageWidthMm: flowWidthMm } : {}),
         measureText: browserMeasure,
       }),
-    [doc, view.concertPitch, view.mode],
+    [doc, view.concertPitch, mode, flowWidthMm],
   );
   const svgs = useMemo(
     () =>
@@ -152,6 +185,8 @@ export function ScoreView() {
     [layout],
   );
   const scale = view.zoom * layout.staffSpaceMm * PX_PER_MM;
+  // Measure starts depend on the document, not on the animation frame.
+  const measureStarts = useMemo(() => measureInfos(doc).map((m) => toNumber(m.start)), [doc]);
 
   // selection colouring
   useLayoutEffect(() => {
@@ -169,7 +204,7 @@ export function ScoreView() {
   useEffect(() => {
     const el = containerRef.current?.querySelector('.input-cursor');
     el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }, [cursor]);
+  }, [cursor, layout]);
 
   const onPointerDown = (page: PageLayout, e: ReactPointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -191,7 +226,12 @@ export function ScoreView() {
         offset: snapOffset(hit),
       };
       const pitch = actions.enterAtPosition(at, hit.position);
-      if (pitch) void previewMidi([midiOf(pitch)], actions.programOf(store.doc, staff.staff.id));
+      if (pitch)
+        void previewMidi(
+          [midiOf(pitch)],
+          actions.programOf(store.doc, staff.staff.id),
+          actions.drumNoteOf(store.doc, staff.staff.id),
+        );
       return;
     }
     if (ref.startsWith('n:')) {
@@ -201,6 +241,7 @@ export function ScoreView() {
         void previewMidi(
           [midiOf(found.note.pitch)],
           actions.programOf(store.doc, found.loc.staffId),
+          actions.drumNoteOf(store.doc, found.loc.staffId),
         );
       return;
     }
@@ -261,8 +302,11 @@ export function ScoreView() {
   };
 
   return (
-    <div className={`score-scroll ${inputActive ? 'input-mode' : ''}`} ref={containerRef}>
-      <div className={`pages mode-${view.mode}`}>
+    <div
+      className={`score-scroll ${mode === 'seamless' ? 'seamless' : ''} ${inputActive ? 'input-mode' : ''}`}
+      ref={containerRef}
+    >
+      <div className={`pages mode-${mode}`}>
         {layout.pages.map((page) => (
           <div
             key={page.index}
@@ -280,6 +324,7 @@ export function ScoreView() {
               selection={selection}
               cursor={inputActive ? cursor : null}
               playhead={playhead}
+              measureStarts={measureStarts}
               hover={hover?.page === page.index ? hover.hit : null}
             />
           </div>
@@ -308,10 +353,11 @@ interface OverlayProps {
   readonly selection: Selection;
   readonly cursor: ScorePosition | null;
   readonly playhead: number | null;
+  readonly measureStarts: readonly number[];
   readonly hover: Hit | null;
 }
 
-function Overlay({ page, doc, selection, cursor, playhead, hover }: OverlayProps) {
+function Overlay({ page, doc, selection, cursor, playhead, measureStarts, hover }: OverlayProps) {
   const staves = allStaves(doc);
   const shapes: ReactElement[] = [];
   // range selection
@@ -404,24 +450,13 @@ function Overlay({ page, doc, selection, cursor, playhead, hover }: OverlayProps
   if (playhead !== null) {
     for (const sys of page.systems) {
       const m = sys.measures.find((x) => {
-        const start = toNumber(measureStart(doc, x.index));
+        const start = measureStarts[x.index]!;
         return playhead >= start && playhead < start + toNumber(x.length);
       });
       if (!m) continue;
-      const start = toNumber(measureStart(doc, m.index));
-      const frac = playhead - start;
-      // approximate by the nearest segments
-      let px = m.contentX;
-      for (const s of m.segments) if (toNumber(s.offset) <= frac + 1e-9) px = s.x;
-      const next = m.segments.find((s) => toNumber(s.offset) > frac + 1e-9);
-      if (next) {
-        const prev = [...m.segments].reverse().find((s) => toNumber(s.offset) <= frac + 1e-9);
-        if (prev)
-          px =
-            prev.x +
-            ((frac - toNumber(prev.offset)) / (toNumber(next.offset) - toNumber(prev.offset))) *
-              (next.x - prev.x);
-      }
+      const start = measureStarts[m.index]!;
+      // The barline is the final interpolation anchor, even when its last note is held.
+      const px = offsetToX(m, playhead - start);
       shapes.push(
         <line key="ph" className="playhead" x1={px} x2={px} y1={sys.top - 1} y2={sys.bottom + 1} />,
       );
@@ -436,8 +471,4 @@ function Overlay({ page, doc, selection, cursor, playhead, hover }: OverlayProps
       {shapes}
     </svg>
   );
-}
-
-function measureStart(doc: ScoreDoc, index: number): Rational {
-  return measureInfos(doc)[index]!.start;
 }

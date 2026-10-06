@@ -4,12 +4,12 @@
  * newest v3.1 weights. The editor's AIlegro panel then generates, harmonises and analyses with it,
  * and Open reads PDFs / scanned pages (Audiveris) and recordings (MuScriptor + AIlegro).
  *
- *   npm run ailegro:serve                                   # ../AIlegro, newest v3.1 weights, port 8765
+ *   npm run ailegro:serve                                   # ../Compose, newest v3.1 weights, port 8765
  *   npm run ailegro:serve -- --checkpoint training/runs/four-pillar-v31-step101129/weights.pt
  *   npm run ailegro:serve -- --ailegro ~/AIlegro --port 8766 -- --threads 2 --candidates 8
  *   npm run ailegro:serve -- --mock                         # placeholder music, no AIlegro model needed
  *
- * Paths: --ailegro (default $AILEGRO_ROOT, then the sibling folder ../AIlegro); --python (default
+ * Paths: --ailegro (default $AILEGRO_ROOT, then the sibling folder ../Compose); --python (default
  * <AIlegro>/.venv-training/bin/python, or a command on the PATH); --checkpoint (default: the newest
  * <AIlegro>/training/runs/four-pillar-v31*\/weights.pt), relative paths are taken from the AIlegro
  * folder. Arguments after `--` go to score_compose.py unchanged (e.g. --audiveris PATH,
@@ -40,7 +40,7 @@ function fail(message: string): never {
   process.exit(1);
 }
 
-const root = resolve(values.ailegro ?? process.env.AILEGRO_ROOT ?? join(REPO, '..', 'AIlegro'));
+const root = resolve(values.ailegro ?? process.env.AILEGRO_ROOT ?? join(REPO, '..', 'Compose'));
 const fromRoot = (p: string) => (isAbsolute(p) ? p : resolve(root, p));
 const hasAilegro = existsSync(join(root, 'training', 'scripts'));
 if (!hasAilegro && !values.mock)

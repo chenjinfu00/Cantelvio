@@ -58,7 +58,7 @@ export function toSeconds(tick,tempos,division){
   return seconds+(tick-last)*microseconds/1e6/division;
 }
 export function parseMIDI(buffer){
-  const view=new DataView(buffer instanceof ArrayBuffer?buffer:buffer.buffer);
+  const view=buffer instanceof ArrayBuffer?new DataView(buffer):new DataView(buffer.buffer,buffer.byteOffset,buffer.byteLength);
   const parts=chunks(view);
   const header=parts.find(part=>part.type==='MThd');
   if(!header)throw new Error('这不是一个 MIDI 文件');
@@ -67,7 +67,7 @@ export function parseMIDI(buffer){
   const tracks=parts.filter(part=>part.type==='MTrk').map(part=>readTrack(view,part.at,part.length));
   const tempos=tracks.flat().filter(event=>event.type==='tempo').sort((a,b)=>a.tick-b.tick);
   const notes=[],pedals=[];
-  for(const events of tracks){
+  for(const [track,events] of tracks.entries()){
     const open=new Map();
     for(const event of events){
       const key=event.channel*128+event.note;
@@ -75,7 +75,7 @@ export function parseMIDI(buffer){
       else if(event.type==='off'){
         const started=open.get(key)?.shift();if(!started)continue;
         const time=toSeconds(started.tick,tempos,division);
-        notes.push({note:started.note,channel:started.channel,velocity:started.velocity/127,time,duration:Math.max(.02,toSeconds(event.tick,tempos,division)-time)});
+        notes.push({note:started.note,channel:started.channel,track,velocity:started.velocity/127,time,duration:Math.max(.02,toSeconds(event.tick,tempos,division)-time)});
       }else if(event.type==='pedal')pedals.push({time:toSeconds(event.tick,tempos,division),down:event.value>=64});
     }
   }

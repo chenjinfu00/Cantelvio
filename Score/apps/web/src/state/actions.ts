@@ -284,13 +284,20 @@ export function enterLetter(step: Step, addToChord: boolean): void {
   const at = ensureCursor();
   const doc = st().doc;
   const pitch = pitchForLetter(doc, at, step, st().view.concertPitch);
-  if (enterPitches(at, [pitch])) void previewMidi([midiOf(pitch)], programOf(doc, at.staffId));
+  if (enterPitches(at, [pitch]))
+    void previewMidi([midiOf(pitch)], programOf(doc, at.staffId), drumNoteOf(doc, at.staffId));
 }
 
 /** General MIDI program used to preview notes of a staff. */
 export function programOf(doc: ScoreDoc, staffId: string): number {
   const part = staffInfo(doc, staffId).part;
   return part.midiProgram ?? findInstrument(part.instrument)?.gmProgram ?? 0;
+}
+
+/** General MIDI drum key used by the core playback timeline for an unpitched staff. */
+export function drumNoteOf(doc: ScoreDoc, staffId: string): number | undefined {
+  const def = findInstrument(staffInfo(doc, staffId).part.instrument);
+  return def?.unpitched ? def.range[0] : undefined;
 }
 
 export function enterPitches(
@@ -566,7 +573,12 @@ export function repitchSelection(step: Step): boolean {
   if (s.apply(cmds, 're-pitch', { selection: s.selection })) {
     const p = (cmds[0] as Extract<Command, { type: 'note.setPitch' }>).pitch;
     const loc = findEventOfNote(st().doc, s.selection.noteIds[0]!);
-    if (loc) void previewMidi([midiOf(p)], programOf(st().doc, loc.staffId));
+    if (loc)
+      void previewMidi(
+        [midiOf(p)],
+        programOf(st().doc, loc.staffId),
+        drumNoteOf(st().doc, loc.staffId),
+      );
   }
   return true;
 }

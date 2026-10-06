@@ -20,6 +20,8 @@ import {
   type ComposeSpec,
   type ComposeTask,
   type HarmonicRhythm,
+  type Difficulty,
+  type PianoTexture,
   RESULT_SCHEMA,
   type TargetMapping,
   buildAnalysisRequest,
@@ -31,6 +33,7 @@ import {
 import { translate } from '../i18n';
 import { download, safeFileName } from './files';
 import { type Selection, getStore } from './store';
+import { DEMO_TASKS, demoId } from './demo';
 
 export const APP_VERSION = '0.1.0';
 
@@ -57,6 +60,9 @@ export const MATERIAL_TASKS: readonly ComposeTask[] = [
 ];
 
 export interface PanelSpec {
+  readonly difficulty?: Difficulty;
+  readonly maxHandSpan?: number;
+  readonly pianoTexture?: PianoTexture;
   readonly task: ComposeTask;
   /** 0-based first measure to write. */
   readonly from: number;
@@ -102,11 +108,17 @@ export function defaultSpec(doc: ScoreDoc, selection: Selection): PanelSpec {
     const loc = findEventOfNote(doc, selection.noteIds[0]!);
     if (loc) from = loc.measureIndex + 1;
   }
+  const demo = demoId();
+  const task = demo && doc.id.startsWith(`demo-${demo}-`) ? DEMO_TASKS[demo]! : 'continue';
+  if (task !== 'continue') {
+    from = task === 'develop-motif' ? 4 : 0;
+    count = 4;
+  }
   return {
-    task: 'continue',
+    task,
     from,
     count,
-    groups: scoreGroups(doc),
+    groups: task === 'accompany-melody' ? ['keys'] : scoreGroups(doc),
     materialParts: doc.parts[0] ? [doc.parts[0].id] : [],
     chordMode: doc.harmony.length ? 'given' : 'free',
     seed: 1,
@@ -114,6 +126,8 @@ export function defaultSpec(doc: ScoreDoc, selection: Selection): PanelSpec {
     topP: 0.95,
     density: null,
     harmonicRhythm: 'auto',
+    difficulty: 'medium',
+    pianoTexture: 'model',
   };
 }
 
@@ -256,6 +270,7 @@ export function importAnalysisResult(result: AnalysisResult): boolean {
 
 /** Ask the adapter server (`POST /analyze`) for the chords of the selected bars and import them. */
 export async function analyzeWithService(base: string, rhythm: HarmonicRhythm): Promise<boolean> {
+  const snapshot = JSON.stringify(getStore().getState().doc);
   const request = newAnalysisRequest(rhythm);
   const res = await fetch(endpoint(base, '/analyze'), {
     method: 'POST',
@@ -272,6 +287,8 @@ export async function analyzeWithService(base: string, rhythm: HarmonicRhythm): 
     }
     throw new Error(message || `HTTP ${res.status}`);
   }
+  if (JSON.stringify(getStore().getState().doc) !== snapshot)
+    throw new Error(translate(getStore().getState().view.lang, 'candidate.stale'));
   return importAnalysisResult(JSON.parse(text) as AnalysisResult);
 }
 
@@ -280,7 +297,7 @@ export function adapterCommand(
   request: ComposeRequest | AnalysisRequest,
   mode: 'file' | 'serve',
 ): string {
-  const script = '"../AIlegro Score/integrations/ailegro/score_compose.py"';
+  const script = '"../Score/integrations/ailegro/score_compose.py"';
   if (mode === 'serve') {
     return `cd "<AIlegro>"\n.venv-training/bin/python ${script} \\\n  --serve --checkpoint training/runs/<run>/weights.pt`;
   }
@@ -309,6 +326,7 @@ export function importResult(result: ComposeResult | AnalysisResult): boolean {
     plan = planComposeImport(s.doc, result, {
       ids: s.ids,
       runId: result.requestId,
+      quantize: 'exact',
       ...(targets ? { targets } : {}),
     });
   } catch (e) {
@@ -348,6 +366,17 @@ export const SERVICE_KEY = 'ailegro-score:service-url';
 /** The adapter server the editor talks to (set and remembered in the AIlegro panel). */
 export function serviceUrl(): string {
   try {
+    if (typeof window !== 'undefined') {
+      const value = new URLSearchParams(window.location.search).get('service');
+      if (value) {
+        const parsed = new URL(value);
+        if (
+          parsed.protocol === 'http:' &&
+          ['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname)
+        )
+          return parsed.origin;
+      }
+    }
     return localStorage.getItem(SERVICE_KEY) || DEFAULT_SERVICE_URL;
   } catch {
     return DEFAULT_SERVICE_URL;
@@ -382,6 +411,7 @@ export async function pingService(base: string): Promise<ServiceInfo> {
 
 /** Send a request to the adapter server (`score_compose.py --serve`) and import the result. */
 export async function generateWithService(base: string, spec: PanelSpec): Promise<boolean> {
+  const snapshot = JSON.stringify(getStore().getState().doc);
   const request = newRequest(spec);
   const res = await fetch(endpoint(base, '/compose'), {
     method: 'POST',
@@ -398,6 +428,8 @@ export async function generateWithService(base: string, spec: PanelSpec): Promis
     }
     throw new Error(message || `HTTP ${res.status}`);
   }
+  if (JSON.stringify(getStore().getState().doc) !== snapshot)
+    throw new Error(translate(getStore().getState().view.lang, 'candidate.stale'));
   return importResult(JSON.parse(text) as ComposeResult);
 }
 

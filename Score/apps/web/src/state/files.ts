@@ -22,8 +22,11 @@ import { IN_ARTIFACT, artifactDownloads } from '../host';
 import { translate } from '../i18n';
 import { importKindOf, importViaService } from './service-import';
 import { currentEntry, getStore, isDirty } from './store';
+import { demoId } from './demo';
 
-const AUTOSAVE_KEY = 'ailegro-score:autosave';
+const AUTOSAVE_KEY = demoId()
+  ? `ailegro-score:demo-autosave:${demoId()}`
+  : 'ailegro-score:autosave';
 
 // ------------------------------------------------------------------------------- File System Access
 
@@ -218,7 +221,7 @@ async function forget(id: string): Promise<void> {
  */
 export async function download(
   name: string,
-  text: string,
+  text: string | Blob,
   type = 'application/json',
 ): Promise<boolean> {
   const viewer = await artifactDownloads();
@@ -235,7 +238,7 @@ export async function download(
       return false;
     }
   }
-  const blob = new Blob([text], { type });
+  const blob = text instanceof Blob ? text : new Blob([text], { type });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -546,6 +549,33 @@ export async function exportSvg(): Promise<void> {
       'image/svg+xml',
     );
     if (!ok) return;
+  }
+}
+
+export async function exportMidi(): Promise<void> {
+  const s = getStore().getState();
+  try {
+    const { scoreToMidi } = await import('../export/midi');
+    const data = scoreToMidi(s.doc);
+    await download(
+      safeFileName(s.doc.meta.title, '.mid'),
+      new Blob([new Uint8Array(data).buffer], { type: 'audio/midi' }),
+    );
+  } catch (e) {
+    s.notify(translate(s.view.lang, 'files.exportFailed', { m: String(e) }), 'error');
+  }
+}
+
+export async function exportPdf(): Promise<void> {
+  const s = getStore().getState();
+  try {
+    const { scoreToPdf } = await import('../export/pdf');
+    await download(
+      safeFileName(s.doc.meta.title, '.pdf'),
+      await scoreToPdf(s.doc, s.view.concertPitch),
+    );
+  } catch (e) {
+    s.notify(translate(s.view.lang, 'files.exportFailed', { m: String(e) }), 'error');
   }
 }
 

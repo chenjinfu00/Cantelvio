@@ -56,6 +56,10 @@ ScoreLayout { pages[], systems[], staffSpaceMm, options }
   `breakAfter: 'page'` 强制换页（该页不做纵向撑满）。
 - 除最后一行（且不够满）外，每行通过二分搜索拉伸系数精确撑满版心宽度。
 - 连续视图（`mode: 'continuous'`）：一行到底，不分页，适合编辑大总谱。
+- 无缝模式（`mode: 'seamless'`）：沿用按宽度分行的规则，把所有谱行放在一张纵向长画布上；
+  行间使用自然间距，不受页高限制，也不做整页纵向撑满。换页提示在此视图仅作为换行，文档本身保留提示。
+  编辑器按可用窗口宽度、缩放和侧栏宽度传入 `pageWidthMm`；单个小节无法再拆分时允许横向滚动，避免裁掉音符。
+  标题只出现一次，小节号仍在行首；不添加页码。几何信息与 SVG 共用同一画布坐标，选择、输入和播放线沿用现有逻辑。
 
 ## 记谱规则（已实现）
 
@@ -102,6 +106,7 @@ SVG 元素带 `data-ref`（`n:<音符 id>`、`e:<事件 id>`、`rest:…`、`ch:
 npm run render -- --all --out out/            # 渲染全部示例为 SVG + PNG
 npm run render -- --file my.ailegro.json --out out/ --concert   # 渲染自己的文件，实际音高
 npm run render -- --sample orchestra --continuous --out out/
+npm run render -- --all --seamless --out out/seamless/
 ```
 
 改排版规则时：在 `engraving.test.ts` 加规则测试，渲染受影响的示例看图，PR 里写明检查了什么，

@@ -271,10 +271,15 @@ export function layoutScore(doc: ScoreDoc, overrides: Partial<LayoutOptions> = {
   // ---- pages
   const pages: { systems: { p: Placed; y: number }[]; forced?: boolean }[] = [];
   const titleHeight = titleBlockHeight(doc);
-  if (opts.mode === 'continuous') {
-    const p = placed[0]!;
-    const y = margin.top + titleHeight - p.top;
-    pages.push({ systems: [{ p, y }] });
+  if (opts.mode !== 'page') {
+    // One canvas with natural system gaps, without page-height constraints or justification.
+    let cursor = margin.top + titleHeight;
+    const systems = placed.map((p) => {
+      const y = cursor - p.top;
+      cursor += p.bottom - p.top + STYLE.systemGap;
+      return { p, y };
+    });
+    pages.push({ systems });
   } else {
     let page: { systems: { p: Placed; y: number }[]; forced?: boolean } = { systems: [] };
     let cursor = margin.top + titleHeight;
@@ -335,9 +340,9 @@ export function layoutScore(doc: ScoreDoc, overrides: Partial<LayoutOptions> = {
       };
       systems.push(geom);
       allSystems.push(geom);
-      if (opts.mode === 'continuous') {
+      if (opts.mode !== 'page') {
         width = Math.max(
-          pageW,
+          width,
           p.built.measures[p.built.measures.length - 1]!.x +
             p.built.measures[p.built.measures.length - 1]!.width +
             margin.right,
@@ -843,7 +848,7 @@ function buildSystem(
     }
   });
   // measure numbers
-  if (opts.measureNumbers && sIndex > 0 && opts.mode === 'page') {
+  if (opts.measureNumbers && sIndex > 0 && opts.mode !== 'continuous') {
     const number = measureNumber(doc, plan.first);
     staffGraphics[0]!.push({
       kind: 'text',

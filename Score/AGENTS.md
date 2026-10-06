@@ -3,7 +3,7 @@
 AIlegro Score is a web-based music notation editor (piano, chamber music, orchestral scores) in
 the spirit of Sibelius/MuseScore, with its own engraving engine and a first-class bridge to
 **AIlegro**, the owner's AI composition system (a separate project in the sibling folder
-`../AIlegro`). Spell the names exactly: **AIlegro**, **AIlegro Score**.
+`../Compose`). Spell the names exactly: **AIlegro**, **AIlegro Score**.
 
 The human owner reads Chinese; docs under `docs/` are mostly Chinese. Code, identifiers, comments,
 commit messages and this file are English.
@@ -36,7 +36,7 @@ npm run dev            # editor at http://127.0.0.1:5178/
 npm run check          # lint + typecheck + unit tests — must pass before every commit
 npm run build          # production build of the editor
 npm run render -- --sample orchestra --out out/   # headless SVG/PNG render for visual checks
-npm run ailegro:serve  # local AIlegro service (../AIlegro): compose, analysis, PDF/recording imports
+npm run ailegro:serve  # local AIlegro service (../Compose): compose, analysis, PDF/recording imports
 npm run test:adapter   # Python tests of the adapter's import jobs (stand-in tools)
 npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/glyph lists)
 ```
@@ -89,11 +89,11 @@ npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/g
 
 ## Environment notes
 
-- The working copy is a local folder (`~/software develop/AIlegro Score`, not in a synced drive),
-  next to `../AIlegro`. GitHub (the remote) is the source of truth; `npm install` artifacts stay
+- The working copy is a local folder (`~/software develop/Cantelvio/Score`, not in a synced drive),
+  next to `../Compose`. GitHub (the remote) is the source of truth; `npm install` artifacts stay
   local. Never create file names containing spaces: names like `name 2.ext` are sync-conflict
   copies (git-ignored) — report them, do not commit or delete them silently.
 - Install dependencies on the machine that runs them. Never run `npm install` for this folder from
   a Linux VM or sandbox: esbuild, rollup and sharp ship platform-specific binaries.
-- The sibling `../AIlegro` project has its own `AGENTS.md`. Do not modify it from this repository;
+- The sibling `../Compose` project has its own `AGENTS.md`. Do not modify it from this repository;
   integrate only through the contract in `docs/ailegro-integration.md` and `packages/ailegro-bridge`.

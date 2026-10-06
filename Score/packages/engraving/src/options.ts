@@ -26,8 +26,8 @@ export const approximateTextWidth: TextMeasurer = (text, size, _family, weight) 
 };
 
 export interface LayoutOptions {
-  /** 'page': paginated like print; 'continuous': one endless system (good for editing big scores). */
-  readonly mode: 'page' | 'continuous';
+  /** 'page': print pages; 'continuous': one horizontal system; 'seamless': wrapped vertical flow. */
+  readonly mode: 'page' | 'continuous' | 'seamless';
   /** Show concert pitch instead of written pitch for transposing instruments. */
   readonly concertPitch: boolean;
   readonly measureText: TextMeasurer;

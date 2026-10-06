@@ -1,5 +1,5 @@
-export const defaults={theme:'blue',surface:'white',tap:true,sensitivity:'fast',preload:true,fullscreen:true,protectFit:true,rememberPosition:true,autoOffline:true};
-const booleans=['tap','preload','fullscreen','protectFit','rememberPosition','autoOffline'];
+export const defaults={theme:'blue',surface:'white',tap:true,sensitivity:'fast',preload:true,fullscreen:true,protectFit:true,rememberPosition:true};
+const booleans=['tap','preload','fullscreen','protectFit','rememberPosition'];
 export function normalizeSettings(value={}){
   if(!value||typeof value!=='object')value={};
   return {theme:['blue','jade','graphite'].includes(value.theme)?value.theme:'blue',surface:['white','paper','mist','dark'].includes(value.surface)?value.surface:'white',sensitivity:['fast','standard','guarded'].includes(value.sensitivity)?value.sensitivity:'fast',...Object.fromEntries(booleans.map(key=>[key,typeof value[key]==='boolean'?value[key]:defaults[key]]))};

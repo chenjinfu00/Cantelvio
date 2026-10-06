@@ -35,6 +35,13 @@ test('taps on the score never bring the controls back',()=>{
   assert.equal(h.chrome.faded,true);
 });
 
+test('the explicit hide action immediately tucks every floating control away',()=>{
+  const h=harness();h.chrome.hideNow();
+  assert.deepEqual(h.log,['hide']);assert.equal(h.chrome.faded,true);
+  h.chrome.hideNow();assert.deepEqual(h.log,['hide'],'repeated hides are harmless');
+  h.chrome.wake();assert.deepEqual(h.log,['hide','show']);
+});
+
 test('open drawers, dialogs and an active pen keep the controls on screen',()=>{
   let held=true;const h=harness({held:()=>held});
   h.idle();assert.deepEqual(h.log,[]);
@@ -57,10 +64,11 @@ test('continuous mouse movement does not restart the timer on every frame',()=>{
 
 test('the reader installs the idle chrome and styles both the edge handles and the pencil dock',async()=>{
   const shell=await fs.readFile(new URL('../docs/reader-shell.js',import.meta.url),'utf8');
-  assert.match(shell,/installIdleChrome\(\)/);
+  assert.match(shell,/installIdleChrome\(\{isWriting:writing\}\)/);
+  assert.match(shell,/getElementById\('chrome-hide'\)/);
   const css=await fs.readFile(new URL('../docs/reader.css',import.meta.url),'utf8');
   assert.match(css,/body\.chrome-idle \.edge-reveal,body\.chrome-idle \.pencil-dock\{opacity:0/);
-  assert.match(css,/body\.chrome-idle \.pencil-dock:has\(\.pencil-tool\.selected\)/);
+  assert.doesNotMatch(css,/body\.chrome-idle \.pencil-dock:has\(\.pencil-tool\.selected\)/,'a selected pen must still fade after inactivity');
   assert.match(css,/body\.chrome-idle \.shelf-reveal\{transform:translateX\(calc\(-100% - 8px\)\)\}/,'the handle tucks behind its edge');
   assert.match(css,/body\.chrome-idle \.shelf-reveal::after\{left:100%/,'and keeps a hit area on that edge');
   assert.match(css,/body\.chrome-idle \.pencil-dock\[data-side=right\]::after\{right:100%/);
@@ -90,5 +98,6 @@ test('installed handlers swallow the revealing tap, ignore score taps and follow
     fire();assert.ok(classes.has('chrome-idle'));
     listeners.get('pointermove')({pointerType:'touch'});assert.ok(classes.has('chrome-idle'),'a finger on the page keeps them hidden');
     listeners.get('pointermove')({pointerType:'mouse'});assert.equal(classes.has('chrome-idle'),false);
+    listeners.get('pointerup')({pointerType:'pen'});assert.equal(classes.has('chrome-idle'),false,'lifting the Pencil only rearms the timeout');
   }finally{if(original)Object.defineProperty(globalThis,'document',original);else delete globalThis.document;}
 });

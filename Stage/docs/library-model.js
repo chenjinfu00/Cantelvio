@@ -16,6 +16,24 @@ const editionWords=/总谱|分谱|缩谱|独奏|双钢琴|四手|弦乐队版|�
 const normalize=s=>s.normalize('NFKC').toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu,'');
 const trim=s=>s.replace(/^[\s,，·—–-]+|[\s,，·—–-]+$/g,'').replace(/\s+/g,' ').trim();
 
+function folderShelf(item){
+  if(item.libraryFolder)return String(item.libraryFolder).trim();
+  const suffix=' · '+String(item.id||'').slice(0,8)+'.pdf';
+  const generated=(item.aliases||[]).find(alias=>String(alias).endsWith(suffix));
+  const parts=String(generated||'').split('/').filter(Boolean);
+  if(parts[0]==='曲谱')parts.shift();
+  return parts.length>1?parts[0]:'';
+}
+
+function chopinCollection(genre,name){
+  if(['玛祖卡','波兰舞曲','圆舞曲','苏格兰舞曲','塔兰泰拉','博莱罗','进行曲','舞曲'].includes(genre)||/马基加洛普舞曲|Contredanse/i.test(name))return '舞曲';
+  if(['回旋曲','变奏曲','叙事曲','谐谑曲','奏鸣曲','协奏曲'].includes(genre)||/音乐会/.test(name))return '大型作品';
+  if(['练习曲','赋格'].includes(genre))return '练习曲与复调';
+  if(['室内乐','歌曲'].includes(genre))return '室内乐与歌曲';
+  if(genre==='作品合集')return '作品合集';
+  return '抒情小品';
+}
+
 export function isAnimenzArrangement(item){
   const title=item.originalTitle||item.title||'',arranger=(item.arranger||'').trim();
   if((item.aliases||[]).some(path=>/-原创|原创作品/.test(path))||/Animenz[^-]*原创/i.test(title))return false;
@@ -31,7 +49,7 @@ export function versionDisplayTitle(item){
     const rest=inside.replace(/编曲\s*[:：]\s*animenzz*\b/ig,'').replace(/^[\s·,，;；]+|[\s·,，;；]+$/g,'');
     return rest?left+rest+right:'';
   });
-  // Inside the Animenz shelf the arranger is the shelf; repeating it on every line is noise.
+  // The arranger remains searchable metadata; repeating it on every title is noise.
   return name.trim();
 }
 
@@ -56,13 +74,15 @@ export function describeWork(item){
   name=trim(name);
   const originalContext=[name,...(item.aliases||[])].join(' ');
   // A game's tracks are all 游戏配乐; the region they come from is the useful second level.
-  const genre=isGame?(item.region||'游戏配乐'):genres.find(([,pattern])=>pattern.test(name))?.[0]||genres.find(([,pattern])=>pattern.test(originalContext))?.[0]||(/合集|全集|作品集|补遗/.test(name)?'作品合集':item.style==='动漫／影视'||/Animenz/.test(prefix)?'动漫／影视':item.style==='流行音乐'?'流行歌曲':'其他作品');
+  let genre=isGame?(item.region||'游戏配乐'):genres.find(([,pattern])=>pattern.test(name))?.[0]||genres.find(([,pattern])=>pattern.test(originalContext))?.[0]||(/合集|全集|作品集|补遗/.test(name)?'作品合集':item.style==='动漫／影视'||/Animenz/.test(prefix)?'动漫／影视':item.style==='流行音乐'?'流行歌曲':'其他作品');
+  const identityGenre=genre;
+  if(composer==='弗雷德里克·肖邦')genre=chopinCollection(genre,name);
   const classical=!isGame&&/古典|浪漫|巴洛克|印象|当代钢琴/.test(item.style||'');
   // Anime OP1/OP2 means opening theme, not an opus number.
   const opus=classical?/\b(Op|BWV|D|S|K|KV|Hob)\.?\s*(\d+[a-z]?)(?:\s*[,.:·-]?\s*(?:No|Nr)\.?\s*(\d+[a-z]?))?/i.exec(name):null;
   // Genre is part of the key: Op.72 can contain a nocturne, march, and dances.
   // No. is used only AFTER the catalogue number; "Concerto No.2, Op.21" is Op.21.
-  const identity=opus?`${opus[1].toLowerCase()}:${opus[2].toLowerCase()}${opus[3]?':no'+opus[3].toLowerCase():''}:${genre}${genre==='其他作品'?':'+normalize(name):''}`:normalize(name);
+  const identity=opus?`${opus[1].toLowerCase()}:${opus[2].toLowerCase()}${opus[3]?':no'+opus[3].toLowerCase():''}:${identityGenre}${identityGenre==='其他作品'?':'+normalize(name):''}`:normalize(name);
   const ambiguous=!name||/^(总谱|钢琴|曲谱|未命名曲谱)$/.test(name)||/^IMSLP\d/i.test(name);
   const key=`${normalize(composer)}|${identity}${ambiguous?'|'+(item.sourceId||item.id):''}`;
   if(genres.some(([label])=>label===name))name+='（合集）';
@@ -70,16 +90,16 @@ export function describeWork(item){
   const folder=(item.aliases?.[0]||'').split('/').slice(0,-1).findLast(x=>/\d\s*版|国家版|原典版|手稿|Henle|Peters|Breitkopf|Mutopia/i.test(x));
   if(folder&&!edition.some(x=>x.includes(folder)))edition.push(folder);
   if(item.arranger&&!edition.some(x=>x.includes(item.arranger)))edition.push('编曲：'+item.arranger);
-  return {key,title:name,composer,genre,classical,catalogue:!!opus,stem:normalize(opus?name.replace(opus[0],''):name),edition:String(item.edition||'').trim()||edition.filter(Boolean).join(' · ')||'未标注版本',search:[title,composer,item.composer,item.arranger,...(item.aliases||[])].join(' ').toLocaleLowerCase()};
+  return {key,title:name,composer,genre,identityGenre,classical,catalogue:!!opus,stem:normalize(opus?name.replace(opus[0],''):name),edition:String(item.edition||'').trim()||edition.filter(Boolean).join(' · ')||'未标注版本',search:[title,composer,item.composer,item.arranger,...(item.aliases||[])].join(' ').toLocaleLowerCase()};
 }
 
 export function groupWorks(items){
   const map=new Map(),described=items.map(item=>({item,description:describeWork(item)})),catalogued=new Map();
-  for(const {description:d} of described){if(d.catalogue){const alias=d.composer+'|'+d.genre+'|'+d.stem;const keys=catalogued.get(alias)||new Set();keys.add(d.key);catalogued.set(alias,keys);}}
+  for(const {description:d} of described){if(d.catalogue){const alias=d.composer+'|'+d.identityGenre+'|'+d.stem;const keys=catalogued.get(alias)||new Set();keys.add(d.key);catalogued.set(alias,keys);}}
   for(const {item,description} of described){
-    if(description.classical&&!description.catalogue){const keys=catalogued.get(description.composer+'|'+description.genre+'|'+description.stem);if(keys?.size===1)description.key=[...keys][0];}
+    if(description.classical&&!description.catalogue){const keys=catalogued.get(description.composer+'|'+description.identityGenre+'|'+description.stem);if(keys?.size===1)description.key=[...keys][0];}
     let work=map.get(description.key);
-    if(!work){work={...description,style:item.style,era:item.era,category:item.category,versions:[]};map.set(work.key,work);}
+    if(!work){work={...description,style:item.style,era:item.era,category:item.category,libraryFolder:folderShelf(item),versions:[]};map.set(work.key,work);}
     work.versions.push({...item,originalTitle:item.title,title:versionDisplayTitle(item),edition:description.edition,workTitle:description.title,search:description.search});
     if((description.catalogue&&!work.catalogue)||(description.catalogue===work.catalogue&&description.title.length<work.title.length)){work.title=description.title;work.catalogue=description.catalogue;}
   }
@@ -99,13 +119,16 @@ export function groupWorks(items){
 // Navigation categories are independent of authorship and stable work keys.
 // Regrouping the shelf must not reset saved editions or merge unrelated songs.
 export function browseGroup(work){
-  // A franchise with a single arrangement does not deserve a shelf of its own.
-  if(work.composer==='王者荣耀')return 'Animenz';
-  if(games.test(work.composer))return work.composer;
   const context=work.versions.map(v=>[v.title,v.arranger,...(v.aliases||[])].join(' ')).join(' ');
-  if(/animenz/i.test(context+' '+work.composer))return 'Animenz';
+  if(work.libraryFolder)return work.libraryFolder;
+  if(work.category==='其他')return '其他';
+  // Small game collections share one shelf with pop music instead of each claiming a shelf.
+  if(/^(鸣潮|王者荣耀)$/.test(work.composer)||/王者荣耀/.test(context))return '流行音乐与其他游戏';
+  if(games.test(work.composer))return work.composer;
+  // Animenz is an arranger, not a browsing category; the repertoire belongs with anime music.
+  if(/animenz/i.test(context+' '+work.composer))return '动漫';
   if(work.style==='动漫／影视'||/天气之子/.test(context))return '动漫';
-  if(work.style==='流行音乐'||work.genre==='流行歌曲'||/流行音乐|流行歌曲/.test(work.category||'')||/教父主题曲/.test(work.title))return '流行音乐';
+  if(work.style==='流行音乐'||work.genre==='流行歌曲'||/流行音乐|流行歌曲/.test(work.category||'')||/教父主题曲/.test(work.title))return '流行音乐与其他游戏';
   return work.composer;
 }
 

@@ -74,7 +74,9 @@ export function insertDraftEvent(
   const list = draftVoice(draft, staffId, measureId, voice);
   let i = 0;
   while (i < list.length && cmp(list[i]!.offset, event.offset) <= 0) i++;
-  list.splice(i, 0, event as Draft<NoteEvent>);
+  // Newly inserted values are not drafted by immer in this producer. Copy the notes array
+  // before handlers sort it, so immutable/replayed command payloads remain reusable.
+  list.splice(i, 0, { ...event, notes: [...event.notes] } as Draft<NoteEvent>);
 }
 
 export function sortNotes(event: DraftEvent): void {

@@ -12,6 +12,7 @@ import {
 } from '@ailegro-score/core';
 import { describe, expect, it } from 'vitest';
 import type { GlyphGraphic, Graphic } from './graphics';
+import { STYLE } from './options';
 import { layoutScore, offsetToX, xToOffset } from './layout/engrave';
 import { buildStaffNotation, type NChord } from './layout/notation';
 import { measureFrame, splitNote, splitRest, tupletFrame } from './layout/rhythm';
@@ -323,5 +324,85 @@ describe('layout', () => {
     expect(layout.pages.length).toBe(1);
     expect(layout.systems.length).toBe(1);
     expect(layout.systems[0]!.measures.length).toBe(doc.measures.length);
+  });
+
+  it('flows a long score vertically without page gaps or height constraints', () => {
+    const doc = createScore({ template: 'piano', measures: 48, ids: sequentialIds(), now: 'T' });
+    const page = layoutScore(doc, { pageHeightMm: 100 });
+    const flow = layoutScore(doc, { mode: 'seamless', pageHeightMm: 100 });
+    expect(page.pages.length).toBeGreaterThan(1);
+    expect(flow.pages.length).toBe(1);
+    expect(flow.systems.length).toBeGreaterThan(1);
+    // Wrapping and horizontal hit-test positions match paper layout; only pagination changes.
+    expect(flow.systems.map((s) => s.measures)).toEqual(page.systems.map((s) => s.measures));
+    expect(flow.systems.flatMap((s) => s.measures.map((m) => m.measureId))).toEqual(
+      doc.measures.map((m) => m.id),
+    );
+    for (const [i, sys] of flow.systems.entries()) {
+      expect(sys.page).toBe(0);
+      if (i) expect(sys.top - flow.systems[i - 1]!.bottom).toBeCloseTo(STYLE.systemGap);
+      expect(sys.staves.every((s) => s.y >= sys.top && s.y + 4 <= sys.bottom)).toBe(true);
+    }
+    const last = flow.systems.at(-1)!;
+    expect(flow.pages[0]!.height).toBeCloseTo(
+      last.bottom + doc.settings.pageMarginsMm.bottom / flow.staffSpaceMm,
+    );
+    expect(flow.pages[0]!.height * flow.staffSpaceMm).toBeGreaterThan(100);
+  });
+
+  it('uses explicit page breaks as line breaks in seamless mode', () => {
+    let doc = createScore({ template: 'piano', measures: 8, ids: sequentialIds(), now: 'T' });
+    doc = applyCommand(doc, {
+      type: 'batch',
+      commands: [
+        { type: 'measure.setBreak', measureId: doc.measures[1]!.id, breakAfter: 'system' },
+        { type: 'measure.setBreak', measureId: doc.measures[3]!.id, breakAfter: 'page' },
+      ],
+    }).doc;
+    const flow = layoutScore(doc, { mode: 'seamless' });
+    expect(flow.pages.length).toBe(1);
+    expect(flow.systems.slice(0, 2).map((s) => s.measures.map((m) => m.index))).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
+    expect(flow.systems[2]!.measures[0]!.index).toBe(4);
+    expect(flow.systems[2]!.top - flow.systems[1]!.bottom).toBeCloseTo(STYLE.systemGap);
+    const numbers = flow.pages[0]!.graphics.filter(
+      (g) => g.kind === 'text' && g.cls === 'measure-number',
+    );
+    expect(numbers.map((g) => (g.kind === 'text' ? g.text : ''))).toEqual(['3', '5']);
+    const withoutNumbers = layoutScore(doc, { mode: 'seamless', measureNumbers: false });
+    expect(withoutNumbers.pages[0]!.graphics.some((g) => g.cls === 'measure-number')).toBe(false);
+    // A view change does not remove the saved page-break hint.
+    expect(layoutScore(doc).pages.length).toBe(2);
+  });
+
+  it('wraps narrow seamless scores without clipping an indivisible measure', () => {
+    const doc = SAMPLES[0]!.build();
+    const wide = layoutScore(doc, { mode: 'seamless' });
+    const narrow = layoutScore(doc, { mode: 'seamless', pageWidthMm: 75 });
+    expect(narrow.systems.length).toBeGreaterThan(wide.systems.length);
+    const page = narrow.pages[0]!;
+    for (const sys of narrow.systems) {
+      const last = sys.measures.at(-1)!;
+      expect(last.x + last.width).toBeLessThanOrEqual(page.width);
+      for (const m of sys.measures)
+        for (const seg of m.segments)
+          expect(xToOffset(m, offsetToX(m, seg.offset))).toBeCloseTo(seg.offset.n / seg.offset.d);
+    }
+  });
+
+  it('keeps sample notation and deterministic SVG in seamless mode', () => {
+    for (const sample of SAMPLES) {
+      const doc = sample.build();
+      const flow = layoutScore(doc, { mode: 'seamless' });
+      const svg = renderPageSvg(flow.pages[0]!, flow);
+      const again = layoutScore(doc, { mode: 'seamless' });
+      expect(svg).toBe(renderPageSvg(again.pages[0]!, again));
+      const refs = (source: string) =>
+        [...source.matchAll(/class="notehead" data-ref="(n:[^"]+)"/g)].map((m) => m[1]).sort();
+      const paper = layoutScore(doc);
+      expect(refs(svg)).toEqual(refs(paper.pages.map((p) => renderPageSvg(p, paper)).join('')));
+    }
   });
 });

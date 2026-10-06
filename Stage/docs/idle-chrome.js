@@ -30,14 +30,18 @@ export class IdleChrome{
     this.arm();
     return reveal;
   }
+  hideNow(){
+    if(this.timer!==null)this.clearTimer(this.timer);
+    this.timer=null;
+    if(!this.faded){this.faded=true;this.hide();}
+  }
   stop(){if(this.timer!==null)this.clearTimer(this.timer);this.timer=null;}
 }
 
-export function installIdleChrome(options={}){
+export function installIdleChrome({isWriting=()=>false,...options}={}){
   const body=document.body;
-  const held=()=>body.matches('.shelf-open,.tools-open')||!!document.querySelector('dialog[open]')
-    ||!!document.querySelector('.pencil-dock.dragging,.pencil-tool.selected,.pencil-dock details[open]')
-    ||!!document.activeElement?.closest?.(CHROME_SELECTOR);
+  const held=()=>isWriting()||body.matches('.shelf-open,.tools-open')||!!document.querySelector('dialog[open]')
+    ||!!document.querySelector('.pencil-dock.dragging,.pencil-dock details[open]');
   const chrome=new IdleChrome({show:()=>body.classList.remove('chrome-idle'),hide:()=>body.classList.add('chrome-idle'),held,...options});
   let swallow=false;
   document.addEventListener('pointerdown',event=>{
@@ -52,5 +56,8 @@ export function installIdleChrome(options={}){
   document.addEventListener('pointermove',event=>{if(event.pointerType==='mouse')chrome.wake();},{capture:true,passive:true});
   document.addEventListener('keydown',()=>chrome.wake(),true);
   document.addEventListener('focusin',()=>chrome.wake(),true);
+  // Give the dock a full quiet period after the Pencil leaves the paper. An already-hidden
+  // dock remains hidden while the user continues writing on the score.
+  document.addEventListener('pointerup',event=>{if(event.pointerType==='pen'&&!chrome.faded)chrome.arm();},true);
   return chrome;
 }

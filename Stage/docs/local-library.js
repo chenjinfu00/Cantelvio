@@ -41,6 +41,21 @@ export function matchLibrary(catalog,manifest,entries){
   return {files,sources,missing};
 }
 
+// The folder itself owns the shelf layout. Metadata can describe authorship, style and era,
+// but it must not recreate categories that the user has already removed in Finder.
+export function shelfFromPath(relative){
+  const parts=String(relative||'').split('/').filter(Boolean);
+  if(parts[0]==='曲谱')parts.shift(); // compatibility with the older wrapped layout
+  return parts.length>1&&parts[0]!==DATA?parts[0]:'';
+}
+
+export function catalogueWithFolderShelves(catalog,manifest){
+  return {...catalog,items:(catalog?.items||[]).map(item=>({
+    ...item,
+    libraryFolder:shelfFromPath(manifest?.files?.[item.id])||item.libraryFolder||'',
+  }))};
+}
+
 export async function openFolder(){
   if(canRemember()){
     // Read access is enough to open the library. The one annotation-sync action asks for
@@ -93,6 +108,7 @@ export async function readLibrary(picked){
   const first=async names=>{for(const name of names){const found=await find(name);if(found)return found;}return null;};
   const catalog=await first(dataPaths('catalog.json')),manifest=await first(dataPaths('manifest.json'));
   if(!catalog||!manifest)throw new Error('这个文件夹不像曲谱库：缺少 catalog.json 或 manifest.json。');
+  const localCatalog=catalogueWithFolderShelves(catalog,manifest);
   const resolved=await Promise.all(entries.map(async entry=>({path:entry.path,file:await (entry.file instanceof Promise?entry.file:Promise.resolve(entry.file))})));
   const {files,sources,missing}=matchLibrary(catalog,manifest,resolved);
   // Page bounds are what lets a score fill the screen without losing a stave; they belong to the
@@ -111,7 +127,7 @@ export async function readLibrary(picked){
     return writable;
   };
   return {
-    kind:picked.kind,handle:picked.handle||null,catalog,missing,
+    kind:picked.kind,handle:picked.handle||null,catalog:localCatalog,missing,
     async fit(id){const file=fitFile(id);return file?readJSON(file):null;},
     // Annotations kept beside the music, when the folder holds any.
     get writable(){return writable;},

@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 import {pageDimensions} from '../docs/page-cache.js';
 import {dockPlacement,nearestDockEdge} from '../docs/dock-position.js';
 import {capturePosition,restorePosition,ReadingPosition} from '../docs/reading-position.js';
 import {defaults,normalizeSettings} from '../docs/settings.js';
 import {chooseVersion,groupWorks} from '../docs/library-model.js';
 import {createPreviewServer} from '../scripts/preview.mjs';
+import {libraryRoot,libraryData} from '../scripts/library-root.mjs';
 
 test('protected screen fit contains every page edge for portrait, landscape, square and narrow PDFs',()=>{
   for(const natural of [{width:210,height:297},{width:400,height:200},{width:200,height:400},{width:600,height:600}])for(const screen of [{width:1024,height:1366},{width:1366,height:1024},{width:512,height:768}]){
@@ -40,22 +40,31 @@ test('scroll alignment survives page swap, refinement, clamping and return to a 
 test('latest version is the initial choice but a saved choice takes priority',()=>{
   const work={versions:[{id:'old',format:'pdf',available:true,modifiedAt:'2020-01-01'},{id:'new',format:'pdf',available:true,modifiedAt:'2025-01-01'}]};assert.equal(chooseVersion(work).id,'new');assert.equal(chooseVersion(work,'old').id,'old');
 });
-test('local collection stays out of public assets and has 701 distinct classified PDFs',async t=>{
-  const folder=new URL('../../本地曲谱/',import.meta.url);let catalog;
-  try{catalog=JSON.parse(await fs.readFile(new URL('catalog.json',folder)));}catch(e){if(e.code==='ENOENT'){t.skip('Private collection is not distributed with the repository');return;}throw e;}
-  const manifest=JSON.parse(await fs.readFile(new URL('manifest.json',folder)));
+test('local collection stays out of public assets and has a complete distinct classified PDF set',async t=>{
+  let root;try{root=libraryRoot();}catch{t.skip('Private collection is not available at the configured library path');return;}
+  const data=libraryData(root),catalog=JSON.parse(await fs.readFile(path.join(data,'catalog.json')));
+  const manifest=JSON.parse(await fs.readFile(path.join(data,'manifest.json')));
   // The collection is curated, so its size moves; what must hold is that the three views agree.
   const total=catalog.items.length;assert.ok(total>500,'the private collection is present');
   assert.equal(new Set(catalog.items.map(v=>v.id)).size,total);assert.equal(Object.keys(manifest.files).length,total);
+  assert.ok(!Object.values(manifest.files).some(relative=>/^(Animenz|流行音乐|鸣潮)\//.test(relative)),'retired shelf names never return');
   assert.equal(catalog.summary.pdfs,total);
-  for(const item of catalog.items){assert.ok(item.composer&&item.style&&item.era);assert.ok(manifest.files[item.id].startsWith('曲谱/'));assert.equal((await fs.stat(path.join(fileURLToPath(folder),manifest.files[item.id]))).size,item.bytes);assert.ok(!('absolute'in item));}
-  let retired={items:{}};try{retired=JSON.parse(await fs.readFile(new URL('retired.json',folder)));}catch{}
+  for(const item of catalog.items){const relative=manifest.files[item.id],resolved=path.resolve(root,relative);assert.ok(item.composer&&item.style&&item.era);assert.ok(relative&&!path.isAbsolute(relative)&&resolved.startsWith(root+path.sep)&&relative.endsWith('.pdf'));assert.equal((await fs.stat(resolved)).size,item.bytes);assert.ok(!('absolute'in item));}
+  let retired={items:{}};try{retired=JSON.parse(await fs.readFile(path.join(data,'retired.json')));}catch{}
   for(const id of Object.keys(retired.items||{}))assert.equal(manifest.files[id],undefined,'a retired score never returns to the catalogue');
-  const works=groupWorks(catalog.items);assert.ok(works.some(w=>w.browseGroup==='原神'));assert.ok(works.some(w=>w.browseGroup==='Animenz'));assert.ok(works.some(w=>w.browseGroup==='流行音乐'));assert.ok(works.some(w=>w.genre==='练习曲'));
-  assert.equal(JSON.parse(await fs.readFile(new URL('../docs/library/catalog.json',import.meta.url))).items.length,0,'the public copy carries no scores');
+  let inkBackup=null;try{inkBackup=JSON.parse(await fs.readFile(path.join(data,'批注','volta-annotations.json')));}catch(error){if(error.code!=='ENOENT')throw error;}
+  if(inkBackup){
+    const pages=Array.isArray(inkBackup.pages)?inkBackup.pages:Object.entries(inkBackup.pages||{}).map(([id,data])=>({id,data}));
+    assert.ok(pages.length,'the saved annotation backup is not empty');
+    for(const page of pages){const scoreId=String(page.id||'').split('/')[0];assert.ok(manifest.files[scoreId],`saved ink still resolves by score ID: ${scoreId}`);}
+  }
+  const works=groupWorks(catalog.items);assert.ok(works.some(w=>w.browseGroup==='原神'));assert.ok(works.some(w=>w.browseGroup==='动漫'));assert.ok(works.some(w=>w.browseGroup==='流行音乐与其他游戏'));assert.ok(works.some(w=>w.genre==='练习曲'));
+  const publicCatalog=new URL('../docs/library/catalog.json',import.meta.url);let publicItems=[];
+  try{publicItems=JSON.parse(await fs.readFile(publicCatalog)).items||[];}catch(error){if(error.code!=='ENOENT')throw error;}
+  assert.equal(publicItems.length,0,'the public copy carries no scores');
 });
 test('local server serves only registered PDFs and metadata, with byte ranges and no private index access',async t=>{
-  const library=path.resolve(import.meta.dirname,'../../本地曲谱');try{await fs.access(library+'/manifest.json');}catch{t.skip('Private collection absent');return;}
+  let library;try{library=libraryRoot();}catch{t.skip('Private collection is not available at the configured library path');return;}
   const server=await createPreviewServer({library});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   try{
     const base=`http://127.0.0.1:${server.address().port}/volta/`,response=await fetch(base+'library/catalog.json'),catalog=await response.json();assert.ok(catalog.items.length>500);assert.match(response.headers.get('Cache-Control'),/private/);

@@ -49,10 +49,11 @@ body.performance-mode .top-drawer{max-height:calc(var(--reader-height) * .44)}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 body.focus-reader>.topbar{display:none}
 .top-drawer{padding:18px 26px 12px;border-radius:0 0 20px 20px}
-.top-drawer>.drawer-heading{padding-bottom:16px;border:0;align-items:flex-start}
+.top-drawer>.drawer-heading{padding-bottom:10px;border:0;align-items:center}
 .top-drawer>.drawer-heading>div{display:grid;gap:5px;min-width:0}
-.drawer-eyebrow{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:2px}
 .top-drawer #reader-title{font-size:18px;font-weight:600;letter-spacing:0;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-drawer #reader-meta{font-size:11px;color:var(--muted);font-weight:400}
+.top-drawer .drawer-collapse{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:20px;color:var(--muted)}
 .top-drawer .reader-toolbar{padding:16px 0;min-height:0;gap:14px}
 .view-controls,.reader-mode-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .view-segments{display:flex;background:var(--tint);padding:3px;border-radius:11px;gap:3px}
@@ -75,10 +76,11 @@ body.focus-reader>.topbar{display:none}
 .sidebar .score-card p{font-size:12px}.sidebar .import-links{margin:12px 0 20px}
 .sidebar #offline-save{font-size:13px;background:var(--tint);border:0;min-height:42px;padding:10px}
 .sidebar .offline-status{font-size:11px;margin:8px 0 18px}
-.practice-drawer{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;font-size:14px}
+.practice-drawer{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0;font-size:14px}
 .practice-drawer>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;min-height:44px;font-weight:600}
 .practice-drawer>summary::-webkit-details-marker,.pencil-dock summary::-webkit-details-marker{display:none}
-.practice-drawer>summary small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:5px}
+.practice-drawer>summary>span:last-child,.bookmark-bar>summary>span:last-child,.pdf-outline>summary>span:last-child{font-size:20px;color:var(--muted);transition:transform .16s}
+.practice-drawer[open]>summary>span:last-child,.bookmark-bar[open]>summary>span:last-child,.pdf-outline[open]>summary>span:last-child{transform:rotate(90deg)}
 .practice-content{padding-top:18px}.practice-intro{font-size:12px;line-height:1.8;color:var(--muted);margin-bottom:12px}
 .learning-actions{display:flex;gap:8px}.learning-actions button{flex:1;padding:10px;font-size:13px}
 .practice-content .reference-panel{margin:14px 0;padding:12px;background:var(--tint);border:0}
@@ -160,12 +162,10 @@ body.chrome-idle .pencil-dock[data-side=right]::after{right:100%;width:56px;top:
 body.chrome-idle .pencil-dock[data-side=left]::after{left:100%;width:56px;top:0;bottom:0}
 /* Anything in use stays out on screen at full strength. */
 body.chrome-idle .edge-reveal:hover,body.chrome-idle .edge-reveal:focus-visible,
-body.chrome-idle .pencil-dock:hover,body.chrome-idle .pencil-dock:focus-within,body.chrome-idle .pencil-dock.dragging,
-body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]),
+body.chrome-idle .pencil-dock.dragging,body.chrome-idle .pencil-dock:has(details[open]),
 body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){opacity:1;transition:opacity .18s ease,transform .18s ease}
 body.chrome-idle .shelf-reveal:hover,body.chrome-idle .shelf-reveal:focus-visible,
-body.chrome-idle .pencil-dock:hover,body.chrome-idle .pencil-dock:focus-within,body.chrome-idle .pencil-dock.dragging,
-body.chrome-idle .pencil-dock:has(.pencil-tool.selected),body.chrome-idle .pencil-dock:has(details[open]),
+body.chrome-idle .pencil-dock.dragging,body.chrome-idle .pencil-dock:has(details[open]),
 body.chrome-idle .pencil-dock:has(.pencil-feedback:not([hidden])){transform:none}
 body.chrome-idle .tools-reveal:hover,body.chrome-idle .tools-reveal:focus-visible{transform:translateX(-50%)}
 @media(prefers-reduced-motion:reduce){
@@ -228,9 +228,56 @@ body.performance-mode .top-drawer #score-card,body.performance-mode .top-drawer 
 .ink-swatches button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset}
 .ink-size{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
 .ink-size input{flex:1;min-width:90px;accent-color:var(--accent)}
+
+/* One compact, continuous toolbar row for score controls and page scrubbing. */
+.top-drawer .reader-toolbar{display:flex;flex-wrap:nowrap;align-items:center;gap:clamp(6px,1.2vw,14px);min-width:0;overflow:hidden}
+.top-drawer .view-controls{flex:0 0 auto;flex-wrap:nowrap;gap:6px;min-width:0}
+.top-drawer .view-segments{flex-wrap:nowrap;gap:2px;padding:2px;border-radius:10px}
+.top-drawer .view-segments button{width:42px;min-width:42px;height:42px;min-height:42px;padding:8px;display:grid;place-items:center}
+.top-drawer .view-segments svg,.reader-mode-actions svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.top-drawer .zoom-control{flex:0 0 auto;display:block}
+.top-drawer .zoom-control select{max-width:82px;min-height:42px;padding:7px 22px 7px 9px;border:1px solid var(--line);border-radius:9px;background-color:var(--surface);color:var(--ink);font-size:13px}
+.top-drawer .page-scrubber{flex:1 1 160px;min-width:72px;gap:8px}
+.top-drawer #page-range{min-width:40px;height:44px;margin:0;appearance:none;-webkit-appearance:none;touch-action:pan-x;cursor:pointer}
+.top-drawer #page-range::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:linear-gradient(90deg,var(--accent) var(--page-progress,0%),color-mix(in srgb,var(--accent) 20%,var(--line)) var(--page-progress,0%))}
+.top-drawer #page-range::-moz-range-track{height:5px;border-radius:99px;background:linear-gradient(90deg,var(--accent) var(--page-progress,0%),color-mix(in srgb,var(--accent) 20%,var(--line)) var(--page-progress,0%))}
+.top-drawer #page-range::-webkit-slider-thumb{width:18px;height:18px;margin-top:-6.5px;border:3px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 1px 5px #10254238;-webkit-appearance:none}
+.top-drawer #page-range::-moz-range-thumb{width:13px;height:13px;border:3px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 1px 5px #10254238}
+.top-drawer #page-range:focus-visible{outline:0}
+.top-drawer #page-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+.top-drawer .page-jump{display:flex;flex:0 0 auto;align-items:center;white-space:nowrap}
+.top-drawer .page-jump input{width:3.4em;min-width:44px;min-height:40px;padding:5px 3px;text-align:center}
+.top-drawer .page-navigation{display:none}
+body.performance-mode .top-drawer .page-navigation{display:flex}
+.top-drawer .reader-mode-actions{width:auto;flex:0 0 auto;flex-wrap:nowrap;justify-content:flex-end;gap:7px}
+.top-drawer .reader-mode-actions button{width:44px;height:44px;min-height:44px;padding:10px;display:grid;place-items:center;border-radius:10px}
+.top-drawer .reader-mode-actions #performance-open{background:var(--accent);color:white}
+
+/* The close affordance remains reachable while long dialogs scroll. */
+dialog{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+dialog .dialog-close{position:sticky!important;top:8px;z-index:8;width:40px;height:40px;min-height:40px;margin:-20px -20px 8px auto;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--muted);display:grid;place-items:center;font-size:16px;line-height:1;box-shadow:0 2px 10px #10254218}
+dialog .dialog-close:hover{background:var(--tint)}
+.pencil-dock .pencil-tool{flex-direction:row;min-height:46px}
+.pencil-dock .dock-export{margin-top:8px;padding-top:10px;border-top:1px solid var(--line);border-radius:0 0 10px 10px}
+.pencil-dock .pencil-tool svg{flex:0 0 auto}
+@media(max-width:650px){.top-drawer .reader-toolbar{gap:7px;padding:12px 0}.top-drawer .view-controls{gap:5px}.top-drawer .view-segments button{width:38px;min-width:38px;height:40px;min-height:40px;padding:7px}.top-drawer .zoom-control select{max-width:70px;min-height:40px;padding:6px 18px 6px 7px;font-size:12px}.top-drawer #page-range{height:40px}.top-drawer .reader-mode-actions{gap:4px}.top-drawer .reader-mode-actions button{width:40px;height:40px;min-height:40px;padding:8px}.top-drawer .page-scrubber{gap:5px}.top-drawer .page-navigation{display:none}}
+@media(max-width:430px){.top-drawer .reader-mode-actions #fullscreen-button{display:none}.top-drawer #page-input{display:none}.top-drawer .page-jump #page-count{margin:0;font-size:11px}.top-drawer .view-segments button{width:36px;min-width:36px}}
 .ink-size i{flex:none;width:var(--dot,6px);height:var(--dot,6px);max-width:22px;max-height:22px;border-radius:50%;background:var(--ink)}
 /* Bookmarks: the pages you keep coming back to, one tap away. */
-.bookmark-bar{border-top:1px solid var(--line);padding:12px 0 4px}
+.pdf-outline{border-top:1px solid var(--line);padding:6px 0}
+.pdf-outline>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;cursor:pointer;font-size:14px;font-weight:600}
+.pdf-outline>summary::-webkit-details-marker{display:none}
+.pdf-outline-list{display:grid;max-height:min(42vh,420px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:5px 2px 8px;scrollbar-gutter:stable}
+.pdf-outline-item{--outline-depth:0;display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:38px;padding:7px 10px 7px calc(10px + var(--outline-depth)*18px);border:0;border-radius:9px;background:transparent;color:var(--ink);font-size:13px;text-align:left}
+button.pdf-outline-item:hover{background:var(--tint)}
+.pdf-outline-item.group{font-weight:650}
+.pdf-outline-item.current{background:var(--lime)}
+.pdf-outline-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pdf-outline-item small{flex:none;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.bookmark-bar{border-top:1px solid var(--line);padding:6px 0}
+.bookmark-bar>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;cursor:pointer;font-size:14px;font-weight:600}
+.bookmark-bar>summary::-webkit-details-marker{display:none}
+.bookmark-content{padding:8px 0 4px}
 .bookmark-add{display:flex;gap:8px;align-items:center}
 #bookmark-label{flex:1;min-width:0;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 #bookmark-add{flex:none;min-height:40px;padding:8px 14px;white-space:nowrap}
@@ -279,3 +326,10 @@ body.performance-mode .top-drawer .midi-bar{display:none}
 /* .empty-state small is display:block, which would otherwise outrank [hidden]. */
 .empty-state small[hidden]{display:none}
 .empty-state small .text-button{font-size:inherit;color:inherit;padding:0}
+
+/* Kept outside the drawers so the three-second cue survives hidden chrome. */
+.turn-cue{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:260;width:min(340px,calc(100vw - 40px));padding:12px 16px;border:1px solid rgba(255,255,255,.25);border-radius:16px;background:rgba(24,51,80,.95);color:white;box-shadow:0 6px 28px #0003;pointer-events:none;font-size:14px}
+#turn-cue:not([hidden])~#toast{visibility:hidden}
+.turn-cue[hidden]{display:none}.turn-cue>div{display:flex;align-items:center;justify-content:space-between;gap:14px}.turn-cue strong{font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}.turn-cue progress{display:block;width:100%;height:5px;margin-top:9px;border:0;border-radius:4px;overflow:hidden;appearance:none;background:#ffffff30;color:#bada86}.turn-cue progress::-webkit-progress-bar{background:#ffffff30}.turn-cue progress::-webkit-progress-value{background:#bada86}.turn-cue progress::-moz-progress-bar{background:#bada86}.turn-cue.paused{background:rgba(55,62,70,.95)}.turn-cue.paused progress{opacity:.5}.turn-map-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}#midi-learn{margin-top:8px}
+
+.anchor-time-edit{width:88px;min-height:36px;border:1px solid var(--line);border-radius:8px;padding:5px;color:var(--ink);background:var(--surface);font-variant-numeric:tabular-nums}.anchor{flex-wrap:wrap}

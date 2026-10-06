@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import {fitLayout,includeInk,safeBounds} from '../docs/fit-layout.js';
 import {pinchTransform,clampZoom} from '../docs/score-zoom.js';
 import {validateInk} from '../docs/ink-validation.js';
+import {libraryRoot,libraryData} from '../scripts/library-root.mjs';
 
 test('content fit contains complete marked bounds for both orientations without stretching',()=>{
   for(const natural of [{width:600,height:900},{width:900,height:600}])for(const screen of [{width:1024,height:1366},{width:1366,height:1024}]){
@@ -16,9 +18,11 @@ test('content fit contains complete marked bounds for both orientations without 
   const box=includeInk([.1,.1,.9,.9],[{width:.002,points:[[.03,.98,.5]]}]);assert.ok(box[0]<.03&&box[3]>.98);
 });
 test('all private pages have conservative finite bounds and keep originals unchanged',async t=>{
-  let summary;try{summary=JSON.parse(await fs.readFile(new URL('../../本地曲谱/fit-summary.json',import.meta.url)));}catch{t.skip('Private collection not present');return;}
-  assert.equal(summary.pdfs,701);assert.equal(summary.pages,11259);assert.deepEqual(summary.failed,[]);
-  for(const name of await fs.readdir(new URL('../../本地曲谱/fit/',import.meta.url))){const value=JSON.parse(await fs.readFile(new URL('../../本地曲谱/fit/'+name,import.meta.url)));for(const page of value.pages)assert.deepEqual(safeBounds(page.bounds),page.bounds);}
+  let root;try{root=libraryRoot();}catch{t.skip('Private collection is not available at the configured library path');return;}
+  const data=libraryData(root),summary=JSON.parse(await fs.readFile(path.join(data,'fit-summary.json'))),manifest=JSON.parse(await fs.readFile(path.join(data,'manifest.json')));
+  let pages=0;assert.equal(summary.pdfs,Object.keys(manifest.files).length);assert.deepEqual(summary.failed,[]);
+  for(const id of Object.keys(manifest.files)){const value=JSON.parse(await fs.readFile(path.join(data,'fit',id+'.json')));pages+=value.pages.length;for(const page of value.pages)assert.deepEqual(safeBounds(page.bounds),page.bounds);}
+  assert.equal(summary.pages,pages);
 });
 test('pinch clamps minimum to fit and uses a score-local transform, not document zoom',()=>{
   const start={zoom:1,distance:100,left:0,top:0,center:{x:200,y:200}};

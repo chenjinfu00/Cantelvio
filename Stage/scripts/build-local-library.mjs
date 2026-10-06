@@ -10,7 +10,7 @@ import {regionFor} from './region-rules.mjs';
 import {classifyLibraryItem,libraryRelativePath} from './library-paths.mjs';
 const sourceDir=path.resolve(process.argv[2]||'../Score_Turner_Web/local_data');
 // The builder creates the collection, so it names the place rather than finding it.
-const output=path.resolve(import.meta.dirname,'../../本地曲谱');
+const output=process.env.VOLTA_LIBRARY?path.resolve(process.env.VOLTA_LIBRARY):path.resolve(import.meta.dirname,'../../../本地曲谱');
 const index=JSON.parse(await fs.readFile(path.join(sourceDir,'library-private-index.json')));
 const imports=JSON.parse(await fs.readFile(path.join(sourceDir,'piascore-import-20260912/pdf-inspection.json')));
 const overrides=JSON.parse(await fs.readFile(path.join(libraryData(output),'metadata.json')));
@@ -39,8 +39,11 @@ for(const [id,entry] of candidates){
   if(/待核对/.test(metadata.composer||'')&&!/待核对/.test(work.composer))metadata.composer=work.composer;
   const {browse,family}=classifyLibraryItem(metadata);
   if(family==='游戏音乐'){metadata.style='游戏音乐';if(!metadata.era||/待核对/.test(metadata.era))metadata.era='21 世纪';}
-  if(family==='Animenz'){metadata.arranger='Animenz';metadata.style='动漫／影视';if(!metadata.era||/待核对/.test(metadata.era))metadata.era='21 世纪';}
-  if(family==='流行音乐')metadata.style='流行音乐';
+  if(family==='动漫'){
+    if(/animenz/i.test([metadata.title,metadata.composer,metadata.arranger,...(metadata.aliases||[])].join(' ')))metadata.arranger||='Animenz';
+    metadata.style='动漫／影视';if(!metadata.era||/待核对/.test(metadata.era))metadata.era='21 世纪';
+  }
+  if(family==='流行音乐与其他游戏'&&!/^(鸣潮|王者荣耀)$/.test(metadata.composer||''))metadata.style='流行音乐';
   const relative=libraryRelativePath(metadata).relative;
   const target=path.join(output,relative);const sources=[...new Map(entry.sources.map(x=>[x.file,x])).values()].sort((a,b)=>b.mtime-a.mtime);
   for(const source of sources)if(await digest(source.file)!==id)throw new Error('Source changed; stop before merging: '+source.original);

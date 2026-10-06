@@ -19,6 +19,7 @@ import {
   randomIds,
 } from '@ailegro-score/core';
 import { create } from 'zustand';
+import type { LayoutOptions } from '@ailegro-score/engraving';
 import type { Lang } from '../i18n';
 
 export type Selection =
@@ -83,7 +84,7 @@ export interface ConfirmRequest {
 export interface ViewState {
   readonly zoom: number;
   readonly concertPitch: boolean;
-  readonly mode: 'page' | 'continuous';
+  readonly mode: LayoutOptions['mode'];
   readonly lang: Lang;
 }
 

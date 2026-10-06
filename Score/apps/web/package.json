@@ -14,8 +14,12 @@
     "@ailegro-score/ailegro-bridge": "0.1.0",
     "@ailegro-score/core": "0.1.0",
     "@ailegro-score/engraving": "0.1.0",
+    "@tonejs/midi": "^2.0.28",
+    "jspdf": "^4.2.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "spessasynth_lib": "^4.3.14",
+    "svg2pdf.js": "^2.8.1",
     "zustand": "^5.0.15"
   },
   "devDependencies": {

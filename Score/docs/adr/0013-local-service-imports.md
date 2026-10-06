@@ -27,7 +27,7 @@ Python 环境里，知道 AIlegro 文件夹在哪里，只接受回环地址的�
   （`writtenPitch`、`trustTimeSignatures`）。这样导入规则只有一份，命令行和编辑器的结果一致。
 - **不打断正在编辑的乐谱。** 任务在后台跑，用户可以继续编辑；完成时当前乐谱有未保存的修改就先询问，
   用户拒绝时结果留着（“打开结果”）。导入的乐谱是新的未保存文档，保存为 `.ailegro.json`。
-- **一条命令启动。** `npm run ailegro:serve`（`tools/ailegro-service.ts`）找到 `../AIlegro`、它的
+- **一条命令启动。** `npm run ailegro:serve`（`tools/ailegro-service.ts`）找到 `../Compose`、它的
   `.venv-training`、最新的 v3.1 权重，再启动适配器；Audiveris 和 MuScriptor 的 Python 由适配器按默认位置寻找，
   也可以用参数指定。
 - 这不是 AIlegro 的契约（不在 `packages/ailegro-bridge` 里）：任务格式只在编辑器和本仓库的适配器之间，

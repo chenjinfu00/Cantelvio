@@ -13,20 +13,20 @@ It also answers harmonic-analysis requests (`ailegro.analysis-request/1` → `ai
 editor: AIlegro panel → “自动标和弦”): chord symbols for existing music, from AIlegro's analysis model or its
 chord tracker.
 
-Both folders sit side by side (`software develop/AIlegro` and `software develop/AIlegro Score`),
-so the commands below use the relative path `../AIlegro Score/...` from the AIlegro root.
+Both folders sit side by side (`software develop/Cantelvio/Compose` and `software develop/Cantelvio/Score`),
+so the commands below use the relative path `../Score/...` from the AIlegro root.
 
 ## Local server (editor button “直接生成 / Generate”)
 
 ```sh
-npm run ailegro:serve        # from AIlegro Score: finds ../AIlegro, .venv-training and the newest v3.1 weights
+npm run ailegro:serve        # from AIlegro Score: finds ../Compose, .venv-training and the newest v3.1 weights
 ```
 
 which runs, from the AIlegro root:
 
 ```sh
 cd "<path>/AIlegro"
-.venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+.venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
 ```
 
@@ -46,7 +46,7 @@ cancels. `GET /health` lists what can be opened (`imports`). Tests with stand-in
 
 ```sh
 cd "<path>/AIlegro"
-.venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+.venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
   --request ~/Downloads/ailegro-request-<id>.json \
   --checkpoint training/runs/<run>/weights.pt \
   --output ~/Downloads/ailegro-result-<id>.json
@@ -60,7 +60,7 @@ Then import the result in the editor (AIlegro panel → “导入生成结果”
 ```sh
 # conversion check against AIlegro's time vocabulary and chord list (no torch needed; with numpy it also
 # estimates context chords like the real run)
-python3 "../AIlegro Score/integrations/ailegro/score_compose.py" --request request.json --dry-run
+python3 "../Score/integrations/ailegro/score_compose.py" --request request.json --dry-run
 
 # placeholder music (scales over a tonic bass) to test the editor round trip anywhere,
 # even without the AIlegro folder; clearly marked as mock in the result

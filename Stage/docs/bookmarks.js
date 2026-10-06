@@ -46,7 +46,7 @@ export function setupBookmarks({score=()=>null,page=()=>1,jump=()=>{},canJump=()
     list.textContent='';
     if(!items.length){
       const empty=document.createElement('p');empty.className='muted';
-      empty.textContent=id?'还没有书签。翻到常用的一页，点「收藏本页」。':'打开曲谱后可以收藏页面。';
+      empty.textContent=id?'暂无书签':'打开曲谱后可用';
       list.append(empty);return;
     }
     for(const item of items){

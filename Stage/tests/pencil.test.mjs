@@ -82,6 +82,6 @@ test('fit screen covers both axes proportionally; full-page mode contains all ed
 });
 test('drawer roles stay separate and the paper has pen/eraser without a peer reading toggle',async()=>{
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
-  assert.doesNotMatch(html,/id="ink-read"/);assert.match(html,/class="pencil-dock"/);assert.match(html,/id="practice-drawer"/);assert.match(html,/<option value="screen">适配屏幕<\/option>/);
+  assert.doesNotMatch(html,/id="ink-read"/);assert.match(html,/class="pencil-dock"/);assert.match(html,/id="chrome-hide"/);assert.match(html,/id="practice-drawer"/);assert.match(html,/<option value="screen">适合<\/option>/);
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);assert.equal(ids.length,new Set(ids).size);
 });

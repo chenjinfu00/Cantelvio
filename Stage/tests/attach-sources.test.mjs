@@ -4,7 +4,7 @@ import {normalizeName,workNames,buildIndex,matchSource,sourcePlan,SOURCE_TYPES} 
 
 const item=(id,title,aliases)=>({id:id.repeat(64),title,aliases});
 const files={
-  ['a'.repeat(64)]:'曲谱/Animenz/动漫／影视/Hikaru Nara-四月是你的谎言/Hikaru Nara-四月是你的谎言 · aaaaaaaa.pdf',
+  ['a'.repeat(64)]:'曲谱/动漫/Hikaru Nara-四月是你的谎言/Hikaru Nara-四月是你的谎言 · aaaaaaaa.pdf',
   ['b'.repeat(64)]:'曲谱/原神/璃月/神女劈观/神女劈观 · bbbbbbbb.pdf',
   ['c'.repeat(64)]:'曲谱/原神/璃月/神女劈观/总谱 · cccccccc.pdf',
 };
@@ -21,7 +21,7 @@ test('names that differ only by punctuation, case or a version note are the same
 });
 
 test('a work answers to its folder, its titles and the file names it came from',()=>{
-  const names=workNames('曲谱/Animenz/动漫／影视/Hikaru Nara-四月是你的谎言',[items[0]]);
+  const names=workNames('曲谱/动漫/Hikaru Nara-四月是你的谎言',[items[0]]);
   assert.ok(names.includes(normalizeName('Hikaru Nara-四月是你的谎言')));
   assert.ok(!names.some(name=>name.startsWith('曲谱')),'a generated path is not a name');
 });
@@ -35,8 +35,8 @@ test('a source lands in its work folder, by folder name or by its own name',()=>
     '读我.txt',
   ],index);
   assert.deepEqual(plan.matched.map(move=>move.target),[
-    '曲谱/Animenz/动漫／影视/Hikaru Nara-四月是你的谎言/Hikaru Nara.mid',
-    '曲谱/Animenz/动漫／影视/Hikaru Nara-四月是你的谎言/Hikaru Nara.sib',
+    '曲谱/动漫/Hikaru Nara-四月是你的谎言/Hikaru Nara.mid',
+    '曲谱/动漫/Hikaru Nara-四月是你的谎言/Hikaru Nara.sib',
     '曲谱/原神/璃月/神女劈观/神女劈观.mid',
   ]);
   assert.deepEqual(plan.unmatched,[],'a .txt is not a source file at all');

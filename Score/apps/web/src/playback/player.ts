@@ -1,10 +1,11 @@
 /**
  * Playback with Web Audio: the core timeline (tempo map, ties, dynamics) is scheduled in small
- * look-ahead windows. Pianos use the Salamander Grand Piano samples (public/audio/salamander);
- * other instruments use light synthesis by General MIDI family until sample sets are added.
+ * look-ahead windows. MuseScore General provides General MIDI sounds through SpessaSynth;
+ * Salamander piano samples and light synthesis remain available if SoundFont loading fails.
  */
 import {
   type PlaybackNote,
+  type ScoreDoc,
   type Rational,
   add,
   buildPlayback,
@@ -15,6 +16,7 @@ import {
   secondsAt,
 } from '@ailegro-score/core';
 import { getStore } from '../state/store';
+import { prepareSoundfont, playSoundfont, stopSoundfont } from './soundfont';
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
@@ -228,6 +230,7 @@ function startTime(): Rational {
 
 export function stopPlayback(): void {
   session++;
+  stopSoundfont();
   for (const n of active) {
     try {
       n.stop();
@@ -239,18 +242,21 @@ export function stopPlayback(): void {
   getStore().getState().setPlaying(false, null);
 }
 
-export async function togglePlayback(): Promise<void> {
+export async function togglePlayback(previewDoc?: ScoreDoc): Promise<void> {
   if (getStore().getState().playing) {
     stopPlayback();
     return;
   }
+  const id = ++session;
+  getStore().getState().setPlaying(true, null);
   const ac = audio();
   await ac.resume();
-  const doc = getStore().getState().doc;
+  const doc = previewDoc ?? getStore().getState().doc;
   const playback = buildPlayback(doc);
-  if (playback.notes.some((n) => n.program < 8 && !n.drum)) await loadPiano();
-  const from = secondsAt(playback.tempo, startTime());
-  const id = ++session;
+  const soundfont = await prepareSoundfont(ac, master!);
+  if (!soundfont && playback.notes.some((n) => n.program < 8 && !n.drum)) await loadPiano();
+  if (id !== session) return;
+  const from = previewDoc ? 0 : secondsAt(playback.tempo, startTime());
   const t0 = ac.currentTime + 0.12;
   const notes = playback.notes.filter(
     (n) => n.start + n.duration > from && n.start >= from - 0.001,
@@ -264,6 +270,7 @@ export async function togglePlayback(): Promise<void> {
       const n = notes[index++]!;
       const when = t0 + (n.start - from);
       const gain = (n.velocity / 127) * 0.9;
+      if (playSoundfont(n, when)) continue;
       if (n.drum) playDrum(n, when, gain);
       else if (n.program < 8 && pianoSamples && pianoSamples.length) playSample(n, when, gain);
       else playSynth(n, when, gain);
@@ -286,10 +293,17 @@ export async function togglePlayback(): Promise<void> {
 }
 
 /** Short preview when a note is entered or selected. */
-export async function previewMidi(midis: readonly number[], program = 0): Promise<void> {
+export async function previewMidi(
+  midis: readonly number[],
+  program = 0,
+  drumMidi?: number,
+): Promise<void> {
   const ac = audio();
   await ac.resume();
-  if (program < 8) void loadPiano();
+  const id = session;
+  const soundfont = await prepareSoundfont(ac, master!);
+  if (id !== session) return;
+  if (!soundfont && drumMidi === undefined && program < 8) void loadPiano();
   const when = ac.currentTime + 0.01;
   for (const midi of midis) {
     const note: PlaybackNote = {
@@ -297,16 +311,18 @@ export async function previewMidi(midis: readonly number[], program = 0): Promis
       staffId: '',
       eventId: '',
       noteId: '',
-      midi,
+      midi: drumMidi ?? midi,
       velocity: 84,
       program,
-      drum: false,
+      drum: drumMidi !== undefined,
       at: rat(0),
       length: rat(1, 4),
       start: 0,
       duration: 0.35,
     };
-    if (program < 8 && pianoSamples && pianoSamples.length) playSample(note, when, 0.55);
+    if (playSoundfont(note, when)) continue;
+    if (note.drum) playDrum(note, when, 0.5);
+    else if (program < 8 && pianoSamples && pianoSamples.length) playSample(note, when, 0.55);
     else playSynth(note, when, 0.5);
   }
 }

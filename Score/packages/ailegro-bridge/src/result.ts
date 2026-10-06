@@ -31,10 +31,15 @@ import {
 import { keyFromTonic, spellNote, spellRoot } from './spelling';
 import { qualityOf } from './qualities';
 import {
+  planPerformance,
+  type PerformanceNote,
+  type PerformanceOptions,
+  type PerformanceReport,
+} from './performance';
+import {
   AILEGRO_GROUPS,
   type AilegroGroup,
   type ComposeResult,
-  type ResultNote,
   RESULT_SCHEMA,
   type TargetMapping,
 } from './schemas';
@@ -52,9 +57,12 @@ export interface ImportOptions {
   /** Clear the target staves in the written bars first (default true). */
   readonly clearTargets?: boolean;
   readonly importChords?: boolean;
+  /** Optional local instrument-aware realization; absent preserves the raw exchange. */
+  readonly performance?: PerformanceOptions;
 }
 
 export interface ImportPlan {
+  readonly performance?: PerformanceReport;
   readonly commands: Command[];
   readonly warnings: string[];
   readonly runId: string;
@@ -95,17 +103,7 @@ function snapQuarter(value: Rational): Rational {
   return rat(Math.round(toNumber(value) * 8), 8);
 }
 
-interface Placed {
-  readonly staff: StaffInfo;
-  readonly voice: number;
-  /** Generated voice slot (`group:voice`) the note came from. */
-  readonly slot: string;
-  readonly start: Rational; // whole notes, absolute
-  readonly end: Rational;
-  readonly midi: number | null;
-  readonly note: ResultNote;
-  readonly bar: number;
-}
+type Placed = PerformanceNote;
 
 export function planComposeImport(
   doc: ScoreDoc,
@@ -188,7 +186,7 @@ export function planComposeImport(
 
   // ---- place notes
   let skipped = 0;
-  const placed: Placed[] = [];
+  let placed: Placed[] = [];
   const chordsByBar: { bar: number; onset: Rational; root: number; quality: string }[] = [];
   const touchedBars = new Set<number>();
   result.bars.forEach((b, k) => {
@@ -244,6 +242,13 @@ export function planComposeImport(
       `${skipped} generated note(s) had no target part or fell outside the bars and were skipped`,
     );
 
+  let performance: PerformanceReport | undefined;
+  if (options.performance) {
+    const plan = planPerformance(doc, result, placed, starts, lengths, options.performance);
+    placed = plan.notes;
+    performance = plan.report;
+  }
+
   // ---- voices: rank the slots that landed on each staff, highest first (a piano's left-hand
   // slot is voice 1 of its part's slots but voice 1 of the bass staff would be wrong)
   const staffSlots = new Map<string, Map<string, number[]>>();
@@ -259,7 +264,8 @@ export function planComposeImport(
     [...slots.entries()]
       .sort(
         (a, b) =>
-          median(b[1]) - median(a[1]) || slotTarget.get(a[0])!.rank - slotTarget.get(b[0])!.rank,
+          median(b[1]) - median(a[1]) ||
+          (slotTarget.get(a[0])?.rank ?? 0) - (slotTarget.get(b[0])?.rank ?? 0),
       )
       .forEach(([slot], i) => voiceOf.set(`${staffId}|${slot}`, Math.min(3, i)));
   }
@@ -474,6 +480,7 @@ export function planComposeImport(
     warnings,
     runId,
     stats: { notes: noteCount, events: eventCount, chords: chordCount, skipped },
+    ...(performance ? { performance } : {}),
   };
 }
 

@@ -1,12 +1,16 @@
 # 与 AIlegro 的接口
 
-AIlegro 是项目所有者的 AI 作曲 / 续写 / 配器系统（同级文件夹 `../AIlegro`，有自己的
+AIlegro 是项目所有者的 AI 作曲 / 续写 / 配器系统（同级文件夹 `../Compose`，有自己的
 `AGENTS.md`）。**AIlegro Score 不修改 AIlegro 项目**，只通过这里定义的三个版本化 JSON 契约
 和一个参考适配器与它交互。
 
 代码：`packages/ailegro-bridge`（契约与转换）、`apps/web/src/state/ailegro.ts` +
 `panels/AilegroPanel.tsx`（编辑器面板）、`integrations/ailegro/score_compose.py`（适配器）。
 决策：[ADR 0005](adr/0005-ailegro-contract.md)。
+
+## 联合工作流程扩展（计划，2026-10-05）
+
+新增多引擎、后台作曲、候选比较、局部接受与文档基线检查的顺序见 [Score 接入计划](open-source-integration-plan.md)；共同组件与模型选择见 [联合开发计划](../../Compose/JOINT-DEVELOPMENT-PLAN.md)。以下接口描述现有 v3.1 实现。新服务能力需独立版本化；在实现与验证前，不把 AMT 或异步作曲列为已支持能力。
 
 ## 工作流程
 
@@ -29,14 +33,14 @@ sequenceDiagram
 ### A. 本机服务器（推荐，一键生成）
 
 ```sh
-npm run ailegro:serve        # 在 AIlegro Score 文件夹：找到 ../AIlegro、.venv-training 和最新的 v3.1 权重
+npm run ailegro:serve        # 在 AIlegro Score 文件夹：找到 ../Compose、.venv-training 和最新的 v3.1 权重
 ```
 
 它等于在 AIlegro 文件夹里运行（需要别的路径时也可以直接这样运行）：
 
 ```sh
-cd "<…>/software develop/AIlegro"
-.venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+cd "<…>/software develop/Cantelvio/Compose"
+.venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
 ```
 
@@ -59,7 +63,7 @@ cd "<…>/software develop/AIlegro"
 1. 面板 → “导出请求 (.json)”，得到 `ailegro-request-<id>.json`；面板会显示要运行的命令。
 2. 在 AIlegro 文件夹运行：
    ```sh
-   .venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+   .venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
      --request ~/Downloads/ailegro-request-<id>.json \
      --checkpoint training/runs/<run>/weights.pt --output ~/Downloads/ailegro-result-<id>.json
    ```
@@ -107,7 +111,7 @@ cd "<…>/software develop/AIlegro"
 
 ```sh
 python3 integrations/ailegro/score_compose.py --serve --mock     # 占位音乐（音阶 + 主音低音）
-python3 integrations/ailegro/score_compose.py --request r.json --dry-run --ailegro-root ../AIlegro
+python3 integrations/ailegro/score_compose.py --request r.json --dry-run --ailegro-root ../Compose
 ```
 
 ## 共同约定（与 AIlegro 训练代码一致）
@@ -380,3 +384,7 @@ python3 integrations/ailegro/score_compose.py --request r.json --dry-run --aileg
 - 声部“角色”（旋律 / 低音 / 和声）目前只在记录里预留 `role` 字段，界面尚未提供。
 - 文字意图（`intent`）与风格标签需要 AIlegro 侧定义词表。
 - 人声目前不映射到六个组；作为给定材料时按 AIlegro 的“六组以外”（第 7 组）传入，模型不会给人声声部写新音。
+
+## 在线候选的演奏难度
+
+网页候选默认通过 bridge 的可选演奏规划器，提供简单 / 中等 / 专业与独立手跨度。先按实际目标乐器分配，再限制音域、节奏、重叠复音、快速跳进与管乐连续句；钢琴配伴奏可按模型/给定和声重新编排双手织体。原始结果保留在候选中，处理后的 ScoreDoc 统一用于预览、试听、接受和输出。此选项属于本地实现，不添加 `/1` 契约字段，原始文件交换仍兼容。详见 [ADR 0017](adr/0017-instrument-aware-difficulty.md) 和[本机验证](demo-verification.md#生成难度与演奏检查本次更新)。

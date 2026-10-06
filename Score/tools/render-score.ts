@@ -5,6 +5,7 @@
  *   npm run render -- --sample orchestra --out out/
  *   npm run render -- --all --out out/renders --svg-only
  *   npm run render -- --file my-score.ailegro.json --concert --continuous
+ *   npm run render -- --sample orchestra --seamless
  *   npm run render -- --file score.mxl            # MusicXML is imported first
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -28,6 +29,7 @@ const { values } = parseArgs({
     out: { type: 'string', default: 'out' },
     concert: { type: 'boolean', default: false },
     continuous: { type: 'boolean', default: false },
+    seamless: { type: 'boolean', default: false },
     'svg-only': { type: 'boolean', default: false },
     zh: { type: 'boolean', default: false },
     scale: { type: 'string', default: '2' },
@@ -75,14 +77,14 @@ for (const job of jobs) {
   const t0 = performance.now();
   const layout = layoutScore(job.doc, {
     concertPitch: values.concert,
-    mode: values.continuous ? 'continuous' : 'page',
+    mode: values.seamless ? 'seamless' : values.continuous ? 'continuous' : 'page',
   });
   const ms = performance.now() - t0;
   for (const page of layout.pages) {
     const svg = renderPageSvg(page, layout, { embedStyle: true });
     const base = join(
       values.out!,
-      `${job.name}${values.concert ? '-concert' : ''}${values.continuous ? '-continuous' : ''}-p${page.index + 1}`,
+      `${job.name}${values.concert ? '-concert' : ''}${values.seamless ? '-seamless' : values.continuous ? '-continuous' : ''}-p${page.index + 1}`,
     );
     writeFileSync(`${base}.svg`, svg);
     if (sharp) {

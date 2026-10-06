@@ -1,14 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import {libraryRoot,CANDIDATES} from '../scripts/library-root.mjs';
+import {libraryRoot,CANDIDATES,ICLOUD_LIBRARY} from '../scripts/library-root.mjs';
 
-test('the collection is looked for beside the project, then inside it',()=>{
+test('the collection is found beside a project, beside its parent, or inside it',()=>{
   const project='/tmp/volta';
   const beside=path.join('/tmp','本地曲谱'),inside=path.join(project,'本地曲谱');
   assert.equal(libraryRoot({env:'',project,exists:file=>file===path.join(beside,'catalog.json')}),beside);
   assert.equal(libraryRoot({env:'',project,exists:file=>file===path.join(inside,'catalog.json')}),inside,'an older layout still works');
-  assert.deepEqual(CANDIDATES,['../本地曲谱','本地曲谱']);
+  const nested='/music/projects/Volta',collection='/music/本地曲谱';
+  assert.equal(libraryRoot({env:'',project:nested,exists:file=>file===path.join(collection,'曲谱库数据/catalog.json')}),collection);
+  assert.deepEqual(CANDIDATES,['../本地曲谱','../../本地曲谱','本地曲谱',ICLOUD_LIBRARY]);
+  assert.equal(libraryRoot({env:'',project:'/apps/Cantelvio/Stage',exists:file=>file===path.join(ICLOUD_LIBRARY,'曲谱库数据/catalog.json')}),ICLOUD_LIBRARY,'falls back to iCloud Drive');
 });
 
 test('an explicit location wins, and a missing one says where it looked',()=>{

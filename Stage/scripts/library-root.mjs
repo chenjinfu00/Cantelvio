@@ -1,10 +1,14 @@
 // Where the score collection lives. It sits beside the project rather than inside it, so that the
 // app and the music can be moved, shared or replaced independently.
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 export const PROJECT=path.resolve(import.meta.dirname,'..');
-export const CANDIDATES=['../本地曲谱','本地曲谱'];
+// Last resort: the collection's long-standing home in iCloud Drive (曲谱&编曲/本地曲谱), so moving the
+// project folder (e.g. into Cantelvio/Stage) does not lose it.
+export const ICLOUD_LIBRARY=path.join(os.homedir(),'Library','Mobile Documents','com~apple~CloudDocs','曲谱&编曲','本地曲谱');
+export const CANDIDATES=['../本地曲谱','../../本地曲谱','本地曲谱',ICLOUD_LIBRARY];
 // The shelves are the folder. Everything the collection needs in order to describe itself
 // lives in one clearly named drawer, so opening the folder shows music and nothing else.
 export const DATA='曲谱库数据';

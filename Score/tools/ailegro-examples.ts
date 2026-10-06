@@ -4,7 +4,7 @@
  *
  *   npm run ailegro:examples -- --out out/ailegro       # write <example>.request.json files
  *   # in the AIlegro folder, for each request (see docs/ailegro-integration.md):
- *   #   .venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+ *   #   .venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
  *   #     --request <example>.request.json --checkpoint <weights.pt> --output <example>.result.json
  *   npm run ailegro:examples -- --check out/ailegro     # import every result found, validate, report
  *

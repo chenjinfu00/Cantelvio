@@ -225,10 +225,11 @@ kbd {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
+  min-width: 160px;
 }
 
 .brand .logo {
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   width: 26px;
@@ -240,6 +241,7 @@ kbd {
 }
 
 .brand strong {
+  flex-shrink: 0;
   font-size: 14px;
   letter-spacing: 0.2px;
   white-space: nowrap;
@@ -738,6 +740,17 @@ kbd {
   justify-content: flex-start;
 }
 
+.score-scroll.seamless {
+  background: #fff;
+}
+
+.pages.mode-seamless {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 16px;
+}
+
 .page {
   position: relative;
   flex: none;
@@ -751,6 +764,11 @@ kbd {
 
 .input-mode .page {
   cursor: crosshair;
+}
+
+.mode-seamless .page {
+  box-shadow: none;
+  touch-action: pan-x pan-y;
 }
 
 .page-svg,
@@ -1358,6 +1376,16 @@ textarea.code {
 
 /* ------------------------------------------------------------------ narrow screens */
 
+@media (max-width: 1200px) {
+  .topbar {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  .topbar .tools {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 900px) {
   .topbar {
     flex-wrap: wrap;
@@ -1450,4 +1478,125 @@ textarea.code {
     color: #111;
     opacity: 1;
   }
+}
+
+/* Candidate previews leave the edited score untouched until acceptance. */
+.candidate-list {
+  margin-top: 16px;
+}
+.candidate-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid var(--border, #d4d4d4);
+  border-radius: 8px;
+}
+.candidate-card small {
+  grid-column: 1;
+}
+.candidate-card button {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+.candidate-dialog {
+  width: min(1100px, 96vw);
+  max-width: 96vw;
+  height: 92dvh;
+  max-height: 92dvh;
+  padding: 0;
+  background: var(--bg, #f2f2f0);
+  color: var(--text, #222);
+  border: 1px solid #888;
+  border-radius: 12px;
+}
+.candidate-dialog::backdrop {
+  background: #0008;
+}
+.candidate-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.candidate-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  flex-shrink: 0;
+}
+.candidate-toolbar span {
+  margin-right: auto;
+  font-size: 13px;
+}
+.candidate-pages {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 14px;
+  background: #dcdedb;
+}
+.candidate-pages > div {
+  max-width: 940px;
+  margin: 0 auto 18px;
+  background: white;
+  box-shadow: 0 2px 12px #0002;
+}
+.candidate-pages svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.candidate-accept {
+  padding: 12px 18px;
+  flex-shrink: 0;
+  border-top: 1px solid #bbb;
+}
+.candidate-accept input[type='number'] {
+  width: 70px;
+}
+@media (max-width: 600px) {
+  .candidate-dialog {
+    height: 96dvh;
+  }
+  .candidate-toolbar,
+  .candidate-accept {
+    padding: 10px;
+  }
+  .candidate-pages {
+    padding: 6px;
+  }
+}
+
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 16px;
+  font-size: 12px;
+  background: #e5ede4;
+  color: #233b29;
+  flex-shrink: 0;
+}
+.demo-banner a {
+  margin-left: auto;
+  color: inherit;
+}
+
+.demo-app {
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+}
+
+.candidate-edge-note {
+  margin: 0;
+  padding: 4px 18px 10px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.candidate-accept .field {
+  flex: 0 0 150px;
+  min-width: 150px;
 }

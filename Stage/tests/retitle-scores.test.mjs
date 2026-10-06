@@ -45,20 +45,47 @@ test('renaming follows the title but keeps the id suffix and the folder',()=>{
 import {groupWorks} from '../docs/library-model.js';
 const pdf=(title,extra={})=>({id:title,sourceId:title,title,format:'pdf',available:true,bytes:1,aliases:[],modifiedAt:'2026-01-01T00:00:00.000Z',composer:'Animenz',arranger:'Animenz',style:'动漫／影视',era:'21 世纪',...extra});
 
-test('the Animenz shelf shows song names, not the arranger on every line',()=>{
+test('Animenz arrangements join the anime shelf without repeating the arranger on every line',()=>{
   const works=groupWorks([pdf('Animenz（编曲） - 红莲の弓矢-进击的巨人OP'),pdf('Animenz - unlasting')]);
-  assert.deepEqual(works.map(w=>w.browseGroup),['Animenz','Animenz']);
+  assert.deepEqual(works.map(w=>w.browseGroup),['动漫','动漫']);
   for(const work of works){
-    assert.doesNotMatch(work.displayTitle,/Animenz/,'the shelf already says Animenz');
+    assert.doesNotMatch(work.displayTitle,/Animenz/,'the arranger stays in metadata instead of the title');
     assert.doesNotMatch(work.versions[0].title,/Animenz（编曲）/);
     assert.equal(work.animenz,true,'the arrangement is still recognised as Animenz');
   }
   assert.match(works.map(w=>w.search).join(' '),/animenz/,'searching for animenz still finds them');
 });
 
-test('a franchise with a single arrangement joins the Animenz shelf instead of standing alone',()=>{
+test('small game collections share the pop and other games shelf',()=>{
   const [work]=groupWorks([pdf('王者荣耀 - 曲谱合集',{composer:'王者荣耀',arranger:null,style:'游戏音乐'})]);
-  assert.equal(work.browseGroup,'Animenz');
+  assert.equal(work.browseGroup,'流行音乐与其他游戏');
+  const [wuthering]=groupWorks([pdf('鸣潮 - 愿戴荣光坠入天渊',{composer:'鸣潮',arranger:null,style:'游戏音乐'})]);
+  assert.equal(wuthering.browseGroup,'流行音乐与其他游戏');
   const [genshin]=groupWorks([pdf('原神 - 璃月',{composer:'原神',arranger:null,style:'游戏音乐'})]);
   assert.equal(genshin.browseGroup,'原神','the big franchises keep their own shelf');
+});
+
+test('a local folder shelf wins over composer metadata',()=>{
+  const [work]=groupWorks([pdf('帕赫贝尔 - D大调卡农',{
+    composer:'帕赫贝尔',arranger:null,style:'巴洛克',category:'古典音乐',libraryFolder:'其他',
+  })]);
+  assert.equal(work.browseGroup,'其他','moving a score in Finder must not recreate its composer shelf');
+});
+
+test('Chopin uses six useful collections instead of many one-work genres',()=>{
+  const works=groupWorks([
+    pdf('弗雷德里克·肖邦 - 船歌, Op.60',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - 塔兰泰拉 Op.43',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - B小调谐谑曲 No.1, Op.20',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - Fuga',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - 三重奏 Op.8',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - 钢琴作品合集',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+  ]);
+  assert.deepEqual(new Set(works.map(work=>work.genre)),new Set(['抒情小品','舞曲','大型作品','练习曲与复调','室内乐与歌曲','作品合集']));
+  const opus72=groupWorks([
+    pdf('弗雷德里克·肖邦 - 3 Ecossiases, Op.72',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+    pdf('弗雷德里克·肖邦 - Funeral March, Op.72',{composer:'弗雷德里克·肖邦',arranger:null,style:'浪漫主义'}),
+  ]);
+  assert.equal(opus72.length,2,'a broad display collection must not merge different works sharing an opus number');
+  assert.ok(opus72.every(work=>work.genre==='舞曲'));
 });

@@ -37,6 +37,7 @@ git merge --no-ff codex/ai-1
 - 每个独立任务使用独立分支，分支名建议以 `codex/` 开头。
 - 提交前检查 `git status` 和 `git diff --staged`。
 - 不提交 `node_modules/`、构建产物、私有本地库、环境变量或密钥。
+- 运行完整测试前，用 `VOLTA_LIBRARY=/path/to/临时曲谱库 npm test` 为当前 worktree 明确指定测试库；不要把测试库复制或提交进仓库。
 - `main` 只保留已经检查过、可以作为稳定基线的提交。
 - 未提交的修改也会被 Git 识别，但只有提交后才会成为可安全合并、回退和追踪的版本记录。
 

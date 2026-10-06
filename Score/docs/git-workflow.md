@@ -5,11 +5,11 @@
 
 ## 一次性设置：GitHub 远程仓库（强烈推荐）
 
-工作副本在本机（`~/software develop/AIlegro Score`）。**以 GitHub 私有仓库作为唯一的事实来源**：
+工作副本在本机（`~/software develop/Cantelvio/Score`）。**以 GitHub 私有仓库作为唯一的事实来源**：
 备份、换电脑、和 Codex 云端协作都经过它。
 
 ```sh
-cd ~/"software develop/AIlegro Score"
+cd ~/"software develop/Cantelvio/Score"
 git config user.name "你的名字"
 git config user.email "你的邮箱"
 
@@ -80,7 +80,7 @@ gh pr create --fill               # 按 PR 模板填写：做了什么、怎么�
   > 分支 `codex/M2-ENG-03-slurs`，完成后开 PR。
 - **同一时间不要让两个助手改同一个包的同一块代码**；在 roadmap 的“负责人”列登记。
 - 助手不得：直接推送到 `main`、手改 `*.generated.ts`、悄悄修改契约（文件格式、AIlegro schema）、
-  修改 `../AIlegro` 项目、提交 `node_modules` / `dist` / `out` / 本地乐谱。
+  修改 `../Compose` 项目、提交 `node_modules` / `dist` / `out` / 本地乐谱。
 - 审阅 AI 的 PR 时重点看：测试是否真的覆盖了改动、是否违反架构不变量、排版截图。
 
 ### Codex

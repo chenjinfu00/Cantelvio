@@ -5,3 +5,4 @@ export * from './record';
 export * from './request';
 export * from './result';
 export * from './analysis';
+export * from './performance';

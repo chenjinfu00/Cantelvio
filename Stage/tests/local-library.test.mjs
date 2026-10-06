@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {relativePaths,matchLibrary} from '../docs/local-library.js';
+import {relativePaths,matchLibrary,shelfFromPath,catalogueWithFolderShelves} from '../docs/local-library.js';
 
 const file=name=>({name,size:1});
 const entry=(path,name=path.split('/').pop())=>({webkitRelativePath:path,name});
@@ -35,6 +35,17 @@ test('a folder answers with the scores the catalogue asks for, and says which ar
   assert.match(local,/entry\.path===rootBackup/,'a backup saved beside catalog.json is also readable');
   assert.match(local,/showDirectoryPicker\(\{id:'volta-library',mode:'read'\}\)/,'folder selection does not request write access yet');
   assert.match(local,/requestPermission\(\{mode:'readwrite'\}\)/,'the sync action can request write access later');
+});
+
+test('the first real folder is the shelf shown by the app',()=>{
+  assert.equal(shelfFromPath('原神/蒙德/风与牧歌之城/总谱 · a.pdf'),'原神');
+  assert.equal(shelfFromPath('曲谱/其他/D大调卡农/钢琴独奏 · b.pdf'),'其他','the old wrapper is ignored');
+  assert.equal(shelfFromPath('曲谱库数据/catalog.json'),'','metadata is never a shelf');
+  const catalog=catalogueWithFolderShelves(
+    {items:[{id:'a',composer:'帕赫贝尔'},{id:'b',composer:'莫扎特'}]},
+    {files:{a:'其他/D大调卡农/钢琴独奏 · a.pdf',b:'沃尔夫冈·阿马德乌斯·莫扎特/奏鸣曲/全集 · b.pdf'}},
+  );
+  assert.deepEqual(catalog.items.map(item=>item.libraryFolder),['其他','沃尔夫冈·阿马德乌斯·莫扎特']);
 });
 
 test('the shelf reads a folder before it reads the network, and the app keeps working offline',async()=>{
@@ -152,7 +163,8 @@ test('the writing dock carries the only explicit annotation export action',async
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="ink-save"/,'saving is where the writing hand already is');
   assert.match(html,/title="导出批注备份"/);
-  assert.match(html,/<span>导出<\/span>/);
+  assert.match(html,/aria-label="导出批注备份"/);
+  assert.doesNotMatch(html,/<button id="ink-save"[^>]*>[^<]*导出/,'export is icon-only in the writing dock');
   for(const id of ['ink-folder-save','ink-export','backup-export','backup-import','backup-file'])assert.doesNotMatch(html,new RegExp('id="'+id+'"'),id+' is removed');
   assert.doesNotMatch(html,/画笔设置|橡皮设置/,'the two ··· buttons are gone');
   assert.match(html,/id="pen-options"/);assert.match(html,/id="erase-options"/);
@@ -166,6 +178,8 @@ test('the writing dock carries the only explicit annotation export action',async
   const folder=await fs.readFile(new URL('../docs/ink-folder.js',import.meta.url),'utf8');
   assert.match(folder,/if\(dock\)dock\.onclick=keep/,'the dock owns the export action');
   assert.match(folder,/exportBackup/,'the export action creates a backup file');
+  assert.match(folder,/setAttribute\('aria-label','导出批注备份'\)/,'the icon-only control keeps its accessible name');
+  assert.doesNotMatch(folder,/querySelector\('span'\)\.textContent/,'export setup no longer expects a visible label');
 });
 
 test('export does not ask for folder write permission',async()=>{
@@ -188,7 +202,7 @@ test('whether markings survive a closed app is answered without being asked',asy
 test('an empty reader offers the whole collection first, one PDF second',async()=>{
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="empty-folder" class="primary">选择曲谱文件夹/,'the first offer is the folder');
-  assert.match(html,/id="empty-import" class="text-button">只打开一份 PDF/,'a single PDF is still one click away');
+  assert.match(html,/id="empty-import" class="text-button"[^>]*>临时打开 PDF/,'a single PDF is still one click away');
   const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
   assert.match(app,/if\(library\?\.local\)\$\('library-button'\)\.click\(\);else localFolder\?\.choose\(\)/,
     'once a folder is open the same button leads back into the shelf');

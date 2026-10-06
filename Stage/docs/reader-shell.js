@@ -18,16 +18,17 @@ export class ReaderShell {
     this.backdrop=document.getElementById('drawer-backdrop');this.stage=document.getElementById('score-stage');
     this.shelf.id='shelf-drawer';
     // The controls float over the score. Opening a drawer never changes its size.
-    for(const selector of ['#score-card','#edition-toolbar','.reader-toolbar','.page-navigation','#bookmark-bar','#midi-bar','#practice-drawer'])this.tools.append(document.querySelector(selector));
+    for(const selector of ['#edition-toolbar','.reader-toolbar','.page-navigation','#pdf-outline','#bookmark-bar','#midi-bar','#practice-drawer'])this.tools.append(document.querySelector(selector));
     document.body.append(document.getElementById('ink-toolbar'));
     installDockPosition();
-    this.idle=installIdleChrome();
+    this.idle=installIdleChrome({isWriting:writing});
     const practice=document.getElementById('practice-live');
     for(const selector of ['#reference-panel','.listening-bar','.reader-footer'])practice.append(document.querySelector(selector));
     this.backdrop.onclick=()=>this.close();
     document.getElementById('shelf-reveal').onclick=()=>this.open('shelf');
     document.getElementById('tools-reveal').onclick=()=>this.open('tools');
     document.querySelectorAll('[data-close-drawer]').forEach(button=>button.onclick=()=>this.close());
+    document.getElementById('chrome-hide').onclick=()=>this.hideChrome();
     this.tools.addEventListener('pointerdown',()=>this.arm());this.tools.addEventListener('keydown',()=>this.arm());
     document.addEventListener('keydown',event=>{
       if(event.key==='Escape'&&this.panel){event.preventDefault();event.stopImmediatePropagation();this.close();}
@@ -72,7 +73,11 @@ export class ReaderShell {
     clearTimeout(this.timer);if(!this.panel||!this.effects.performing())return;
     this.timer=setTimeout(()=>{if(this.tools.contains(document.activeElement)&&document.activeElement.matches('input,select'))this.arm();else this.close();},5000);
   }
-  close({focus=true}={}){this.panel=null;clearTimeout(this.timer);this.sync();this.idle?.wake();if(focus)this.stage.focus({preventScroll:true});}
+  close({focus=true,wake=true}={}){this.panel=null;clearTimeout(this.timer);this.sync();if(wake)this.idle?.wake();if(focus)this.stage.focus({preventScroll:true});}
+  hideChrome(){
+    for(const popover of document.querySelectorAll('.pencil-popover'))popover.open=false;
+    this.close({focus:false,wake:false});document.activeElement?.blur?.();this.idle?.hideNow();
+  }
   sync(){
     document.body.classList.toggle('shelf-open',this.panel==='shelf');document.body.classList.toggle('tools-open',this.panel==='tools');
     this.shelf.inert=this.panel!=='shelf';this.tools.inert=this.panel!=='tools';this.reader.inert=!!this.panel;

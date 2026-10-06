@@ -8,3 +8,6 @@ tmp/
 .env*
 dist/
 曲谱/
+
+# Preserved local score-working artifacts, not application source.
+archive/working-files/

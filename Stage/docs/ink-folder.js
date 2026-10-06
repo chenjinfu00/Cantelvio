@@ -59,7 +59,7 @@ export function setupInkFolder({ink,library,toast=()=>{},canRun=()=>true,drain,s
   let busy=false;
   const source=()=>library?.local||null;
   const say=text=>{if(status)status.textContent=text;};
-  const markExport=()=>{if(!dock)return;dock.title='导出批注备份';dock.querySelector('span').textContent='导出';const icon=dock.querySelector('svg');if(icon)icon.innerHTML='<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/><path d="M5 21a2 2 0 0 1-2-2v-3M19 21a2 2 0 0 0 2-2v-3"/>';};
+  const markExport=()=>{if(!dock)return;dock.title='导出批注备份';dock.setAttribute('aria-label','导出批注备份');const icon=dock.querySelector('svg');if(icon)icon.innerHTML='<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/><path d="M5 21a2 2 0 0 1-2-2v-3M19 21a2 2 0 0 0 2-2v-3"/>';};
   function describe(){
     const local=source();
     if(!local||local.needsFolder){

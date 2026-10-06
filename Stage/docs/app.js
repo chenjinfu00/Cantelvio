@@ -16,19 +16,27 @@ import {installReaderViewport} from './reader-viewport.js';
 import {ReadingPosition} from './reading-position.js';
 import {setupRecentScores} from './recent-scores.js';
 import {setupBookmarks} from './bookmarks.js';
+import {setupPDFOutline} from './pdf-outline.js';
 import {setupMIDI} from './midi-ui.js';
+import {parseMIDI} from './midi-file.js';
+import {analyzeMIDI} from './midi-reference.js';
+import {TurnCue,showTurnCue} from './turn-cue.js';
+import {pageTurnMap,validatePageTurnMap} from './page-turn-map.js';
+import {CHOPIN_EXAMPLE,exampleFor} from './chopin-example.js';
 import {setupLocalFolder} from './local-library.js';
 import {drainInk,showMerged} from './annotation-backup.js';
 import {setupInkFolder} from './ink-folder.js';
 import {BUILD_INFO,VERSION_UPDATE} from './build-info.js';
+import {installScreenAwake} from './screen-awake.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
 const $ = id => document.getElementById(id);
-const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,reference:null,microphone:null,matcher:null,turner:null,renderId:0,audioURL:null,abort:null,startAnchor:0,frameTime:0,op:0,zoom:1,fit:'screen'};
+const state={score:null,pdf:null,page:1,spread:false,phase:'idle',draft:null,reference:null,microphone:null,matcher:null,turner:null,renderId:0,audioURL:null,abort:null,startAnchor:0,frameTime:0,cue:null,op:0,zoom:1,fit:'screen'};
 const ink=new Ink(toast,{canWrite:()=>!!state.pdf&&state.phase==='idle'&&!performing()});
 const readerViewport=installReaderViewport();
+installScreenAwake();
 const readingPosition=new ReadingPosition($('score-stage'));
-let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline,inkFolder;
+let toastTimer,wakeLock,resizeTimer,library,recent,bookmarks,outline,midi,performanceMode,performanceSnapshot,performanceTurning=false,shell,offline,inkFolder;
 let cachePDF=null,visibleKeys=[],previewKeys=[],warmTimer,fitProfile=null;
 const pageCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal));
 const previewCache=new PageRenderCache((page,metrics,signal)=>renderScorePage(cachePDF,page,metrics,signal),{maxEntries:12,maxPixels:3_500_000});
@@ -58,13 +66,18 @@ function controls(){
   for(const id of ['ink-pen','ink-erase','ink-undo','ink-redo','score-zoom'])$(id).disabled=!loaded||state.phase!=='idle';
   if(state.phase!=='idle'&&ink.mode!=='read')ink.setMode('read');
   for(const id of ['import-button','empty-import','empty-folder','demo-button','url-import'])$(id).disabled=locked||learning()||state.phase==='following';
+  $('midi-import-button').disabled=!loaded||state.phase!=='idle';$('midi-learn').disabled=!loaded||state.phase!=='idle';
+  $('turn-map-export').disabled=!(state.draft||state.reference)?.sourceId||!(state.draft||state.reference)?.anchors?.length;
+  $('turn-map-import').disabled=state.phase!=='reference';
   $('audio-button').disabled=!loaded||state.phase!=='idle';$('learn-button').disabled=!loaded||state.phase!=='idle';
   $('prev-button').disabled=!loaded||state.page===1||locked;$('next-button').disabled=!loaded||state.page>=state.pdf.numPages||locked;
   $('page-input').disabled=!loaded||locked;$('page-input').value=state.page;
   const range=$('page-range');range.disabled=!loaded||locked;range.max=loaded?state.pdf.numPages:1;
   if(document.activeElement!==range)range.value=state.page;
+  range.style.setProperty('--page-progress',`${loaded?(state.page-1)/Math.max(1,state.pdf.numPages-1)*100:0}%`);
   $('page-count').textContent=loaded?`/ ${state.pdf.numPages}`:'/ —';
   bookmarks?.refresh();
+  outline?.refresh();
   $('page-label').textContent=loaded?`PDF 第 ${state.page}${state.spread&&state.page<state.pdf.numPages?'–'+(state.page+1):''} 页`:'等待导入';
   $('listen-button').disabled=state.phase!=='following'&&(state.phase!=='idle'||!state.reference);
   $('listen-button').textContent=state.phase==='following'?'停止聆听':'开始聆听 ↗';
@@ -78,7 +91,7 @@ function controls(){
   $('reference-audio').hidden=state.phase==='learning';
   $('set-start-button').hidden=state.phase!=='reference';$('rest-button').hidden=state.phase!=='reference';
   $('rest-button').textContent=state.draft?.restStart!==undefined?'标记钢琴重新进入':'标记钢琴休止开始';
-  $('reference-hint').textContent=state.phase==='reference'?'先跳过乐队引子，设定练习起点。纯乐队片段可标记休止开始和重新进入，系统将跳过这些参考声音。翻页请在下一页第一个音处标记。':'弹到下一页第一个音时手动翻页。钢琴休止时保持安静，继续弹奏后再标记。';
+  $('reference-hint').textContent=state.phase==='reference'?'播放参考声音，在下一页第一个音处翻页。完整录音或双钢琴可保留乐队段；只练独奏时，可设置起点并标记需要跳过的休止。':'弹到下一页第一个音时手动翻页。钢琴休止时保持安静，继续弹奏后再标记。';
   $('reference-status').textContent=state.phase==='learning'?`正在学习 ${formatTime(state.frameTime)}`:state.phase==='analyzing'?'正在分析声音…':state.draft?`${state.draft.anchors.length-1} 个翻页点`:'准备中';
 }
 
@@ -87,22 +100,22 @@ function ready(){
   document.querySelector('.listening-bar').classList.remove('listening');
   $('meter').querySelectorAll('span').forEach(s=>{s.style.height='6px';s.style.background='';});
   if(state.reference)status('翻页点准备好了','回到起始页，点击开始聆听',`${state.reference.anchors.length-1} 个翻页点 · 保存在本机`);
-  else if(state.pdf)status('学习这首作品的翻页点','导入录音，或用麦克风弹一遍','尚未学习参考演奏');
+  else if(state.pdf)status('学习这首作品的翻页点','导入 MIDI 或录音，标记每页开头','尚未学习参考演奏');
   else status('准备好，就开始演奏','先导入曲谱并学习一次翻页点','等待准备');
 }
 async function persist(){
-  if(!state.score)return;
+  if(!state.score||state.score.temporary)return;
   try{await saveScore({...state.score,page:state.page,reference:state.reference});}
   catch{toast('浏览器存储不足，当前仍可使用，但关闭后可能需要重新导入。');}
 }
-async function openPDF(buffer,name,restored=null,onProgress){
+async function openPDF(buffer,name,restored=null,onProgress,{temporary=false}={}){
   if(performing())throw new Error('请先退出演出模式再切换曲谱。');
   const remote=buffer?.url?buffer:null;
   if(!remote&&buffer.byteLength>60*1024*1024)throw new Error('手动导入的 PDF 请小于 60 MB；曲谱库中的大文件采用按需读取。');
   const oldPhase=state.phase;state.phase='loading';controls();$('render-status').hidden=false;
   clearTimeout(warmTimer);state.renderId++;pageCache.prioritize([]);previewCache.prioritize([]);
   try{
-    const id=remote?.id||await scoreID(buffer),saved=restored||await loadScore(id).catch(()=>null);
+    const id=remote?.id||await scoreID(buffer),saved=temporary?null:restored||await loadScore(id).catch(()=>null);
     const source=remote?{url:remote.url,withCredentials:true,disableAutoFetch:true,disableStream:true,rangeChunkSize:262144}:{data:new Uint8Array(buffer.slice(0))};
     onProgress?.('正在读取曲谱…');
     const pdf=await loadPDFDocument(pdfjs.getDocument,{...source,cMapUrl:new URL('./vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('./vendor/standard_fonts/',import.meta.url).href,wasmUrl:new URL('./vendor/wasm/',import.meta.url).href,isEvalSupported:false},state.pdf,({loaded,total})=>{
@@ -110,7 +123,7 @@ async function openPDF(buffer,name,restored=null,onProgress){
     });
     $('chopin-audio')?.remove();
     await inkFolder?.save({quiet:true}).catch(()=>{});
-    state.pdf=pdf;state.score=remote?{id,name,remote,path:remote.path||null,local:!!remote.local,system:!!remote.system}:{id,name,buffer,path:buffer.path||null,local:false,system:false};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);midi?.setScore(library?.item(id));
+    state.pdf=pdf;state.score=remote?{id,name,remote,path:remote.path||null,local:!!remote.local,system:!!remote.system,temporary}:{id,name,buffer,path:buffer.path||null,local:false,system:false,temporary};state.reference=null;state.draft=null;state.startAnchor=0;state.zoom=1;state.fit='screen';$('score-zoom').value='screen';ink.setScore(id);bookmarks?.setScore(state.score);outline?.setDocument(pdf);midi?.setScore(library?.item(id));
     fitProfile=null;
     // Page bounds travel with the collection, in its own folder.
     try{
@@ -120,10 +133,11 @@ async function openPDF(buffer,name,restored=null,onProgress){
     readingPosition.setScore(id);
     if(saved?.reference){try{state.reference=validateReference(saved.reference,pdf.numPages);}catch{toast('旧的学习记录需要重新建立；PDF 已恢复。');}}
     state.page=Math.max(1,Math.min(pdf.numPages,saved?.page||1));
-    $('score-title').textContent=name.replace(/\.pdf$/i,'');$('reader-title').textContent=name.replace(/\.pdf$/i,'');$('score-meta').textContent=`${pdf.numPages} 页 · ${remote?'曲谱库':'本机导入'}`;
+    const displayName=name.replace(/\.pdf$/i,''),displayMeta=`${pdf.numPages} 页 · ${temporary?'临时打开':remote?'曲谱库':'本机导入'}`;
+    $('score-title').textContent=displayName;$('reader-title').textContent=displayName;$('score-meta').textContent=displayMeta;$('reader-meta').textContent=displayMeta;
     $('empty-state').hidden=true;$('pages').hidden=false;
     onProgress?.('正在显示谱页…');
-  controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(state.score);if(!state.score.system)recent?.remember({id,name,path:state.score.path||library?.local?.path?.(id)||null});shell?.close();offline?.refresh();
+  controls();renderAnchors();ready();await renderPages();await persist();library?.setCurrent(temporary?null:state.score);if(!temporary&&!state.score.system)recent?.remember({id,name,path:state.score.path||library?.local?.path?.(id)||null});shell?.close();offline?.refresh();
   }finally{state.phase=oldPhase;$('render-status').hidden=true;controls();}
 }
 async function renderPages({anchor=null,beforePaint=()=>{}}={}){
@@ -196,12 +210,13 @@ async function renderPages({anchor=null,beforePaint=()=>{}}={}){
 
 function renderAnchors(){
   const ref=state.draft||state.reference,list=$('anchor-list');list.replaceChildren();
-  if(!ref){const p=document.createElement('p');p.className='muted';p.textContent='学习完成后，翻页点会保存在这里。';list.append(p);return;}
+  if(!ref)return;
   ref.anchors.forEach((a,i)=>{
     const row=document.createElement('div');row.className='anchor'+(state.page===a.page?' active':'');
     const button=document.createElement('button');button.className='text-button';button.style.textDecoration='none';button.textContent=`${i===0?'起始':'第 '+(i+1)+' 段'} · 第 ${a.page} 页`;
     button.onclick=action(async()=>{if(learning()){if(state.phase==='reference')$('reference-audio').currentTime=a.time;await navigate(a.page,{mark:false});}else{state.startAnchor=i;await navigate(a.page,{mark:false,anchor:i});}});
-    const time=document.createElement('span');time.textContent=formatTime(a.time);row.append(button,time);
+    const time=document.createElement('span');time.textContent=formatTime(a.time)+(a.bar?` · m.${a.bar}`:'');row.append(button,time);
+    if(state.phase==='reference'){const edit=document.createElement('input');edit.type='number';edit.min=0;edit.max=state.draft.duration;edit.step='.01';edit.value=a.time.toFixed(3);edit.setAttribute('aria-label',`第 ${a.page} 页翻页时间（秒）`);edit.className='anchor-time-edit';edit.onchange=action(()=>{const value=Number(edit.value);if(!Number.isFinite(value)||value<0||value>state.draft.duration||state.draft.anchors.some(other=>other!==a&&Math.abs(other.time-value)<.25)){edit.value=a.time;throw new Error('请输入参考演奏范围内且不重复的时间。');}a.time=value;state.draft.anchors.sort((x,y)=>x.time-y.time);renderAnchors();});row.append(edit);}
     if(state.draft&&i>0){const remove=document.createElement('button');remove.className='anchor-remove';remove.textContent='×';remove.ariaLabel=`删除第 ${i} 个翻页点`;remove.onclick=()=>{state.draft.anchors.splice(i,1);renderAnchors();controls();};row.append(remove);}
     list.append(row);
   });
@@ -218,8 +233,9 @@ async function navigate(page,{mark:shouldMark=true,automatic=false,anchor}={}){
   if(!state.pdf||busy())return;
   page=Number(page);if(!Number.isInteger(page)||page<1||page>state.pdf.numPages)throw new Error('页码超出曲谱范围。');
   if(page===state.page&&anchor===undefined)return;
-  if(performing()&&!automatic)manualTurnGuard.manual();
+  if(!automatic)manualTurnGuard.manual();
   if(learning()&&shouldMark)mark(page);
+  if(!automatic){state.cue?.reset();showTurnCue($('turn-cue'),null);}
   if(state.phase==='following'&&!automatic){
     let target=anchor??state.reference.anchors.findIndex((a,i)=>a.page===page&&i>=state.turner.anchorIndex);
     if(target<0)target=state.reference.anchors.findIndex(a=>a.page===page);
@@ -229,7 +245,7 @@ async function navigate(page,{mark:shouldMark=true,automatic=false,anchor}={}){
   const previousPage=state.page,performanceTurn=performing();
   if(performanceTurn){performanceTurning=true;$('performance-error').hidden=true;}
   state.page=page;controls();renderAnchors();
-  try{await renderPages();if(!learning())savePosition(state.score.id,state.page).catch(()=>toast('页码暂时无法保存；翻页仍可使用。'));}
+  try{await renderPages();if(!learning()&&!state.score.temporary)savePosition(state.score.id,state.page).catch(()=>toast('页码暂时无法保存；翻页仍可使用。'));}
   catch(error){
     if(!performanceTurn)throw error;
     state.page=previousPage;controls();$('performance-error').textContent='这页未能载入，请再按一次翻页。';$('performance-error').hidden=false;
@@ -241,28 +257,33 @@ async function releaseAudio(){
   if(state.audioURL)URL.revokeObjectURL(state.audioURL);state.audioURL=null;
 }
 async function stopSession(){
-  state.op++;state.abort?.abort();state.abort=null;
+  state.op++;state.abort?.abort();state.abort=null;state.cue=null;showTurnCue($('turn-cue'),null);midi?.stop();
   const mic=state.microphone;state.microphone=null;await mic?.stop();
   await wakeLock?.release().catch(()=>{});wakeLock=null;
   state.phase='idle';state.draft=null;await releaseAudio();controls();renderAnchors();ready();
 }
 async function learnFile(file,startTime=0){
   if(!state.pdf||state.phase!=='idle'||performing())return;
-  state.phase='analyzing';const op=++state.op;state.abort=new AbortController();state.spread=false;controls();await renderPages();
+  midi?.stop();state.phase='analyzing';const op=++state.op;state.abort=new AbortController();state.spread=false;controls();await renderPages();
   $('reference-title').textContent=file.name;status('正在学习参考声音','第一次分析需要一点时间','只在本机处理');
   try{
-    const result=await analyzeAudio(file,f=>{$('reference-status').textContent=`分析 ${Math.round(f*100)}%`},state.abort.signal);
+    const isMIDI=/\.midi?$/i.test(file.name),sourceId=await scoreID(await file.arrayBuffer());
     if(op!==state.op)return;
-    state.draft={featureVersion:FEATURE_VERSION,frames:result.frames,anchors:[{time:startTime,page:state.page}],duration:result.duration,sourceName:file.name,rests:[]};
-    state.audioURL=URL.createObjectURL(file);$('reference-audio').src=state.audioURL;
+    const progress=f=>{if(op===state.op)$('reference-status').textContent=`分析 ${Math.round(f*100)}%`;};
+    const result=isMIDI?await analyzeMIDI(parseMIDI(await file.arrayBuffer()),progress,state.abort.signal):await analyzeAudio(file,progress,state.abort.signal);
+    if(op!==state.op)return;
+    state.draft={featureVersion:FEATURE_VERSION,frames:result.frames,anchors:[{time:startTime,page:state.page}],duration:result.duration,sourceName:file.name,sourceId,sourceKind:isMIDI?'midi':'audio',rests:[]};
+    const preset=exampleFor(state.score.id,sourceId);
+    if(preset){Object.assign(state.draft,validatePageTurnMap(preset,{scoreId:state.score.id,sourceId,pageCount:state.pdf.numPages,duration:result.duration}));startTime=state.draft.anchors.find(a=>a.page===state.page)?.time||0;}
+    state.audioURL=URL.createObjectURL(result.blob||file);$('reference-audio').src=state.audioURL;
     if(startTime>0)$('reference-audio').addEventListener('loadedmetadata',()=>{$('reference-audio').currentTime=startTime;},{once:true});
-    state.phase='reference';controls();renderAnchors();status('边听参考录音，边标记翻页','播放录音，在下一页的第一个音处翻页','音频指纹已准备');
+    state.phase='reference';controls();renderAnchors();status(isMIDI?'边听 MIDI，边标记翻页':'边听参考录音，边标记翻页','播放录音，在下一页的第一个音处翻页',preset?`已载入 ${preset.anchors.length-1} 个示例翻页点，可试听后完成学习`:'音频指纹已准备');
   }catch(e){if(op===state.op)await stopSession();throw e;}
 }
 function meter(frame){const level=Math.max(0,Math.min(1,(frame.db+60)/48));$('meter').querySelectorAll('span').forEach((s,i)=>{s.style.height=(5+level*(10+10*Math.sin(i*1.3)**2))+'px';s.style.background=frame.active?'#789c48':'#c5d1b7';});}
 async function learnLive(){
   if(!state.pdf||state.phase!=='idle'||performing())return;
-  state.phase='starting';state.spread=false;state.frameTime=0;const op=++state.op;controls();await renderPages();
+  midi?.stop();state.phase='starting';state.spread=false;state.frameTime=0;const op=++state.op;controls();await renderPages();
   const mic=new Microphone();state.microphone=mic;
   state.draft={featureVersion:FEATURE_VERSION,frames:[],anchors:[{time:0,page:state.page}],duration:0,sourceName:'麦克风学习'};
   try{
@@ -296,9 +317,10 @@ async function startFollowing(){
   let start=state.startAnchor;
   if(state.reference.anchors[start]?.page!==state.page)start=state.reference.anchors.findIndex(a=>a.page===state.page);
   if(start<0)throw new Error('请从左侧选择已标记的起始页，再开始聆听。');
-  state.phase='starting';const op=++state.op;controls();$('reference-audio').pause();
+  midi?.stop();state.phase='starting';const op=++state.op;controls();$('reference-audio').pause();
   state.matcher=new OnlineMatcher(state.reference.frames,frameAtTime(state.reference.frames,state.reference.anchors[start].time));
   state.turner=new TurnController(state.reference.anchors,state.reference.frames,{lead:Number($('lead-select').value)});state.turner.reset(start);
+  state.cue=new TurnCue(state.reference.anchors,state.reference.frames,{lead:Number($('lead-select').value)});
   const mic=new Microphone();state.microphone=mic;
   let automaticPending=false;
   try{
@@ -308,20 +330,22 @@ async function startFollowing(){
       else if(!match.stable)status('正在寻找熟悉的乐句','识别清楚后才会翻页',`匹配相似度 ${Math.round(match.confidence*100)}%`);
       else status('正在跟随你的演奏','放慢、停顿，谱页会一起等待',`参考位置 ${formatTime(state.reference.frames[match.index].time)} · 相似度 ${Math.round(match.confidence*100)}%`);
       // Do not advance the anchor while a page is rendering or a manual correction settles.
-      if(automaticPending||busy()||$('performance-dialog').open||performing()&&!manualTurnGuard.permits())return;
+      if(automaticPending||busy()||$('performance-dialog').open||!manualTurnGuard.permits()){showTurnCue($('turn-cue'),null);return;}
+      const cue=state.cue.observe(match,frame.time,state.turner.anchorIndex);showTurnCue($('turn-cue'),cue);
+      state.turner.lead=Number($('lead-select').value)*state.cue.rate;
       const turner=state.turner,revision=manualTurnGuard.revision,next=turner.observe(match);
       if(next){
-        automaticPending=true;
+        state.cue.reset();showTurnCue($('turn-cue'),null);automaticPending=true;
         action(async()=>{
           try{
-            if(state.phase!=='following'||op!==state.op||state.turner!==turner||performing()&&!manualTurnGuard.permits(revision))return;
+            if(state.phase!=='following'||op!==state.op||state.turner!==turner||!manualTurnGuard.permits(revision))return;
             await navigate(next.page,{automatic:true,mark:false});toast(`已跟随音乐翻到第 ${next.page} 页`);
           }finally{automaticPending=false;}
         })();
       }
     },()=>action(async()=>{await stopSession();toast('麦克风连接已结束。');})());
     if(op!==state.op){await mic.stop();return;}
-    state.phase='following';controls();document.querySelector('.listening-bar').classList.add('listening');status('正在聆听，请开始演奏','从当前已标记的乐句开头进入','等待音乐');
+    state.phase='following';controls();shell.close();document.querySelector('.listening-bar').classList.add('listening');status('正在聆听，请开始演奏','从当前已标记的乐句开头进入','等待音乐');
     try{wakeLock=await navigator.wakeLock?.request('screen');}catch{}
   }catch(e){await stopSession();throw e;}
 }
@@ -375,16 +399,22 @@ for(const event of ['fullscreenchange','webkitfullscreenchange'])document.addEve
 });
 $('score-stage').addEventListener('contextmenu',e=>{if(performing())e.preventDefault();});
 
-for(const id of ['import-button','empty-import','imslp-upload'])$(id).onclick=()=>{if(performing())return;$('imslp-dialog').close();$('pdf-input').click();};
-$('pdf-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(file)await openPDF(await file.arrayBuffer(),file.name);});
+$('import-button').onclick=$('empty-import').onclick=()=>{if(!performing())$('imslp-dialog').showModal();};
+$('imslp-upload').onclick=()=>{if(performing())return;$('imslp-dialog').close();$('pdf-input').click();};
+$('pdf-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(file)await openPDF(await file.arrayBuffer(),file.name,null,undefined,{temporary:true});});
+$('midi-import-button').onclick=()=>$('midi-input').click();
+$('midi-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(file)await learnFile(file);});
+$('turn-map-export').onclick=()=>{const ref=state.draft||state.reference;if(!ref?.sourceId)return;const blob=new Blob([JSON.stringify(pageTurnMap(state.score.id,ref),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='volta-page-turns.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('turn-map-import').onclick=()=>$('turn-map-input').click();
+$('turn-map-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(!file||state.phase!=='reference')return;if(file.size>1024*1024)throw new Error('翻页点文件过大。');const draft=state.draft,map=JSON.parse(await file.text());if(state.draft!==draft)return;Object.assign(draft,validatePageTurnMap(map,{scoreId:state.score.id,sourceId:draft.sourceId,pageCount:state.pdf.numPages,duration:draft.duration}));delete draft.restStart;renderAnchors();controls();toast('已载入翻页点，请试听核对后完成学习。');});
 $('audio-button').onclick=()=>$('audio-input').click();$('audio-input').onchange=action(async e=>{const file=e.target.files[0];e.target.value='';if(file)await learnFile(file);});
-$('help-button').onclick=()=>$('help-dialog').showModal();$('imslp-button').onclick=()=>$('imslp-dialog').showModal();
+$('help-button').onclick=()=>$('help-dialog').showModal();
 document.querySelectorAll('.dialog-close,.dialog-done').forEach(b=>b.onclick=()=>b.closest('dialog').close());
 $('prev-button').onclick=()=>requestTurn(-1);
 $('next-button').onclick=()=>requestTurn(1);
 $('page-input').onchange=action(()=>navigate(Number($('page-input').value)));
 // Dragging shows the page you are heading for; the turn happens when you let go.
-$('page-range').oninput=()=>{$('page-input').value=$('page-range').value;$('page-label').textContent=`PDF 第 ${$('page-range').value} 页`;};
+$('page-range').oninput=()=>{$('page-input').value=$('page-range').value;$('page-label').textContent=`PDF 第 ${$('page-range').value} 页`;$('page-range').style.setProperty('--page-progress',`${(Number($('page-range').value)-1)/Math.max(1,Number($('page-range').max)-1)*100}%`);};
 $('page-range').onchange=action(()=>navigate(Number($('page-range').value)));
 $('single-button').onclick=action(async()=>{state.spread=false;controls();await renderPages();});
 $('spread-button').onclick=action(async()=>{state.spread=true;controls();await renderPages();});
@@ -392,7 +422,7 @@ $('score-zoom').onchange=action(async e=>{const value=e.target.value;state.zoom=
 $('reading-position-reset').onclick=action(()=>readingPosition.reset());
 $('fullscreen-button').onclick=async()=>{if(fullscreenElement())await leaveScoreFullscreen();else if(!await requestScoreFullscreen())toast('此浏览器未提供全屏。iPad 可通过 Safari“添加到主屏幕”减少浏览器栏。');shell.close();};
 $('learn-button').onclick=action(learnLive);$('finish-button').onclick=action(finishLearning);$('cancel-button').onclick=action(stopSession);$('listen-button').onclick=action(startFollowing);$('mark-button').onclick=action(()=>navigate(state.page+1));
-$('lead-select').onchange=()=>{if(state.turner)state.turner.lead=Number($('lead-select').value);};
+$('lead-select').onchange=()=>{if(state.turner)state.turner.lead=Number($('lead-select').value);if(state.cue){state.cue.lead=Number($('lead-select').value);state.cue.reset();showTurnCue($('turn-cue'),null);}};
 $('set-start-button').onclick=action(()=>{
   if(state.phase!=='reference')return;const time=$('reference-audio').currentTime;
   state.draft.anchors=[{time,page:state.page},...state.draft.anchors.filter(a=>a.time>time+.25)];
@@ -410,20 +440,26 @@ $('url-import').onclick=action(async()=>{
   const url=new URL($('pdf-url').value);if(url.protocol!=='https:'&&url.protocol!=='http:')throw new Error('请输入 HTTP 或 HTTPS PDF 链接。');
   if(/imslp\.org$/.test(url.hostname)&&!url.pathname.toLowerCase().endsWith('.pdf'))throw new Error('这是 IMSLP 页面。请在原网站下载 PDF，再从本机导入。');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
-  try{const response=await fetch(url,{credentials:'omit',signal:controller.signal});if(!response.ok)throw new Error('无法读取 PDF');const data=await response.arrayBuffer();await openPDF(data,decodeURIComponent(url.pathname.split('/').pop())||'IMSLP 曲谱');$('imslp-dialog').close();}
+  try{const response=await fetch(url,{credentials:'omit',signal:controller.signal});if(!response.ok)throw new Error('无法读取 PDF');const data=await response.arrayBuffer();await openPDF(data,decodeURIComponent(url.pathname.split('/').pop())||'IMSLP 曲谱',null,undefined,{temporary:true});$('imslp-dialog').close();}
   catch{throw new Error('这个网站不允许直接读取，请打开原链接下载 PDF，再导入文件。');}finally{clearTimeout(timer);}
 });
 $('demo-button').onclick=action(async()=>{
-  const response=await fetch('./local/chopin.pdf');
-  if(!response.ok)throw new Error('肖邦示例在本机版本中可用。这里请导入你下载的肖邦第二钢协 PDF。');
-  await openPDF(await response.arrayBuffer(),'肖邦 · 第二钢琴协奏曲 / I. Maestoso');
-  if(!state.reference)await navigate(3,{mark:false});
-  toast('第一乐章共 16 页，钢琴独奏从 PDF 第 3 页进入。');
-  if(!document.getElementById('chopin-audio')){
-    const b=document.createElement('button');b.id='chopin-audio';b.className='secondary full';b.textContent='载入第一乐章参考录音';
-    b.onclick=action(async()=>{if(state.phase!=='idle')return;const response=await fetch('./local/chopin.mp3');if(!response.ok)throw new Error('本机参考录音不可用，请导入自己的录音。');await learnFile(new File([await response.blob()],'Chopin Op.21 · I. Maestoso.mp3',{type:'audio/mpeg'}),state.page===3?147.24:0);});
-    $('score-card').append(b);
-  }
+  if(state.phase!=='idle')return;
+  const id=CHOPIN_EXAMPLE.scoreId,local=library?.local;
+  let address=await local?.url?.(id);
+  if(!address&&!local&&['localhost','127.0.0.1'].includes(location.hostname))address=new URL('./scores/'+id+'.pdf',import.meta.url).href;
+  if(!address)throw new Error('请先选择包含波兰国家版双钢琴谱的本地曲谱文件夹。');
+  await openPDF({id,url:address,local:true},'肖邦第二钢琴协奏曲 · 波兰国家版双钢琴');
+  if(!state.reference)await navigate(13,{mark:false});
+  const name=CHOPIN_EXAMPLE.sourceName;
+  midi.setScore({sources:[{name,kind:'midi'}]});
+  if(state.reference?.sourceId===CHOPIN_EXAMPLE.sourceId){shell.open('tools');return;}
+  const midiURL=local?local.sourceURL(id,name):new URL('./sources/'+id+'/'+encodeURIComponent(name),import.meta.url).href;
+  if(!midiURL)throw new Error('曲谱已打开。请选择旁边的第一乐章 MIDI，或点击“导入 MIDI”。');
+  const response=await fetch(midiURL);
+  if(!response.ok)throw new Error('曲谱已打开，尚未找到示例 MIDI。请点击“导入 MIDI”。');
+  await learnFile(new File([await response.blob()],name,{type:'audio/midi'}));
+  shell.open('tools');
 });
 document.addEventListener('keydown',e=>{
   if(performing()){
@@ -461,6 +497,7 @@ if(document.modelContext?.registerTool){
 controls();ready();
 library=setupLibrary(openPDF,toast,()=>state.phase==='idle'&&!performing(),()=>state.score,offlineScore);
 midi=setupMIDI({
+  canPlay:()=>state.phase==='idle'&&!performing(),onLearn:learnFile,
   sources:()=>library?.item(state.score?.id)?.sources||[],
   // A selected folder is authoritative; only the public demo/import path may use bundled sources.
   url:name=>{
@@ -498,6 +535,12 @@ bookmarks=setupBookmarks({
   jump:page=>{shell?.close();navigate(page).catch(error=>toast(errorMessage(error)));},
   toast,
 });
+outline=setupPDFOutline({
+  page:()=>state.page,
+  canJump:()=>!!state.pdf&&['idle','following','learning','reference'].includes(state.phase),
+  jump:page=>{shell?.close();navigate(page,{mark:false}).catch(error=>toast(errorMessage(error)));},
+  toast,
+});
 recent=setupRecentScores({
   canOpen:()=>state.phase==='idle'&&!performing(),
   open:async (id,item)=>{
@@ -512,7 +555,7 @@ recent=setupRecentScores({
   },
   onError:error=>toast(errorMessage(error)),
 });
-offline=setupOffline(()=>state.score,openPDF,toast,()=>settings.value);
+offline=setupOffline(()=>state.score,openPDF,toast);
 const deploy=setupDeploy({toast,onDone:()=>offline?.refresh()});
 $('offline-deploy').onclick=()=>deploy?.open();
 $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，批注保存在本机';
@@ -525,6 +568,9 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
   const saved=await loadScore();
   if(saved?.system){try{await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,saved);}catch{toast('版本说明页暂时无法打开。');}}
   else if(saved?.buffer){try{await openPDF(saved.buffer,saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
+  else if(saved?.id===CHOPIN_EXAMPLE.scoreId&&!library?.local&&['localhost','127.0.0.1'].includes(location.hostname)){
+    try{await openPDF({id:saved.id,url:new URL('./scores/'+saved.id+'.pdf',import.meta.url).href,local:true},saved.name,saved);}catch{toast('示例曲谱未能恢复，请确认本地曲谱服务已开启。');}
+  }
   else if(saved&&library?.local&&!library.local.needsFolder){
     const local=library.local.url?.(saved.id)||library.local.pathURL?.(saved.path);
     if(local){try{await openPDF({id:saved.id,url:local,path:saved.path||library.local.path?.(saved.id),local:true},saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
@@ -532,5 +578,4 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
   }else await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,null).catch(()=>{});
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
 })().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
-$('demo-button').onclick=()=>$('library-button').click();
 const buildVersion=$('build-version');if(buildVersion)buildVersion.textContent=`版本时间：${BUILD_INFO.label}`;

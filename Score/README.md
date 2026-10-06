@@ -9,6 +9,12 @@ engine and a first-class bridge to AIlegro, an AI composition system.*
 
 > 状态：早期开发（v0.1）。当前可以用的功能和下一步计划见 [docs/roadmap.md](docs/roadmap.md)。
 
+顶栏的曲谱视图可选择 **无缝模式**：按可用宽度换行，整份曲谱连续向下滚动，没有分页空隙或页码。
+页面视图和横向连续视图也可随时切换；打印及 PDF / SVG 导出仍使用纸张分页。
+回放进度线按音频时钟连续前进，包括每小节的最后一拍、长音和休止。
+
+本机联合演示：[全部功能入口](http://127.0.0.1:4187/demo/)，实际可用项、检查证据与重启方法见 [演示验证](docs/demo-verification.md)。
+
 ## 快速开始
 
 需要 Node.js 22.12 或更新版本。
@@ -26,7 +32,7 @@ npm run ailegro:serve             # 本机 AIlegro 服务：作曲、和声分�
 ## 和 AIlegro 一起用
 
 ```sh
-npm run ailegro:serve   # 终端 1：找到 ../AIlegro、它的 Python 环境和最新的 v3.1 权重，启动本机服务
+npm run ailegro:serve   # 终端 1：找到 ../Compose、它的 Python 环境和最新的 v3.1 权重，启动本机服务
 npm run dev             # 终端 2：编辑器
 ```
 
@@ -48,6 +54,7 @@ npm run dev             # 终端 2：编辑器
 
 ## 文档
 
+- [AIlegro + Score 联合开发与开源接入](docs/open-source-integration-plan.md)
 - [产品愿景与特色功能](docs/vision.md)
 - [整体架构](docs/architecture.md)
 - [乐谱数据模型](docs/score-model.md)

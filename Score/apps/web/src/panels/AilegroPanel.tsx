@@ -4,6 +4,8 @@ import {
   type ComposeRequest,
   type ComposeTask,
   HARMONIC_RHYTHMS,
+  DIFFICULTIES,
+  PERFORMANCE_PROFILES,
   type HarmonicRhythm,
 } from '@ailegro-score/ailegro-bridge';
 import { useEffect, useMemo, useState } from 'react';
@@ -24,7 +26,6 @@ import {
   exportAnalysisRequest,
   exportRecord,
   exportRequest,
-  generateWithService,
   importResultFile,
   pendingRuns,
   pingService,
@@ -45,6 +46,13 @@ import {
   saveImportOptions,
 } from '../state/service-import';
 import { getStore, useEditor } from '../state/store';
+import {
+  cancelCandidates,
+  clearCandidates,
+  generateCandidates,
+  useComposeCandidates,
+} from '../state/compose-candidates';
+import { CandidatePreview } from './CandidatePreview';
 
 export function AilegroPanel() {
   const t = useT();
@@ -55,6 +63,10 @@ export function AilegroPanel() {
   const [serviceUrl, setServiceUrl] = useState(storedServiceUrl);
   const [service, setService] = useState<ServiceInfo | 'offline' | null>(null);
   const [busy, setBusy] = useState(false);
+  const [candidateCount, setCandidateCount] = useState(3);
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const candidateState = useComposeCandidates();
+  const preview = candidateState.candidates.find((c) => c.id === previewId);
   const [importOptions, setImportOptions] = useState<ImportOptions>(loadImportOptions);
   const runs = useMemo(() => pendingRuns(doc), [doc]);
 
@@ -64,6 +76,8 @@ export function AilegroPanel() {
     const s = getStore().getState();
     setSpec(defaultSpec(s.doc, s.selection));
     setLastRequest(null);
+    if (useComposeCandidates.getState().candidates.some((c) => c.base.id !== s.doc.id))
+      clearCandidates();
   }, [generation]);
 
   // A new range selection retargets the bars to write.
@@ -129,7 +143,11 @@ export function AilegroPanel() {
   const onGenerate = async () => {
     setBusy(true);
     try {
-      await generateWithService(serviceUrl, spec);
+      const available = await pingService(serviceUrl);
+      setService(available);
+      if (available.tasks && !available.tasks.includes(spec.task))
+        throw new Error(t('candidate.unsupported'));
+      await generateCandidates(serviceUrl, spec, candidateCount);
       setService((s) => (s === 'offline' ? null : s));
     } catch (e) {
       if (e instanceof TypeError) setService('offline');
@@ -192,7 +210,28 @@ export function AilegroPanel() {
     </label>
   );
 
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      void fetch(`${serviceUrl.trim().replace(/\/+$/, '')}/health`, { signal: controller.signal })
+        .then((r) => {
+          if (!r.ok) throw new Error();
+          return r.json() as Promise<ServiceInfo>;
+        })
+        .then(setService)
+        .catch(() => {
+          if (!controller.signal.aborted) setService('offline');
+        });
+    }, 300);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [serviceUrl]);
+
   const needsMaterial = MATERIAL_TASKS.includes(spec.task);
+  const unsupported =
+    service && service !== 'offline' && service.tasks && !service.tasks.includes(spec.task);
   const taskLabel = (task: ComposeTask) =>
     t(`ai.task.${task}` as MessageKey) + (ADAPTER_TASKS.includes(task) ? '' : t('ai.task.pending'));
 
@@ -209,12 +248,44 @@ export function AilegroPanel() {
         <span>{t('ai.task')}</span>
         <select value={spec.task} onChange={(e) => update({ task: e.target.value as ComposeTask })}>
           {ALL_TASKS.map((task) => (
-            <option key={task} value={task}>
+            <option
+              key={task}
+              value={task}
+              disabled={
+                !!(
+                  service &&
+                  service !== 'offline' &&
+                  service.tasks &&
+                  !service.tasks.includes(task)
+                )
+              }
+            >
               {taskLabel(task)}
             </option>
           ))}
         </select>
       </label>
+
+      <label className="field">
+        <span>{t('ai.difficulty')}</span>
+        <select
+          value={spec.difficulty ?? 'medium'}
+          disabled={busy || candidateState.busy}
+          onChange={(e) =>
+            update({
+              difficulty: e.target.value as PanelSpec['difficulty'],
+              maxHandSpan: undefined,
+            })
+          }
+        >
+          {DIFFICULTIES.map((d) => (
+            <option key={d} value={d}>
+              {t(`ai.difficulty.${d}`)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <p className="hint">{t(`ai.difficultyHint.${spec.difficulty ?? 'medium'}`)}</p>
 
       <div className="row">
         <label className="field">
@@ -289,6 +360,48 @@ export function AilegroPanel() {
         </select>
       </label>
       {spec.task === 'accompany-melody' && spec.chordMode !== 'given' && rhythmSelect}
+
+      {spec.task === 'accompany-melody' && spec.groups.includes('keys') && (
+        <label className="field">
+          <span>{t('ai.pianoTexture')}</span>
+          <select
+            value={spec.pianoTexture ?? 'model'}
+            disabled={busy || candidateState.busy}
+            onChange={(e) => update({ pianoTexture: e.target.value as PanelSpec['pianoTexture'] })}
+          >
+            {(['model', 'broken', 'chords'] as const).map((s) => (
+              <option key={s} value={s}>
+                {t(`ai.texture.${s}`)}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      <details className="advanced">
+        <summary>{t('ai.playerSettings')}</summary>
+        <label className="field">
+          <span>{t('ai.handSpan')}</span>
+          <select
+            value={spec.maxHandSpan ?? ''}
+            disabled={busy || candidateState.busy}
+            onChange={(e) =>
+              update({ maxHandSpan: e.target.value ? Number(e.target.value) : undefined })
+            }
+          >
+            <option value="">
+              {t('ai.handSpanDefault', {
+                n: PERFORMANCE_PROFILES[spec.difficulty ?? 'medium'].handSpan,
+              })}
+            </option>
+            {[7, 9, 12, 14, 16].map((n) => (
+              <option key={n} value={n}>
+                {t(`ai.handSpan.${n}` as MessageKey)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="hint">{t('ai.performanceHint')}</p>
+      </details>
 
       <details className="advanced">
         <summary>{t('ai.advanced')}</summary>
@@ -386,13 +499,52 @@ export function AilegroPanel() {
                 })}
               </p>
             )}
+            <label className="field">
+              <span>{t('candidate.count')}</span>
+              <select
+                value={candidateCount}
+                disabled={busy}
+                onChange={(e) => setCandidateCount(Number(e.target.value))}
+              >
+                {[1, 2, 3, 4].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </label>
             <button
               className="primary wide"
-              disabled={busy || spec.groups.length === 0}
+              disabled={busy || candidateState.busy || spec.groups.length === 0 || !!unsupported}
               onClick={() => void onGenerate()}
             >
-              {busy ? t('ai.generating') : `✦ ${t('ai.generate')}`}
+              {busy ? t('ai.generating') : `✦ ${t('candidate.generate')}`}
             </button>
+            {candidateState.busy && (
+              <div className="row tight">
+                <span role="status">
+                  {t('candidate.progress', {
+                    n: candidateState.completed + 1,
+                    total: candidateState.total,
+                  })}
+                </span>
+                <button onClick={cancelCandidates}>{t('candidate.cancel')}</button>
+              </div>
+            )}
+            {candidateState.candidates.length > 0 && (
+              <section className="candidate-list">
+                <h4>{t('candidate.title')}</h4>
+                <p className="hint">{t('candidate.intro')}</p>
+                {candidateState.candidates.map((c, i) => (
+                  <div className="candidate-card" key={c.id}>
+                    <strong>{t('candidate.label', { n: i + 1 })}</strong>
+                    <small>{t('candidate.summary', { n: c.notes, s: c.seconds.toFixed(1) })}</small>
+                    <button onClick={() => setPreviewId(c.id)}>{t('candidate.view')}</button>
+                  </div>
+                ))}
+                <button onClick={clearCandidates}>{t('candidate.discard')}</button>
+              </section>
+            )}
           </>
         )}
 
@@ -423,6 +575,9 @@ export function AilegroPanel() {
         )}
       </section>
 
+      {preview && (
+        <CandidatePreview key={preview.id} candidate={preview} onClose={() => setPreviewId(null)} />
+      )}
       <section className="ai-import">
         <h4>{t('import.title')}</h4>
         {IN_ARTIFACT ? (
@@ -435,8 +590,18 @@ export function AilegroPanel() {
               <BrandText text={t('import.hint')} />
             </p>
             <div className="row tight wrap">
-              <button onClick={() => void onOpenForImport('pdf')}>{t('import.openPdf')}</button>
-              <button onClick={() => void onOpenForImport('audio')}>{t('import.openAudio')}</button>
+              <button
+                disabled={!!(service && service !== 'offline' && service.imports?.pdf === false)}
+                onClick={() => void onOpenForImport('pdf')}
+              >
+                {t('import.openPdf')}
+              </button>
+              <button
+                disabled={!!(service && service !== 'offline' && service.imports?.audio === false)}
+                onClick={() => void onOpenForImport('audio')}
+              >
+                {t('import.openAudio')}
+              </button>
             </div>
             <details className="advanced">
               <summary>{t('import.options')}</summary>

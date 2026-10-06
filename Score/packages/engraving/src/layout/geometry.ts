@@ -1,5 +1,5 @@
 /** Geometry of laid-out measures: segment positions and time <-> x conversions. */
-import { type Rational, cmp, sub, toNumber } from '@ailegro-score/core';
+import { type Rational, toNumber } from '@ailegro-score/core';
 
 export interface SegmentGeometry {
   readonly offset: Rational;
@@ -18,8 +18,8 @@ export interface MeasureGeometry {
   readonly length: Rational;
 }
 
-/** x of a time position inside a laid-out measure (interpolating between segments). */
-export function offsetToX(measure: MeasureGeometry, t: Rational): number {
+/** x of a time position; floats are supported for the audio-clock-driven playhead. */
+export function offsetToX(measure: MeasureGeometry, t: Rational | number): number {
   return xAtOffset(measure.segments, measure.length, measure.x + measure.width, t);
 }
 
@@ -48,16 +48,18 @@ export function xAtOffset(
   segs: readonly SegmentGeometry[],
   length: Rational,
   endX: number,
-  t: Rational,
+  t: Rational | number,
 ): number {
   if (segs.length === 0) return endX;
+  const offset = typeof t === 'number' ? t : toNumber(t);
   let k = 0;
-  while (k + 1 < segs.length && cmp(segs[k + 1]!.offset, t) <= 0) k++;
+  while (k + 1 < segs.length && toNumber(segs[k + 1]!.offset) <= offset) k++;
   const a = segs[k]!;
-  if (cmp(a.offset, t) === 0) return a.x;
+  const start = toNumber(a.offset);
+  if (start === offset) return a.x;
   const nextOffset = segs[k + 1]?.offset ?? length;
   const nextX = segs[k + 1]?.x ?? endX;
-  const span = toNumber(sub(nextOffset, a.offset));
-  const frac = span > 0 ? toNumber(sub(t, a.offset)) / span : 0;
+  const span = toNumber(nextOffset) - start;
+  const frac = span > 0 ? (offset - start) / span : 0;
   return a.x + (nextX - a.x) * frac;
 }

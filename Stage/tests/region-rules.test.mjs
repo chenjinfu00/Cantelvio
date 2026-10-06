@@ -7,9 +7,12 @@ import {groupWorks} from '../docs/library-model.js';
 test('a track lands in the region its place or character comes from',()=>{
   const cases={'原神 - Watatsumi Island 1':'稻妻','原神 - 溢彩华庭（海祇岛BGM）':'稻妻','原神 - 神女劈观':'璃月',
     '原神 - The Fading Stories (Qingce Night)':'璃月','原神 - Battle Theme of Andrius - Wolf of the North':'蒙德',
-    '原神 - 龙脊雪山 BGM2':'蒙德','原神 - Hadramaveth Desert 2':'须弥','原神 - 翠草之龙':'须弥',
-    '原神 - Court of Fontaine Main Theme':'枫丹','原神 - 咏歌与凯旋 Lamentation et triomphe':'枫丹',
-    '原神 - 纳塔战斗曲 3':'纳塔','原神 - 挪德卡莱 Nod-Krai':'至冬','原神 - Golden Apple Archipelago Night OST #1':'活动与其他'};
+    '原神 - 龙脊雪山 BGM2':'蒙德','原神 - 皎洁的笑颜':'蒙德','原神 - 终天的闭幕曲':'蒙德',
+    '原神 - Liyue Battle Theme I':'璃月','原神 - Hadramaveth Desert 2':'须弥','原神 - 三千娑世御咏歌':'须弥',
+    '原神 - 噬神巨蛇的狂舞':'须弥','原神 - Court of Fontaine Main Theme':'枫丹','原神 - 魔像督军战斗音乐':'枫丹',
+    '原神 - 咏歌与凯旋 Lamentation et triomphe':'枫丹','原神 - 纳塔战斗曲 3':'纳塔',
+    '原神 - 永夜与破晓的誓刃':'至冬','原神 - 博士周本战斗曲':'至冬','原神 - Golden Apple Archipelago Night OST #1':'活动与其他',
+    '原神 - 原神主旋律':'活动与其他'};
   for(const [title,region] of Object.entries(cases))assert.equal(regionFor(title),region,title);
   for(const region of Object.values(cases))assert.ok(REGIONS.includes(region));
 });

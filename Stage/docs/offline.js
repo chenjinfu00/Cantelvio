@@ -35,11 +35,11 @@ export async function saveOffline(score,progress=()=>{}){
   try{await cache.put(metaURL(score.id),new Response(JSON.stringify(item),{headers:{'Content-Type':'application/json'}}));}catch(error){await cache.delete(url);throw error;}
   return item;
 }
-export function setupOffline(current,openPDF,toast,settings=()=>({})){ 
-  let saving=false,shellReady=false,attempted=null;
+export function setupOffline(current,openPDF,toast){
+  let saving=false,shellReady=false;
   const supported='serviceWorker' in navigator&&'caches' in globalThis&&isSecureContext;
   const ready=supported?(async()=>{
-    await navigator.serviceWorker.register(new URL('./sw.js?version=20260916-2352',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+    await navigator.serviceWorker.register(new URL('./sw.js?version=20260928-auto-turn-1',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
     await Promise.race([navigator.serviceWorker.ready,new Promise((_,reject)=>setTimeout(()=>reject(new Error('离线应用准备较慢，请稍后再试。')),60000))]);
     shellReady=true;return true;
   })():Promise.reject(new Error('离线使用需要 HTTPS 或本机 localhost，并使用支持离线存储的浏览器。'));
@@ -69,9 +69,9 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
     try{
       const items=await offlineItems(),score=current(),saved=items.some(item=>item.id===score?.id);
       const local=!!score?.local;
-      $('offline-save').disabled=saving||!score||local||saved&&shellReady;
-      $('offline-save').textContent=local?'本地曲谱无需复制':saved&&shellReady?'✓ 已保存到这台设备':'保存当前导入曲谱供离线使用';
-      if(!saving)$('offline-status').textContent=local?'当前曲谱直接从本地曲谱文件夹读取，不会复制到浏览器。':saved&&shellReady?'PDF 和阅谱应用均已保存，可断网打开。':shellReady?'离线应用已就绪。导入曲谱可另存本机副本。':'正在准备离线阅谱应用…';
+      $('offline-save').disabled=saving||!score||score.temporary||local||saved&&shellReady;
+      $('offline-save').textContent=score?.temporary?'临时曲谱不会保存':local?'本地曲谱无需复制':saved&&shellReady?'✓ 已保存到这台设备':'保存当前曲谱供离线使用';
+      if(!saving)$('offline-status').textContent=score?.temporary?'这份曲谱仅在当前会话打开，不写入曲谱库或离线副本。':local?'当前曲谱直接从本地曲谱文件夹读取，不会复制到浏览器。':saved&&shellReady?'PDF 和阅谱应用均已保存，可断网打开。':shellReady?'如需保存在本机，可在这里手动保存曲谱副本。':'正在准备离线阅谱应用…';
       $('offline-summary').textContent=`${items.length} 份本机导入副本 · ${mb(items.reduce((sum,item)=>sum+item.bytes,0))}${shellReady?' · 离线应用已就绪':''}`;
       const list=$('offline-list');list.replaceChildren();
       for(const item of items){
@@ -82,13 +82,11 @@ export function setupOffline(current,openPDF,toast,settings=()=>({})){
         remove.onclick=async()=>{try{if(!confirm('仅移除这台设备上下载的 PDF？原谱和手写批注不会删除。'))return;const cache=await caches.open(PDFS);await cache.delete(item.url);await cache.delete(metaURL(item.id));navigator.serviceWorker?.controller?.postMessage({type:'volta:forget',url:item.url});await refresh();}catch{toast('离线副本暂时无法移除，请重试。');}};
         row.append(title,open,remove);list.append(row);
       }
-      // Local libraries already have the authoritative PDF. Do not silently duplicate every
-      // local score into Cache Storage; explicit offline deployment remains available.
-      if(score&&!score.local&&!score.system&&shellReady&&!saved&&!saving&&navigator.onLine&&settings().autoOffline&&attempted!==score.id){attempted=score.id;setTimeout(()=>{if(current()?.id===score.id&&!current()?.local&&!saving&&settings().autoOffline)$('offline-save').click();},1200);}
+      // PDFs enter device storage only when the user explicitly asks for it.
     }catch{$('offline-summary').textContent='当前浏览器未允许本机存储，请检查浏览器设置。';}
   }
   $('offline-save').onclick=async()=>{
-    if(saving||!current())return;const score=current();if(score.local){toast('本地曲谱已经在所选文件夹中，无需复制。');return;}saving=true;$('offline-save').disabled=true;
+    if(saving||!current())return;const score=current();if(score.temporary){toast('临时打开的曲谱不会保存到本机副本。');return;}if(score.local){toast('本地曲谱已经在所选文件夹中，无需复制。');return;}saving=true;$('offline-save').disabled=true;
     try{$('offline-status').textContent='正在确认离线应用已完整保存…';await ready;await saveOffline(score,message=>$('offline-status').textContent=message);toast('已完整保存到这台设备，可断网阅读。');}
     catch(error){$('offline-status').textContent=error.name==='QuotaExceededError'?'本机空间不足，未完成保存。请移除不需要的离线副本。':error.message;toast($('offline-status').textContent);}
     finally{const message=$('offline-status').textContent;saving=false;await refresh();if(!message.startsWith('正在')&&!message.startsWith('已下载'))$('offline-status').textContent=message;}

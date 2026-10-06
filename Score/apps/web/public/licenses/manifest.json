@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-04",
+  "libraries": [
+    {
+      "name": "spessasynth_lib",
+      "version": "4.3.14",
+      "license": "Apache-2.0",
+      "notices": [
+        "licenses/spessasynth_lib/LICENSE"
+      ]
+    },
+    {
+      "name": "spessasynth_core",
+      "version": "4.3.22",
+      "license": "Apache-2.0",
+      "notices": [
+        "licenses/spessasynth_core/LICENSE"
+      ]
+    },
+    {
+      "name": "stb-vorbis",
+      "version": "0.0.6",
+      "license": "Apache-2.0",
+      "notices": [
+        "licenses/stb-vorbis/LICENSE"
+      ]
+    },
+    {
+      "name": "svg2pdf.js",
+      "version": "2.8.1",
+      "license": "MIT",
+      "notices": [
+        "licenses/svg2pdf.js/LICENSE"
+      ]
+    },
+    {
+      "name": "svgpath",
+      "version": "2.6.0",
+      "license": "MIT",
+      "notices": [
+        "licenses/svgpath/LICENSE"
+      ]
+    },
+    {
+      "name": "specificity",
+      "version": "0.4.1",
+      "license": "MIT",
+      "notices": [
+        "licenses/specificity/LICENSE"
+      ]
+    },
+    {
+      "name": "font-family-papandreou",
+      "version": "0.2.0-patch2",
+      "license": "MIT",
+      "notices": [
+        "licenses/font-family-papandreou/LICENSE"
+      ]
+    },
+    {
+      "name": "cssesc",
+      "version": "3.0.0",
+      "license": "MIT",
+      "notices": [
+        "licenses/cssesc/LICENSE-MIT.txt"
+      ]
+    },
+    {
+      "name": "jspdf",
+      "version": "4.2.1",
+      "license": "MIT",
+      "notices": [
+        "licenses/jspdf/LICENSE"
+      ]
+    },
+    {
+      "name": "fast-png",
+      "version": "6.4.0",
+      "license": "MIT",
+      "notices": [
+        "licenses/fast-png/LICENSE"
+      ]
+    },
+    {
+      "name": "pako",
+      "version": "2.2.0",
+      "license": "(MIT AND Zlib)",
+      "notices": [
+        "licenses/pako/LICENSE"
+      ]
+    },
+    {
+      "name": "iobuffer",
+      "version": "5.4.0",
+      "license": "MIT",
+      "notices": [
+        "licenses/iobuffer/LICENSE"
+      ]
+    },
+    {
+      "name": "@types/pako",
+      "version": "2.0.4",
+      "license": "MIT",
+      "notices": [
+        "licenses/types__pako/LICENSE"
+      ]
+    },
+    {
+      "name": "fflate",
+      "version": "0.8.3",
+      "license": "MIT",
+      "notices": [
+        "licenses/fflate/LICENSE"
+      ]
+    },
+    {
+      "name": "@babel/runtime",
+      "version": "7.29.7",
+      "license": "MIT",
+      "notices": [
+        "licenses/babel__runtime/LICENSE"
+      ]
+    },
+    {
+      "name": "@tonejs/midi",
+      "version": "2.0.28",
+      "license": "MIT",
+      "notices": [
+        "licenses/tonejs__midi/LICENSE.md"
+      ]
+    },
+    {
+      "name": "midi-file",
+      "version": "1.2.4",
+      "license": "MIT",
+      "notices": [
+        "licenses/midi-file/LICENSE.md"
+      ]
+    },
+    {
+      "name": "array-flatten",
+      "version": "3.0.0",
+      "license": "MIT",
+      "notices": [
+        "licenses/array-flatten/LICENSE"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "path": "audio/soundfonts/MuseScore_General.sf3",
+      "bytes": 39900972,
+      "sha256": "5b85b6c2c61d10b2b91cddd41efcce7b25cd31c8271d511c73afafbef20b6fa3"
+    },
+    {
+      "path": "audio/soundfonts/MuseScore_General_License.md",
+      "bytes": 3419,
+      "sha256": "5ad8d737e13c7f01f5b9674872a82a92b4ba253603e8ed14b9db12293550b4b9"
+    },
+    {
+      "path": "audio/soundfonts/MuseScore_General_Sample_Sources.csv",
+      "bytes": 12817,
+      "sha256": "cbec757614fa47d2ba71a2f1276bf010918261d94987cfb678352e9755e9bdd4"
+    },
+    {
+      "path": "fonts/LXGWWenKai-OFL.txt",
+      "bytes": 5176,
+      "sha256": "0333a85fe077b6849f8e417acc44e8bd879442ceb681e271acf93e2d57fd4e2e"
+    },
+    {
+      "path": "fonts/LXGWWenKaiLite-Regular.ttf",
+      "bytes": 13872424,
+      "sha256": "140c99ba4e28e817cec49bf82a0c5fcdc4fe633fb9dfda16d0ee8d59a8545f15"
+    }
+  ]
+}

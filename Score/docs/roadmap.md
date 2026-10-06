@@ -6,7 +6,13 @@
 
 状态：✅ 完成 · 🚧 进行中 · ⏳ 待做 · ⛔ 受阻（写明原因）
 
-## 当前状态（2026-10-03）
+## 联合开发优先级（2026-10-05，计划）
+
+与 AIlegro 共同的阶段顺序见 [Score 开源接入计划](open-source-integration-plan.md)和[联合开发计划](../../Compose/JOINT-DEVELOPMENT-PLAN.md)。首期交付“写入或导入旋律 → 锁定 → 生成伴奏候选 → 局部接受 → 修改再生成 → 回放与导出”。
+
+优先联调 `M3-AI-01/03/13`，完成候选比较和局部接受 `M3-AI-05/06`；随后接入已验证的引擎能力和后台作曲 `M3-AI-11/12`。同步复验现有 SoundFont、MIDI、PDF 接入；接着补 MusicXML / 大编制 MIDI、版本对比及增量排版。连续生成片段接入为 `M3-AI-14`。2026-10-05 的实际演示与验证见 [demo-verification.md](demo-verification.md)；仅按已验证行为更新状态。
+
+## 功能基线（2026-10-03 历史记录）
 
 能用的：
 
@@ -30,8 +36,8 @@
   可以指定换和弦频率；和声分析给已有的音乐自动标和弦记号。
 - 中英文界面，154 个单元测试 + 8 个适配器测试（`npm run test:adapter`），CI（lint、类型检查、测试、构建、示例渲染）。
 
-最需要先做的：在 Mac 上按 [try-it.md](try-it.md) 试一遍（`M3-AI-01` 的检查清单、真实录音扒谱）、`M2-ENG-01`（增量排版）、
-`M2-ENG-02`（多声部碰撞）。
+当时记录的优先项：在 Mac 上按 [try-it.md](try-it.md) 试一遍（`M3-AI-01` 的检查清单、真实录音扒谱）、`M2-ENG-01`（增量排版）、
+`M2-ENG-02`（多声部碰撞）。当前顺序以上面的联合开发计划为准。
 
 ## M1 · 基础（v0.1）✅
 
@@ -66,34 +72,41 @@
 | M2-CORE-02 | 复制 / 粘贴（范围剪贴板 → 命令） | ⏳ | |
 | M2-CORE-03 | 文字记谱按记谱音高输入（移调乐器的记谱调号） | ⏳ | |
 | M2-CORE-04 | MusicXML 导入（导入的内容带 `source: import`） | ✅ `.musicxml` / `.xml` / `.mxl`，编辑器打开或拖入、`npm run import:musicxml`（[musicxml-import.md](musicxml-import.md)、[ADR 0011](adr/0011-musicxml-import.md)） | claude |
-| M2-CORE-05 | MusicXML、MIDI 导出 | ⏳ | |
+| M2-CORE-05 | MusicXML、MIDI 导出 | 部分完成 | MIDI 已接入；MusicXML 导出待做 |
 | M2-CORE-06 | 文件格式 v2（事件记号、倚音、`spanners`，v1 迁移）、文字记谱 v1 | ✅ | claude |
 | M2-CORE-07 | PDF / 图片识谱：Audiveris → MusicXML → 导入（命令行 `npm run import:pdf`） | ✅ [pdf-import.md](pdf-import.md)、[ADR 0012](adr/0012-pdf-import-audiveris.md)；编辑器经本机服务打开 PDF 见 `M3-AI-10` | claude |
 | M2-CORE-08 | 音频 → 乐谱：AIlegro 转写（MuScriptor + beat_this）、节奏量化、保留该保留的音符 → MusicXML → 打开 | 🚧 AIlegro 脚本完成，编辑器经本机服务打开录音（`M3-AI-10`）；模拟评估逐音 F1 88–90%，跑动单独定网格，补漏掉的音（规则 + 补音模型）（[audio-import.md](audio-import.md)）；待在真实录音上评估 | claude |
+| M2-CORE-09 | 大编制 MIDI 导出：解决当前单端口 15 个有音高声部限制，验证多端口或兼容输出 | ⏳ | |
 | M2-WEB-01 | 复制粘贴界面；范围移调、范围改时值 | ⏳ | |
 | M2-WEB-02 | 快速插入面板：力度、谱号、调号、拍号、演奏法 | 🚧 小键盘已有力度、演奏法、装饰、线条；谱号、调号、拍号还在属性面板 | |
-| M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ⏳ | |
+| M2-WEB-03 | 更好的回放音色（弦乐、木管、铜管采样或 SoundFont） | ✅ | SpessaSynth + MuseScore General，失败时保留原回放 |
 | M2-WEB-04 | 排版放进 Web Worker（配合 M2-ENG-01） | ⏳ | |
 | M2-WEB-05 | Safari、Firefox 兼容性检查 | ⏳ | |
 | M2-WEB-06 | Playwright 端到端测试进 CI（流程见 [editor.md](editor.md#手动检查清单改编辑器后过一遍)） | ⏳ | |
-| M2-WEB-07 | 矢量 PDF 导出（页面尺寸准确） | ⏳ | |
+| M2-WEB-07 | 矢量 PDF 导出（页面尺寸准确） | ✅ | svg2pdf.js + jsPDF，中文字体嵌入 |
 | M2-WEB-08 | 浮动小键盘（Sibelius Keypad + MuseScore 面板）、输入时画线条 | ✅ | claude |
 | M2-WEB-09 | 文件：写回原文件、另存为、最近文件、拖放打开、未保存提醒 | ✅ | claude |
+| M2-WEB-10 | 无缝曲谱模式：按窗口宽度换行、连续向下滚动，保留页面与横向连续视图 | ✅ | codex |
 
 ## M3 · AIlegro 深度集成与版本历史（v0.3）
 
 | id | 任务 | 状态 | 负责人 |
 | --- | --- | --- | --- |
-| M3-AI-01 | **在 AIlegro 环境用训练好的权重运行适配器**，核对 `load` / `feed_bar` / `next_bar` 参数与返回值，修正适配器 | 🚧 云端用第 45,225 步权重端到端跑通（2026-10-02）；Mac 上待跑一次并试听 | claude |
+| M3-AI-01 | **在 AIlegro 环境用训练好的权重运行适配器**，核对 `load` / `feed_bar` / `next_bar` 参数与返回值，修正适配器 | ✅ Mac 固定 v3.1 真实权重五项任务、候选/原谱试听与接受已验证（2026-10-05）；真实录音评估另见 M2-CORE-08 | claude |
 | M3-AI-02 | 生成区间内的锁定材料：`accompany-melody`、`orchestrate`、`develop-motif` | ✅ 用 AIlegro 解码约束实现（[ADR 0008](adr/0008-locked-material-by-decoding.md)） | claude |
-| M3-AI-03 | 声部角色（旋律 / 低音 / 和声）界面 → 记录里的 `role` | ⏳ | |
+| M3-AI-03 | 六组乐器与具体声部映射、允许 / 关闭控制；内部角色保留为分析或高级信息，避免重复角色操作栏 | ⏳ [接入计划](open-source-integration-plan.md) | |
 | M3-AI-04 | 文字意图与风格标签（需要 AIlegro 定义词表） | ⛔ 等 AIlegro 侧 | |
-| M3-AI-05 | 一次请求多个候选（不同种子），并排比较后选择 | ⏳ | |
-| M3-AI-06 | 部分接受：按小节 / 按乐器接受 AI 建议 | ⏳ | |
+| M3-AI-05 | 1–4 个候选（不同种子），原谱对照、逐个试听后选择 | ✅ 客户端顺序请求，候选隔离于原谱 | codex |
+| M3-AI-06 | 部分接受：按小节 / 按乐器接受 AI 建议 | ✅ 一次撤销；切过延音/线条时提示扩大范围 | codex |
 | M3-AI-07 | 配和声：AIlegro 侧“旋律 → 和弦”小模型，先出和弦记号给用户改，再锁定和弦写伴奏 | ✅ 配和声模型 v1 + 适配器 `--harmonizer`（[ADR 0009](adr/0009-harmonizer-model.md)）；和弦随结果导入为和弦记号 | claude |
 | M3-AI-08 | 动机发展的变形方式（重复、模进、倒影、增值、截取）在面板里逐小节选择 → `compose-request/2` | ⏳ | |
 | M3-AI-09 | 和声分析：给已有的音乐自动标和弦记号（所选小节或全曲）；换和弦频率（分析与配伴奏） | ✅ 契约 `analysis-request/1` → `analysis-result/1`、`POST /analyze`、AIlegro 和声分析模型 v2（[ADR 0010](adr/0010-harmonic-analysis-contract.md)）；意图标签 `harmonic-rhythm:<…>` | claude |
 | M3-AI-10 | 本机 AIlegro 服务：编辑器里直接打开 PDF / 图片（Audiveris）和录音（MuScriptor + AIlegro），后台任务、进度、取消；`npm run ailegro:serve` 一条命令启动 | ✅ `POST /import/pdf\|audio`、`GET\|DELETE /jobs/<id>`（[ADR 0013](adr/0013-local-service-imports.md)）；[试用指南](try-it.md) | claude |
+| M3-AI-11 | 引擎能力与固定模型版本：按服务实际能力开放任务，AMT 经验证后接入 | 🚧 已按真实任务/导入能力开放，演示固定 v3.1；AMT 待验证接入 | codex |
+| M3-AI-12 | 后台作曲任务、进度、取消与候选返回；保留已有同步与文件交换兼容 | 🚧 前端候选进度与取消等待已实现；服务器后台作曲/中断待做 | codex |
+| M3-AI-13 | 请求基线、锁定材料精度预检、结果写回冲突检查；取消 / 过期结果不覆盖用户编辑 | 🚧 在线候选/分析指纹保护、晚到取消丢弃、精确时间已实现；离线基线与词表精度预检待做 | codex |
+| M3-AI-14 | 连续生成的完整片段接入 Score，序号去重与跨段延音；已提交片段保持可编辑 | ⏳ | |
+| M3-AI-15 | 生成难度三档与乐器演奏限制；按具体乐手设置钢琴单手跨度 | ✅ 在线候选三档、双手织体、范围/复音/跳进/换气；复杂指法与特殊奏法待做（[ADR 0017](adr/0017-instrument-aware-difficulty.md)） | codex |
 | M3-HIST-01 | 命名版本：IndexedDB、自动版本、时间线面板 | ⏳ | |
 | M3-HIST-02 | `diffScores` 语义对比（core）+ 测试 | ⏳ | |
 | M3-HIST-03 | 对比界面（叠加 / 并排） | ⏳ | |
@@ -118,6 +131,7 @@
 | --- | --- | --- |
 | M5-OPS-01 | 选择许可证（目前 UNLICENSED） | ⏳ |
 | M5-OPS-02 | 部署（静态站点 + 协作服务器）、账号与分享 | ⏳ |
+| M5-OPS-03 | 第三方代码、权重、语料、字体、音色版本和许可追溯；研究与产品资源分开 | ⏳ |
 | M5-WEB-01 | 桌面打包（Tauri）以便本机文件读写 | ⏳ |
 | M5-WEB-02 | 无障碍（键盘导航、屏幕阅读器标签） | ⏳ |
 | M5-WEB-03 | 性能目标：双管编制 300 小节流畅编辑与回放 | ⏳ |

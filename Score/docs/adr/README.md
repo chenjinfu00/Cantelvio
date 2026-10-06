@@ -18,6 +18,10 @@
 | [0011](0011-musicxml-import.md) | MusicXML 导入：自写 XML 解析器，整和弦连音线合并成一个事件，调号取不移调声部 | 已接受 |
 | [0012](0012-pdf-import-audiveris.md) | PDF / 图片识谱：调用外部的 Audiveris（AGPL，单独安装），再走 MusicXML 导入 | 已接受 |
 | [0013](0013-local-service-imports.md) | 编辑器经本机 AIlegro 服务打开 PDF、图片和录音：后台导入任务、轮询进度，结果走 MusicXML 导入 | 已接受 |
+| [0014](0014-playback-and-export-libraries.md) | web 层接入回放和导出库，复用核心实际音高时间线与自研排版 | 已接受 |
+| [0015](0015-open-source-engines-and-score-workflow.md) | 可替换生成引擎、Score 候选审阅与局部接受，服务扩展单独版本化 | 提议 |
+| [0016](0016-seamless-score-view.md) | 无缝曲谱按宽度换行，在单张纵向长画布上连续滚动 | 已接受 |
+| [0017](0017-instrument-aware-difficulty.md) | 在线生成候选的三档难度、钢琴双手编配和乐器约束，处理后的音符统一用于预览/播放/输出 | 已接受 |
 
 ## 模板
 

@@ -20,10 +20,9 @@ export function classifyLibraryItem(item){
   const sourceAliases=(item.aliases||[]).filter(alias=>!generatedAlias(alias,item.id));
   const normalized={...item,aliases:sourceAliases,title:versionDisplayTitle({...item,aliases:sourceAliases})};
   const work=describeWork(normalized),browse=groupWorks([normalized])[0].browseGroup;
-  const family=/^(原神|崩坏3|崩坏：星穹铁道|鸣潮)$/.test(browse)?'游戏音乐'
-    :browse==='Animenz'?'Animenz'
+  const family=/^(原神|崩坏3|崩坏：星穹铁道)$/.test(browse)?'游戏音乐'
     :browse==='动漫'?'动漫'
-    :browse==='流行音乐'?'流行音乐'
+    :browse==='流行音乐与其他游戏'?'流行音乐与其他游戏'
     :/待核对/.test(browse)?'待核对':'古典与器乐';
   return {item:normalized,work,browse,family};
 }
@@ -47,14 +46,14 @@ export function libraryRelativePath(item,{current=null,shelfWorks=Infinity}={}){
   // A folder should add information. These labels merely repeat their parent
   // category and otherwise force every score one click deeper.
   const redundantGenre=new Set(['游戏配乐','其他作品','流行歌曲','作曲家待核对']);
-  const animeRepeatsParent=browse==='动漫'&&work.genre==='动漫／影视';
+  const flatCollection=new Set(['动漫','其他','流行音乐与其他游戏','陈致逸','路德维希·范·贝多芬']).has(browse);
   // A shelf holding two or three works is already a short list; sorting it by genre only buries it.
   const tinyShelf=shelfWorks<=3;
-  if(!redundantGenre.has(work.genre)&&!animeRepeatsParent&&!tinyShelf)folders.push(segment(work.genre));
+  if(!redundantGenre.has(work.genre)&&!flatCollection&&!tinyShelf)folders.push(segment(work.genre));
   // One folder per work: every edition of it, plus its MIDI and engraving sources, live together.
   folders.push(segment(work.title));
-  // A lone edition label that only repeats the shelf ("编曲：Animenz" under Animenz) says nothing.
-  const blank=!work.edition||work.edition==='未标注版本'||work.edition==='编曲：'+browse;
+  // A lone edition label that only repeats a shelf label says nothing.
+  const blank=!work.edition||work.edition==='未标注版本'||work.edition==='编曲：'+browse||(browse==='动漫'&&work.edition==='编曲：Animenz');
   const label=blank?work.title:work.edition;
   folders.push(segment(label)+' · '+item.id.slice(0,8)+'.pdf');
   return {relative:path.join(...folders),...classified};

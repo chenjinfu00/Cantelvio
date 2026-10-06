@@ -14,7 +14,7 @@
 ## 第一次运行
 
 ```sh
-cd ~/"software develop/AIlegro Score"
+cd ~/"software develop/Cantelvio/Score"
 
 npm install           # 在 Mac 本机运行（不要在 Linux 虚拟机里装，见下文）
 
@@ -40,8 +40,8 @@ VS Code 推荐插件：ESLint、Prettier、Vitest（`.vscode/extensions.json`）
 
 ## 项目位置与同步（重要）
 
-1. **工作副本在本地**：`~/software develop/AIlegro Score`，和 `~/software develop/AIlegro` 并排——
-   适配器命令里的 `../AIlegro`、`../AIlegro Score` 相对路径依赖这个位置关系。
+1. **工作副本在本地**：`~/software develop/Cantelvio/Score`，和 `~/software develop/Cantelvio/Compose` 并排——
+   适配器命令里的 `../Compose`、`../Score` 相对路径依赖这个位置关系。
    （2026-10-02 从 iCloud Drive 移出：同步盘会同步约 220 MB 的 `node_modules`，`.nosync` 符号链接对
    npm 无效，两台电脑同时打开还可能损坏 `.git`。）
 2. **GitHub 是唯一的事实来源**：备份、换电脑都用 `git push` / `git pull`，不要把仓库放回 iCloud、
@@ -56,11 +56,11 @@ VS Code 推荐插件：ESLint、Prettier、Vitest（`.vscode/extensions.json`）
 
 ```sh
 # 检查转换（不需要 torch）
-python3 integrations/ailegro/score_compose.py --request request.json --dry-run --ailegro-root ../AIlegro
+python3 integrations/ailegro/score_compose.py --request request.json --dry-run --ailegro-root ../Compose
 # 不需要模型的完整往返测试（编辑器里“连接”→“直接生成”）
 python3 integrations/ailegro/score_compose.py --serve --mock
 # 真正生成：在 AIlegro 文件夹里用它自己的环境
-cd ../AIlegro && .venv-training/bin/python "../AIlegro Score/integrations/ailegro/score_compose.py" \
+cd ../Compose && .venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
 ```
 

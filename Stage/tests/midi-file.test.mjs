@@ -8,6 +8,13 @@ const varInt=value=>{const out=[value&0x7f];value>>=7;while(value){out.unshift((
 const chunk=(type,body)=>bytes([...type].map(c=>c.charCodeAt(0)),[body.length>>24&255,body.length>>16&255,body.length>>8&255,body.length&255],body);
 const file=(division,tracks)=>new Uint8Array(bytes(chunk('MThd',[0,1,0,tracks.length,division>>8,division&255]),...tracks.map(events=>chunk('MTrk',events)))).buffer;
 
+test('a MIDI inside a larger byte buffer respects its offset and keeps track identity',()=>{
+  const data=new Uint8Array(file(480,[bytes(0,[0x90,60,100],varInt(480),[0x80,60,0])]));
+  const pooled=Buffer.alloc(data.length+64,0x42);pooled.set(data,32);
+  const midi=parseMIDI(pooled.subarray(32,32+data.length));
+  assert.equal(midi.notes.length,1);assert.equal(midi.notes[0].track,0);assert.equal(midi.duration,.5);
+});
+
 test('a note becomes a start time and a length in seconds',()=>{
   // 480 ticks per quarter, 120 bpm by default: one quarter note is half a second.
   const midi=parseMIDI(file(480,[bytes(varInt(0),[0x90,60,100],varInt(480),[0x80,60,0],varInt(0),[0xff,0x2f,0])]));

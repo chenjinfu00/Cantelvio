@@ -1,17 +1,19 @@
 import {groupWorks,chooseVersion,compareNames} from './library-model.js';
 import {versionPreferences} from './version-preferences.js';
+import {prioritizeLibraryGroups,readLibraryRecency,rememberLibraryRecency} from './library-recency.js';
 const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
 export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getOffline=async()=>null){
   let localSource=null;   // a folder chosen on this device, read instead of the network
-  let items=[],works=[],mode='composer',selected='',genre='',loaded=false,localLibrary=false,refreshTask=null,opening=false,currentWork=null;
+  let items=[],works=[],mode='composer',selected='',genre='',loaded=false,localLibrary=false,refreshTask=null,opening=false,currentWork=null,recency=readLibraryRecency();
   const preferences=versionPreferences(),labels={composer:'曲目分类',style:'风格',era:'年代',category:'原收藏'};
   const feedback=(node,message,error=false)=>{node.hidden=!message;node.textContent=message;node.classList.toggle('error',error);};
   const counts=(list,field)=>{const groups=new Map();for(const work of list){const key=work[field]||'待核对';groups.set(key,(groups.get(key)||0)+1);}return [...groups].sort(([a],[b])=>compareNames(a,b));};
   const button=(text,fn,style='secondary')=>{const b=el('button',text,style);b.type='button';b.onclick=fn;return b;};
   const pickGroup=key=>{selected=key;genre='';draw();};
   const pickGenre=key=>{genre=key;draw();};
+  const rememberOpened=work=>{recency=rememberLibraryRecency(work);};
 
   function syncControls(){
     const locked=opening||!canOpen();
@@ -51,7 +53,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
         await openPDF(offline.remote,version.title,null,message=>feedback(statusNode,message));
         let message='已从这台设备的离线副本打开；已记住此版本。',failed=false;
         try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
-        setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
+        rememberOpened(work);setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
         $('library-dialog').close();return;
       }
       if(!local&&localSource&&!localSource.needsFolder&&localSource.missing?.includes?.(version.id))throw new Error('本地曲谱文件夹里没有这份 PDF。请检查文件夹，或重新选择。');
@@ -59,7 +61,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
       await openPDF({id:version.id,url:local,path:localSource?.path?.(version.id)||null,workKey:work.key,local:true},version.title,null,message=>feedback(statusNode,message));
       let message='已记住此版本，下次打开这首曲目会继续使用。',failed=false;
       try{await preferences.save(work.key,version.sourceId||version.id);}catch{message='曲谱已打开，但此次版本选择未能保存。下次可在这里重新选择。';failed=true;}
-      setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
+      rememberOpened(work);setCurrent();feedback($('edition-status'),message,failed);feedback(statusNode,statusNode===$('edition-status')?message:'',failed);
       $('library-dialog').close();
     }catch(error){feedback(statusNode,error.message||'打开失败，请重试。',true);setCurrent();}
     finally{opening=false;syncControls();}
@@ -89,7 +91,8 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
   function draw(){
     const query=$('library-search').value.toLocaleLowerCase().trim(),format=$('library-format').value;
     const filtered=works.filter(work=>(!format||work.versions.some(v=>v.format===format))&&(!query||work.search.includes(query)));
-    const groupField=mode==='composer'?'browseGroup':mode,groups=counts(filtered,groupField);
+    const groupField=mode==='composer'?'browseGroup':mode,remembered=mode==='composer'?recency.composer:recency[mode];
+    const groups=prioritizeLibraryGroups(counts(filtered,groupField),remembered);
     if(selected&&!groups.some(([key])=>key===selected)){selected='';genre='';}
     const nav=$('library-groups');nav.replaceChildren(button('曲目概览 · '+filtered.length,()=>pickGroup(''),'library-group'+(!selected?' selected':'')));
     for(const [key,count] of groups)nav.append(button(key+' · '+count,()=>pickGroup(key),'library-group'+(key===selected?' selected':'')));
@@ -103,10 +106,11 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
     if(!selected&&!query){
       $('library-count').textContent='按'+labels[mode]+'浏览 · 同曲的版本收在一起';
       for(const [key,count] of groups)addCategory(key,count,()=>pickGroup(key));
-    }else if(selected&&mode==='composer'&&!['流行音乐','动漫','Animenz'].includes(selected)&&!genre&&!query&&counts(inGroup,'genre').length>1){
+    }else if(selected&&mode==='composer'&&!['流行音乐与其他游戏','动漫','其他','陈致逸','路德维希·范·贝多芬'].includes(selected)&&!genre&&!query&&counts(inGroup,'genre').length>1){
       $('library-count').textContent=selected+' · 先选择体裁';
       addCategory('全部曲目',inGroup.length,()=>pickGenre('*'));
-      for(const [key,count] of counts(inGroup,'genre'))addCategory(key,count,()=>pickGenre(key));
+      const genres=prioritizeLibraryGroups(counts(inGroup,'genre'),selected===recency.composer?recency.genre:'');
+      for(const [key,count] of genres)addCategory(key,count,()=>pickGenre(key));
     }else{
       $('library-count').textContent=inGenre.length+' 首曲目／合集 · 打开时使用上次成功载入的版本';
       for(const work of inGenre)results.append(card(work));

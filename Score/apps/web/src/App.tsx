@@ -21,6 +21,7 @@ import {
   saveScoreAs,
 } from './state/files';
 import { getStore, isDirty, useEditor } from './state/store';
+import { demoId } from './state/demo';
 
 const AUTOSAVE_DELAY_MS = 800;
 
@@ -127,8 +128,16 @@ export function App() {
   }, [title]);
 
   return (
-    <div className="app">
+    <div className={demoId() ? 'app demo-app' : 'app'}>
       <TopBar />
+      {demoId() && (
+        <div className="demo-banner">
+          <span>{t('demo.draft')}</span>
+          <a href="http://127.0.0.1:4187/demo/" target="_blank" rel="noreferrer">
+            {t('demo.home')}
+          </a>
+        </div>
+      )}
       <Palette />
       <main className="workspace">
         <ScoreView />

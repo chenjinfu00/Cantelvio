@@ -9,6 +9,8 @@ import {
   type RecentFile,
   confirmDiscard,
   exportSvg,
+  exportMidi,
+  exportPdf,
   loadNew,
   openRecent,
   openScore,
@@ -51,6 +53,7 @@ export function TopBar() {
   const keypadOpen = useEditor((s) => s.keypad.open);
   const demo = useDropdown();
   const recent = useDropdown();
+  const exports = useDropdown();
   const [recentList, setRecentList] = useState<RecentFile[]>([]);
   const store = getStore().getState;
 
@@ -155,7 +158,39 @@ export function TopBar() {
             </div>
           )}
         </div>
-        <button onClick={() => void exportSvg()}>{t('menu.exportSvg')}</button>
+        <div className="dropdown" ref={exports.ref}>
+          <button onClick={() => exports.setOpen(!exports.open)} aria-expanded={exports.open}>
+            {t('menu.export')} ▾
+          </button>
+          {exports.open && (
+            <div className="dropdown-menu">
+              <button
+                onClick={() => {
+                  exports.setOpen(false);
+                  void exportMidi();
+                }}
+              >
+                {t('menu.exportMidi')}
+              </button>
+              <button
+                onClick={() => {
+                  exports.setOpen(false);
+                  void exportPdf();
+                }}
+              >
+                {t('menu.exportPdf')}
+              </button>
+              <button
+                onClick={() => {
+                  exports.setOpen(false);
+                  void exportSvg();
+                }}
+              >
+                {t('menu.exportSvg')}
+              </button>
+            </div>
+          )}
+        </div>
         {/* the artifact viewer cannot open the print dialog */}
         {!IN_ARTIFACT && <button onClick={() => window.print()}>{t('menu.print')}</button>}
       </nav>
@@ -202,11 +237,15 @@ export function TopBar() {
           />
           {t('view.concert')}
         </label>
-        <button
-          onClick={() => store().setView({ mode: view.mode === 'page' ? 'continuous' : 'page' })}
+        <select
+          aria-label={t('view.mode')}
+          value={view.mode}
+          onChange={(e) => store().setView({ mode: e.target.value as typeof view.mode })}
         >
-          {view.mode === 'page' ? t('view.continuous') : t('view.page')}
-        </button>
+          <option value="page">{t('view.page')}</option>
+          <option value="seamless">{t('view.seamless')}</option>
+          <option value="continuous">{t('view.continuous')}</option>
+        </select>
         <button
           onClick={() => store().setView({ zoom: Math.max(0.4, +(view.zoom - 0.1).toFixed(2)) })}
           aria-label={t('view.zoomOut')}
