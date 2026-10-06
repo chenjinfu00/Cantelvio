@@ -63,3 +63,25 @@ Cantelvio/
 | Stage | `npm test`、预览 `/volta/` 页面 | 159 通过、3 跳过（测试环境看不到私人曲谱库，属预期），页面正常 |
 
 Score 测试在隔离副本中用 Linux 依赖运行，没有改动 Score 的 `node_modules`。模型生成在 CPU 上用 PyTorch 2.5.1 复现；Mac 上的 `.venv-training` 解释器本身未在本机执行过。
+
+## Git 仓库（2026-10-06 建立）
+
+Cantelvio 根目录是唯一的 Git 仓库（monorepo），四个模块都在其中：
+
+- `main` 包含 Score 和 Stage 的完整历史（已改写到 `Score/`、`Stage/` 子目录下），之后一次提交保存两边当时未提交的工作，再一次提交首次加入 Compose 和 Harmony。
+- 旧分支以前缀保留：`score/*`（原 AIlegro Score 的全部分支）、`stage/*`（原 Volta 的 main 和 origin 分支）。
+- 原来的两个 `.git` 原样备份在 `_git-backup-2026-10-06/`（已忽略，不进 Git）；确认新仓库无误后可删除。
+- 根 `.gitignore` 排除大模型与第三方源码（AMT、MuScriptor、open-source 的 sources 与 datasets）、训练 runs/logs/数据、本机环境；它们的清单、下载脚本和 SHA 保留在仓库里。
+- 暂无远程仓库。原 Volta 的 GitHub 公开仓库 chenjinfu00/volta 不再自动更新。
+
+## 开源前清单（未完成）
+
+1. **选许可证**：根目录还没有 LICENSE；Score 的包标记为 `UNLICENSED`。
+2. **模型权重和训练数据**：仓库里的浏览器模型（如 `Compose/frontend/vendor/lib/joint-*weights.js`、Harmony 的 melody/harmony transformer）训练时用过本地曲谱库，要确认数据许可允许公开权重。PDMX、Winterreise、ASAP 等数据许可见 `Compose/OPEN-SOURCE-INVENTORY.md`。
+3. **第三方资源**：音色（MuseScore General，MIT）、字体（霞鹜文楷，OFL）、pdf.js、KaTeX、采样等已附许可/NOTICE；公开前再对照清单核一遍。
+4. **个人信息**：文档和记录中有本机路径（`/Users/chenjinfu/...`），提交作者邮箱为 273286233@qq.com；公开前决定是否清理或改用 GitHub noreply 邮箱。
+5. **GitHub 配置**：`Score/.github`（工作流、模板）在 monorepo 中不会生效，需移到根目录并调整路径。
+6. **大文件**：最大的已跟踪文件是 39 MB 的音色和若干 4–8 MB 的权重 JS；如果仓库继续增大，可考虑 Git LFS。
+7. **旧公开仓库**：决定 chenjinfu00/volta 是存档并指向 Cantelvio，还是用 `git subtree split` 继续同步。
+
+已检查：Score 和 Stage 的全部历史以及待提交文件中，未发现 API 密钥、令牌或私钥。
