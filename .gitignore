@@ -48,3 +48,6 @@ __pycache__/
 
 # Harmony: local working copies of source material
 /Harmony/demos/MusicalKaraoke/tmp/
+
+# Built demo site
+/site-dist/

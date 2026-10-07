@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cantelvio · 从旋律到完整乐谱</title>
+<meta name="description" content="Cantelvio：用 Transformer 生成旋律与和声，在乐谱编辑器中比较、修改、回放与导出。">
+<style>
+:root{--bg:#f6f5ef;--fg:#1d2420;--mute:#5d665f;--card:#fff;--line:#dcdfd3;--acc:#2f6b4f;--acc-fg:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#141815;--fg:#e8ece6;--mute:#9aa59c;--card:#1c221e;--line:#2c352f;--acc:#6fbf94;--acc-fg:#0e1411}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+main{max-width:980px;margin:0 auto;padding:0 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+.brand{font-weight:700;font-size:20px;letter-spacing:.02em}
+select{font:inherit;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.hero{padding:40px 0 24px}.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.15;margin:0 0 12px}
+.lead{color:var(--mute);max-width:640px;font-size:18px}
+.btn{display:inline-block;background:var(--acc);color:var(--acc-fg);padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:600;margin:8px 8px 0 0}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:32px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column}
+.card h3{margin:0 0 2px}.card .sub{color:var(--mute);font-size:13px;margin-bottom:8px}.card p{flex:1;margin:0 0 12px;color:var(--mute);font-size:15px}
+.card a{color:var(--acc);font-weight:600;text-decoration:none}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 28px;color:var(--mute)}
+.flow span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+h2{margin:32px 0 8px}.note{color:var(--mute);font-size:14px;border-top:1px solid var(--line);padding-top:16px;margin-top:32px}
+</style>
+</head>
+<body>
+<main>
+<header><span class="brand">♫ Cantelvio</span>
+<select id="lang" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select></header>
+
+<section class="hero">
+<h1 data-zh="从一段旋律，写到完整曲谱。" data-en="From a melody to a finished score.">从一段旋律，写到完整曲谱。</h1>
+<p class="lead" data-zh="用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。" data-en="Transformer-based composition focused on better harmony and melody: generate, listen, compare, then edit, play back and export in a notation editor.">用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。</p>
+<a class="btn" href="./score/" data-zh="打开曲谱编辑器" data-en="Open the score editor">打开曲谱编辑器</a>
+<a class="btn ghost" href="./compose/orchestra/joint.html" data-zh="浏览器内生成演示" data-en="In-browser generation demo">浏览器内生成演示</a>
+</section>
+
+<div class="flow" aria-label="workflow"><span data-zh="给定旋律" data-en="Melody">给定旋律</span>→<span data-zh="生成伴奏" data-en="Accompaniment">生成伴奏</span>→<span data-zh="比较、编辑、接受" data-en="Compare & edit">比较、编辑、接受</span>→<span data-zh="回放与导出" data-en="Play & export">回放与导出</span>→<span data-zh="演奏跟随" data-en="Perform">演奏跟随</span></div>
+
+<section class="grid">
+<div class="card"><h3>Compose</h3><div class="sub" data-zh="生成" data-en="Generation">生成</div><p data-zh="浏览器内运行的联合模型：旋律、和声、低音与配器。完整的伴奏与连续演奏使用本机 Python 服务（见 GitHub）。" data-en="A joint model that runs in the browser: melody, harmony, bass and orchestration. Full accompaniment and continuous performance use a local Python service (see GitHub).">浏览器内运行的联合模型：旋律、和声、低音与配器。完整的伴奏与连续演奏使用本机 Python 服务（见 GitHub）。</p><a href="./compose/orchestra/joint.html" data-zh="试用 →" data-en="Try it →">试用 →</a></div>
+<div class="card"><h3>Score</h3><div class="sub" data-zh="编辑" data-en="Editing">编辑</div><p data-zh="网页曲谱编辑器：钢琴、室内乐与管弦乐，候选比较与接受，回放，MusicXML / MIDI / PDF 导入导出。" data-en="A web notation editor for piano, chamber and orchestral music with candidate comparison, playback and MusicXML / MIDI / PDF import and export.">网页曲谱编辑器：钢琴、室内乐与管弦乐，候选比较与接受，回放，MusicXML / MIDI / PDF 导入导出。</p><a href="./score/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
+<div class="card"><h3>Harmony</h3><div class="sub" data-zh="理论" data-en="Theory">理论</div><p data-zh="Tonnetz 和声关系可视化，辅助分析和声进行与转调。" data-en="Tonnetz visualization of harmonic relations, for analysing progressions and modulations.">Tonnetz 和声关系可视化，辅助分析和声进行与转调。</p><a href="./harmony/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
+<div class="card"><h3>Stage</h3><div class="sub" data-zh="演奏" data-en="Performance">演奏</div><p data-zh="PDF 读谱、演奏跟随与自动翻页（麦克风仅在本机处理）。" data-en="PDF score reading, performance following and automatic page turns (microphone audio is processed on-device).">PDF 读谱、演奏跟随与自动翻页（麦克风仅在本机处理）。</p><a href="./stage/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
+</section>
+
+<p class="note" data-zh="这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。" data-en="This is a research prototype: judge the output by ear, and see the repository for model and data licences. Some features (full accompaniment, continuous performance, audio-to-score) need a local service.">这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。</p>
+</main>
+<script>
+(function(){var s=document.getElementById('lang');function set(l){document.documentElement.lang=l==='en'?'en':'zh-CN';document.querySelectorAll('[data-zh]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});}
+var saved;try{saved=localStorage.getItem('cantelvio-lang')}catch(e){}
+var l=saved||((navigator.language||'').indexOf('zh')===0?'zh':'en');s.value=l;set(l);
+s.onchange=function(){set(s.value);try{localStorage.setItem('cantelvio-lang',s.value)}catch(e){}};})();
+</script>
+</body>
+</html>
