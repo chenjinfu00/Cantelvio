@@ -3,7 +3,7 @@ const root=new URL('./',self.location.href),STATE=new URL('./.shell-state',root)
 // Shell updates belong to one installed path. Legacy caches and other readers
 // on this origin are left intact; PDF keys already include their full path.
 const SHELL_PREFIX='volta-shell-'+encodeURIComponent(root.pathname)+'-';
-const SHELL=SHELL_PREFIX+'20261007-scoped-shell-1',PDFS='volta-offline-pdfs-v1';
+const SHELL=SHELL_PREFIX+'20261008-onboarding-1',PDFS='volta-offline-pdfs-v1';
 
 async function report(message){
   for(const client of await self.clients.matchAll({includeUncontrolled:true})){

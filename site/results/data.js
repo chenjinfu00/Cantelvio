@@ -111,7 +111,7 @@ window.RESULTS = {
     {zh: 'PDF 识谱（Audiveris，300 dpi 自家排版的乐谱）', en: 'PDF import (Audiveris, 300 dpi scores engraved by the editor)', v: {zh: '众赞歌 100%、《菩提树》90%、韦伯单簧管小协奏曲 80%（指定乐器后 95%）', en: 'chorale 100%, “Der Lindenbaum” 90%, Weber clarinet concertino 80% (95% with the instrument given)'}},
     {zh: 'Stage 全景/无缝视图', en: 'Stage seamless / panorama views', v: {zh: '809 小节的整部四重奏 0.6 秒排好，滚动约 60 帧/秒（原整条内联 SVG 约 16 帧/秒）', en: 'an 809-bar quartet lays out in 0.6 s and scrolls at ≈60 fps (≈16 fps with one inline SVG)'}},
     {zh: '联合模型浏览器推理', en: 'Joint model in-browser inference', v: {zh: '与 PyTorch 逐 logit 对照最大差 2.4×10⁻⁵；48 小节预告与播放 0 差异', en: 'max logit difference vs PyTorch 2.4×10⁻⁵; 0 differences between 48-bar preview and playback'}},
-    {zh: '自动测试（2026-10-06）', en: 'Automated tests (2026-10-06)', v: {zh: 'Compose 68/68 · Score 192/192（+ 适配器 8/8）· Harmony 86/86 · Stage 159 通过、3 跳过（需私有曲谱库）', en: 'Compose 68/68 · Score 192/192 (+ adapter 8/8) · Harmony 86/86 · Stage 159 passed, 3 skipped (need a private score library)'}}
+    {zh: '网页发布验证（2026-10-08）', en: 'Web release checks (2026-10-08)', v: {zh: 'Compose 70/70 · Score 195/195 · Harmony 88/88 · Stage 166/166；全部通过，无跳过；静态站点 7 页、0 断链', en: 'Compose 70/70 · Score 195/195 · Harmony 88/88 · Stage 166/166; all passed, none skipped; 7 static pages, 0 broken links'}}
   ],
   audioClips: [
     {id: 'twinkle', zh: '《小星星》', en: 'Twinkle Twinkle'},

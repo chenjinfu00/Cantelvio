@@ -42,7 +42,7 @@
 
 | # | 事项 | 谁 | 时间 | 说明 / 验收 |
 |---|---|---|---|---|
-| B1 | **修公开站的死角** | Claude / Codex | H0 | ✅ 公开编辑器返回总入口；Harmony / Stage 子路径缓存隔离；链接检查覆盖锚点、本机地址和发布边界 |
+| B1 | **修公开站的死角** | Claude / Codex | H0 | ✅ 2026-10-08：GitHub Pages 完整站点上线；模块返回总入口；Stage 首次欢迎页显示谱架；Harmony / Stage 子路径缓存隔离；链接检查覆盖锚点、本机地址和发布边界 |
 | B2 | **Score 无服务演示模式** | Claude / Codex | H1 | 🚧 公开试用模式已可编辑示例、回放、导入 MusicXML、导出 MIDI/PDF/SVG；不访问访客本机服务。五项任务的预生成伴奏候选仍待接入 |
 | B3 | 试听库 | Claude | H1 | 把 v3.1 五项任务的 MIDI（共 30 段）渲染成音频并放进结果页；或用 SpessaSynth 在浏览器里直接播 |
 | B4 | **新模型进浏览器** | Claude | H2 | 先量 v3.1（≈5.0M 参数）与配和声（0.87M）在 fp16/int8 下的大小与速度；ONNX Runtime Web；与 PyTorch 逐 logit 对照；首次加载 ≤ 10 MB 并显示进度 |

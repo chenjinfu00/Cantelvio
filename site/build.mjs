@@ -43,9 +43,14 @@ rewrite('harmony/index.html', html => html
   .replace('<title>Tonnetz · Isomorphic keyboard</title>', '<title>Cantelvio Harmony · Tonnetz</title>')
   .replace('<div id="performanceToggles"', '<style>.cantelvio-home{color:inherit;text-decoration:none;font:600 13px system-ui;padding:10px 12px;border:1px solid rgba(175,222,231,.3);border-radius:10px;touch-action:manipulation}.cantelvio-home:focus-visible{outline:2px solid #64e5df;outline-offset:3px}</style><div id="performanceToggles"')
   .replace('<label class="performance-layout-select">', '<a class="cantelvio-home" href="../">← Cantelvio</a><label class="performance-layout-select">'));
-rewrite('stage/index.html', html => html
-  .replace('<title>Volta · 听谱翻页</title>', '<title>Cantelvio Stage · 听谱翻页</title>')
-  .replace('<a class="brand" href="./"><span class="brand-mark">V</span><span>volta', '<a class="brand" href="../" aria-label="Cantelvio 首页 / Home"><span class="brand-mark">C</span><span>Cantelvio Stage'));
+rewrite('stage/index.html', html => {
+  const shelfHeading = '<div class="drawer-heading"><div><strong>volta';
+  if (!html.includes(shelfHeading)) throw new Error('Stage shelf heading changed; update site/build.mjs');
+  return html
+    .replace('<title>Volta · 听谱翻页</title>', '<title>Cantelvio Stage · 听谱翻页</title>')
+    .replace('<a class="brand" href="./"><span class="brand-mark">V</span><span>volta', '<a class="brand" href="../" aria-label="Cantelvio 首页 / Home"><span class="brand-mark">C</span><span>Cantelvio Stage')
+    .replace(shelfHeading, '<a class="secondary full" href="../" style="display:block;margin-bottom:12px;text-align:left;text-decoration:none">← Cantelvio</a>' + shelfHeading);
+});
 
 // Compose: browser-only pages and their vendored model/audio assets.
 const cf = 'Compose/frontend';

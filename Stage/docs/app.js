@@ -576,6 +576,9 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
     if(local){try{await openPDF({id:saved.id,url:local,path:saved.path||library.local.path?.(saved.id),local:true},saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
     else await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,null).catch(()=>{});
   }else await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,null).catch(()=>{});
+  // Keep the PDF/import entry visible until a newcomer has a score or a library.
+  // An open shelf also holds the idle controls; real scores keep immersive reading.
+  if(state.score?.system&&!library?.local)shell.open('shelf');
   if(query.get('piece')==='chopin'&&['localhost','127.0.0.1'].includes(location.hostname))$('demo-button').click();
 })().catch(()=>toast('本机曲谱未能恢复，可从曲谱库重新打开；批注仍保留。'));
 const buildVersion=$('build-version');if(buildVersion)buildVersion.textContent=`版本时间：${BUILD_INFO.label}`;

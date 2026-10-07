@@ -1,8 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import vm from 'node:vm';
 import {strokeWidth,eraserRadius} from '../docs/ink.js';
 import {validateInk} from '../docs/ink-validation.js';
+import {IdleChrome} from '../docs/idle-chrome.js';
+import {VERSION_UPDATE} from '../docs/build-info.js';
 
 const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
 const shell=await fs.readFile(new URL('../docs/reader-shell.js',import.meta.url),'utf8');
@@ -48,6 +51,37 @@ test('temporary PDF entry points share a session-only import flow',async()=>{
   const offline=await fs.readFile(new URL('../docs/offline.js',import.meta.url),'utf8');
   assert.match(offline,/score\.temporary\|\|local/,'temporary PDFs are excluded from offline copies');
   assert.doesNotMatch(offline,/autoOffline/,'no background import copy is made');
+});
+
+test('welcome startup keeps PDF import discoverable while real scores retain immersive reading',async()=>{
+  const app=await fs.readFile(new URL('../docs/app.js',import.meta.url),'utf8');
+  const start=app.indexOf('(async()=>{',app.indexOf('// Nothing to sign in to:'));
+  assert.ok(start>=0);
+  const startup=app.slice(start,app.indexOf('const buildVersion=',start))
+    .replaceAll('import.meta.url',JSON.stringify('https://example.test/Cantelvio/stage/app.js'));
+  for(const scenario of [
+    {name:'first visit',saved:null,local:null,expectedShelf:true},
+    {name:'reopened system welcome',saved:{system:true},local:null,expectedShelf:true},
+    {name:'restored real PDF',saved:{id:'real-score',name:'score.pdf',buffer:new ArrayBuffer(1)},local:null,expectedShelf:false},
+    {name:'connected library',saved:null,local:{},expectedShelf:false},
+    {name:'restored library score',saved:{id:'real-score',name:'score.pdf'},local:{url:()=>'/local-score.pdf'},expectedShelf:false},
+  ]){
+    let panel=null,visible=true,expire;
+    const state={score:null},library={local:scenario.local};
+    const chrome=new IdleChrome({held:()=>!!panel,show:()=>visible=true,hide:()=>visible=false,
+      setTimer:fn=>{expire=fn;return 1;},clearTimer(){}});
+    const context=vm.createContext({URL,URLSearchParams,location:{search:'',hostname:'example.test'},
+      state,library,localRestore:Promise.resolve(),loadScore:async()=>scenario.saved,
+      VERSION_UPDATE,CHOPIN_EXAMPLE:{scoreId:'chopin'},
+      openPDF:async source=>{state.score=source?.system?source:{system:false};panel=null;chrome.wake();},
+      shell:{open:next=>{panel=next;chrome.wake();}},
+      toast:message=>assert.fail(message),$:()=>assert.fail('no synthetic click is needed'),
+    });
+    await vm.runInContext(startup,context);
+    assert.equal(panel,scenario.expectedShelf?'shelf':null,scenario.name);
+    expire();
+    assert.equal(visible,scenario.expectedShelf,scenario.name+' after idle timeout');
+  }
 });
 
 test('dialog close buttons stay available while dialog content scrolls',async()=>{
