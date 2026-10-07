@@ -27,6 +27,7 @@ python3 -m http.server -d site-dist 8080
 ```
 
 生成的 `site-dist/` 是纯静态站（入口页 + Score + Harmony + Stage + Compose 的浏览器内模型页），推送到 `main` 后由 `.github/workflows/pages.yml` 部署到 GitHub Pages。
+`site/results/` 是实验与评估结果页（数据在 `site/results/data.js`，更新数字只改这一个文件）。
 完整的伴奏生成、连续演奏和录音转谱需要本机 Python 服务，不在静态站里。
 The static site contains everything that runs in the browser. Full accompaniment generation, continuous performance and audio-to-score need the local Python service and are not part of it.
 

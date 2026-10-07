@@ -35,6 +35,7 @@ h2{margin:32px 0 8px}.note{color:var(--mute);font-size:14px;border-top:1px solid
 <h1 data-zh="从一段旋律，写到完整曲谱。" data-en="From a melody to a finished score.">从一段旋律，写到完整曲谱。</h1>
 <p class="lead" data-zh="用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。" data-en="Transformer-based composition focused on better harmony and melody: generate, listen, compare, then edit, play back and export in a notation editor.">用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。</p>
 <a class="btn" href="./score/" data-zh="打开曲谱编辑器" data-en="Open the score editor">打开曲谱编辑器</a>
+<a class="btn ghost" href="./results/" data-zh="查看全部结果" data-en="See all results">查看全部结果</a>
 <a class="btn ghost" href="./compose/orchestra/joint.html" data-zh="浏览器内生成演示" data-en="In-browser generation demo">浏览器内生成演示</a>
 </section>
 
@@ -48,6 +49,7 @@ h2{margin:32px 0 8px}.note{color:var(--mute);font-size:14px;border-top:1px solid
 </section>
 
 <p class="note" data-zh="这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。" data-en="This is a research prototype: judge the output by ear, and see the repository for model and data licences. Some features (full accompaniment, continuous performance, audio-to-score) need a local service.">这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。</p>
+<p class="note"><a href="https://github.com/chenjinfu00/Cantelvio">GitHub</a> · <a href="./results/" data-zh="实验与评估结果" data-en="Experiments &amp; evaluation results">实验与评估结果</a></p>
 </main>
 <script>
 (function(){var s=document.getElementById('lang');function set(l){document.documentElement.lang=l==='en'?'en':'zh-CN';document.querySelectorAll('[data-zh]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});}

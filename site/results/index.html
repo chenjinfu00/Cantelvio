@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cantelvio · 结果 Results</title>
+<meta name="description" content="Cantelvio 目前所有的实验与评估结果：和声与旋律模型、配伴奏、和声分析、音频转乐谱、编辑器验证，以及已知的局限。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24'%3E%E2%99%AB%3C/text%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;--bg:#f6f5ef;--surface:#fcfcfb;--fg:#1d2420;--mute:#5d665f;--line:#dcdfd3;--acc:#256abf;--ref:#9a9e96;
+--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--tilebg:#fcfcfb}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#141815;--surface:#1a1a19;--fg:#e8ece6;--mute:#a3ada5;--line:#2f3832;--acc:#6da7ec;--ref:#6f766f;
+--s1:#3987e5;--s2:#d95926;--s3:#199e70;--tilebg:#1c221e}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+a{color:var(--acc)}code{font-size:.85em;word-break:break-all}
+main{max-width:1000px;margin:0 auto;padding:0 16px 56px}
+header.top{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0}
+.brand{font-weight:700;font-size:20px;text-decoration:none;color:var(--fg)}
+header nav{display:flex;gap:14px;flex-wrap:wrap;flex:1;font-size:14px}
+select{font:inherit;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+h1{font-size:clamp(28px,5.5vw,44px);line-height:1.15;margin:12px 0 8px}
+h2{font-size:24px;margin:48px 0 6px;scroll-margin-top:12px}h3{font-size:17px;margin:24px 0 6px}h4{margin:0 0 6px;font-size:15px}
+p{margin:8px 0}.lead{color:var(--mute);font-size:18px;max-width:720px}.mute{color:var(--mute);font-size:14px}
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:24px 0}
+.tile{background:var(--tilebg);border:1px solid var(--line);border-radius:14px;padding:16px}
+.tv-v{font-size:30px;font-weight:650;line-height:1.1;letter-spacing:-.01em}.tv-l{color:var(--mute);font-size:13.5px;margin-top:6px}
+.cols{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 12px}
+.card h3{margin-top:0}
+.note{border-left:3px solid var(--line);padding:2px 0 2px 12px;color:var(--mute);font-size:14.5px;margin:12px 0}
+/* tables */
+.tbl{overflow-x:auto;margin:8px 0}table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{font-weight:600;color:var(--mute);font-size:12.5px;white-space:nowrap}td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody th{font-weight:500}
+details.tv{margin-top:8px;font-size:13px}details.tv summary{cursor:pointer;color:var(--mute)}
+/* bars */
+.hb{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.hb-row{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:10px;align-items:center;padding:3px 4px;border-radius:8px}
+.hb-row:hover,.hb-row:focus-visible{background:color-mix(in srgb,var(--line) 45%,transparent);outline:none}
+.hb-l{font-size:13.5px;line-height:1.3}.hb-t{display:flex;align-items:center;gap:8px;min-width:0}
+.hb-b{height:18px;border-radius:0 4px 4px 0;min-width:2px;flex:none}.hb-v{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hb-row.best .hb-l{font-weight:600}
+@media (max-width:520px){.hb-row{grid-template-columns:1fr;gap:2px}}
+/* lines */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin:4px 0 2px}.legend i,.tip i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+svg.lc{display:block;max-width:100%}svg .grid{stroke:var(--line);stroke-width:1}svg .ax{fill:var(--mute);font-size:12px}svg .end{fill:var(--fg);font-size:12px;font-variant-numeric:tabular-nums}
+svg .xh{stroke:var(--mute);stroke-width:1}
+.xkey{margin:4px 0 0;padding-left:22px;font-size:12.5px;color:var(--mute)}
+.tip{position:fixed;z-index:10;display:none;pointer-events:none;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.45;box-shadow:0 4px 14px rgba(0,0,0,.18);max-width:300px}
+/* audio */
+.clips{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
+.clip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.clip label{display:block;font-size:13px;margin:8px 0}.clip label span{display:block;color:var(--mute);margin-bottom:2px}.clip audio{width:100%;height:36px}
+ul.plain{padding-left:20px}ul.plain li{margin:6px 0}
+footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;color:var(--mute);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+<a class="brand" href="../">♫ Cantelvio</a>
+<nav>
+<a href="#s-models" data-zh="模型" data-en="Models">模型</a>
+<a href="#s-harmony" data-zh="和声与旋律" data-en="Harmony &amp; melody">和声与旋律</a>
+<a href="#s-accompany" data-zh="配伴奏" data-en="Accompaniment">配伴奏</a>
+<a href="#s-analysis" data-zh="和声分析" data-en="Analysis">和声分析</a>
+<a href="#s-audio2score" data-zh="音频→乐谱" data-en="Audio→score">音频→乐谱</a>
+<a href="#s-software" data-zh="软件" data-en="Software">软件</a>
+<a href="#s-limits" data-zh="局限" data-en="Limits">局限</a>
+<a class="gh" href="https://github.com/chenjinfu00/Cantelvio">GitHub</a>
+</nav>
+<select id="lang" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select>
+</header>
+
+<h1 data-zh="目前的全部结果" data-en="All results so far">目前的全部结果</h1>
+<p class="lead" data-zh="Cantelvio 用 Transformer 改进自动作曲的和声与旋律。这一页汇总到目前为止做过的实验、评估和验证，每个数字都来自仓库里的报告；也写明了哪些结论还站不住。" data-en="Cantelvio uses Transformers to improve the harmony and melody of automatic composition. This page collects every experiment, evaluation and check so far; each number comes from a report in the repository, and the weak spots are stated openly.">Cantelvio 用 Transformer 改进自动作曲的和声与旋律。这一页汇总到目前为止做过的实验、评估和验证，每个数字都来自仓库里的报告；也写明了哪些结论还站不住。</p>
+<p class="mute"><span data-zh="数据截至" data-en="Data as of">数据截至</span> <span id="asof"></span> · <span data-zh="研究原型，请用耳朵判断" data-en="Research prototype — judge by ear">研究原型，请用耳朵判断</span></p>
+
+<div class="tiles" id="tiles"></div>
+
+<h2 id="s-models" data-zh="模型一览" data-en="The models">模型一览</h2>
+<p class="mute" data-zh="从最早的小型和声/旋律模型，到现在的四大件 v3.1 与几个专门的小模型。" data-en="From the first small harmony/melody models to today’s four-pillar v3.1 and a few specialised small models.">从最早的小型和声/旋律模型，到现在的四大件 v3.1 与几个专门的小模型。</p>
+<div class="card" id="models-t"></div>
+
+<h2 id="s-harmony" data-zh="和声与旋律：该不该合在一个模型里" data-en="Harmony &amp; melody: one model or several?">和声与旋律：该不该合在一个模型里</h2>
+<p data-zh="联合四轨模型把和声、低音、旋律、节奏放进同一个 Transformer，取代了分开训练的 Harmony v2 与 Melody v5。在同样的事件上，旋律与下一和弦的交叉熵都明显下降；参数量相同的通用 Transformer 与结构化模型一样好，所以后面的模型改用通用架构。" data-en="The joint four-track model puts harmony, bass, melody and rhythm into one Transformer, replacing the separately trained Harmony v2 and Melody v5. On the same events, both melody and next-chord cross-entropy drop clearly; a generic Transformer with the same parameter count is just as good, so later models use the generic architecture.">联合四轨模型把和声、低音、旋律、节奏放进同一个 Transformer……</p>
+<div class="cols">
+<div class="card"><h3 data-zh="旋律交叉熵（越低越好）" data-en="Melody cross-entropy (lower is better)">旋律交叉熵</h3><div id="joint-m"></div></div>
+<div class="card"><h3 data-zh="下一和弦交叉熵（越低越好）" data-en="Next-chord cross-entropy (lower is better)">下一和弦交叉熵</h3><div id="joint-c"></div></div>
+</div>
+<p class="note" data-zh="盲听（8 段）：结构化更好 3、通用更好 3、差不多 2；分出高下的 6 段里有 5 段选了后听的 B，说明有顺序偏好。" data-en="Blind listening (8 clips): structured better 3, generic better 3, about equal 2; in 5 of the 6 decided clips the second clip (B) won, which suggests an order bias.">盲听……</p>
+
+<h3 data-zh="管弦乐模型：12 平均律对称性" data-en="Orchestral model: 12-tone symmetry">管弦乐模型：12 平均律对称性</h3>
+<p data-zh="同一个 440 万参数的模型各训练 6,000 步。相对音高（音高旋转编码）让验证损失降低约 25%，并且对移调几乎不敏感；移调增强只对旋转模型有帮助。" data-en="The same 4.4M-parameter model, 6,000 steps each. Relative pitch (pitch-rotation encoding) lowers validation loss by about 25% and makes it nearly insensitive to transposition; transposition augmentation only helps the rotation model.">相对音高……</p>
+<div class="card"><div id="ablation"></div><details class="tv"><summary data-zh="含移调后的损失" data-en="Including transposed losses">含移调后的损失</summary><div id="ablation-t"></div></details></div>
+<p class="note" data-zh="只有一个随机种子、6,000 步；更长训练后差距可能缩小。" data-en="One seed and 6,000 steps only; the gap may shrink with longer training.">只有一个随机种子。</p>
+
+<h2 id="s-accompany" data-zh="为旋律配伴奏" data-en="Accompanying a melody">为旋律配伴奏</h2>
+<p data-zh="给定一条旋律，让 v3.1 写钢琴伴奏。半音冲突指伴奏与旋律在同一时刻相差小二度/大七度。“选 N 份”是生成 N 份取旋律概率最高的一份；加冲突惩罚就是在挑选时扣掉冲突多的候选，不需要重新训练。" data-en="Given a melody, v3.1 writes the piano accompaniment. A semitone clash is a minor second / major seventh against the melody at the same moment. “Best of N” generates N candidates and keeps the one with the highest melody probability; the clash penalty subtracts a cost for clashing candidates when choosing — no retraining.">给定一条旋律……</p>
+<div class="cols">
+<div class="card"><h3 data-zh="半音冲突（%，越低越好）" data-en="Semitone clashes (%, lower is better)">半音冲突</h3><div id="pen-clash"></div></div>
+<div class="card"><h3 data-zh="强拍上的伴奏音属于和弦（%，越高越好）" data-en="Strong-beat accompaniment notes inside the chord (%, higher is better)">强拍和弦音</h3><div id="pen-tone"></div></div>
+</div>
+<p class="note" data-zh="3 首简单旋律 × 4 个种子，训练集窗口，只比较做法。建议：选 8 份用惩罚 2–4，选 32 份用 4；代价只是旋律在伴奏下的概率略低。" data-en="3 simple melodies × 4 seeds, training-set windows — this compares methods only. Suggested: penalty 2–4 for best-of-8 and 4 for best-of-32; the only cost is a slightly lower melody probability under the accompaniment.">3 首简单旋律……</p>
+
+<h3 data-zh="与 Anticipatory Music Transformer（AMT）对照" data-en="Comparison with the Anticipatory Music Transformer (AMT)">与 AMT 对照</h3>
+<div class="cols">
+<div class="card"><h3 data-zh="3 首简单旋律（《小星星》等）" data-en="3 simple melodies (Twinkle, Ode to Joy, Lightly Row)">3 首简单旋律</h3><div id="amt-simple-lg"></div><div id="amt-simple"></div></div>
+<div class="card"><h3 data-zh="24 首真实艺术歌曲（OpenScore Lieder）" data-en="24 real art songs (OpenScore Lieder)">24 首真实艺术歌曲</h3><div id="amt-lieder-lg"></div><div id="amt-lieder"></div><details class="tv"><summary data-zh="含强拍和弦拟合" data-en="With strong-beat chord fit">含强拍和弦拟合</summary><div id="amt-lieder-t"></div></details></div>
+</div>
+<p class="note" data-zh="在 3 首简单旋律上，AMT 只要给一小节开头就稳定、在拍上，冲突与 v3.1 加惩罚相当；但在真实艺术歌曲上并没有拉开差距（14.1% 对 11.3%），而且 v3.1 见过这些总谱、AMT 没见过，差距大小不可信。因此 v3.2 先按“给定材料通道”做，预读式训练保留作备选。" data-en="On 3 simple melodies AMT is stable and on-beat once given a one-bar intro, with clashes comparable to v3.1 + penalty; on real art songs it does not pull ahead (14.1% vs 11.3%), and v3.1 saw those scores in training while AMT did not, so the gap size is unreliable. v3.2 therefore starts with the “given material channel”; anticipation-style training stays as an option.">在 3 首简单旋律上……</p>
+
+<h3 data-zh="试听（3 首旋律 × 3 种做法）" data-en="Listen (3 melodies × 3 methods)">试听</h3>
+<div class="clips" id="clips"></div>
+<p class="mute" data-zh="音色：FluidSynth + FluidR3_GM（MIT）。每段均为同一旋律的不同伴奏。" data-en="Rendered with FluidSynth + FluidR3_GM (MIT). Each clip is the same melody with a different accompaniment.">音色：FluidSynth + FluidR3_GM（MIT）。</p>
+
+<h2 id="s-analysis" data-zh="和声分析与配和声" data-en="Harmony analysis &amp; harmonizing">和声分析与配和声</h2>
+<p data-zh="两个小模型：配和声 v1 只读旋律、给出和弦；分析模型 v2 读全部音符、自动标和弦。指标是对 AugmentedNet 标注的逐拍和弦完全一致率。" data-en="Two small models: harmonizer v1 reads only the melody and proposes chords; analysis v2 reads all notes and labels chords. The metric is exact per-beat chord agreement with AugmentedNet labels.">两个小模型……</p>
+<div class="card"><h3 data-zh="逐拍和弦完全一致（%，测试集）" data-en="Exact per-beat chord agreement (%, test set)">逐拍和弦完全一致</h3><div id="harm"></div></div>
+<h3 data-zh="把配和声模型的和弦交给 v3.1 写伴奏" data-en="Feeding the harmonizer’s chords to v3.1">把配和声模型的和弦交给 v3.1</h3>
+<div class="card" id="harm-effect"></div>
+<p class="note" data-zh="分析模型 v2 的测试集：80 首作品、13,213 个拍点；读全部音符时根音一致 77.6%（规则跟踪器 75.3%）。只读旋律时 v2 不如 v1，所以配伴奏仍用 v1。" data-en="Analysis v2 test set: 80 pieces, 13,213 beats; reading all notes, root agreement is 77.6% (rule tracker 75.3%). With the melody only, v2 is below v1, so accompaniment still uses v1.">分析模型 v2 的测试集……</p>
+
+<h3 data-zh="AugmentedNet 与规则跟踪器（弦乐四重奏）" data-en="AugmentedNet vs the rule-based tracker (string quartets)">AugmentedNet 与规则跟踪器</h3>
+<div class="card" id="augnet"></div>
+<p class="note" data-zh="跟踪器更贴合四重奏里实际响着的音；AugmentedNet 是一个独立的参照，而不是标准答案。（196 部里 186 部成功，10 部 MusicXML 解析失败。）" data-en="The tracker fits the sounding notes of the quartets better; AugmentedNet is an independent reference, not ground truth. (186 of 196 scores succeeded; 10 failed MusicXML parsing.)">跟踪器更贴合……</p>
+
+<h2 id="s-audio2score" data-zh="音频 → 乐谱" data-en="Audio → score">音频 → 乐谱</h2>
+<p data-zh="MuScriptor 转写音符与节拍，AIlegro 的流程把它整理成可读的 MusicXML：节拍修补、按乐器选细分、跑动段落、补漏掉的音。下面的数字用的是“真实乐谱 + 模拟演奏与转写错误”。" data-en="MuScriptor transcribes notes and beats; the pipeline cleans them into readable MusicXML: beat repair, per-instrument subdivision, run passages, filling missed notes. The numbers below use real scores plus simulated performance and transcription errors.">MuScriptor 转写音符与节拍……</p>
+<div class="card"><h3 data-zh="逐音 F1（%，模拟，测试集）" data-en="Note F1 (%, simulated, test set)">逐音 F1</h3><div id="audio"></div></div>
+<p class="note" data-zh="示例 Brahms《Der Strom》：62.0% → 75.5% → 82.8% → 82.7%。注意：各阶段来自不同次评估，评估集可能略有不同；真实录音上还没有量过。" data-en="Example, Brahms “Der Strom”: 62.0% → 75.5% → 82.8% → 82.7%. Stages come from separate evaluation runs whose sets may differ slightly; real recordings have not been measured yet.">示例……</p>
+
+<h2 id="s-training" data-zh="v3.1 与训练进度" data-en="v3.1 and training progress">v3.1 与训练进度</h2>
+<div class="card"><h3 data-zh="续训前后（第 45,225 步 → 第 101,129 步）" data-en="Before and after continued training (step 45,225 → 101,129)">续训前后</h3><div id="v31"></div></div>
+<div class="card" style="margin-top:24px"><h3 data-zh="四大件 v2 的训练损失" data-en="Four-pillar v2 training loss">四大件 v2 的训练损失</h3><div id="train"></div><p class="mute" data-zh="v2 累计 39,327 步（约 21.4 小时，M2 Pro）。没有验证集，损失下降不等于泛化。" data-en="v2 totals 39,327 steps (≈21.4 h on an M2 Pro). There is no validation set; falling loss is not generalisation.">没有验证集。</p></div>
+<p class="note" data-zh="续训后单个指标有升有降：不选候选时冲突更少，但“选 N 份”后冲突变多——挑候选只看旋律概率、不惩罚冲突，所以才加了上面的冲突惩罚。" data-en="After continuation some metrics improve and some do not: clashes fall without candidate selection but rise with “best of N”, because selection only looks at melody probability — hence the clash penalty above.">续训后……</p>
+
+<h2 id="s-software" data-zh="软件与验证" data-en="Software &amp; verification">软件与验证</h2>
+<div class="card" id="software"></div>
+
+<h2 id="s-limits" data-zh="局限与尚未做的事" data-en="Limitations &amp; what is not done">局限与尚未做的事</h2>
+<ul class="plain" id="limits"></ul>
+
+<h2 id="s-more" data-zh="资料来源与链接" data-en="Sources &amp; links">资料来源与链接</h2>
+<ul class="plain" id="sources"></ul>
+<p><a class="gh" href="https://github.com/chenjinfu00/Cantelvio">GitHub</a> · <a href="../" data-zh="返回首页" data-en="Back to home">返回首页</a> · <a href="https://github.com/chenjinfu00/Cantelvio/blob/main/ROADMAP.md" data-zh="路线图" data-en="Roadmap">路线图</a></p>
+
+<footer data-zh="Cantelvio 是研究原型。生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。" data-en="Cantelvio is a research prototype. Judge the generated music by ear; see the repository for model and data licences.">Cantelvio 是研究原型。</footer>
+</main>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

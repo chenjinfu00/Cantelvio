@@ -4,6 +4,7 @@
 //   /score/      Score editor (Vite build, base './'; reuses Score/apps/web/dist unless --build)
 //   /harmony/    Harmony (Tonnetz) public pages
 //   /stage/      Stage (Volta) docs/ PWA
+//   /results/    results page (site/results) + listening clips from Compose/training/reports/amt-compare-20261005
 //   /compose/    Compose in-browser pages (orchestra joint model, QA); the main page and four-pillar need the local Python service and are NOT published
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,6 +38,15 @@ for (const d of ['orchestra', 'vendor', 'media', 'src']) {
   if (fs.existsSync(path.join(root, cf, d))) fs.cpSync(path.join(root, cf, d), path.join(out, 'compose', d), {recursive: true, dereference: true, filter: skip});
 }
 for (const f of ['style.css', 'favicon.svg']) fs.copyFileSync(path.join(root, cf, f), path.join(out, 'compose', f));
+
+// Results page and its listening clips.
+fs.mkdirSync(path.join(out, 'results'), {recursive: true});
+for (const f of fs.readdirSync(path.join(root, 'site/results'))) fs.copyFileSync(path.join(root, 'site/results', f), path.join(out, 'results', f));
+const clips = path.join(root, 'Compose/training/reports/amt-compare-20261005');
+fs.mkdirSync(path.join(out, 'results/audio'), {recursive: true});
+let nClips = 0;
+for (const f of fs.existsSync(clips) ? fs.readdirSync(clips) : []) if (f.endsWith('.mp3')) { fs.copyFileSync(path.join(clips, f), path.join(out, 'results/audio', f)); nClips++; }
+if (nClips !== 9) console.warn(`warning: expected 9 listening clips, found ${nClips}`);
 
 let bytes = 0, files = 0;
 (function walk(d) { for (const e of fs.readdirSync(d, {withFileTypes: true})) { const p = path.join(d, e.name); e.isDirectory() ? walk(p) : (files++, bytes += fs.statSync(p).size); } })(out);
