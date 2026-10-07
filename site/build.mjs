@@ -37,6 +37,14 @@ fs.mkdirSync(path.join(out, 'compose'), {recursive: true});
 for (const d of ['orchestra', 'vendor', 'media', 'src']) {
   if (fs.existsSync(path.join(root, cf, d))) fs.cpSync(path.join(root, cf, d), path.join(out, 'compose', d), {recursive: true, dereference: true, filter: skip});
 }
+// The five-model comparison page needs the local Python service: publish only the in-browser joint page.
+fs.rmSync(path.join(out, 'compose/orchestra/index.html'), {force: true});
+const jointPage = path.join(out, 'compose/orchestra/joint.html');
+const jointOld = 'href="./" data-en="← Five-model comparison" data-zh="← 返回五组模型对比">← Five-model comparison';
+const jointHtml = fs.readFileSync(jointPage, 'utf8');
+if (!jointHtml.includes(jointOld)) console.warn('warning: joint.html back link changed; update site/build.mjs');
+fs.writeFileSync(jointPage, jointHtml.replace(jointOld, 'href="../" data-en="← About this demo" data-zh="← 关于这个演示">← About this demo'));
+fs.copyFileSync(path.join(root, 'site/compose-index.html'), path.join(out, 'compose/index.html'));
 for (const f of ['style.css', 'favicon.svg']) fs.copyFileSync(path.join(root, cf, f), path.join(out, 'compose', f));
 
 // Results page and its listening clips.

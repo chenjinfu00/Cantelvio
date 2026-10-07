@@ -1,12 +1,14 @@
-name: CI
+name: Score CI
 
 on:
   push:
     branches: [main]
+    paths: ['Score/**', '.github/workflows/score-ci.yml']
   pull_request:
+    paths: ['Score/**', '.github/workflows/score-ci.yml']
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: score-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -14,12 +16,16 @@ jobs:
     name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Score
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version-file: Score/.nvmrc
           cache: npm
+          cache-dependency-path: Score/package-lock.json
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
@@ -30,5 +36,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sample-renders
-          path: out/renders
+          path: Score/out/renders
           retention-days: 14

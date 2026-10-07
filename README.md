@@ -48,11 +48,11 @@ cd Harmony && npm start
 cd Stage && npm run preview
 ```
 
-测试：`npm test` 分别在 `Compose/`、`Score/`、`Harmony/`、`Stage/` 中运行。
+测试：在根目录 `npm test` 运行 Compose / Harmony / Stage 的测试，`npm run check:score` 运行 Score 的检查；`npm run site:build && npm run site:check` 建站并检查链接。
 
 ## 路线图 / Roadmap
 
-分阶段计划见 [ROADMAP.md](ROADMAP.md)。内部交接与迁移记录见 [docs/INTERNAL-HANDOFF.md](docs/INTERNAL-HANDOFF.md)。
+长期计划见 [ROADMAP.md](ROADMAP.md)，现状审计见 [docs/AUDIT-2026-10-07.md](docs/AUDIT-2026-10-07.md)，所有实验结果见 [结果页](site/results/)。内部交接与迁移记录见 [docs/INTERNAL-HANDOFF.md](docs/INTERNAL-HANDOFF.md)。
 
 ## 许可与数据 / Licences and data
 

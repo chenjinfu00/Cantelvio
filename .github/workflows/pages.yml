@@ -2,7 +2,7 @@ name: Deploy demo site
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'Score/apps/web/**', 'Score/packages/**', 'Harmony/public/**', 'Stage/docs/**', 'Compose/frontend/**']
+    paths: ['site/**', 'Score/apps/web/**', 'Score/packages/**', 'Harmony/public/**', 'Stage/docs/**', 'Compose/frontend/**', 'Compose/training/reports/amt-compare-20261005/**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +20,7 @@ jobs:
       - run: npm ci
         working-directory: Score
       - run: node site/build.mjs --build
+      - run: node site/check-links.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: {path: site-dist}

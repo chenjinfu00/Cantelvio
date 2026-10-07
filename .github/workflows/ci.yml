@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['Score/**', '**/*.md']
+  pull_request:
+    paths-ignore: ['Score/**', '**/*.md']
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  modules:
+    name: Test ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        module: [Compose, Harmony, Stage]
+    defaults:
+      run:
+        working-directory: ${{ matrix.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Install (only modules with a lockfile)
+        run: if [ -f package-lock.json ]; then npm ci; fi
+      - run: npm test
+  site:
+    name: Build the demo site and check links
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: Score/package-lock.json}
+      - run: npm ci
+        working-directory: Score
+      - run: node site/build.mjs --build
+      - run: node site/check-links.mjs

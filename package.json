@@ -1,0 +1,21 @@
+{
+  "name": "cantelvio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cantelvio: Transformer-based music generation with a notation editor, harmony visualisation and performance following.",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:compose && npm run test:harmony && npm run test:stage",
+    "test:compose": "npm test --prefix Compose",
+    "test:harmony": "npm test --prefix Harmony",
+    "test:stage": "npm test --prefix Stage",
+    "check:score": "npm run check --prefix Score",
+    "site": "node site/build.mjs",
+    "site:build": "node site/build.mjs --build",
+    "site:check": "node site/check-links.mjs",
+    "site:serve": "python3 -m http.server -d site-dist 8080"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
