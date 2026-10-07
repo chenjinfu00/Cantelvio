@@ -103,5 +103,5 @@ test("the service worker and manifest use the new English-first assets", () => {
   assert.equal(parsedManifest.lang, "en");
   assert.match(parsedManifest.name, /Isomorphic keyboard/);
   for (const asset of ["./i18n.js?v=1", "./app.css?v=20", "./app.js?v=21"]) assert.match(sw, new RegExp(asset.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  assert.match(sw, /tonnetz-v38-melodic-phrases/);
+  assert.match(sw, /v39-scoped-cache/);
 });

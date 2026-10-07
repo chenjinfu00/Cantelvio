@@ -1,8 +1,8 @@
-name: Deploy demo site
+name: Deploy Cantelvio web
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'Score/apps/web/**', 'Score/packages/**', 'Harmony/public/**', 'Stage/docs/**', 'Compose/frontend/**', 'Compose/training/reports/amt-compare-20261005/**']
+    paths: ['.github/workflows/pages.yml', 'package*.json', 'site/**', 'Score/apps/web/**', 'Score/packages/**', 'Score/*.json', 'Score/.nvmrc', 'Harmony/public/**', 'Stage/docs/**', 'Compose/frontend/**', 'Compose/training/reports/amt-compare-20261005/**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -10,19 +10,29 @@ permissions:
   id-token: write
 concurrency: {group: pages, cancel-in-progress: true}
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment: {name: github-pages, url: '${{ steps.deployment.outputs.page_url }}'}
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: {node-version: 22, cache: npm, cache-dependency-path: Score/package-lock.json}
       - run: npm ci
         working-directory: Score
+      - name: Validate browser modules
+        run: npm test
+      - name: Validate the score editor
+        run: npm run check --prefix Score
       - run: node site/build.mjs --build
       - run: node site/check-links.mjs
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with: {path: site-dist}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: {name: github-pages, url: '${{ steps.deployment.outputs.page_url }}'}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4

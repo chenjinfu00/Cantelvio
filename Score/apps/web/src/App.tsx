@@ -22,6 +22,7 @@ import {
 } from './state/files';
 import { getStore, isDirty, useEditor } from './state/store';
 import { demoId } from './state/demo';
+import { IN_STATIC_PREVIEW } from './host';
 
 const AUTOSAVE_DELAY_MS = 800;
 
@@ -128,16 +129,22 @@ export function App() {
   }, [title]);
 
   return (
-    <div className={demoId() ? 'app demo-app' : 'app'}>
+    <div className={demoId() || IN_STATIC_PREVIEW ? 'app demo-app' : 'app'}>
       <TopBar />
-      {demoId() && (
+      {IN_STATIC_PREVIEW ? (
+        <div className="demo-banner">
+          <span>{t('preview.editor')}</span>
+          <a href="../">{t('preview.home')}</a>
+          {demoId() && <span>{t('demo.draft')}</span>}
+        </div>
+      ) : demoId() ? (
         <div className="demo-banner">
           <span>{t('demo.draft')}</span>
           <a href="http://127.0.0.1:4187/demo/" target="_blank" rel="noreferrer">
             {t('demo.home')}
           </a>
         </div>
-      )}
+      ) : null}
       <Palette />
       <main className="workspace">
         <ScoreView />

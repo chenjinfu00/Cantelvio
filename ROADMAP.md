@@ -42,8 +42,8 @@
 
 | # | 事项 | 谁 | 时间 | 说明 / 验收 |
 |---|---|---|---|---|
-| B1 | **修公开站的死角** | Claude | H0 | ✅ Compose 入口页与返回链接、链接检查脚本已加；待办：Score 演示横幅指向本机地址（见审计） |
-| B2 | **Score 无服务演示模式** | Claude | H1 | 预生成的结果随站发布（伴奏候选、五项任务示例）；检测到本机服务时才启用“生成” |
+| B1 | **修公开站的死角** | Claude / Codex | H0 | ✅ 公开编辑器返回总入口；Harmony / Stage 子路径缓存隔离；链接检查覆盖锚点、本机地址和发布边界 |
+| B2 | **Score 无服务演示模式** | Claude / Codex | H1 | 🚧 公开试用模式已可编辑示例、回放、导入 MusicXML、导出 MIDI/PDF/SVG；不访问访客本机服务。五项任务的预生成伴奏候选仍待接入 |
 | B3 | 试听库 | Claude | H1 | 把 v3.1 五项任务的 MIDI（共 30 段）渲染成音频并放进结果页；或用 SpessaSynth 在浏览器里直接播 |
 | B4 | **新模型进浏览器** | Claude | H2 | 先量 v3.1（≈5.0M 参数）与配和声（0.87M）在 fp16/int8 下的大小与速度；ONNX Runtime Web；与 PyTorch 逐 logit 对照；首次加载 ≤ 10 MB 并显示进度 |
 | B5 | 体积与首屏预算 | Claude | H1 | 站点 103 MB：音色 39 MB（首次播放才下载）、中文字体 15 MB（改子集）；首页 + 结果页 ≤ 3 MB |
@@ -66,7 +66,7 @@
 
 | # | 事项 | 谁 | 时间 | 说明 |
 |---|---|---|---|---|
-| D1 | 根脚本与 CI | Claude | ✅ H0 | 根 `package.json`（`npm test`、`npm run site:build`）；根 CI 跑 Compose/Harmony/Stage 测试与建站+死链检查；Score CI 移到根目录 |
+| D1 | 根脚本与 CI | Claude / Codex | ✅ H0 | 根 CI 与 Pages 发布均测试浏览器模块、检查 Score 并构建检查站点；预览 API 测试已不再依赖被忽略的训练清单 |
 | D2 | 仓库瘦身 | Claude + **用户**决定 | H0–H1 | `Compose/archive`（67 MB，4 份相同的 4 MB 权重）移出主线（打 tag 保留）；评估 `Compose/validation`（38 MB）、`Harmony/demos`（33 MB） |
 | D3 | 个人信息与历史 | **用户**决定 | H1 | 18 个文件含 `/Users/chenjinfu` 路径；162 个提交的作者邮箱是个人邮箱。公开宣传前决定：改写历史（git filter-repo + mailmap，之后强制推送）或保留 |
 | D4 | 改名收尾 | Claude | H1 | 包名（`ailegro`→`@cantelvio/compose` 等）、页面标题、localStorage 键迁移；保留 `ailegro:serve` 等旧命令别名 |

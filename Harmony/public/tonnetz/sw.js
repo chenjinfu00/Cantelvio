@@ -1,5 +1,7 @@
-const CACHE_NAME = "tonnetz-v38-melodic-phrases";
-const CACHE_PREFIX = "tonnetz-";
+// CacheStorage is shared by every project on this origin. Only retire caches
+// belonging to this installation, so another keyboard or old demo stays offline.
+const CACHE_PREFIX = `tonnetz-${encodeURIComponent(new URL("./", self.location.href).pathname)}-`;
+const CACHE_NAME = `${CACHE_PREFIX}v39-scoped-cache`;
 const ASSETS = [
   "./",
   "./index.html",
@@ -100,9 +102,10 @@ self.addEventListener("fetch", (event) => {
       }
       return response;
     }).catch(async () => {
-      const cached = await caches.match(event.request);
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(event.request);
       if (cached) return cached;
-      if (event.request.mode === "navigate") return caches.match("./index.html");
+      if (event.request.mode === "navigate") return cache.match(new URL("./index.html", self.location.href).href);
       return new Response("Offline", { status: 503, statusText: "Offline" });
     })
   );

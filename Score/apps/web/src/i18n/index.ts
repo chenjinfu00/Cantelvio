@@ -126,6 +126,12 @@ const zh = {
   'ai.generate': '直接生成',
   'demo.draft': '演示乐谱 · 可自由修改，不会覆盖普通编辑草稿',
   'demo.home': '全部功能演示',
+  'preview.editor': '网页试用 · 选择示例即可编辑、试听和导出；AI 生成需要本机服务',
+  'preview.home': '返回 Cantelvio',
+  'preview.serviceUnavailable':
+    '这个网页提供乐谱编辑器，不托管 AI 模型。可从「示例」开始创作、试听并导出 MIDI、PDF 或 SVG。AI 生成与和声分析需要下载项目，在本机运行编辑器和 AIlegro 服务；下面的请求与结果文件交换仍可使用。',
+  'preview.importUnavailable':
+    '网页可直接打开 .ailegro.json 或 MusicXML 文件。PDF / 图片识谱及录音扒谱需要下载项目并运行本机 AIlegro 服务，网页不会上传这些文件。',
   'candidate.count': '候选数量',
   'candidate.generate': '生成候选',
   'candidate.title': '伴奏与作曲候选',
@@ -554,6 +560,13 @@ const en: Record<Key, string> = {
   'ai.generate': 'Generate',
   'demo.draft': 'Demo score · edit freely; your regular draft stays separate',
   'demo.home': 'All feature demos',
+  'preview.editor':
+    'Web preview · edit, listen and export examples; AI generation needs a local service',
+  'preview.home': 'Back to Cantelvio',
+  'preview.serviceUnavailable':
+    'This website provides the score editor without hosting AI models. Start with Examples, edit, listen and export MIDI, PDF or SVG. AI generation and harmonic analysis need the downloaded project with the editor and AIlegro service running locally. Request and result file exchange still works below.',
+  'preview.importUnavailable':
+    'Open .ailegro.json or MusicXML files directly in this browser. Reading PDFs or images and transcribing recordings need the downloaded project and local AIlegro service. This website does not upload those files.',
   'candidate.count': 'Number of candidates',
   'candidate.generate': 'Generate candidates',
   'candidate.title': 'Composition candidates',

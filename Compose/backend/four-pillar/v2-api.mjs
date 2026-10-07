@@ -14,8 +14,8 @@ const cache = new Map();
 export class FourPillarInputError extends Error {}
 export class FourPillarBusyError extends Error {}
 
-export async function previewPrompts() {
-  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+export async function previewPrompts(sourcePath = manifestPath) {
+  const manifest = JSON.parse(await readFile(sourcePath, 'utf8'));
   return manifest.selection.validation.map((entry, index) => ({
     id: index, scoreId: entry.scoreId, work: entry.workId.replaceAll('_', ' '),
     oldPrior: false,

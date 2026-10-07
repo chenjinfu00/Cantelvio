@@ -10,6 +10,7 @@ export function installShell({onProgress=()=>{},timeout=180000}={}){
     let retries=0;
     const listen=event=>{
       const data=event.data||{};
+      if(data.scope!==root.href)return;
       if(data.type==='volta:shell-progress')onProgress(data);
       else if(data.type==='volta:shell-ready'){
         if(data.error){cleanup();reject(new Error(data.error));return;}
@@ -27,7 +28,7 @@ export function installShell({onProgress=()=>{},timeout=180000}={}){
     const cleanup=()=>{clearTimeout(timer);navigator.serviceWorker.removeEventListener('message',listen);};
     navigator.serviceWorker.addEventListener('message',listen);
     try{
-      const registration=await navigator.serviceWorker.register(new URL('./sw.js?version=20260928-auto-turn-1',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register(new URL('./sw.js?version=20261007-scoped-shell-1',root),{type:'module',scope:root.pathname,updateViaCache:'none'});
       const active=registration.active||navigator.serviceWorker.controller;
       if(active)active.postMessage({type:'volta:prime'});
       else await navigator.serviceWorker.ready.then(reg=>reg.active?.postMessage({type:'volta:prime'}));

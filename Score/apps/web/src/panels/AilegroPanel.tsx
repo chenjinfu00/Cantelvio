@@ -10,7 +10,7 @@ import {
 } from '@ailegro-score/ailegro-bridge';
 import { useEffect, useMemo, useState } from 'react';
 import { BrandText } from '../components/BrandText';
-import { IN_ARTIFACT } from '../host';
+import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';
 import { type MessageKey, useT } from '../i18n';
 import {
   ADAPTER_TASKS,
@@ -211,6 +211,7 @@ export function AilegroPanel() {
   );
 
   useEffect(() => {
+    if (LOCAL_SERVICE_UNAVAILABLE) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       void fetch(`${serviceUrl.trim().replace(/\/+$/, '')}/health`, { signal: controller.signal })
@@ -461,10 +462,11 @@ export function AilegroPanel() {
         <h4>
           <BrandText text={t('ai.viaService')} />
         </h4>
-        {IN_ARTIFACT ? (
-          // A page on claude.ai cannot reach a server on this computer; files work everywhere.
+        {LOCAL_SERVICE_UNAVAILABLE ? (
           <p className="hint">
-            <BrandText text={t('ai.serviceUnavailable')} />
+            <BrandText
+              text={t(IN_STATIC_PREVIEW ? 'preview.serviceUnavailable' : 'ai.serviceUnavailable')}
+            />
           </p>
         ) : (
           <>
@@ -580,9 +582,11 @@ export function AilegroPanel() {
       )}
       <section className="ai-import">
         <h4>{t('import.title')}</h4>
-        {IN_ARTIFACT ? (
+        {LOCAL_SERVICE_UNAVAILABLE ? (
           <p className="hint">
-            <BrandText text={t('import.unavailable')} />
+            <BrandText
+              text={t(IN_STATIC_PREVIEW ? 'preview.importUnavailable' : 'import.unavailable')}
+            />
           </p>
         ) : (
           <>
@@ -675,7 +679,7 @@ export function AilegroPanel() {
         </p>
         {rhythmSelect}
         <div className="row tight wrap">
-          {!IN_ARTIFACT && (
+          {!LOCAL_SERVICE_UNAVAILABLE && (
             <button className="primary" disabled={busy} onClick={() => void onAnalyze()}>
               {busy ? t('ai.analyzing') : `✦ ${t('ai.analyze')}`}
             </button>

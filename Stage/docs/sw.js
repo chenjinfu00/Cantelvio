@@ -1,8 +1,16 @@
 import {cachedPDFResponse,forgetCachedBody} from './offline-range.js';
-const SHELL='volta-shell-20260928-auto-turn-1',PDFS='volta-offline-pdfs-v1';
 const root=new URL('./',self.location.href),STATE=new URL('./.shell-state',root).href,BATCH=8;
+// Shell updates belong to one installed path. Legacy caches and other readers
+// on this origin are left intact; PDF keys already include their full path.
+const SHELL_PREFIX='volta-shell-'+encodeURIComponent(root.pathname)+'-';
+const SHELL=SHELL_PREFIX+'20261007-scoped-shell-1',PDFS='volta-offline-pdfs-v1';
 
-async function report(message){for(const client of await self.clients.matchAll({includeUncontrolled:true}))client.postMessage(message);}
+async function report(message){
+  for(const client of await self.clients.matchAll({includeUncontrolled:true})){
+    const url=new URL(client.url);
+    if(url.origin===root.origin&&url.pathname.startsWith(root.pathname))client.postMessage({...message,scope:root.href});
+  }
+}
 async function shellFiles(cache){
   try{
     const response=await fetch(new URL('./cache-manifest.json',root),{cache:'reload'});
@@ -51,7 +59,7 @@ async function shellStatus(){
 }
 self.addEventListener('install',event=>event.waitUntil((async()=>{await primeShell().catch(()=>{});await self.skipWaiting();})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
-  for(const name of await caches.keys())if(name.startsWith('volta-shell-')&&name!==SHELL)await caches.delete(name);
+  for(const name of await caches.keys())if(name.startsWith(SHELL_PREFIX)&&name!==SHELL)await caches.delete(name);
   await self.clients.claim();
 })()));
 self.addEventListener('message',event=>{

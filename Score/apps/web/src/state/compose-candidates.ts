@@ -24,7 +24,13 @@ import {
 } from '@ailegro-score/ailegro-bridge';
 import { create } from 'zustand';
 import { translate, type MessageKey } from '../i18n';
-import { APP_VERSION, endpoint, toComposeSpec, type PanelSpec } from './ailegro';
+import {
+  APP_VERSION,
+  assertServiceAvailable,
+  endpoint,
+  toComposeSpec,
+  type PanelSpec,
+} from './ailegro';
 import { getStore } from './store';
 
 export interface ComposeCandidate {
@@ -76,6 +82,7 @@ export async function generateCandidates(
   spec: PanelSpec,
   count = 1,
 ): Promise<void> {
+  assertServiceAvailable();
   if (useComposeCandidates.getState().busy) return;
   if (!Number.isInteger(count) || count < 1 || count > 4) fail('candidate.invalid');
   const state = getStore().getState(),

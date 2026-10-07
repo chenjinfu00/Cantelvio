@@ -31,6 +31,7 @@ import {
   planComposeImport,
 } from '@ailegro-score/ailegro-bridge';
 import { translate } from '../i18n';
+import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';
 import { download, safeFileName } from './files';
 import { type Selection, getStore } from './store';
 import { DEMO_TASKS, demoId } from './demo';
@@ -270,6 +271,7 @@ export function importAnalysisResult(result: AnalysisResult): boolean {
 
 /** Ask the adapter server (`POST /analyze`) for the chords of the selected bars and import them. */
 export async function analyzeWithService(base: string, rhythm: HarmonicRhythm): Promise<boolean> {
+  assertServiceAvailable();
   const snapshot = JSON.stringify(getStore().getState().doc);
   const request = newAnalysisRequest(rhythm);
   const res = await fetch(endpoint(base, '/analyze'), {
@@ -403,7 +405,19 @@ export function endpoint(base: string, path: string): string {
   return `${base.trim().replace(/\/+$/, '')}${path}`;
 }
 
+/** Public static previews keep file exchange available but cannot run the optional adapter. */
+export function assertServiceAvailable(): void {
+  if (LOCAL_SERVICE_UNAVAILABLE)
+    throw new Error(
+      translate(
+        getStore().getState().view.lang,
+        IN_STATIC_PREVIEW ? 'preview.serviceUnavailable' : 'ai.serviceUnavailable',
+      ),
+    );
+}
+
 export async function pingService(base: string): Promise<ServiceInfo> {
+  assertServiceAvailable();
   const res = await fetch(endpoint(base, '/health'), { method: 'GET' });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as ServiceInfo;
@@ -411,6 +425,7 @@ export async function pingService(base: string): Promise<ServiceInfo> {
 
 /** Send a request to the adapter server (`score_compose.py --serve`) and import the result. */
 export async function generateWithService(base: string, spec: PanelSpec): Promise<boolean> {
+  assertServiceAvailable();
   const snapshot = JSON.stringify(getStore().getState().doc);
   const request = newRequest(spec);
   const res = await fetch(endpoint(base, '/compose'), {

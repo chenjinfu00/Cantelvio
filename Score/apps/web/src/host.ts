@@ -1,6 +1,7 @@
 /**
- * Where the editor runs. Locally (npm run dev / preview) everything is available. Published as a
- * claude.ai artifact the page runs in a locked-down frame: downloads go through the viewer's
+ * Where the editor runs. Locally (npm run dev / preview) everything is available. GitHub Pages
+ * serves the editor without an AI backend. In a claude.ai artifact the page runs in a
+ * locked-down frame: downloads go through the viewer's
  * `downloads` capability, printing is unavailable and calls to a server on this computer
  * (the AIlegro adapter) are blocked. Feature code asks this module instead of guessing.
  */
@@ -26,6 +27,14 @@ export interface DownloadsCapability {
 /** True inside a claude.ai artifact viewer (or the platform's top-level artifact host). */
 export const IN_ARTIFACT =
   typeof window !== 'undefined' && typeof window.claude?.use === 'function';
+
+/** Pages builds also set this flag so a custom domain keeps the same static-only behavior. */
+export const IN_STATIC_PREVIEW =
+  import.meta.env.VITE_STATIC_PREVIEW === 'true' ||
+  (typeof window !== 'undefined' && /(^|\.)github\.io$/i.test(window.location.hostname));
+
+/** A published static editor never probes or uploads files to a visitor's local machine. */
+export const LOCAL_SERVICE_UNAVAILABLE = IN_ARTIFACT || IN_STATIC_PREVIEW;
 
 let downloads: Promise<DownloadsCapability | null> | null = null;
 

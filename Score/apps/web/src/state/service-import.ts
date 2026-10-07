@@ -8,6 +8,7 @@
 import { importMusicXml, musicXmlFromBytes } from '@ailegro-score/core';
 import { useSyncExternalStore } from 'react';
 import { type Lang, translate } from '../i18n';
+import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';
 import { endpoint, serviceUrl } from './ailegro';
 import { confirmDiscard, inflateRaw, openImportedDoc } from './files';
 import { getStore } from './store';
@@ -219,6 +220,15 @@ export async function importViaService(
   options: ImportOptions = loadImportOptions(),
 ): Promise<boolean> {
   const lang = getStore().getState().view.lang;
+  if (LOCAL_SERVICE_UNAVAILABLE) {
+    getStore()
+      .getState()
+      .notify(
+        translate(lang, IN_STATIC_PREVIEW ? 'preview.importUnavailable' : 'import.unavailable'),
+        'error',
+      );
+    return false;
+  }
   if (busy(status)) {
     getStore().getState().notify(translate(lang, 'import.busy'), 'error');
     return false;

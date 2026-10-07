@@ -150,7 +150,7 @@ test('a newcomer is told what folder to point at, and told only until they have'
   const html=await fs.readFile(new URL('../docs/index.html',import.meta.url),'utf8');
   assert.match(html,/id="local-folder-intro"/,'the how-to sits with the button it explains');
   assert.match(html,/曲谱库数据\/\n?\s*catalog\.json|catalog\.json/,'the example names the files the app looks for');
-  assert.match(html,/github\.com\/chenjinfu00\/volta#readme/,'the long version is one link away');
+  assert.match(html,/github\.com\/chenjinfu00\/Cantelvio\/tree\/main\/Stage#readme/,'the long version is one link away');
   const local=await fs.readFile(new URL('../docs/local-library.js',import.meta.url),'utf8');
   assert.match(local,/const settled=\(\)=>\{if\(intro\)intro\.hidden=true;\}/,'it stops taking up room once a folder is open');
   const readme=await fs.readFile(new URL('../README.md',import.meta.url),'utf8');

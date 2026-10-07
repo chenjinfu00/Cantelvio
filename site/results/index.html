@@ -74,7 +74,7 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;color:v
 <select id="lang" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select>
 </header>
 
-<h1 data-zh="目前的全部结果" data-en="All results so far">目前的全部结果</h1>
+<h1 data-zh="主线模型的实验与试听" data-en="Mainline experiments & listening examples">主线模型的实验与试听</h1>
 <p class="lead" data-zh="Cantelvio 用 Transformer 改进自动作曲的和声与旋律。这一页汇总到目前为止做过的实验、评估和验证，每个数字都来自仓库里的报告；也写明了哪些结论还站不住。" data-en="Cantelvio uses Transformers to improve the harmony and melody of automatic composition. This page collects every experiment, evaluation and check so far; each number comes from a report in the repository, and the weak spots are stated openly.">Cantelvio 用 Transformer 改进自动作曲的和声与旋律。这一页汇总到目前为止做过的实验、评估和验证，每个数字都来自仓库里的报告；也写明了哪些结论还站不住。</p>
 <p class="mute"><span data-zh="数据截至" data-en="Data as of">数据截至</span> <span id="asof"></span> · <span data-zh="研究原型，请用耳朵判断" data-en="Research prototype — judge by ear">研究原型，请用耳朵判断</span></p>
 
@@ -112,7 +112,7 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;color:v
 </div>
 <p class="note" data-zh="在 3 首简单旋律上，AMT 只要给一小节开头就稳定、在拍上，冲突与 v3.1 加惩罚相当；但在真实艺术歌曲上并没有拉开差距（14.1% 对 11.3%），而且 v3.1 见过这些总谱、AMT 没见过，差距大小不可信。因此 v3.2 先按“给定材料通道”做，预读式训练保留作备选。" data-en="On 3 simple melodies AMT is stable and on-beat once given a one-bar intro, with clashes comparable to v3.1 + penalty; on real art songs it does not pull ahead (14.1% vs 11.3%), and v3.1 saw those scores in training while AMT did not, so the gap size is unreliable. v3.2 therefore starts with the “given material channel”; anticipation-style training stays as an option.">在 3 首简单旋律上……</p>
 
-<h3 data-zh="试听（3 首旋律 × 3 种做法）" data-en="Listen (3 melodies × 3 methods)">试听</h3>
+<h3 id="s-listen" data-zh="试听（3 首旋律 × 3 种做法）" data-en="Listen (3 melodies × 3 methods)">试听</h3>
 <div class="clips" id="clips"></div>
 <p class="mute" data-zh="音色：FluidSynth + FluidR3_GM（MIT）。每段均为同一旋律的不同伴奏。" data-en="Rendered with FluidSynth + FluidR3_GM (MIT). Each clip is the same melody with a different accompaniment.">音色：FluidSynth + FluidR3_GM（MIT）。</p>
 
