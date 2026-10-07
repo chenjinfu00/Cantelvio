@@ -1,87 +1,59 @@
-# Cantelvio：改名与整合规划
+# Cantelvio
 
-更新：2026-10-06（已搬迁并改名）
+**从一段旋律，写到完整曲谱。** · *From a melody to a finished score.*
 
-## 给 Claude 的交接说明
+Cantelvio 用 Transformer 改进自动作曲的**和声与旋律**生成，并配有曲谱编辑器、和声可视化和演奏跟随工具，让生成结果可以被听、被比较、被修改。
+Cantelvio is a research project on Transformer-based music generation, focused on better harmony and melody, with a notation editor, harmony visualisation and a performance-following tool around it.
 
-用户已确认将四个音乐子项目的总品牌改为 **Cantelvio**。原有 AIlegro 等名称对应的是同一套项目，不是新建或重写的产品。
+> 状态 / Status：研究原型。生成结果需要用耳朵判断。Research prototype — judge the output by ear.
 
-**2026-10-06 已完成：** 四个文件夹已移入本目录，并按模块名改为 `Compose/`、`Score/`、`Harmony/`、`Stage/`；项目间相对路径（`../Compose`、`../Score` 等）、Score 的 `ailegro:serve` 默认路径和适配器脚本路径、各项目说明文档里的本机路径已同步更新。日志、训练 manifest、validation 记录等历史文件保留原路径。页面标题、代码标识、包名和存储键尚未改名。
+## 模块 / Modules
 
-## 项目分工与目标目录
+| 目录 | 名称 | 作用 |
+|---|---|---|
+| [`Compose/`](Compose/) | Cantelvio Compose | 音乐生成：给定旋律配伴奏、旋律与和声分析、浏览器内联合模型、训练与评估代码 |
+| [`Score/`](Score/) | Cantelvio Score | 网页曲谱编辑器：候选比较与接受、回放、MusicXML / MIDI / PDF 导入导出 |
+| [`Harmony/`](Harmony/) | Cantelvio Harmony | Tonnetz 和声关系可视化 |
+| [`Stage/`](Stage/) | Cantelvio Stage | PDF 读谱、演奏跟随与自动翻页 |
 
-| 原项目名 | 现文件夹 | 对外模块名称 | 职责 |
-|---|---|---|---|
-| AIlegro | `Compose/` | Cantelvio Compose | 音乐生成、旋律分析、给定旋律配伴奏 |
-| AIlegro Score | `Score/` | Cantelvio Score | 乐谱编辑、候选比较与接受、回放和导出 |
-| Tonnetz | `Harmony/` | Cantelvio Harmony | 和声关系与音乐理论可视化 |
-| Volta | `Stage/` | Cantelvio Stage | PDF 读谱、演奏跟随与自动翻页 |
+主线流程：给定旋律 → 生成伴奏 → 在 Score 中比较、编辑、接受 → 回放与导出 → 在 Stage 中演奏。
 
-搬迁前四个项目位于 `/Users/chenjinfu/software develop/`。现在的结构：
+## 网页演示 / Web demo
 
-```text
-Cantelvio/
-├── README.md
-├── Compose/   (原 AIlegro)
-├── Score/     (原 AIlegro Score)
-├── Harmony/   (原 Tonnetz)
-└── Stage/     (原 Volta)
+```sh
+node site/build.mjs            # 用已有的 Score 构建产物
+node site/build.mjs --build    # 先重新构建 Score（需要 Score 里 npm ci）
+python3 -m http.server -d site-dist 8080
 ```
 
-## 接下来的简短计划
+生成的 `site-dist/` 是纯静态站（入口页 + Score + Harmony + Stage + Compose 的浏览器内模型页），推送到 `main` 后由 `.github/workflows/pages.yml` 部署到 GitHub Pages。
+完整的伴奏生成、连续演奏和录音转谱需要本机 Python 服务，不在静态站里。
+The static site contains everything that runs in the browser. Full accompaniment generation, continuous performance and audio-to-score need the local Python service and are not part of it.
 
-1. **迁移并验证。** ✅ 2026-10-06 完成，详见下方“迁移验证记录”。
-2. **统一展示名称。** 将页面标题、导航、介绍和入口逐步更新为 Cantelvio 及四个模块名称。代码标识、接口、包名、存储键和历史路径按兼容需要处理，不做全局字符串替换。
-3. **连通创作流程。** 以“给定旋律 → 生成伴奏 → 在 Score 中比较、编辑与接受 → 回放、导出及演奏”为主线；Harmony 辅助分析，Stage 承接读谱演奏。
-4. **继续改善音乐质量。** 保留简单／中等／专业三档与乐器演奏限制，优先改进和声适配、自然织体和生成速度。默认保留模型原始织体与力度，避免把所有输出强制改成固定分解和弦。
+## 在本机运行 / Run locally
 
-## 开发时保留的上下文
+需要 Node ≥ 22.12（Score）/ ≥ 20（其余）。各模块的细节见它们自己的 README。
 
-- 本轮改名不涉及更换模型、覆盖权重或重新训练；迁移后先验证当前效果，再讨论模型调整。
-- 自研模型与编辑器继续作为核心；结合已整理的开源工具。AMT 用于对照评估，下载完成不等于已经接入默认生成流程。
-- 进入子项目时先读其 `AGENTS.md`，以及存在的 `CLAUDE.md`、`START_HERE.md`；保留各项目自己的开发规则。
-- 现有共同规划与开源清单在 `Compose/JOINT-DEVELOPMENT-PLAN.md`、`Compose/OPEN-SOURCE-INVENTORY.md`。具体实现与验证以子项目代码和记录为准。
+```sh
+# Compose：本机服务（http://127.0.0.1:4187/）。完整生成需要 PyTorch 环境和模型权重，见 Compose/README.md
+cd Compose && npm start
+# Score：编辑器（http://127.0.0.1:5178/）
+cd Score && npm ci && npm run dev
+# Score ↔ Compose：让编辑器调用本机生成服务
+cd Score && npm run ailegro:serve
+# Harmony（http://127.0.0.1:4174/tonnetz/）
+cd Harmony && npm start
+# Stage
+cd Stage && npm run preview
+```
 
-## 迁移验证记录（2026-10-06）
+测试：`npm test` 分别在 `Compose/`、`Score/`、`Harmony/`、`Stage/` 中运行。
 
-**修复**
+## 路线图 / Roadmap
 
-- Stage：原 `.git` 借用旧 iCloud 仓库（`曲谱&编曲/volta`）的对象库，已从 GitHub（chenjinfu00/volta）补齐全部对象并去掉 alternates；`git fsck` 通过，HEAD、分支和未提交修改保持原样。origin 仍指向原 iCloud 仓库。
-- Stage：本地曲谱库查找在项目旁边找不到时，回退到 iCloud 的 `曲谱&编曲/本地曲谱`（`scripts/library-root.mjs`，测试同步更新）。
-- Compose：`.venv-training` 和 `MuScriptor-large-1.3B/.venv-py312` 的启动脚本、activate 改为新路径（路径含空格，脚本改用 pip 的 `/bin/sh` 启动写法）；`training/orchestra/work/python-path` 更新。
-- Score：`ailegro:serve` 默认找 `../Compose`；编辑器适配器路径改为 `../Score/...`（源码和现有 `dist`）。
+分阶段计划见 [ROADMAP.md](ROADMAP.md)。内部交接与迁移记录见 [docs/INTERNAL-HANDOFF.md](docs/INTERNAL-HANDOFF.md)。
 
-**检查结果**
+## 许可与数据 / Licences and data
 
-| 模块 | 检查 | 结果 |
-|---|---|---|
-| Compose | `npm test` | 68/68 通过 |
-| Compose | 本地服务 4187、`/demo/`、`/api/demo/status` | 正常 |
-| Score | typecheck、vitest、build、adapter 测试 | 全部通过（192 测试、8 adapter 测试） |
-| Score → Compose | `ailegro:serve` 路径解析；8 个示例请求用 v3.1 真实权重生成/分析并导回编辑器检查 | 全部成功，0 problems |
-| Harmony | `npm test`、本地服务 `/tonnetz/` | 86/86 通过，页面正常 |
-| Stage | `npm test`、预览 `/volta/` 页面 | 159 通过、3 跳过（测试环境看不到私人曲谱库，属预期），页面正常 |
-
-Score 测试在隔离副本中用 Linux 依赖运行，没有改动 Score 的 `node_modules`。模型生成在 CPU 上用 PyTorch 2.5.1 复现；Mac 上的 `.venv-training` 解释器本身未在本机执行过。
-
-## Git 仓库（2026-10-06 建立）
-
-Cantelvio 根目录是唯一的 Git 仓库（monorepo），四个模块都在其中：
-
-- `main` 包含 Score 和 Stage 的完整历史（已改写到 `Score/`、`Stage/` 子目录下），之后一次提交保存两边当时未提交的工作，再一次提交首次加入 Compose 和 Harmony。
-- 旧分支以前缀保留：`score/*`（原 AIlegro Score 的全部分支）、`stage/*`（原 Volta 的 main 和 origin 分支）。
-- 原来的两个 `.git` 原样备份在 `_git-backup-2026-10-06/`（已忽略，不进 Git）；确认新仓库无误后可删除。
-- 根 `.gitignore` 排除大模型与第三方源码（AMT、MuScriptor、open-source 的 sources 与 datasets）、训练 runs/logs/数据、本机环境；它们的清单、下载脚本和 SHA 保留在仓库里。
-- 暂无远程仓库。原 Volta 的 GitHub 公开仓库 chenjinfu00/volta 不再自动更新。
-
-## 开源前清单（未完成）
-
-1. **选许可证**：根目录还没有 LICENSE；Score 的包标记为 `UNLICENSED`。
-2. **模型权重和训练数据**：仓库里的浏览器模型（如 `Compose/frontend/vendor/lib/joint-*weights.js`、Harmony 的 melody/harmony transformer）训练时用过本地曲谱库，要确认数据许可允许公开权重。PDMX、Winterreise、ASAP 等数据许可见 `Compose/OPEN-SOURCE-INVENTORY.md`。
-3. **第三方资源**：音色（MuseScore General，MIT）、字体（霞鹜文楷，OFL）、pdf.js、KaTeX、采样等已附许可/NOTICE；公开前再对照清单核一遍。
-4. **个人信息**：文档和记录中有本机路径（`/Users/chenjinfu/...`），提交作者邮箱为 273286233@qq.com；公开前决定是否清理或改用 GitHub noreply 邮箱。
-5. **GitHub 配置**：`Score/.github`（工作流、模板）在 monorepo 中不会生效，需移到根目录并调整路径。
-6. **大文件**：最大的已跟踪文件是 39 MB 的音色和若干 4–8 MB 的权重 JS；如果仓库继续增大，可考虑 Git LFS。
-7. **旧公开仓库**：决定 chenjinfu00/volta 是存档并指向 Cantelvio，还是用 `git subtree split` 继续同步。
-
-已检查：Score 和 Stage 的全部历史以及待提交文件中，未发现 API 密钥、令牌或私钥。
+**许可证尚未确定**，首次公开发布前会补上。部分依赖和数据有各自的限制（例如 MuScriptor 权重和若干评估数据集仅限非商用），清单在 [`Compose/OPEN-SOURCE-INVENTORY.md`](Compose/OPEN-SOURCE-INVENTORY.md)。
+**The licence is not yet decided** and will be added before the first public release. Some dependencies and datasets are non-commercial only; see `Compose/OPEN-SOURCE-INVENTORY.md`.

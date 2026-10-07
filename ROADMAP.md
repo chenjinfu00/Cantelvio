@@ -12,7 +12,7 @@
 ### P0 · 发布底座（本轮已完成大部分）
 - [x] 统一入口页（中英双语）与静态站构建脚本，所有路径相对，可放在子路径。
 - [x] GitHub Pages 工作流。
-- [ ] 根目录 `README.md` 改为面向公众的介绍（现在是内部交接说明，另存为 `docs/INTERNAL-HANDOFF.md`）。
+- [x] 根目录 `README.md` 已改为面向公众的介绍；内部交接说明移到 `docs/INTERNAL-HANDOFF.md`。
 - [ ] 选许可证；确认浏览器模型权重的训练数据许可（见 README 开源前清单第 2 条）。
 - [ ] 把 `Score/.github` 移到根目录，CI 覆盖四个模块；个人路径/邮箱清理。
 验收：在干净克隆上 `node site/build.mjs --build` 通过；Pages 部署后各入口可打开。
