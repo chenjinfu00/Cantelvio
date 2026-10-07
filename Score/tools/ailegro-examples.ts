@@ -1,12 +1,12 @@
 /**
- * Example AIlegro compose requests for every task, built from small demo scores, and a check that
- * imports the adapter's results back into the same scores (end-to-end test of the AIlegro bridge).
+ * Example Cantelvio compose requests for every task, built from small demo scores, and a check that
+ * imports the adapter's results back into the same scores (end-to-end test of the Cantelvio bridge).
  *
- *   npm run ailegro:examples -- --out out/ailegro       # write <example>.request.json files
- *   # in the AIlegro folder, for each request (see docs/ailegro-integration.md):
+ *   npm run cantelvio:examples -- --out out/cantelvio       # write <example>.request.json files
+ *   # in the Cantelvio folder, for each request (see docs/ailegro-integration.md):
  *   #   .venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
  *   #     --request <example>.request.json --checkpoint <weights.pt> --output <example>.result.json
- *   npm run ailegro:examples -- --check out/ailegro     # import every result found, validate, report
+ *   npm run cantelvio:examples -- --check out/cantelvio     # import every result found, validate, report
  *
  * The melodies are public-domain tunes (Ode to Joy, Twinkle Twinkle); the other music comes from
  * the demo samples in packages/core.
@@ -27,7 +27,7 @@ import {
   type Command,
   type CreateScoreOptions,
   type ScoreDoc,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import {
   ANALYSIS_RESULT_SCHEMA,
   buildAnalysisRequest,
@@ -39,7 +39,7 @@ import {
   type ComposeRequest,
   type ComposeResult,
   type ComposeSpec,
-} from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/compose-bridge';
 
 const NOW = '2026-10-01T00:00:00.000Z';
 
@@ -48,7 +48,7 @@ function score(options: CreateScoreOptions, music: Record<number, string | strin
   return fillStaves(createScore({ ...options, ids, now: NOW }), music, ids);
 }
 
-/** Chord symbols (root letter + alter, AIlegro quality id) at the start of the given measures. */
+/** Chord symbols (root letter + alter, Cantelvio quality id) at the start of the given measures. */
 function withChords(
   doc: ScoreDoc,
   chords: readonly [number, 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B', number, string][],

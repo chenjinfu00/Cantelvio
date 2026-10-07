@@ -8,7 +8,7 @@ import {
   mulInt,
   tempoMap,
   toString as ratString,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import type { HarmonicRhythm } from './analysis';
 import { buildScoreRecord } from './record';
 import {
@@ -48,7 +48,7 @@ export interface ComposeSpec {
   readonly modelKeys?: boolean;
   readonly contextBars?: number;
   readonly intent?: { readonly text: string; readonly tags?: readonly string[] };
-  /** How often chords may change where AIlegro chooses them (accompany-melody); sent as the intent tag
+  /** How often chords may change where Cantelvio chooses them (accompany-melody); sent as the intent tag
    * `harmonic-rhythm:<value>` so the compose contract stays unchanged. */
   readonly harmonicRhythm?: HarmonicRhythm;
 }
@@ -285,7 +285,7 @@ export function buildComposeRequest(
     schema: REQUEST_SCHEMA,
     requestId: meta.requestId,
     createdAt: meta.createdAt ?? null,
-    client: { app: 'AIlegro Score', version: meta.appVersion ?? '0.1.0' },
+    client: { app: 'Cantelvio Score', version: meta.appVersion ?? '0.1.0' },
     task: spec.task,
     intent: intentOf(spec),
     score: filtered,

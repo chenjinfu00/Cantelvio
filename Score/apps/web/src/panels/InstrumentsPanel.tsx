@@ -5,7 +5,7 @@ import {
   type Part,
   createPart,
   findInstrument,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { type KeyboardEvent, useEffect, useState } from 'react';
 import { useT } from '../i18n';
 import { getStore, useEditor } from '../state/store';

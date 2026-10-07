@@ -1,12 +1,12 @@
 # 音频 → 乐谱
 
-把一段录音变成可以编辑的乐谱。识别在 AIlegro 里完成（两个模型、两个 Python 环境），结果是 MusicXML，
+把一段录音变成可以编辑的乐谱。识别在 Cantelvio 里完成（两个模型、两个 Python 环境），结果是 MusicXML，
 在编辑器里用“打开”或拖进窗口即可（[musicxml-import.md](musicxml-import.md)）。
 
 ## 在编辑器里
 
-先运行本机服务 `npm run ailegro:serve`（[try-it.md](try-it.md)），再“打开”或拖入录音（WAV、MP3、FLAC、OGG、M4A、
-AIFF），或在 AIlegro 面板“从 PDF 或录音开始”→“打开录音…”。服务在后台依次运行下面两步，左下角显示阶段（载入、
+先运行本机服务 `npm run cantelvio:serve`（[try-it.md](try-it.md)），再“打开”或拖入录音（WAV、MP3、FLAC、OGG、M4A、
+AIFF），或在 Cantelvio 面板“从 PDF 或录音开始”→“打开录音…”。服务在后台依次运行下面两步，左下角显示阶段（载入、
 转写第几段、找拍子、整理成乐谱）和用时，可以取消；完成后作为新乐谱打开，提示里写保留了多少音、拍号、速度和小节数。
 面板“识谱 / 扒谱选项”对应命令行的选项：录音里的乐器（`--instruments`）、拍号（`--metre`）、合成一个钢琴谱（`--piano`）。
 （[ADR 0013](adr/0013-local-service-imports.md)）
@@ -14,13 +14,13 @@ AIFF），或在 AIlegro 面板“从 PDF 或录音开始”→“打开录音�
 ## 命令行流程
 
 ```sh
-cd "<path>/AIlegro"
+cd "<path>/Cantelvio"
 # 1. 音符和节拍：MuScriptor（转写）+ beat_this（节拍、强拍）
 MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_muscriptor.py ~/Music/song.wav \
     --instruments acoustic_piano,voice            # 可选：告诉模型有哪些乐器 → song.notes.json
 # 2. 乐谱：节拍对齐、节奏量化、声部与乐器、保留该保留的音符、记谱
 .venv-training/bin/python training/scripts/audio_to_score.py ~/Music/song.notes.json   # → song.musicxml
-# 3. 在 AIlegro Score 里打开 song.musicxml，保存为 .ailegro.json
+# 3. 在 Cantelvio Score 里打开 song.musicxml，保存为 .cantelvio.json
 ```
 
 - 第 1 步在 Apple 芯片上用 MPS 运行 MuScriptor large（约 13 亿参数）。乐器组名称见 `muscriptor list-instruments`
@@ -28,7 +28,7 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 - 第 2 步常用选项：`--metre 3/4`（拍号读错时指定）、`--piano`（所有乐器缩成一份钢琴谱）、`--report r.json`
   （去掉、移动、补上了哪些音及原因，找到了哪些跑动）、`--keep-all`（不清理，看原始转写）、`--analyzer none`（不用和声检查）、
   `--filler none`（不用补音模型）。
-- 细节和实测见 AIlegro 的 `training/README.md`（“音频 → 乐谱”一节）。
+- 细节和实测见 Cantelvio 的 `training/README.md`（“音频 → 乐谱”一节）。
 
 ## “保留该保留的音符”做了什么
 
@@ -42,11 +42,11 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
    被一两个漏音切开的跑动重新接成一段；
 4. 一个人声标签里常常同时有几个音（合唱、重唱）时，按起音拆成几条线，各成一个声部（女高到男低）；去掉重复的音、
    高八度 / 十二度的短“鬼音”、孤立的极短音；乐器演奏不了的音（远超音域，人声或管乐同时多于一个音）移到能演奏的声部；
-5. 用 AIlegro 的和声分析模型（[ADR 0010](adr/0010-harmonic-analysis-contract.md) 的同一个模型）标出和弦，
+5. 用 Cantelvio 的和声分析模型（[ADR 0010](adr/0010-harmonic-analysis-contract.md) 的同一个模型）标出和弦，
    去掉既不是和弦音、也不在级进线条上、这个声部前后两拍内也不再出现这个音级的短音（最高声部总是保留）；
 6. 修补跑动（很保守）：网格上空了一两格（前后是规则的线条、空格前的音没有延长、附近没有和弦、走向一致、每格只有
    一个音合适）时补上漏掉的音阶音或和弦音；音阶跑动里偏了半音、又不是和弦音的音移回调内（按估出的调和第 5 步的和弦）；
-7. **补音模型**（AIlegro 的 note filler v1）：读整理好的乐谱，在每个起音和网格点上估计每个音高“原谱这里有音、转写漏掉了”
+7. **补音模型**（Cantelvio 的 note filler v1）：读整理好的乐谱，在每个起音和网格点上估计每个音高“原谱这里有音、转写漏掉了”
    的概率，超过阈值（0.6）的补上，放进这一刻离它最近的声部；
 8. 钢琴分左右手，每谱表最多 4 个声部，按估出的调拼写升降号，移调乐器写记谱音高，三连音括号按声部加。
 
@@ -68,4 +68,4 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 ## 下一步
 
 在 Mac 上把测试集乐谱合成为音频、用 MuScriptor 真实转写，量出真实的错误分布（特别是跑动和漏音）；再用（转写, 原谱）
-训练 AIlegro 自己的“保留 / 去掉”模型和补音模型，跑动的节奏也可以从中学。
+训练 Cantelvio 自己的“保留 / 去掉”模型和补音模型，跑动的节奏也可以从中学。

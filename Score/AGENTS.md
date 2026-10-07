@@ -1,9 +1,9 @@
 # AGENTS.md — instructions for AI coding agents (Codex, Claude, …)
 
-AIlegro Score is a web-based music notation editor (piano, chamber music, orchestral scores) in
+Cantelvio Score is a web-based music notation editor (piano, chamber music, orchestral scores) in
 the spirit of Sibelius/MuseScore, with its own engraving engine and a first-class bridge to
-**AIlegro**, the owner's AI composition system (a separate project in the sibling folder
-`../Compose`). Spell the names exactly: **AIlegro**, **AIlegro Score**.
+**Cantelvio**, the owner's AI composition system (a separate project in the sibling folder
+`../Compose`). Spell the names exactly: **Cantelvio**, **Cantelvio Score**.
 
 The human owner reads Chinese; docs under `docs/` are mostly Chinese. Code, identifiers, comments,
 commit messages and this file are English.
@@ -23,7 +23,7 @@ commit messages and this file are English.
 | --- | --- |
 | `packages/core` | Score model, rational time, pitch spelling, instruments/templates, **commands** + undo/redo, JSON file format, text notation, MusicXML import, playback timeline. Pure TS. |
 | `packages/engraving` | Layout engine: ScoreDoc → pages of positioned graphics → SVG, using SMuFL/Bravura metrics. Pure TS. |
-| `packages/ailegro-bridge` | AIlegro interchange: score-record export, compose requests, import of generated music. Pure TS. |
+| `packages/ailegro-bridge` | Cantelvio interchange: score-record export, compose requests, import of generated music. Pure TS. |
 | `apps/web` | React + Vite editor UI (store, keyboard input, palettes, playback). |
 | `tools/` | Node CLIs (e.g. `render-score.ts` renders samples/files to SVG/PNG). |
 | `docs/` | Design docs, ADRs, roadmap. |
@@ -36,7 +36,7 @@ npm run dev            # editor at http://127.0.0.1:5178/
 npm run check          # lint + typecheck + unit tests — must pass before every commit
 npm run build          # production build of the editor
 npm run render -- --sample orchestra --out out/   # headless SVG/PNG render for visual checks
-npm run ailegro:serve  # local AIlegro service (../Compose): compose, analysis, PDF/recording imports
+npm run cantelvio:serve  # local Cantelvio service (../Compose): compose, analysis, PDF/recording imports
 npm run test:adapter   # Python tests of the adapter's import jobs (stand-in tools)
 npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/glyph lists)
 ```
@@ -59,7 +59,7 @@ npm run gen:smufl      # regenerate SMuFL glyph data (only when changing fonts/g
    (no DOM lib) and ESLint. Browser/Node specifics live in `apps/web` and `tools/`.
 8. **Engraving is a pure, deterministic function** `(doc, options) → layout → SVG`. Same input,
    same bytes. This keeps snapshot tests and visual diffs meaningful.
-9. **Versioned contracts**: the `.ailegro.json` file format and the AIlegro interchange schemas
+9. **Versioned contracts**: the `.cantelvio.json` file format and the Cantelvio interchange schemas
    (`ailegro.score-record/1`, `ailegro.compose-request/1`, `ailegro.compose-result/1`,
    `ailegro.analysis-request/1`, `ailegro.analysis-result/1`) only change with a version bump, a
    migration, tests and a doc update.

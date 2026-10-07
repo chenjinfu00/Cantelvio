@@ -8,7 +8,7 @@
 | Node.js | ≥ 22.12（`.nvmrc` 写的是 22） | `brew install node@22` 或 `nvm install 22` |
 | npm | 随 Node | 本项目用 npm workspaces，不用 pnpm/yarn |
 | git | 任意新版本 | 远程仓库建议 GitHub（见 [git-workflow.md](git-workflow.md)） |
-| Python 3 | 可选 | 只有运行 AIlegro 适配器时需要；真正生成要用 AIlegro 自己的 `.venv-training` |
+| Python 3 | 可选 | 只有运行 Cantelvio 适配器时需要；真正生成要用 Cantelvio 自己的 `.venv-training` |
 | 浏览器 | Chrome / Edge 最新版 | 开发时主要在 Chromium 上测试；Safari、Firefox 尚待验证 |
 
 ## 第一次运行
@@ -35,7 +35,7 @@ VS Code 推荐插件：ESLint、Prettier、Vitest（`.vscode/extensions.json`）
 | `npm run check` | `lint` + `typecheck` + `test` |
 | `npm run test:watch` | 测试监听模式 |
 | `npm run format` | Prettier 格式化全部文件 |
-| `npm run render -- …` | `tools/render-score.ts`：`--sample <id>`、`--all`、`--file x.ailegro.json`、`--out dir`、`--concert`、`--continuous`、`--svg-only`、`--zh`、`--scale` |
+| `npm run render -- …` | `tools/render-score.ts`：`--sample <id>`、`--all`、`--file x.cantelvio.json`、`--out dir`、`--concert`、`--continuous`、`--svg-only`、`--zh`、`--scale` |
 | `npm run gen:smufl` | 重新生成 Bravura 字形数据（只在改字形表时） |
 
 ## 项目位置与同步（重要）
@@ -52,14 +52,14 @@ VS Code 推荐插件：ESLint、Prettier、Vitest（`.vscode/extensions.json`）
 4. **文件名不要含空格**。`name 2.ext` 这样的文件是同步冲突副本（`.gitignore` 忽略它们），要人工处理：
    `find . -path ./node_modules -prune -o -name "* [2-9]*" -print`。
 
-## AIlegro 适配器的环境
+## Cantelvio 适配器的环境
 
 ```sh
 # 检查转换（不需要 torch）
-python3 integrations/ailegro/score_compose.py --request request.json --dry-run --ailegro-root ../Compose
+python3 integrations/ailegro/score_compose.py --request request.json --dry-run --cantelvio-root ../Compose
 # 不需要模型的完整往返测试（编辑器里“连接”→“直接生成”）
 python3 integrations/ailegro/score_compose.py --serve --mock
-# 真正生成：在 AIlegro 文件夹里用它自己的环境
+# 真正生成：在 Cantelvio 文件夹里用它自己的环境
 cd ../Compose && .venv-training/bin/python "../Score/integrations/ailegro/score_compose.py" \
   --serve --checkpoint training/runs/<run>/weights.pt
 ```
@@ -70,7 +70,7 @@ cd ../Compose && .venv-training/bin/python "../Score/integrations/ailegro/score_
 
 - **端口被占用**：`npm run dev -- --port 5180`。
 - **没有声音**：浏览器要求先有一次点击/按键才能启动音频；第一次播放钢琴采样需要下载约 1.3 MB。
-- **“未连接” AIlegro 服务**：确认服务器在运行、地址是 `http://127.0.0.1:8765`；
+- **“未连接” Cantelvio 服务**：确认服务器在运行、地址是 `http://127.0.0.1:8765`；
   如果编辑器不是从 localhost 打开的，服务器要加 `--allow-origin <编辑器的地址>`。
 - **中文字体**：乐谱里的中文用系统字体（PingFang SC / Songti SC / Noto CJK），导出的 SVG 在没有这些
   字体的电脑上会换用其他字体。

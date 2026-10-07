@@ -1,4 +1,4 @@
-# AIlegro 前端
+# Cantelvio Compose 前端
 
 ## 2026-09-30 当前主页：Four-pillar v2 连续演奏
 

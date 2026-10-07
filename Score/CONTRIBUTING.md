@@ -10,4 +10,4 @@ Quick rules:
 2. Conventional Commits (`feat(core): …`). Small, focused commits.
 3. `npm run check` before every commit; CI runs the same plus a build and sample renders.
 4. Open a PR, fill in the template, squash-merge when green.
-5. Contracts (`.ailegro.json`, AIlegro interchange schemas) change only with a version bump.
+5. Contracts (`.cantelvio.json`, Cantelvio interchange schemas) change only with a version bump.

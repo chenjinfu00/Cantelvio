@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Harmonizer v1: melody -> chords, for AIlegro Score's accompany-melody task.
+"""Harmonizer v1: melody -> chords, for Cantelvio Score's accompany-melody task.
 
 v3.1 writes the chord of a beat before the melody note of that beat (event order: chord changes, then notes
 from the lowest up), so with a given melody it has to guess the harmony. This small separate model reads the
@@ -45,7 +45,7 @@ CORPUS = ROOT / 'data/joint/lieder-joint.npz'
 KEYSIG_CACHE = ROOT / 'data/joint/lieder-keysig-v1.npz'      # notated key signatures on the corpus grid
 TEXTURE_CACHE = ROOT / 'data/joint/lieder-texture-v1.npz'    # all notes of the aligned scores on the corpus grid
 SCORES = ROOT / 'data/four-pillar-score-all-train-v1.sqlite'
-DEFAULT_WEIGHTS = ROOT / 'runs/harmonizer-v1-20261003/weights.pt'   # used by AIlegro Score's adapter
+DEFAULT_WEIGHTS = ROOT / 'runs/harmonizer-v1-20261003/weights.pt'   # used by Cantelvio Score's adapter
 ANALYSIS_WEIGHTS = ROOT / 'runs/harmonizer-v2-20261003/weights.pt'  # with texture: harmonic analysis
 NO_BASS = 12
 SCHEMA = 'ailegro-harmonizer-v1'

@@ -5,7 +5,8 @@
   "description": "Cantelvio: Transformer-based music generation with a notation editor, harmony visualisation and performance following.",
   "type": "module",
   "scripts": {
-    "test": "npm run test:compose && npm run test:harmony && npm run test:stage",
+    "test": "npm run test:compose && npm run test:harmony && npm run test:stage && npm run test:site",
+    "test:site": "node --test site/tests/*.test.mjs",
     "test:compose": "npm test --prefix Compose",
     "test:harmony": "npm test --prefix Harmony",
     "test:stage": "npm test --prefix Stage",

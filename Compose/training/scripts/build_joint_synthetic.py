@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthetic four-stream phrases for pretraining the AIlegro joint Transformer.
+"""Synthetic four-stream phrases for pretraining the Cantelvio Compose joint Transformer.
 
 Uses the project's existing rule system, not new hand-written music:
   A  melody grammar (train_melody.make_phrase): melody + one chord per bar, and
@@ -180,7 +180,7 @@ def main():
     records = [{'scoreId': s['id'], 'workId': s['id'], 'split': s['split'], 'reject': None, 'type': s['type'],
                 'style': s['style'], 'N': int(len(p['bar'])), 'bars': s['bars'], 'accompaniment': {k: s[k] for k in ('accStyle', 'rhythm', 'texture', 'bassPattern')}}
                for s, p in zip(specs, per)]
-    summary = {'source': 'AIlegro rule system: train_melody/train_harmony grammars + src/planner.js accompaniment',
+    summary = {'source': 'Cantelvio Compose rule system: train_melody/train_harmony grammars + src/planner.js accompaniment',
                'seed': a.seed, 'phrases': len(specs), 'steps': int(offsets[-1]), 'seconds': round(time.time() - t0),
                'splits': {s: sum(1 for r in records if r['split'] == s) for s in ('train', 'validation')}, 'records': records}
     out.with_suffix('.json').write_text(json.dumps(summary, indent=1))

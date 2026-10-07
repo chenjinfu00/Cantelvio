@@ -1,0 +1,134 @@
+/* Theme the reader's tools; paper, ink colours and stage mode keep their own settings. */
+html[data-cv-app="stage"][data-cv-app="stage"] {
+  --ink: var(--cv-text);
+  --green: var(--cv-accent);
+  --lime: var(--cv-accent-soft);
+  --muted: var(--cv-muted);
+  --line: var(--cv-border);
+  --surface: var(--cv-surface);
+  --workspace: var(--cv-bg);
+  --accent: var(--cv-accent);
+  --dark: var(--cv-accent-hover);
+  --tint: var(--cv-raised);
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="stage"][data-cv-theme="light"]:not(.performance-active) {
+  color-scheme: light;
+}
+
+html[data-cv-app="stage"][data-cv-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-cv-app="stage"][data-surface="mist"]:not(.performance-active):not(.home-screen) {
+  --reader-background: #e8edf5;
+}
+
+html[data-cv-app="stage"] body {
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.sidebar, .top-drawer, .empty-state, .edge-reveal, .pencil-dock, .pencil-options-panel, .pencil-feedback) {
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  border-color: var(--cv-border);
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) .empty-state {
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.drawer-heading, .brand, .score-card h1, .step b, .anchor, .library-group, .library-card h3, .bookmark-go) {
+  color: var(--cv-text);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.brand-mark, .brand-caption, .settings-entry, .work-versions > summary, .library-breadcrumbs .quiet, .library-open-status:not(.error), .library-card .library-open-status:not(.error)) {
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.eyebrow, .section-label, .section-label span, .text-button, .step p, .score-card p, .sidebar-bottom p, .sidebar-bottom p span, .empty-state p, .empty-state small, .empty-kicker, .reader-footer, .reader-footer select, #page-count, .library-category-card span, .library-card small, .privacy-icon, .reference-heading span, .reference-panel p, .listening-info p) {
+  color: var(--cv-muted);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.primary, .empty-state .primary, .listening-bar .primary) {
+  background: var(--cv-accent);
+  color: var(--cv-on-accent);
+  border-color: var(--cv-accent);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) .primary:hover:enabled {
+  background: var(--cv-accent-hover);
+  border-color: var(--cv-accent-hover);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.secondary, .quiet, .icon-button, .anchor, .library-group, .library-category-card) {
+  color: var(--cv-text);
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.secondary, .quiet, .icon-button, .library-group, .library-category-card, .anchor):hover:enabled {
+  background: var(--cv-raised);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.icon-button.selected, .view-segments .selected, .ink-tools button.selected, .library-group.selected, .anchor.active, .bookmark.current, .theme-choices [aria-pressed="true"]) {
+  background: var(--cv-accent-soft);
+  color: var(--cv-accent);
+  border-color: var(--cv-accent);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.reference-panel, .listening-bar, .library-card, .library-category-card) {
+  background: var(--cv-surface);
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.mic-icon, .listening-bar.listening .mic-icon) {
+  background: var(--cv-accent-soft);
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.sidebar, .top-drawer, #settings-dialog, #metadata-dialog, #library-dialog, #imslp-dialog) :is(input:not([type="range"]):not([type="checkbox"]), select, textarea) {
+  background-color: var(--cv-surface);
+  color: var(--cv-text);
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="stage"] :is(#performance-dialog, #settings-dialog, #metadata-dialog, #library-dialog, #deploy-dialog, #help-dialog, #imslp-dialog) {
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="stage"] :is(#performance-dialog, #settings-dialog, #metadata-dialog, #library-dialog, #deploy-dialog, #help-dialog, #imslp-dialog) :is(p, li, .muted, .setting-row small) {
+  color: var(--cv-muted);
+}
+
+html[data-cv-app="stage"] #library-count {
+  background: var(--cv-surface);
+}
+
+html[data-cv-app="stage"] :is(#settings-dialog, #performance-dialog, #deploy-dialog, #library-dialog) :is(.settings-note, .gesture-guide, .performance-setup, .viewport-details) {
+  background: var(--cv-raised);
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.toast, .render-status) {
+  background: var(--cv-accent);
+  color: var(--cv-on-accent);
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="stage"] :is(.library-card .library-open-status.error, #performance-dialog .error, .anchor .anchor-remove) {
+  color: var(--cv-danger);
+}
+
+html[data-cv-app="stage"] body:not(.performance-mode) :is(.sidebar, .top-drawer, .edge-reveal, .pencil-dock, #settings-dialog, #metadata-dialog, #library-dialog, #deploy-dialog, #help-dialog, #imslp-dialog) :focus-visible {
+  outline-color: var(--cv-accent);
+}

@@ -8,7 +8,7 @@ import type { ID } from './types';
  * Format: `<prefix>_<12 base36 chars>`; prefixes make ids self-describing in diffs and logs:
  *   sc score, pt part, st staff, gr group, m measure, e event, n note, tu tuplet,
  *   cl clef change, dy dynamic, tm tempo, ch chord symbol, gc grace note (chord), sp spanner,
- *   ai AIlegro request / run.
+ *   ai Cantelvio request / run.
  */
 // prettier-ignore
 export type IdPrefix =

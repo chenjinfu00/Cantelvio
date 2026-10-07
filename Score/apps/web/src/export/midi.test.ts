@@ -1,4 +1,4 @@
-import { SAMPLES, buildPlayback } from '@ailegro-score/core';
+import { SAMPLES, buildPlayback } from '@cantelvio-score/core';
 import { Midi } from '@tonejs/midi';
 import { describe, expect, it } from 'vitest';
 import { scoreToMidi } from './midi';

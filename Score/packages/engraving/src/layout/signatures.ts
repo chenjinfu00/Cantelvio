@@ -1,5 +1,5 @@
 /** Clefs, key signatures and time signatures: glyph placement and widths. */
-import type { ClefType, KeySignature, TimeSignature } from '@ailegro-score/core';
+import type { ClefType, KeySignature, TimeSignature } from '@cantelvio-score/core';
 import { type Graphic } from '../graphics';
 import { type GlyphName, DIGIT_GLYPHS, glyphWidth } from '../smufl/glyphs';
 

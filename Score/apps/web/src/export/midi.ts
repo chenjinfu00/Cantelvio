@@ -1,5 +1,5 @@
 /** MIDI export follows the same concert-pitch performance timeline as playback. */
-import { buildPlayback, measureInfos, toNumber, type ScoreDoc } from '@ailegro-score/core';
+import { buildPlayback, measureInfos, toNumber, type ScoreDoc } from '@cantelvio-score/core';
 import { Midi } from '@tonejs/midi';
 
 const utf8Text = (text: string) => String.fromCharCode(...new TextEncoder().encode(text));

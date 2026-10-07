@@ -1,0 +1,123 @@
+/* The landing page and orchestra console share one palette. Music roles keep their colours. */
+html[data-cv-app="compose"] {
+  --bg: var(--cv-bg);
+  --fg: var(--cv-text);
+  --mute: var(--cv-muted);
+  --acc: var(--cv-accent);
+  --panel: var(--cv-surface);
+  --panel2: var(--cv-raised);
+  --line: var(--cv-border);
+  --text: var(--cv-text);
+  --muted: var(--cv-muted);
+  --soft: var(--cv-muted);
+  --mint: var(--cv-accent);
+  --orange: var(--cv-accent);
+  --red: var(--cv-danger);
+  --font: var(--cv-font);
+  --display: var(--cv-font);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="compose"][data-cv-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-cv-app="compose"][data-cv-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-cv-app="compose"] body {
+  background: var(--cv-bg);
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="compose"] .panel {
+  background: var(--cv-surface);
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="compose"] :is(.brand-mark, .section-number, .download, .joint-entry-link) {
+  border-color: var(--cv-border);
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="compose"] .live-dot {
+  background: var(--cv-accent);
+  box-shadow: 0 0 0 5px var(--cv-accent-soft);
+}
+
+html[data-cv-app="compose"] :is(.btn, .primary) {
+  background: var(--cv-accent);
+  color: var(--cv-on-accent);
+  border-color: var(--cv-accent);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="compose"] :is(.btn, .primary):hover:not(:disabled) {
+  background: var(--cv-accent-hover);
+  border-color: var(--cv-accent-hover);
+}
+
+html[data-cv-app="compose"] :is(.secondary, #language, .group-presets button, .group-control, .seed-row button, .download, .joint-entry-link) {
+  background: var(--cv-surface);
+  border-color: var(--cv-border);
+  color: var(--cv-text);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="compose"] :is(.secondary, #language, .group-presets button, .group-control, .seed-row button, .download, .joint-entry-link):hover:not(:disabled):not(.disabled) {
+  background: var(--cv-raised);
+}
+
+html[data-cv-app="compose"] .group-control[data-state="on"] {
+  background: var(--cv-accent-soft);
+  border-color: var(--cv-accent);
+  color: var(--cv-text);
+}
+
+html[data-cv-app="compose"] :is(.control, .top-actions, main > p) :is(input[type="number"], select),
+html[data-cv-app="compose"] #lang {
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="compose"] #lang {
+  min-height: 40px;
+  padding: 7px 10px;
+}
+
+html[data-cv-app="compose"] .control input[type="range"] {
+  accent-color: var(--cv-accent);
+}
+
+html[data-cv-app="compose"] .chord-bar {
+  background: linear-gradient(to right, var(--cv-accent-soft) var(--fill, 0%), var(--cv-raised) var(--fill, 0%));
+  border-color: var(--cv-border);
+  color: var(--cv-text);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="compose"] .chord-bar.active {
+  border-color: var(--cv-accent);
+}
+
+html[data-cv-app="compose"] .playback-row {
+  background: var(--cv-raised);
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="compose"] .roll-viewport {
+  border-color: var(--cv-border);
+  /* Its canvas draws the six fixed instrument-role colours over a dark note map. */
+  background: #17221b;
+}
+
+html[data-cv-app="compose"] :is(.page-shell, main > p) :focus-visible {
+  outline-color: var(--cv-accent);
+}

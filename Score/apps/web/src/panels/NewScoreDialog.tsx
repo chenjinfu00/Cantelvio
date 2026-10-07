@@ -1,4 +1,4 @@
-import { type NoteValue, TEMPLATES, createScore, lengthOf } from '@ailegro-score/core';
+import { type NoteValue, TEMPLATES, createScore, lengthOf } from '@cantelvio-score/core';
 import { useEffect, useRef, useState } from 'react';
 import { type MessageKey, useT } from '../i18n';
 import { stopPlayback } from '../playback/player';

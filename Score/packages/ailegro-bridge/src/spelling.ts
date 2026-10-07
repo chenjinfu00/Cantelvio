@@ -1,5 +1,5 @@
 /**
- * Pitch spelling for music that arrives as MIDI numbers (AIlegro output): key-aware, and
+ * Pitch spelling for music that arrives as MIDI numbers (Cantelvio output): key-aware, and
  * chord-aware when a chord is known (so C-E-G# in an augmented chord is not spelled C-E-Ab).
  */
 import {
@@ -10,7 +10,7 @@ import {
   keyTonicPitchClass,
   spellMidi,
   stepSemitone,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { chordToneSteps, qualityOf } from './qualities';
 
 /** Key signature for a tonic pitch class and mode (0 major, 1 minor), fewest accidentals. */

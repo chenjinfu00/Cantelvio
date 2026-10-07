@@ -6,7 +6,7 @@
  * Ctrl+Alt+O 8va (Shift: 8vb) · K keypad (Alt+1–6 its tabs) · Ctrl+B add measure · Space play ·
  * Ctrl+Z / Ctrl+Y undo/redo · Ctrl+S save (Shift: save as) · Ctrl+O open · Esc.
  */
-import type { NoteValue, Step } from '@ailegro-score/core';
+import type { NoteValue, Step } from '@cantelvio-score/core';
 import * as actions from '../state/actions';
 import * as marks from '../state/marks';
 import { type KeypadTab, getStore } from '../state/store';

@@ -1,4 +1,4 @@
-import { rat } from '@ailegro-score/core';
+import { rat } from '@cantelvio-score/core';
 import { describe, expect, it } from 'vitest';
 import { type MeasureGeometry, offsetToX, xToOffset } from './geometry';
 

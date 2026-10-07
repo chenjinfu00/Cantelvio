@@ -400,7 +400,7 @@ describe('MusicXML import', () => {
     expect(second!.graces).toBeUndefined();
   });
 
-  it('maps chord-symbol kinds, degrees and bass notes to AIlegro qualities', () => {
+  it('maps chord-symbol kinds, degrees and bass notes to Cantelvio qualities', () => {
     const harmony = (root: string, kind: string, extra = '') =>
       `<harmony><root><root-step>${root[0]}</root-step>${root[1] === 'b' ? '<root-alter>-1</root-alter>' : ''}</root>` +
       `<kind>${kind}</kind>${extra}</harmony>`;

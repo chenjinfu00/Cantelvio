@@ -1,4 +1,4 @@
-"""AIlegro orchestral model: a generic decoder-only Transformer over BAR / NOTE tokens.
+"""Cantelvio Compose orchestral model: a generic decoder-only Transformer over BAR / NOTE tokens.
 
 Pitch enters in one of two ways (config 'pitch'):
   'rotary'   (12-TET translation symmetry) - no absolute pitch embedding. Each token has a

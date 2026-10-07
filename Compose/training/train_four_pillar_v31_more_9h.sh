@@ -1,6 +1,6 @@
 #!/bin/bash
-# AIlegro 四大件 v3.1：在已经训练的 17.5 小时（第 101,129 步）之后再训练 9 小时（累计 26.5 小时）。
-# 在 Mac 的“终端”里、于 AIlegro 文件夹运行：
+# Cantelvio Compose 四大件 v3.1：在已经训练的 17.5 小时（第 101,129 步）之后再训练 9 小时（累计 26.5 小时）。
+# 在 Mac 的“终端”里、于 Cantelvio Compose 文件夹运行：
 #
 #   bash training/train_four_pillar_v31_more_9h.sh          开始：先把现在的权重另存一份，再接着训练 9 小时
 #   bash training/train_four_pillar_v31_more_9h.sh status   查看进度：步数、损失、剩余时间

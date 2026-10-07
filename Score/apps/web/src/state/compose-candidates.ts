@@ -13,7 +13,7 @@ import {
   measureInfos,
   rat,
   validateScore,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import {
   type ComposeRequest,
   type ComposeResult,
@@ -21,7 +21,7 @@ import {
   RESULT_SCHEMA,
   buildComposeRequest,
   planComposeImport,
-} from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/compose-bridge';
 import { create } from 'zustand';
 import { translate, type MessageKey } from '../i18n';
 import {
@@ -318,7 +318,7 @@ export function acceptCandidate(c: ComposeCandidate, scope = fullCandidateScope(
   const commands = candidateCommands(c, scope);
   const checked = applyCommand(s.doc, { type: 'batch', commands }).doc;
   if (validateScore(checked).length) fail('candidate.invalid');
-  if (!s.apply(commands, 'AIlegro', { selection: { kind: 'none' } })) return false;
+  if (!s.apply(commands, 'Cantelvio', { selection: { kind: 'none' } })) return false;
   clearCandidates();
   getStore().getState().notify(translate(s.view.lang, 'candidate.accepted'));
   return true;

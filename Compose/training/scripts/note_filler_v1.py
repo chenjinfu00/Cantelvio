@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AIlegro note filler v1: the notes a transcription missed, read from the score around them.
+"""Cantelvio Compose note filler v1: the notes a transcription missed, read from the score around them.
 
 audio_to_score.py turns a transcription into a score and keeps the notes that belong there, but a note the
 transcription model never heard cannot be kept. This model reads the cleaned score at every onset and at every
@@ -8,10 +8,10 @@ whole excerpt around it through a transformer) and gives, for every pitch, the p
 score has a note starting there. Pitches the score lacks whose probability passes a threshold are added
 (`added='filler'`), to the part that plays nearest to them.
 
-Training data: the AIlegro score database (the Lieder train split, the string quartet movements outside the
+Training data: the Cantelvio Compose score database (the Lieder train split, the string quartet movements outside the
 evaluation and tuning sets, the orchestral scores) "performed" and "transcribed" by eval_audio_to_score.py's
 simulation (normal and fast-passage errors, some with beat-tracker slips) and cleaned by audio_to_score.py with
-AIlegro's harmonic analysis; the target is the original score. Pitches are moved to C major / A minor (the
+Cantelvio Compose's harmonic analysis; the target is the original score. Pitches are moved to C major / A minor (the
 estimated key). The threshold is chosen on the tuning set (Lieder validation songs and other quartet movements).
 
     .venv-training/bin/python training/scripts/note_filler_v1.py data --out training/data/note-filler-v1.npz

@@ -1,9 +1,9 @@
 """Background import jobs of the adapter server: a PDF or scanned page through Audiveris, a recording through
-MuScriptor and AIlegro's audio_to_score.py. The editor uploads the file, polls the job and imports the MusicXML
+MuScriptor and Cantelvio's audio_to_score.py. The editor uploads the file, polls the job and imports the MusicXML
 it gets back (see docs/ailegro-integration.md, "本机服务的导入任务", and ADR 0013).
 
 Only the standard library: the tools run as separate processes, so this module works without torch, without
-AIlegro (PDF only) and in the adapter's --mock mode.
+Cantelvio (PDF only) and in the adapter's --mock mode.
 """
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ class Tools:
             'Audiveris was not found: install it (docs/pdf-import.md) or start the service with --audiveris PATH')
         missing = []
         if root is None:
-            missing.append('no AIlegro project (--ailegro-root)')
+            missing.append('no Cantelvio project (--cantelvio-root)')
         else:
             for label, path in (('audio_transcribe_muscriptor.py', self.transcribe_script),
                                 ('audio_to_score.py', self.score_script),
@@ -306,7 +306,7 @@ def run_pdf(job: Job, tools: Tools) -> dict:
 
 
 def run_audio(job: Job, tools: Tools) -> dict:
-    """MuScriptor (its own Python environment) → notes and beats; AIlegro's audio_to_score.py → MusicXML."""
+    """MuScriptor (its own Python environment) → notes and beats; Cantelvio's audio_to_score.py → MusicXML."""
     source = job.workdir / job.name
     notes = job.workdir / 'transcription.notes.json'
     root = tools.transcribe_script.parents[2]

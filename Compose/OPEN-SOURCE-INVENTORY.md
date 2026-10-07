@@ -1,10 +1,10 @@
-# AIlegro 开源软件与资源总清单
+# Cantelvio Compose 开源软件与资源总清单
 
-更新日期：2026-10-05。范围为本地 `AIlegro`、相邻的 `AIlegro Score`，以及这轮已讨论的候选项目。
+更新日期：2026-10-05。范围为本地 `Compose/`、相邻的 `Score/`，以及这轮已讨论的候选项目。
 
 接入顺序和两个项目的分工见 [联合开发计划](JOINT-DEVELOPMENT-PLAN.md)。保留自有模型作基线，实测选择 AMT 等生成引擎；Score 保留自研排版与命令日志结构，开源工具补齐生成、分析、回放、导出、数据整理与评估。
 下面区分软件代码、模型权重、乐谱数据、录音、字体和音色；“已下载”表示文件在本地，不表示已经接入或完成效果评估。
-AIlegro 与 Score 自有代码也不因使用这些库而自动变成开源；Score 的包目前标记为 `UNLICENSED`。
+Cantelvio Compose 与 Score 自有代码也不因使用这些库而自动变成开源；Score 的包目前标记为 `UNLICENSED`。
 
 ## 状态说明
 
@@ -55,8 +55,8 @@ AMT 的 10 个快照是 small 系列 5 个、medium 系列 3 个、large 系列 
 | [jsPDF](https://github.com/parallax/jsPDF) | PDF 页面、尺寸、文字和字体嵌入 | 4.2.1，MIT | 代码已接入；菜单提供独立 PDF 导出 |
 | [霞鹜文楷轻便版](https://github.com/lxgw/LxgwWenKai-Lite) | PDF 中文字体 | OFL-1.1，TTF 文件 13,872,424 字节 | 已下载并接入；Score `public/fonts/`，采用字体子集，当前各字重共用常规字体 |
 | [Bravura](https://github.com/steinbergmedia/bravura) | SMuFL 音乐符号字形 | OFL-1.1；构建用 `@vexflow-fonts/bravura` 1.0.2 | 已使用；轮廓和锚点生成到自研排版。使用这个字体包不代表使用 VexFlow 排版引擎 |
-| [Salamander Grand Piano](https://github.com/Tonejs/audio) | 既有钢琴采样及回放兜底 | 本地复制来源按 CC BY 3.0 保留署名，另保存作者公有领域声明 | AIlegro 与 Score 已使用，文件为选取的 MP3 子集；不把整个 Tone.js 库列为 AIlegro 运行依赖 |
-| [tonejs-instruments 采样](https://github.com/nbrosowsky/tonejs-instruments) | AIlegro 电贝斯、电吉他音色 | 本地样本按 CC BY 3.0；保留 Brosowsky、Karoryfer 来源署名 | AIlegro 已使用；只复制样本，没有使用上游 JavaScript 加载器 |
+| [Salamander Grand Piano](https://github.com/Tonejs/audio) | 既有钢琴采样及回放兜底 | 本地复制来源按 CC BY 3.0 保留署名，另保存作者公有领域声明 | Cantelvio Compose 与 Score 已使用，文件为选取的 MP3 子集；不把整个 Tone.js 库列为 Cantelvio Compose 运行依赖 |
+| [tonejs-instruments 采样](https://github.com/nbrosowsky/tonejs-instruments) | Cantelvio Compose 电贝斯、电吉他音色 | 本地样本按 CC BY 3.0；保留 Brosowsky、Karoryfer 来源署名 | Cantelvio Compose 已使用；只复制样本，没有使用上游 JavaScript 加载器 |
 
 10-04 曾完成新导出与回放的浏览器检查，包括中文矢量 A4 PDF、MIDI 下载和停止后静音。
 随后补了打击乐点击试听映射；这份清单仅盘点文件与依赖，未重新执行该补丁的完整功能检查。
@@ -82,7 +82,7 @@ PDMX 筛选是依据上游元数据的选择策略，不是对每首曲谱权属
 
 ## 现有基础依赖
 
-以下为实际本地版本；AIlegro 网页和服务器仍使用原生 JavaScript、Node 内置模块，没有新增第三方 npm 运行依赖。
+以下为实际本地版本；Cantelvio Compose 网页和服务器仍使用原生 JavaScript、Node 内置模块，没有新增第三方 npm 运行依赖。
 Score 的 npm 包及各 Python 环境独立管理，安装一个环境不表示另一个环境也有相同软件。
 
 | 软件 | 当前本地版本 | 用途和许可记录 |

@@ -43,7 +43,7 @@ its exact event times. No web runtime changes are made by training.
 
 ## Data build and checks
 
-From the AIlegro project root, using its existing `.venv-training`:
+From the Cantelvio Compose project root, using its existing `.venv-training`:
 
 ```sh
 .venv-training/bin/python training/tests/joint-expression.test.py

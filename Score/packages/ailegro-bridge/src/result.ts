@@ -27,7 +27,7 @@ import {
   sub,
   barLength,
   toNumber,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { keyFromTonic, spellNote, spellRoot } from './spelling';
 import { qualityOf } from './qualities';
 import {
@@ -50,7 +50,7 @@ export interface ImportOptions {
   readonly runId?: string;
   /** Group -> parts mapping (from the request); default: parts of the score by instrument group. */
   readonly targets?: readonly TargetMapping[];
-  /** 'notation' snaps onsets/durations to a readable grid; 'exact' keeps AIlegro's values. */
+  /** 'notation' snaps onsets/durations to a readable grid; 'exact' keeps Cantelvio's values. */
   readonly quantize?: 'notation' | 'exact';
   /** Mark as AI suggestion (default true). */
   readonly suggestion?: boolean;

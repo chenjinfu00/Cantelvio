@@ -1,5 +1,5 @@
 /** Geometry of laid-out measures: segment positions and time <-> x conversions. */
-import { type Rational, toNumber } from '@ailegro-score/core';
+import { type Rational, toNumber } from '@cantelvio-score/core';
 
 export interface SegmentGeometry {
   readonly offset: Rational;

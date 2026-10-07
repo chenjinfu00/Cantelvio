@@ -7,8 +7,8 @@ import {
   sequentialIds,
   validateScore,
   type ScoreDoc,
-} from '@ailegro-score/core';
-import type { ComposeRequest, ComposeResult } from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/core';
+import type { ComposeRequest, ComposeResult } from '@cantelvio-score/compose-bridge';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { defaultSpec, type PanelSpec } from './ailegro';
 import { initStore, getStore } from './store';

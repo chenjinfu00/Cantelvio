@@ -21,7 +21,7 @@ import {
   spannerTimes,
   sub,
   toNumber,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import type { Extent } from '../bbox';
 import type { Graphic } from '../graphics';
 import { glyphBox } from '../smufl/glyphs';

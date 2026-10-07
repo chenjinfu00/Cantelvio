@@ -4,7 +4,7 @@
 Every example starts from the first bar of a validation window (OpenScore Lieder or a
 synthetic style phrase); neither model trained on these windows. Both models then
 generate the remaining bars per sixteenth step in the order R -> H -> B -> M under the
-same sampling rules as the AIlegro app in Auto + Free mode (src/composer.js):
+same sampling rules as the Cantelvio Compose app in Auto + Free mode (src/composer.js):
   * R: the model's distribution as is (temperature 1, no top-p); no HOLD after REST.
   * H: chords change only on beats; a chord lasts at most two bars; the current chord
     is not a "new" chord. B/M: melody A3-A5, bass E1-D4; HOLD only while a note sounds.

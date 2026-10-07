@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Four-pillar v3.1 composition tasks: given material inside the bars being written.
 
-AIlegro Score asks for five tasks: continue, melody-from-chords, accompany-melody, develop-motif and
+Cantelvio Score asks for five tasks: continue, melody-from-chords, accompany-melody, develop-motif and
 orchestrate. v3.1 writes one event at a time in a fixed stream order (per onset: chord changes, unpitched
 notes, pitched notes from the lowest up) and only ever sees what is already written, so given material has to
 enter the stream in that same order. `TaskComposer` extends the v3.1 `Composer` (decoding only; the trained

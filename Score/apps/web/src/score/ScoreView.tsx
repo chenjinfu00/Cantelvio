@@ -17,7 +17,7 @@ import {
   parseRational,
   rat,
   toNumber,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import {
   FONT_STACK,
   type MeasureGeometry,
@@ -29,7 +29,7 @@ import {
   offsetToX,
   renderPageSvg,
   xToOffset,
-} from '@ailegro-score/engraving';
+} from '@cantelvio-score/engraving';
 import {
   type ReactElement,
   memo,

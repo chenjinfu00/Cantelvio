@@ -3,7 +3,7 @@
  * serves the editor without an AI backend. In a claude.ai artifact the page runs in a
  * locked-down frame: downloads go through the viewer's
  * `downloads` capability, printing is unavailable and calls to a server on this computer
- * (the AIlegro adapter) are blocked. Feature code asks this module instead of guessing.
+ * (the Cantelvio adapter) are blocked. Feature code asks this module instead of guessing.
  */
 
 interface ClaudeHost {

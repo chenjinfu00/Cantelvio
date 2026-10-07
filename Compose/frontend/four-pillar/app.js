@@ -20,7 +20,7 @@ function status(en, zh, kind = 'idle') {
 }
 function translate() {
   document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-  document.title = tr('AIlegro · Four-pillar v2', 'AIlegro · 四大件 v2 试听');
+  document.title = tr('Cantelvio Compose · Four-pillar v2', 'Cantelvio Compose · 四大件 v2 试听');
   document.querySelectorAll('[data-en][data-zh]').forEach(node => { node.textContent = node.dataset[language]; });
   $('language').textContent = language === 'en' ? '中文' : 'EN';
   renderGroups(); renderPrompts(); updatePrior(); live?.updateLanguage();
@@ -116,7 +116,7 @@ async function generate() {
     if (audioUrl) URL.revokeObjectURL(audioUrl);
     audioUrl = URL.createObjectURL(audio.blob);
     $('player').src = audioUrl; $('player').load();
-    $('download').href = audioUrl; $('download').download = `ailegro-four-pillar-${data.options.seed}.wav`;
+    $('download').href = audioUrl; $('download').download = `cantelvio-four-pillar-${data.options.seed}.wav`;
     $('download').classList.remove('disabled'); $('download').setAttribute('aria-disabled', 'false');
     last = data; draw(data.sample); renderSummary(data);
     status('Ready to listen · original bars first, model bars second', '可以试听 · 前两小节为原谱，后两小节为模型续写', 'ready');

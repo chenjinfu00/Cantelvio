@@ -3,7 +3,7 @@
  * minimum distances from glyph extents and duration-based springs. Width as a function of the
  * system's stretch factor lets the system layout justify lines exactly.
  */
-import { type MeasureInfo, type Rational, cmp, eq, sub, toNumber } from '@ailegro-score/core';
+import { type MeasureInfo, type Rational, cmp, eq, sub, toNumber } from '@cantelvio-score/core';
 import { STYLE } from '../options';
 import { type ChordGeom, type RestGeom, chordGeometry, restGeometry } from './chord';
 import type { NItem, NMeasure } from './notation';

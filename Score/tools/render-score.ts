@@ -1,10 +1,10 @@
 /**
- * Headless renderer: engrave sample scores or .ailegro.json files to SVG (and PNG via sharp).
+ * Headless renderer: engrave sample scores or .cantelvio.json files to SVG (and PNG via sharp).
  * Used by humans and AI agents to check engraving changes visually, and by CI.
  *
  *   npm run render -- --sample orchestra --out out/
  *   npm run render -- --all --out out/renders --svg-only
- *   npm run render -- --file my-score.ailegro.json --concert --continuous
+ *   npm run render -- --file my-score.cantelvio.json --concert --continuous
  *   npm run render -- --sample orchestra --seamless
  *   npm run render -- --file score.mxl            # MusicXML is imported first
  */
@@ -17,8 +17,8 @@ import {
   type ScoreDoc,
   parseScore,
   randomIds,
-} from '@ailegro-score/core';
-import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
+} from '@cantelvio-score/core';
+import { layoutScore, renderPageSvg } from '@cantelvio-score/engraving';
 import { importMusicXmlFile } from './musicxml-file';
 
 const { values } = parseArgs({
@@ -48,7 +48,7 @@ for (const f of values.file ?? []) {
     jobs.push({ name: basename(f).replace(MUSICXML_FILE_PATTERN, ''), doc });
   } else
     jobs.push({
-      name: basename(f).replace(/\.ailegro\.json$|\.json$/, ''),
+      name: basename(f).replace(/\.(?:cantelvio|ailegro)\.json$|\.json$/i, ''),
       doc: parseScore(readFileSync(f, 'utf8')),
     });
 }

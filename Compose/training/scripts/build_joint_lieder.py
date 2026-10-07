@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build the four-stream (rhythm / harmony / bass / melody) Lieder corpus for the
-AIlegro joint Transformer prototype.
+Cantelvio Compose joint Transformer prototype.
 
 Source: the pinned CC0 OpenScore Lieder tree (training/data/sources/*.tar.gz).
 Only the MusicXML (.mxl) scores and the bundled AugmentedNet automatic
@@ -12,7 +12,7 @@ Per piece, a global sixteenth-note grid is built:
   rhythm  articulation of the remaining accompaniment notes
           (REST, HOLD, one onset, two or more onsets)
   harmony AugmentedNet chords aligned by measure number and in-measure offset,
-          reduced to AIlegro's 40 chord qualities; local key per step
+          reduced to Cantelvio Compose's 40 chord qualities; local key per step
 Per bar: metre, position, off-grid onsets and chord-tone coverage (alignment QA).
 
 Split = sha256(song directory) % 10: 0 validation (same rule as the current

@@ -58,7 +58,7 @@ def main():
               'curationPolicy': '../midi-library-curation.json', 'files': entries}
     (DESTINATION / 'manifest.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
     (DESTINATION / 'README.md').write_text(
-        '# AIlegro MIDI Library\n\n'
+        '# Cantelvio Compose MIDI Library\n\n'
         f'{len(entries)} reviewed MIDI copies are listed directly in this folder for browsing. '
         'The three-digit prefix only makes filenames unique; `manifest.json` '
         'records each original relative path and SHA-256. The review exclusions '

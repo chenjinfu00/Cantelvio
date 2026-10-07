@@ -1,0 +1,146 @@
+/* Cantelvio appearance adapter for the editor chrome. Music paper, notation,
+   voice colours, AI ink and playback markers retain their musical meaning. */
+html[data-cv-app="score"][data-cv-app="score"] {
+  /* Outrank the editor's legacy :root dark-mode rules in every system theme. */
+  --bg: var(--cv-bg);
+  --desk: var(--cv-bg);
+  --panel: var(--cv-surface);
+  --panel-2: var(--cv-raised);
+  --line: var(--cv-border);
+  --line-strong: var(--cv-border);
+  --border: var(--cv-border);
+  --text: var(--cv-text);
+  --text-2: var(--cv-muted);
+  --accent: var(--cv-accent);
+  --accent-2: var(--cv-accent-soft);
+  --accent-text: var(--cv-on-accent);
+  --good: var(--cv-good);
+  --bad: var(--cv-danger);
+  --warn: var(--cv-warning);
+  --shadow: var(--cv-shadow);
+  --radius: var(--cv-radius);
+  --font: var(--cv-font);
+}
+
+html[data-cv-app="score"][data-cv-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-cv-app="score"][data-cv-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Keep these overrides inside React's app: the shared appearance dialog is
+   mounted outside #root and owns its controls independently. */
+html[data-cv-app="score"] #root button.primary:hover:not(:disabled) {
+  background: var(--cv-accent-hover);
+  border-color: var(--cv-accent-hover);
+  filter: none;
+}
+
+html[data-cv-app="score"] #root :is(input, textarea)::placeholder {
+  color: var(--cv-muted);
+  opacity: 1;
+}
+
+html[data-cv-app="score"] #root input:is([type="range"], [type="radio"]) {
+  accent-color: var(--cv-accent);
+}
+
+html[data-cv-app="score"] #root :is(a, summary):focus-visible {
+  outline: 2px solid var(--cv-accent);
+  outline-offset: 3px;
+}
+
+html[data-cv-app="score"] #root :is(.keypad, .modal, .candidate-dialog, .toast, .import-status, .brand .logo, .keypad .key, .candidate-card, .drop-overlay span) {
+  border-radius: var(--cv-radius);
+}
+
+html[data-cv-app="score"] #root .keypad.docked {
+  border-radius: var(--cv-radius) var(--cv-radius) 0 0;
+}
+
+html[data-cv-app="score"] #root .side .tabs button.on {
+  background: var(--cv-accent-soft);
+  border-color: var(--cv-border);
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="score"] #root .demo-banner {
+  background: var(--cv-accent-soft);
+  color: var(--cv-text);
+  border-bottom: 1px solid var(--cv-border);
+}
+
+html[data-cv-app="score"] #root .demo-banner a {
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="score"] #root .demo-banner a:hover {
+  color: var(--cv-accent-hover);
+}
+
+html[data-cv-app="score"] #root .drop-overlay {
+  background: var(--cv-accent-soft);
+  background: color-mix(in srgb, var(--cv-accent) 12%, transparent);
+  border-color: var(--cv-accent);
+}
+
+html[data-cv-app="score"] #root .toast {
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  border: 1px solid var(--cv-border);
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="score"] #root .toast.error {
+  background: var(--cv-danger-soft);
+  color: var(--cv-danger);
+  border-color: var(--cv-danger);
+}
+
+html[data-cv-app="score"] #root .candidate-card {
+  background: var(--cv-raised);
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="score"] #root .candidate-card small {
+  color: var(--cv-muted);
+}
+
+html[data-cv-app="score"] #root .candidate-dialog {
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="score"] #root :is(.candidate-toolbar, .candidate-accept) {
+  background: var(--cv-surface);
+}
+
+html[data-cv-app="score"] #root .candidate-accept {
+  border-color: var(--cv-border);
+}
+
+html[data-cv-app="score"] #root .candidate-pages {
+  background: var(--cv-bg);
+}
+
+/* Candidate SVGs use currentColor, so white paper must also carry black ink
+   when the surrounding application uses the shared dark appearance. */
+html[data-cv-app="score"] #root .candidate-pages > div {
+  background: #fff;
+  color: #111;
+  box-shadow: var(--cv-shadow);
+}
+
+@media print {
+  html[data-cv-app="score"] body,
+  html[data-cv-app="score"] #root :is(.app, .workspace, .score-scroll) {
+    background: #fff;
+  }
+
+  html[data-cv-app="score"] #root .demo-banner {
+    display: none !important;
+  }
+}

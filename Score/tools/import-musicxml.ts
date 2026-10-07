@@ -1,8 +1,8 @@
 /**
- * Import MusicXML (.musicxml, .xml or compressed .mxl) into the .ailegro.json format and report
+ * Import MusicXML (.musicxml, .xml or compressed .mxl) into the .cantelvio.json format and report
  * what was skipped or approximated, plus any structural (validation) problems.
  *
- *   npm run import:musicxml -- score.mxl --out out/score.ailegro.json
+ *   npm run import:musicxml -- score.mxl --out out/score.cantelvio.json
  *   npm run import:musicxml -- a.mxl b.musicxml --out-dir out/imports
  *   npm run import:musicxml -- corpus/*.mxl --summary          # one line per file
  *
@@ -17,7 +17,7 @@ import {
   sequentialIds,
   serializeScore,
   validateScore,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { importMusicXmlFile } from './musicxml-file';
 
 const { values, positionals } = parseArgs({
@@ -32,7 +32,7 @@ const { values, positionals } = parseArgs({
 
 if (positionals.length === 0) {
   console.error(
-    'usage: npm run import:musicxml -- <file.musicxml|.xml|.mxl>... [--out file.ailegro.json] [--out-dir dir] [--summary] [--sequential-ids]',
+    'usage: npm run import:musicxml -- <file.musicxml|.xml|.mxl>... [--out file.cantelvio.json] [--out-dir dir] [--summary] [--sequential-ids]',
   );
   process.exit(2);
 }
@@ -66,7 +66,7 @@ for (const path of positionals) {
       (values['out-dir']
         ? join(
             values['out-dir'],
-            `${basename(path).replace(MUSICXML_FILE_PATTERN, '')}.ailegro.json`,
+            `${basename(path).replace(MUSICXML_FILE_PATTERN, '')}.cantelvio.json`,
           )
         : null);
     if (target) {

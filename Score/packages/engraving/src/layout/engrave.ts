@@ -14,7 +14,7 @@ import {
   keyTonic,
   lt,
   measureInfos,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { extentOf } from '../bbox';
 import { type Graphic, translate } from '../graphics';
 import { type LayoutOptions, STYLE, defaultOptions } from '../options';

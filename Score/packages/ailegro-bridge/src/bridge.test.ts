@@ -10,7 +10,7 @@ import {
   validateScore,
   voiceEvents,
   type ScoreDoc,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { describe, expect, it } from 'vitest';
 import { buildScoreRecord } from './record';
 import { buildComposeRequest } from './request';

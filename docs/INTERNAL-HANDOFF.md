@@ -1,37 +1,37 @@
 # Cantelvio：改名与整合规划（内部交接说明；面向公众的介绍见根目录 README.md）
 
-更新：2026-10-06（已搬迁并改名）
+更新：2026-10-08（当前展示品牌与服务入口已统一；下方迁移验证保留历史记录）
 
 ## 给 Claude 的交接说明
 
-用户已确认将四个音乐子项目的总品牌改为 **Cantelvio**。原有 AIlegro 等名称对应的是同一套项目，不是新建或重写的产品。
+四个音乐模块共用 **Cantelvio** 品牌：Compose、Score、Harmony 和 Stage。当前界面、现行说明以及 Compose 与 Score 的包名使用 Cantelvio；本机服务推荐入口为 `cantelvio:serve`。原有作品格式、生成接口和浏览器保存键继续兼容，历史训练日志与来源证据保持原样。
 
-**2026-10-06 已完成：** 四个文件夹已移入本目录，并按模块名改为 `Compose/`、`Score/`、`Harmony/`、`Stage/`；项目间相对路径（`../Compose`、`../Score` 等）、Score 的 `ailegro:serve` 默认路径和适配器脚本路径、各项目说明文档里的本机路径已同步更新。日志、训练 manifest、validation 记录等历史文件保留原路径。页面标题、代码标识、包名和存储键尚未改名。
+**2026-10-06 迁移记录：** 四个文件夹已移入本目录，并按模块名改为 `Compose/`、`Score/`、`Harmony/`、`Stage/`；项目间相对路径（`../Compose`、`../Score` 等）、Score 的服务默认路径和适配器脚本路径、各项目说明文档里的本机路径已同步更新。日志、训练 manifest、validation 记录等历史文件保留原路径。
 
 ## 项目分工与目标目录
 
-| 原项目名 | 现文件夹 | 对外模块名称 | 职责 |
+| 模块 | 文件夹 | 对外模块名称 | 职责 |
 |---|---|---|---|
-| AIlegro | `Compose/` | Cantelvio Compose | 音乐生成、旋律分析、给定旋律配伴奏 |
-| AIlegro Score | `Score/` | Cantelvio Score | 乐谱编辑、候选比较与接受、回放和导出 |
-| Tonnetz | `Harmony/` | Cantelvio Harmony | 和声关系与音乐理论可视化 |
-| Volta | `Stage/` | Cantelvio Stage | PDF 读谱、演奏跟随与自动翻页 |
+| Compose | `Compose/` | Cantelvio Compose | 音乐生成、旋律分析、给定旋律配伴奏 |
+| Score | `Score/` | Cantelvio Score | 乐谱编辑、候选比较与接受、回放和导出 |
+| Harmony | `Harmony/` | Cantelvio Harmony | 和声关系与音乐理论可视化 |
+| Stage | `Stage/` | Cantelvio Stage | PDF 读谱、演奏跟随与自动翻页 |
 
 搬迁前四个项目位于 `/Users/chenjinfu/software develop/`。现在的结构：
 
 ```text
 Cantelvio/
 ├── README.md
-├── Compose/   (原 AIlegro)
-├── Score/     (原 AIlegro Score)
-├── Harmony/   (原 Tonnetz)
-└── Stage/     (原 Volta)
+├── Compose/
+├── Score/
+├── Harmony/
+└── Stage/
 ```
 
 ## 接下来的简短计划
 
 1. **迁移并验证。** ✅ 2026-10-06 完成，详见下方“迁移验证记录”。
-2. **统一展示名称。** 将页面标题、导航、介绍和入口逐步更新为 Cantelvio 及四个模块名称。代码标识、接口、包名、存储键和历史路径按兼容需要处理，不做全局字符串替换。
+2. **统一展示名称。** ✅ 当前页面标题、导航、介绍、包名和推荐服务入口已统一。代码标识、接口、存储键和历史路径按兼容需要处理。
 3. **连通创作流程。** 以“给定旋律 → 生成伴奏 → 在 Score 中比较、编辑与接受 → 回放、导出及演奏”为主线；Harmony 辅助分析，Stage 承接读谱演奏。
 4. **继续改善音乐质量。** 保留简单／中等／专业三档与乐器演奏限制，优先改进和声适配、自然织体和生成速度。默认保留模型原始织体与力度，避免把所有输出强制改成固定分解和弦。
 
@@ -72,7 +72,7 @@ Cantelvio 根目录是唯一的 Git 仓库（monorepo），四个模块都在其
 - 旧分支以前缀保留：`score/*`（原 AIlegro Score 的全部分支）、`stage/*`（原 Volta 的 main 和 origin 分支）。
 - 原来的两个 `.git` 原样备份在 `_git-backup-2026-10-06/`（已忽略，不进 Git）；确认新仓库无误后可删除。
 - 根 `.gitignore` 排除大模型与第三方源码（AMT、MuScriptor、open-source 的 sources 与 datasets）、训练 runs/logs/数据、本机环境；它们的清单、下载脚本和 SHA 保留在仓库里。
-- 暂无远程仓库。原 Volta 的 GitHub 公开仓库 chenjinfu00/volta 不再自动更新。
+- 当前远程仓库为 [chenjinfu00/Cantelvio](https://github.com/chenjinfu00/Cantelvio)，网页端通过 GitHub Pages 发布。
 
 ## 开源前清单（未完成）
 

@@ -1,5 +1,5 @@
 /**
- * AIlegro text notation (v1): a compact, LilyPond-inspired way to type music, used by the editor's
+ * Cantelvio text notation (v1): a compact, LilyPond-inspired way to type music, used by the editor's
  * text input mode, by tests and fixtures, and as an easy format for language models to write.
  *
  *   c d e f | g2 g2 | a4 a a a | g1          relative octaves, durations carry over

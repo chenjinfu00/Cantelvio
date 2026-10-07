@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train the AIlegro orchestral model. Resumes automatically from <run>/state.pt.
+"""Train the Cantelvio Compose orchestral model. Resumes automatically from <run>/state.pt.
 
   python training/orchestra/train.py configs/ablation-rotary-aug.json --data <prepared data> --runs <folder>
 

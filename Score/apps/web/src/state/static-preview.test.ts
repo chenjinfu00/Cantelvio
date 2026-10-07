@@ -1,4 +1,4 @@
-import { SAMPLES, serializeScore } from '@ailegro-score/core';
+import { SAMPLES, serializeScore } from '@cantelvio-score/core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 async function host(hostname: string, flag = 'false') {
@@ -63,6 +63,8 @@ describe('static public editor', () => {
     const { openFile } = await import('./files');
     const sample = SAMPLES[0]!.build('en');
     initStore(sample);
+    expect(await openFile(new File([serializeScore(sample)], 'piano.cantelvio.json'))).toBe(true);
+    expect(serializeScore(getStore().getState().doc)).toBe(serializeScore(sample));
     expect(await openFile(new File([serializeScore(sample)], 'piano.ailegro.json'))).toBe(true);
     expect(serializeScore(getStore().getState().doc)).toBe(serializeScore(sample));
 

@@ -6,7 +6,7 @@ labels: bug
 
 **What happened**
 
-**Steps to reproduce** (attach the `.ailegro.json` or the text-notation snippet if possible)
+**Steps to reproduce** (attach the `.cantelvio.json` or the text-notation snippet if possible)
 
 **Expected**
 

@@ -14,7 +14,7 @@ import {
   type Articulation,
   NOTE_VALUE_BEAMS,
   type NoteValue,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { type GlyphName, anchor, glyphBox, glyphWidth } from '../smufl/glyphs';
 import { STYLE } from '../options';
 import type { AccidentalKind, NChord, NNote, NRest } from './notation';

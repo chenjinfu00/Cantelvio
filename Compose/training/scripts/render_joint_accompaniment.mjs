@@ -1,5 +1,5 @@
 // Render accompaniment (chord texture + bass) for synthetic joint-model phrases
-// with AIlegro's own rule planner (src/planner.js → frozen v91 buildBarEvents).
+// with Cantelvio Compose's own rule planner (src/planner.js → frozen v91 buildBarEvents).
 // Since 2026-09-27 that planner is archived with the pre-joint runtime; the import
 // points there so the synthetic corpus can be rebuilt exactly as before.
 // Input: JSON array of phrase specs. Output: the same specs with `events`.

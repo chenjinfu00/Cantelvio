@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train the AIlegro joint R/H/B/M Transformer prototype (or the flat baseline).
+"""Train the Cantelvio Compose joint R/H/B/M Transformer prototype (or the flat baseline).
 
 Schedule: synthetic pretraining (existing rule system), then fine-tuning on the
 OpenScore Lieder four-stream corpus with a little synthetic replay. The Lieder
@@ -132,7 +132,7 @@ def main():
             'windows': {k: len(v) for k, v in W.items()}, 'selectedStep': best_step, 'trainSeconds': round(train_seconds, 1),
             'secondsPerStep': round(train_seconds / total, 4), 'curve': curve, 'final': final, 'resumedAfterSteps': resumed,
             'order': 'per sixteenth step R -> H -> B -> M; no stream generated ahead',
-            'data': 'synthetic pretraining (AIlegro rule system) + OpenScore Lieder (CC0) with AugmentedNet harmony; Lieder test split untouched'}
+            'data': 'synthetic pretraining (Cantelvio Compose rule system) + OpenScore Lieder (CC0) with AugmentedNet harmony; Lieder test split untouched'}
     (a.output_dir / 'training.json').write_text(json.dumps(meta, indent=1))
     if state_path.exists():
         state_path.unlink()

@@ -11,8 +11,8 @@ import type {
   DynamicValue,
   NoteValue,
   Ornament,
-} from '@ailegro-score/core';
-import type { GlyphName } from '@ailegro-score/engraving';
+} from '@cantelvio-score/core';
+import type { GlyphName } from '@cantelvio-score/engraving';
 import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,

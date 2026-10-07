@@ -1,11 +1,11 @@
 /**
- * Open a PDF / scanned page or a recording through the local AIlegro service (the adapter server,
- * `npm run ailegro:serve`). The file is uploaded, Audiveris (PDF) or MuScriptor + AIlegro's
+ * Open a PDF / scanned page or a recording through the local Cantelvio service (the adapter server,
+ * `npm run cantelvio:serve`). The file is uploaded, Audiveris (PDF) or MuScriptor + Cantelvio's
  * audio_to_score.py (recording) run there as a background job, the editor polls the job and imports
  * the MusicXML it gets back into a new, unsaved score. The job API (`ailegro-score.import-job/1`)
  * is described in docs/ailegro-integration.md and ADR 0013.
  */
-import { importMusicXml, musicXmlFromBytes } from '@ailegro-score/core';
+import { importMusicXml, musicXmlFromBytes } from '@cantelvio-score/core';
 import { useSyncExternalStore } from 'react';
 import { type Lang, translate } from '../i18n';
 import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';

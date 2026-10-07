@@ -1,7 +1,7 @@
 import type { ClefType } from '../model/clef';
 import { type Interval, interval } from '../pitch/pitch';
 
-/** AIlegro's six native instrument groups (see AIlegro training/orchestra/groups.py). */
+/** Cantelvio's six native instrument groups (see Cantelvio training/orchestra/groups.py). */
 export const AILEGRO_GROUPS = [
   'woodwinds',
   'brass',
@@ -32,7 +32,7 @@ export interface InstrumentDef {
   readonly gmProgram: number;
   /** Unpitched percussion plays on the GM drum channel. */
   readonly unpitched?: boolean;
-  /** Group used when exporting to AIlegro; null = not mapped (e.g. voices). */
+  /** Group used when exporting to Cantelvio; null = not mapped (e.g. voices). */
   readonly ailegroGroup: AilegroGroup | null;
   /** Orchestral score order (lower = higher on the page). */
   readonly order: number;
@@ -92,7 +92,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
   def({ id: 'harpsichord', name: { en: 'Harpsichord', zh: '羽管键琴' }, abbreviation: { en: 'Hpsd.', zh: '羽管键琴' }, family: 'keyboards', staves: ['treble', 'bass'], brace: true, range: [29, 89], gmProgram: 6, ailegroGroup: 'keys', order: 425 }),
   def({ id: 'organ', name: { en: 'Organ', zh: '管风琴' }, abbreviation: { en: 'Org.', zh: '管风琴' }, family: 'keyboards', staves: ['treble', 'bass', 'bass'], brace: true, range: [24, 96], gmProgram: 19, ailegroGroup: 'keys', order: 430 }),
   def({ id: 'guitar', name: { en: 'Guitar', zh: '吉他' }, abbreviation: { en: 'Gtr.', zh: '吉他' }, family: 'plucked', staves: ['treble8vb'], range: [40, 83], gmProgram: 24, ailegroGroup: 'keys', order: 440 }),
-  // ---------------------------------------------------------------- voices (not mapped to an AIlegro group)
+  // ---------------------------------------------------------------- voices (not mapped to a Cantelvio group)
   def({ id: 'soprano', name: { en: 'Soprano', zh: '女高音' }, abbreviation: { en: 'S.', zh: '女高' }, family: 'voices', staves: ['treble'], range: [60, 84], gmProgram: 52, ailegroGroup: null, order: 500 }),
   def({ id: 'mezzo-soprano', name: { en: 'Mezzo-soprano', zh: '女中音' }, abbreviation: { en: 'Mz.', zh: '女中' }, family: 'voices', staves: ['treble'], range: [57, 81], gmProgram: 52, ailegroGroup: null, order: 505 }),
   def({ id: 'alto', name: { en: 'Alto', zh: '女低音' }, abbreviation: { en: 'A.', zh: '女低' }, family: 'voices', staves: ['treble'], range: [53, 77], gmProgram: 52, ailegroGroup: null, order: 510 }),

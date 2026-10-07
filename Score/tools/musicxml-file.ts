@@ -1,6 +1,6 @@
 /**
  * Node side of MusicXML import: read a `.musicxml` / `.xml` / `.mxl` file (inflating `.mxl`
- * archives with node:zlib) and import it with @ailegro-score/core.
+ * archives with node:zlib) and import it with @cantelvio-score/core.
  */
 import { readFileSync } from 'node:fs';
 import { basename } from 'node:path';
@@ -11,7 +11,7 @@ import {
   type MusicXmlImportResult,
   importMusicXml,
   musicXmlFromBytes,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 
 export const inflateRaw = (data: Uint8Array): Uint8Array => new Uint8Array(inflateRawSync(data));
 

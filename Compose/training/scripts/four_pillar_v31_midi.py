@@ -82,7 +82,7 @@ def untangle(notes):
 
 def to_midi(audition: dict, tempo: float) -> tuple[bytes, dict]:
     tick = lambda quarters: round(quarters * TPQ)  # noqa: E731
-    conductor = [(0, 0, meta(0x03, b'AIlegro v3.1')),
+    conductor = [(0, 0, meta(0x03, b'Cantelvio Compose v3.1')),
                  (0, 1, meta(0x51, round(60_000_000 / tempo).to_bytes(3, 'big')))]
     voices, drums, start, meter, key = {}, [], Fraction(0), None, None
     for bar in audition['bars']:

@@ -1,6 +1,6 @@
 /**
- * AIlegro's chord-quality vocabulary, in AIlegro's order (training/data/chord-qualities.json).
- * The ORDER matters: AIlegro's sampler reports qualities as indices into this list.
+ * Cantelvio's chord-quality vocabulary, in Cantelvio's order (training/data/chord-qualities.json).
+ * The ORDER matters: Cantelvio's sampler reports qualities as indices into this list.
  */
 export interface ChordQuality {
   readonly id: string;

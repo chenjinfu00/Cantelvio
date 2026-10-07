@@ -13,7 +13,7 @@ Sections (all by default):
             chords (semitone clashes, strong-beat chord tones, doublings)
   analysis  (with --analyzer, not in the default sections) test songs aligned with the score database: chords
             read from every note of the score by harmonizer v2, from the melody only, by harmonizer v1, and by
-            AIlegro's rule-based chord tracker, against AugmentedNet
+            Cantelvio Compose's rule-based chord tracker, against AugmentedNet
   auditions one MIDI per tune and chord source (v3.1's own, the harmonizer's, human), seed 1, best of 8, in a
             folder next to the report (not in the default sections)
   lieder    test-split songs whose score aligns with the corpus: 8 real bars fed to v3.1, then 4 bars written
@@ -138,7 +138,7 @@ def section_accuracy(model, info, pieces) -> dict:
 # ====================================================================== harmonic analysis (all notes)
 def section_analysis(analyzer, analyzer_info, harmonizer, harmonizer_info) -> dict:
     """Test songs aligned with the score database: chords read from every note of the score (harmonizer v2) or
-    from the melody only, and AIlegro's rule-based chord tracker over every note, against AugmentedNet."""
+    from the melody only, and Cantelvio Compose's rule-based chord tracker over every note, against AugmentedNet."""
     from four_pillar_v31_tonal import NoteTable, track_chords, track_keys
     corpus = Corpus()
     pieces = hz.load_pieces(texture=True)

@@ -104,7 +104,7 @@ SVG 元素带 `data-ref`（`n:<音符 id>`、`e:<事件 id>`、`rest:…`、`ch:
 
 ```sh
 npm run render -- --all --out out/            # 渲染全部示例为 SVG + PNG
-npm run render -- --file my.ailegro.json --out out/ --concert   # 渲染自己的文件，实际音高
+npm run render -- --file my.cantelvio.json --out out/ --concert   # 渲染自己的文件，实际音高
 npm run render -- --sample orchestra --continuous --out out/
 npm run render -- --all --seamless --out out/seamless/
 ```

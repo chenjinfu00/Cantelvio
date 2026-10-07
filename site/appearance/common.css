@@ -1,0 +1,78 @@
+/* One visual vocabulary for the published Cantelvio workspaces. */
+html[data-cv-app] {
+  --cv-bg:#f6f5ef;--cv-surface:#fff;--cv-raised:#faf9f5;--cv-text:#142019;
+  --cv-muted:#59635b;--cv-border:#d8ddd4;--cv-accent:#2f6b4f;--cv-accent-hover:#285b43;
+  --cv-on-accent:#fff;--cv-accent-soft:#e9f0eb;--cv-good:#237349;--cv-warning:#95611b;
+  --cv-danger:#b13b3b;--cv-warning-soft:#faf3e5;--cv-danger-soft:#faeded;
+  --cv-shadow:0 6px 24px rgb(20 32 25 / .10);--cv-radius:10px;
+  --cv-font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color-scheme:light;
+}
+html[data-cv-theme="dark"] {color-scheme:dark}
+html[data-cv-app="home"],html[data-cv-app="results"],html[data-cv-app="compose"] {
+  --bg:var(--cv-bg);--fg:var(--cv-text);--mute:var(--cv-muted);--card:var(--cv-surface);
+  --surface:var(--cv-surface);--tilebg:var(--cv-surface);--line:var(--cv-border);
+  --acc:var(--cv-accent);--acc-fg:var(--cv-on-accent);
+}
+html[data-cv-app="home"] body,html[data-cv-app="results"] body {font-family:var(--cv-font)}
+html[data-cv-app="home"] .btn,html[data-cv-app="compose"] .btn {color:var(--cv-on-accent)}
+html[data-cv-app="home"] .btn.ghost {color:var(--cv-text)}
+html[data-cv-app] :is(input,select,textarea) {accent-color:var(--cv-accent)}
+html[data-cv-app] :focus-visible {outline-color:var(--cv-accent)}
+html[data-cv-app="harmony"] .cantelvio-home {background:var(--cv-surface);color:var(--cv-text);border-color:var(--cv-border)}
+html[data-cv-app="harmony"] .cantelvio-home:focus-visible {outline-color:var(--cv-accent)}
+html[data-cv-app] .cv-appearance-trigger {
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;
+  min-height:36px;padding:7px 10px;border:1px solid var(--cv-border);border-radius:var(--cv-radius);
+  background:var(--cv-surface);color:var(--cv-text);font:600 13px/1.3 var(--cv-font);
+  cursor:pointer;white-space:nowrap;text-decoration:none;box-shadow:none;letter-spacing:normal;
+}
+html[data-cv-app] .cv-appearance-trigger:hover {background:var(--cv-accent-soft);border-color:var(--cv-accent)}
+html[data-cv-app] .cv-appearance-trigger:focus-visible {outline:2px solid var(--cv-accent);outline-offset:3px}
+.cv-appearance-trigger .cv-gear {font-size:18px;line-height:1;letter-spacing:normal}
+html[data-cv-app="score"] .topbar .cv-appearance-trigger {min-height:30px;padding:4px 8px}
+html[data-cv-app="score"] .topbar .cv-appearance-trigger .cv-trigger-label {display:none}
+html[data-cv-app="harmony"] #performanceToggles .cv-appearance-trigger .cv-trigger-label {display:none}
+html[data-cv-app="harmony"] .sheet-header {grid-template-columns:1fr minmax(180px,auto) auto auto;gap:12px}
+html[data-cv-app="stage"] .cv-appearance-trigger {width:100%;margin:0 0 12px;min-height:44px}
+html[data-cv-app="stage"] .cv-appearance-trigger[data-cv-in-settings] {width:auto;margin:0 0 16px}
+html[data-cv-app="compose"] .cv-landing-actions {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+html[data-cv-app="compose"] .cv-landing-actions select {margin-left:auto;float:none!important}
+.cv-appearance-fallback {position:fixed;right:16px;top:16px;z-index:500}
+/* Isolated controls: host app selectors must not recolor or reshape this dialog. */
+html[data-cv-app] dialog.cv-appearance {
+  box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(480px,calc(100% - 32px));
+  max-width:480px;max-height:calc(100dvh - 32px);overflow:auto;padding:24px;border:1px solid var(--cv-border);
+  border-radius:18px;background:var(--cv-surface);color:var(--cv-text);font:15px/1.6 var(--cv-font);
+  box-shadow:var(--cv-shadow);z-index:1000;overscroll-behavior:contain;color-scheme:inherit;
+}
+html[data-cv-app] dialog.cv-appearance:not([open]) {display:none}
+html[data-cv-app] dialog.cv-appearance::backdrop {background:rgb(10 22 16 / .42);backdrop-filter:blur(3px)}
+html[data-cv-app] .cv-appearance * {box-sizing:border-box;font-family:var(--cv-font);letter-spacing:normal}
+html[data-cv-app] .cv-appearance h2 {margin:0;font-size:23px;line-height:1.3;font-weight:650;color:var(--cv-text)}
+html[data-cv-app] .cv-appearance p {margin:10px 0 20px;font-size:13px;line-height:1.65;color:var(--cv-muted)}
+html[data-cv-app] .cv-appearance .cv-settings-header {display:flex;justify-content:space-between;align-items:center;gap:12px}
+html[data-cv-app] .cv-appearance .cv-field {display:flex;justify-content:space-between;align-items:center;gap:16px;margin:18px 0;font-size:14px;color:var(--cv-text)}
+html[data-cv-app] .cv-appearance :is(button,input,select) {font:inherit;color:var(--cv-text);border-radius:var(--cv-radius)}
+html[data-cv-app] .cv-appearance select {min-height:40px;padding:7px 12px;border:1px solid var(--cv-border);background:var(--cv-raised);max-width:62%}
+html[data-cv-app] .cv-appearance input[type="color"] {display:block;width:64px;height:40px;padding:3px;background:var(--cv-raised);border:1px solid var(--cv-border);cursor:pointer}
+html[data-cv-app] .cv-appearance .cv-presets {display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px}
+html[data-cv-app] .cv-appearance .cv-presets button {display:flex;align-items:center;gap:6px;padding:7px 10px;min-height:36px;border:1px solid var(--cv-border);background:var(--cv-raised);font-size:13px;cursor:pointer;color:var(--cv-text)}
+html[data-cv-app] .cv-appearance .cv-presets button[aria-pressed="true"] {border-color:var(--cv-accent);box-shadow:0 0 0 1px var(--cv-accent);background:var(--cv-accent-soft)}
+html[data-cv-app] .cv-appearance .cv-swatch {width:16px;height:16px;border-radius:50%;background:var(--swatch);border:1px solid rgb(0 0 0 / .15)}
+html[data-cv-app] .cv-appearance .cv-preview {display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--cv-border);border-radius:12px;background:var(--cv-bg);margin:20px 0}
+html[data-cv-app] .cv-appearance .cv-preview span {font-size:13px;color:var(--cv-muted)}
+html[data-cv-app] .cv-appearance .cv-preview strong {background:var(--cv-accent);color:var(--cv-on-accent);border-radius:var(--cv-radius);padding:7px 12px;font-weight:600}
+html[data-cv-app] .cv-appearance .cv-settings-actions {display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--cv-border);padding-top:18px}
+html[data-cv-app] .cv-appearance .cv-settings-actions button {min-height:40px;cursor:pointer;border:1px solid var(--cv-border);padding:8px 14px;background:var(--cv-raised);font-size:14px;font-weight:600}
+html[data-cv-app] .cv-appearance .cv-settings-actions .cv-done {background:var(--cv-accent);color:var(--cv-on-accent);border-color:var(--cv-accent)}
+html[data-cv-app] .cv-appearance .cv-close {min-width:36px;min-height:36px;border:1px solid var(--cv-border);padding:0;background:var(--cv-raised);font-size:22px;cursor:pointer}
+html[data-cv-app] .cv-appearance button:focus-visible {outline:2px solid var(--cv-accent);outline-offset:3px}
+@media(max-width:640px) {
+  html[data-cv-app="home"] header .cv-appearance-trigger,html[data-cv-app="results"] header .cv-appearance-trigger {margin-left:auto}
+  html[data-cv-app="score"] .cv-appearance-trigger .cv-trigger-label {display:none}
+  html[data-cv-app] dialog.cv-appearance {padding:20px}
+  html[data-cv-app="harmony"] .sheet-header .cv-trigger-label {display:none}
+}
+@media(max-width:1200px) {html[data-cv-app="harmony"] .sheet-header {grid-template-columns:1fr auto auto}}
+@media print {.cv-appearance-trigger,dialog.cv-appearance {display:none!important}}

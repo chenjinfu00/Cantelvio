@@ -35,7 +35,7 @@ function stageText(t: ReturnType<typeof useT>, s: Status): string {
   return stage === 'transcribing' ? `${label} · ${t('import.chunks', { a, b })}` : label;
 }
 
-/** Floating status of the PDF / recording job running on the local AIlegro service. */
+/** Floating status of the PDF / recording job running on the local Cantelvio service. */
 export function ImportStatus() {
   const t = useT();
   const s = useImportStatus();

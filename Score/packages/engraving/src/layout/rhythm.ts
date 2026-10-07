@@ -25,7 +25,7 @@ import {
   sub,
   writtenFromLength,
   ZERO,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 
 /** A metric frame: a bar, or a tuplet span inside a bar. Positions are relative to `start`. */
 export interface Frame {

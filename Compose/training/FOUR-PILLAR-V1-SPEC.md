@@ -6,7 +6,7 @@
 - Verification Status: DESIGN-REVIEWED; FOUR-PILLAR UNTRAINED NETWORK AND CONTRACT TESTS PASSED; TRAINING, FREE DECODING AND LISTENING UNVERIFIED
 - Version Label: four_pillar_v1_design
 
-# AIlegro 四大件模型 v1：实现规格与实验计划
+# Cantelvio Compose 四大件模型 v1：实现规格与实验计划
 
 **状态：架构设计定稿，四项能力的联合网络及事件/约束接口已实现并通过合成测试，但尚不能启动正式训练。** 本文规定下一代模型如何写和声、复调、曲式与配器；并规定精确节奏、力度、速度及用户素材如何进入同一流程。当前实现与缺口见 [FOUR-PILLAR-V1-IMPLEMENTATION.md](FOUR-PILLAR-V1-IMPLEMENTATION.md)。它不是当前网页的能力说明。当前网页和三个已部署权重保持不变。用户已决定：四项能力的完整数据、模型、损失、训练与短程技术验收都准备好之后，才启动新架构训练；不先训一个只有复调的候选模型。`scripts/train_four_pillar_trial.py` 可选用旧 H/M 部分参数作初值，仍不是本规格所要求的正式训练入口。
 
@@ -100,4 +100,4 @@
 
 本规格的实验问题是：在同一可审数据与盲听条件下，分层计划＋真正多声部事件解码＋生成前配器，是否比现有局部四轨模型更好地满足长期结构、声部独立和乐器约束，而不损失和声与播放可靠性。主要证据是**预注册的条件遵守率和同条件盲听**，验证 NLL 仅是辅证。尚未设定任意“达到 X% 就好听”的成功阈值；阈值应在固定测试样本与评价流程确认后、查看新模型结果前确定。隔离技术试训命令见 `training/README.md`；目前不存在安全的一行**正式**四大件训练命令。
 
-相关研究是方法参考而非本项目已复现的结果：[Museformer 的细/粗粒度长程注意力](https://proceedings.neurips.cc/paper_files/paper/2022/hash/092c2d45005ea2db40fc24c470663416-Abstract-Conference.html)、[MIDI-GPT 的多轨条件补写](https://ojs.aaai.org/index.php/AAAI/article/view/32138)、[FIGARO 的可解释描述条件](https://openreview.net/forum?id=NyR8OZFHw6i)。具体两层规模、精确有理数编码、旧模型适配与验收规则是 **AIlegro 的设计选择**，仍需实现和消融验证。
+相关研究是方法参考而非本项目已复现的结果：[Museformer 的细/粗粒度长程注意力](https://proceedings.neurips.cc/paper_files/paper/2022/hash/092c2d45005ea2db40fc24c470663416-Abstract-Conference.html)、[MIDI-GPT 的多轨条件补写](https://ojs.aaai.org/index.php/AAAI/article/view/32138)、[FIGARO 的可解释描述条件](https://openreview.net/forum?id=NyR8OZFHw6i)。具体两层规模、精确有理数编码、旧模型适配与验收规则是 **Cantelvio Compose 的设计选择**，仍需实现和消融验证。

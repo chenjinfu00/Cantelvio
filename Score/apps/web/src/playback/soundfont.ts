@@ -1,5 +1,5 @@
 /** Local SoundFont synthesizer. Destroying the worklet cancels scheduled notes on Stop. */
-import type { PlaybackNote } from '@ailegro-score/core';
+import type { PlaybackNote } from '@cantelvio-score/core';
 import type { WorkletSynthesizer } from 'spessasynth_lib';
 import processorUrl from 'spessasynth_lib/dist/spessasynth_processor.min.js?url';
 

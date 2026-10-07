@@ -47,7 +47,7 @@ import {
   voiceTimeline,
   ZERO,
   keyAlter,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { type Frame, measureFrame, splitNote, splitRest, tupletFrame } from './rhythm';
 
 export type AccidentalKind = 'flat' | 'natural' | 'sharp' | 'doubleSharp' | 'doubleFlat';

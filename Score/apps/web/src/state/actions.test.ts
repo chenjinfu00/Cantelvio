@@ -1,5 +1,5 @@
 // Note-input actions on the real store and core commands (audio preview mocked out).
-import { createScore, findEvent, pitchName, randomIds } from '@ailegro-score/core';
+import { createScore, findEvent, pitchName, randomIds } from '@cantelvio-score/core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as actions from './actions';
 import { getStore, initStore } from './store';

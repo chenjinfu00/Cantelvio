@@ -14,7 +14,7 @@ import {
   rat,
   scoreTimeAt,
   secondsAt,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { getStore } from '../state/store';
 import { prepareSoundfont, playSoundfont, stopSoundfont } from './soundfont';
 

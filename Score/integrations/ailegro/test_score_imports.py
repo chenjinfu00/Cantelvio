@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests of the adapter's import jobs with stand-in tools (no Audiveris, MuScriptor, AIlegro or torch needed).
+"""Tests of the adapter's import jobs with stand-in tools (no Audiveris, MuScriptor, Cantelvio or torch needed).
 
     python3 integrations/ailegro/test_score_imports.py        # or: npm run test:adapter
 """
@@ -85,7 +85,7 @@ class ImportJobs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
-        root = Path(cls.tmp.name) / 'AIlegro'
+        root = Path(cls.tmp.name) / 'Cantelvio'
         scripts = root / 'training' / 'scripts'
         scripts.mkdir(parents=True)
         (scripts / 'audio_transcribe_muscriptor.py').write_text(FAKE_TRANSCRIBE)

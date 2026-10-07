@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate the v3.1 parts and the AIlegro Score composition tasks (four_pillar_v31_parts / _tasks).
+"""Evaluate the v3.1 parts and the Cantelvio Score composition tasks (four_pillar_v31_parts / _tasks).
 
 Sections (all by default):
 
@@ -13,7 +13,7 @@ Sections (all by default):
   chords       melody-from-chords: strong-beat chord tones under locked vs the model's own chords
   orchestrate  real orchestral bars reduced to their distinct (onset, pitch) notes, re-assigned to groups by the
                model (8 real context bars fed first): share of notes given a group that played them, against the
-               register of the context and chance; also with light doublings as AIlegro Score asks for them
+               register of the context and chance; also with light doublings as Cantelvio Score asks for them
   motif        restating the previous bar through the bank, synthetic full-texture and top-line references:
                Jaccard similarity of key-relative (onset, pitch) to the intended bar
 
@@ -354,7 +354,7 @@ def section_chords(model, vocab, seeds=6):
 def section_orchestrate(model, vocab, corpus, windows=40):
     rows = {}
     for label, request_groups, doublings in (('groups not requested', False, False), ('groups requested', True, False),
-                                             ('groups requested, light doublings (AIlegro Score)', True, True)):
+                                             ('groups requested, light doublings (Cantelvio Score)', True, True)):
         rng, hits = random.Random(4), Counter()
         for sid, score, b in corpus.windows('classical-scores', windows, rng, min_groups=3):
             analysis = analyze(score, 'classical-scores', None, b - 8, b)

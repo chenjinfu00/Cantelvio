@@ -1,4 +1,4 @@
-import { AILEGRO_GROUPS, type AilegroGroup } from '@ailegro-score/core';
+import { AILEGRO_GROUPS, type AilegroGroup } from '@cantelvio-score/core';
 import {
   type AnalysisRequest,
   type ComposeRequest,
@@ -7,7 +7,7 @@ import {
   DIFFICULTIES,
   PERFORMANCE_PROFILES,
   type HarmonicRhythm,
-} from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/compose-bridge';
 import { useEffect, useMemo, useState } from 'react';
 import { BrandText } from '../components/BrandText';
 import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';

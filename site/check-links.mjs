@@ -11,6 +11,8 @@ let bad = 0;
 const fail = message => { console.error(message); bad++; };
 for (const page of pages) {
   const html = fs.readFileSync(page, 'utf8');
+  if (!html.includes('data-cv-app=') || !html.includes('appearance.js')) fail(`missing shared appearance: ${path.relative(out, page)}`);
+  if (/AI(?:<[^>]*>)*legro/i.test(html)) fail(`old visible branding: ${path.relative(out, page)}`);
   for (const m of html.matchAll(/\b(src|href|poster)=["']([^"']+)["']/g)) {
     const [, attr, ref] = m;
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(?:[:/]|$)/i.test(ref)) {
@@ -30,7 +32,7 @@ for (const page of pages) {
     }
   }
 }
-for (const relative of ['score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json']) {
+for (const relative of ['score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
 (function checkPublishedFiles(dir) {

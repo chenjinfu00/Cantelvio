@@ -1,4 +1,4 @@
-# AIlegro 模型训练与数据
+# Cantelvio Compose 模型训练与数据
 
 **四大件 v2 当前状态：** 训练前修订 2 已补齐长小节覆盖、来源和声/表现监督、四类条件任务、因果持续音状态、离线自由生成及完整恢复。58 项相关测试与 8 组真实资料无更新前后向检查通过，45,357 份 MIDI 内容指纹已冻结。当前启动脚本已按用户选择扩到 **512 小节摘要历史**（总参数 6,965,881，可训练 5,384,572），训练与离线生成使用同一配置；精细事件窗口仍为 2048 tokens。新输出目录为 `runs/four-pillar-v2-history512-20260930/`，当前默认训练 **11 小时**、每 5 分钟保存。上述 58 项是窗口扩展前的历史结果；扩展后 61 项测试、8 组真实资料预检及额外完整 512 小节真实谱资源检查均通过，证据见下方当前说明。**正式训练由用户自行启动，本次未代为运行。**仅预检可运行 `bash training/run_four_pillar_v2.sh --preflight`；正式启动、恢复与兼容检查点续训见 [v2 当前说明](FOUR-PILLAR-V2-TRAINING.md)。
 
@@ -83,7 +83,7 @@ cd "/Users/chenjinfu/software develop/Cantelvio/Compose"
   - `synthetic-joint.npz/.json`：由现有语法和 App 的伴奏规划器生成的 10,112 个乐句。
 - 构建合成数据时调用的规则伴奏规划器已随旧运行时移到 `../archive/pre-joint-runtime-20260927/src/planner.js`，`render_joint_accompaniment.mjs` 已改为从那里导入，重建结果与之前相同。构建数据还需要 `music21`（读乐谱）和 Node。导出 MIDI 需要 `mido`。请用项目环境安装：`.venv-training/bin/python -m pip install music21 mido`。
 
-从 AIlegro 根目录运行：
+从 Cantelvio Compose 根目录运行：
 
 ```sh
 # 可选：从原始乐谱重建四轨语料（原始包需先解压到 data/sources/extracted/）
@@ -138,7 +138,7 @@ npm test
 
 ## Python 环境
 
-这台电脑已有的 PyTorch 环境已归入项目根目录 `.venv-training/`。从 **AIlegro 根目录**执行：
+这台电脑已有的 PyTorch 环境已归入项目根目录 `.venv-training/`。从 **Cantelvio Compose 根目录**执行：
 
 ```sh
 .venv-training/bin/python training/scripts/check_training.py
@@ -162,7 +162,7 @@ npm test
 
 ## 从原始乐谱重新生成数据
 
-在 AIlegro 根目录：
+在 Cantelvio Compose 根目录：
 
 ```sh
 mkdir -p training/data/sources/extracted
@@ -339,10 +339,10 @@ v3.1 针对作曲“四大件”（和声、复调、曲式、配器）重写了
 
 92 BPM 4/4 每小节可用 2.61 秒。240 步只是早期迹象，不能证明长训练后的效果或音乐质量；乐器组、声部、和弦根音与性质的损失也都略低，总损失相同是因为本版多了参考指针这一项目标。
 
-**开始训练（推荐）**：在“终端”里进入 AIlegro 文件夹，运行一个脚本；默认训练 7 个半小时（整个过程约 7 小时 40 分）。
+**开始训练（推荐）**：在“终端”里进入 Cantelvio Compose 文件夹，运行一个脚本；默认训练 7 个半小时（整个过程约 7 小时 40 分）。
 
 ```sh
-cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/software\ develop/AIlegro
+cd "/Users/chenjinfu/software develop/Cantelvio/Compose"
 bash training/train_four_pillar_v31.sh          # 开始；中断后再运行同一命令，会从最近的保存点接着训练
 bash training/train_four_pillar_v31.sh status   # 进度、损失、剩余时间
 bash training/train_four_pillar_v31.sh log      # 接着看日志（Ctrl-C 只是不再显示）
@@ -412,7 +412,7 @@ bash training/train_four_pillar_v31.sh sample   # 用当前权重生成 3 段试
   `AILEGRO_V31_HOURS=26.5`（17.5 + 9）的包装，开始前先把当前权重另存到 `training/runs/four-pillar-v31-step<步数>/`，
   因为训练会不断覆盖运行目录里的 `weights.pt`。
 
-## 四大件 v3.1：拆成两部分，以及 AIlegro Score 的作曲任务（2026-10-02）
+## 四大件 v3.1：拆成两部分，以及 Cantelvio Score 的作曲任务（2026-10-02）
 
 只增加解码与分析代码，**不改动** v3.1 计入哈希的文件和权重（以后精确续训不受影响）。
 
@@ -428,7 +428,7 @@ bash training/train_four_pillar_v31.sh sample   # 用当前权重生成 3 段试
 - **配器**：没给乐器组的锁定音，按 p(组)·p(声部|组)·p(音高|组,声部)·p(时值|…) 选最可能的组和声部；允许叠置音时，模型自己在该起音提出这个音高，就用它提出的组和声部（同一后验的一次抽样）。可用 `free_filter` 只允许叠置音。
 - **候选**：`best_of(K, …)` 把同一小节写 K 份，保留锁定材料对数概率最高的一份（配伴奏时就是“旋律在这份伴奏下最自然”）。
 - **合成参考小节**：`reference_from_notes` + `transform_motif`（重复、调内模进、倒影、逆行、增值、减值、截取）。
-- AIlegro Score 的适配器（`AIlegro Score/integrations/ailegro/score_compose.py`）用它实现为旋律配伴奏、配器和动机发展。
+- Cantelvio Score 的适配器（`../../Score/integrations/ailegro/score_compose.py`）用它实现为旋律配伴奏、配器和动机发展。
 
 **修正（2026-10-02）**：第一版在给定音的起音上，把模型“该写旋律了”的提议改派到伴奏的组，钢琴于是把旋律原样抄一遍，还会在同一声部重复同一个音（人声旋律选 8 份时 81% 的旋律音被钢琴同音重复，每小节 0.2–0.3 个重复音）；当时冲突和和弦音的改善有一部分来自这种抄写。上面“乐器组”“音高”两条规则修正了它，下表是修正后的结果。
 
@@ -455,7 +455,7 @@ bash training/train_four_pillar_v31.sh sample   # 用当前权重生成 3 段试
 | 真实 Lieder（人声对钢琴，9,449 个音） | 7.9% | 90.3% | 67.2% | 43.0% | — |
 
 - 依和弦写旋律：强拍音是锁定和弦音的比例 93.0%（模型自己写和弦时 92.8%）。
-- 配器（40 个真实管弦乐小节，先送入 8 个真实上下文小节）：给定音分到原曲演奏过它的组 70.8%（告诉模型要用哪些组；不告诉 69.9%；像 AIlegro Score 那样再加轻度叠置 67.7%，每小节加 11.8 个叠置音），按上下文音区分配 66.0%，随机 35.1%。
+- 配器（40 个真实管弦乐小节，先送入 8 个真实上下文小节）：给定音分到原曲演奏过它的组 70.8%（告诉模型要用哪些组；不告诉 69.9%；像 Cantelvio Score 那样再加轻度叠置 67.7%，每小节加 11.8 个叠置音），按上下文音区分配 66.0%，随机 35.1%。
 - 动机重述（39 个窗口，与目标小节调内 (起音, 音高) 的 Jaccard）：原小节参考 0.567，不参考 0.080；完整织体的合成模进 0.512（不参考 0.057）；只给最高声部的模进 0.236、倒影 0.238，倒影加上其下方伴奏 0.292；完整织体的截取 0.405、减值 0.305。
 
 结论：修正后，选 32 份时半音冲突（8.1%）和同音/八度重叠（68.3%）已接近真实 Lieder（7.9%、67.2%），强拍和弦音还差（83.5% 对 90.3%）；锁定人写的和弦仍然最有效，下一步宜另训“旋律 → 和弦”的配和声小模型。默认钢琴在旋律之前不与人声同音，所以同音只有约 6%（Lieder 43.0%）；`unison='before'` 只写一份时同音 45.7%，选 8 份升到 73.7%——挑选标准是旋律在伴奏下的概率，抄旋律的伴奏最占便宜。
@@ -512,7 +512,7 @@ v3.1 在同一拍里先写和弦、再写旋律音，所以给定旋律配伴奏
 
 **评估**：`.venv-training/bin/python training/scripts/eval_harmonizer_v1.py --harmonizer training/runs/harmonizer-v1-20261003/weights.pt --output training/reports/harmonizer-v1-<日期>.json`（约 8 分钟；`--sections auditions` 另写试听 MIDI）。
 
-**AIlegro Score**：适配器 `--harmonizer auto`（默认）在为旋律配伴奏、且没有给定和弦时，用这个模型给出和弦并锁定；和弦随结果导入为和弦记号，可以修改后用给定和弦重新生成。
+**Cantelvio Score**：适配器 `--harmonizer auto`（默认）在为旋律配伴奏、且没有给定和弦时，用这个模型给出和弦并锁定；和弦随结果导入为和弦记号，可以修改后用给定和弦重新生成。
 
 ### 换和弦频率（2026-10-03）
 
@@ -531,11 +531,11 @@ v3.1 在同一拍里先写和弦、再写旋律音，所以给定旋律配伴奏
 
 和弦越稀，伴奏越简单，但旋律落在和弦外的机会越多，冲突随之上升；`half-bar` 与人写和弦最接近。
 
-**AIlegro Score**：作曲请求里的意图标签 `harmonic-rhythm:<beat|half-bar|bar|two-bars>`（面板“换和弦频率”）；适配器 `--harmonic-rhythm` 设默认值。
+**Cantelvio Score**：作曲请求里的意图标签 `harmonic-rhythm:<beat|half-bar|bar|two-bars>`（面板“换和弦频率”）；适配器 `--harmonic-rhythm` 设默认值。
 
 ## 和声分析模型 v2：旋律 + 全部音符 → 和弦（2026-10-03）
 
-给已有的整份乐谱标和弦（AIlegro Score 的“自动标和弦”）。和配和声模型 v1 是同一个网络和同一份语料，只多读一个**织体通道**：同一网格上每一步所有声部的音（每个音级正在发声的音数，最多记 3；这一步起音的音级；最低音的音级）。
+给已有的整份乐谱标和弦（Cantelvio Score 的“自动标和弦”）。和配和声模型 v1 是同一个网络和同一份语料，只多读一个**织体通道**：同一网格上每一步所有声部的音（每个音级正在发声的音数，最多记 3；这一步起音的音级；最低音的音级）。
 
 - **模型**：`scripts/harmonizer_v1.py --texture`，870,368 参数。织体从数据库总谱重建，只用时间轴与语料逐步对上的作品（`verified_bar_steps`；训练 780 首、验证 77 首、测试 80 首），缓存在 `data/joint/lieder-texture-v1.npz`（缺失时自动重建）。其余作品和随机 30% 的训练窗口不给织体（`--texture-dropout 0.3`），所以只有旋律时也能用。
 - **训练**：`.venv-training/bin/python training/scripts/harmonizer_v1.py --run-dir training/runs/harmonizer-v2-20261003 --steps 4000 --texture`，再加 `--tune-decoding`（惩罚选为 0.25）。云端 2 线程约 42 分钟。验证集拍点准确率：每步取最大 64.9%，Viterbi 67.2%；只给旋律 37.2%。
@@ -544,7 +544,7 @@ v3.1 在同一拍里先写和弦、再写旋律音，所以给定旋律配伴奏
 | 方法 | 完全一致 | 根音一致 | 根音和三和弦类型一致 |
 |---|---:|---:|---:|
 | 分析模型 v2，读全部音符 | **71.2%** | **77.6%** | **75.9%** |
-| AIlegro 和弦跟踪器（规则），读全部音符 | 67.0% | 75.3% | 73.1% |
+| Cantelvio Compose 和弦跟踪器（规则），读全部音符 | 67.0% | 75.3% | 73.1% |
 | 分析模型 v2，只读旋律 | 35.0% | 42.7% | 40.0% |
 | 配和声模型 v1，只读旋律 | 36.1% | 43.9% | 41.3% |
 
@@ -552,19 +552,19 @@ v3.1 在同一拍里先写和弦、再写旋律音，所以给定旋律配伴奏
 
 **评估**：`.venv-training/bin/python training/scripts/eval_harmonizer_v1.py --harmonizer training/runs/harmonizer-v1-20261003/weights.pt --analyzer training/runs/harmonizer-v2-20261003/weights.pt --sections analysis --output training/reports/harmonizer-v2-<日期>.json`（约 10 秒）。
 
-**AIlegro Score**：契约 `ailegro.analysis-request/1` → `ailegro.analysis-result/1`，服务器 `POST /analyze`。适配器 `--analyzer auto`（默认）有 v2 权重时用它，否则用规则和弦跟踪器；请求里的 `engine` 可以指定 `model` 或 `rules`，`harmonicRhythm` 同上。
+**Cantelvio Score**：契约 `ailegro.analysis-request/1` → `ailegro.analysis-result/1`，服务器 `POST /analyze`。适配器 `--analyzer auto`（默认）有 v2 权重时用它，否则用规则和弦跟踪器；请求里的 `engine` 可以指定 `model` 或 `rules`，`harmonicRhythm` 同上。
 
 ## 音频 → 乐谱：MuScriptor 转写，节拍对齐，保留该保留的音符（2026-10-03）
 
-把一段录音变成 AIlegro Score 能打开的乐谱（MusicXML）。分两步，因为两个模型在两个 Python 环境里：
+把一段录音变成 Cantelvio Score 能打开的乐谱（MusicXML）。分两步，因为两个模型在两个 Python 环境里：
 
 ```sh
 # 1. 音符和节拍（MuScriptor 的环境；只能用于你有权转写的录音，MuScriptor 是 CC BY-NC 4.0）
 MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_muscriptor.py song.wav \
     [--instruments acoustic_piano,voice]          # → song.notes.json
-# 2. 乐谱（AIlegro 的环境）
+# 2. 乐谱（Cantelvio Compose 的环境）
 .venv-training/bin/python training/scripts/audio_to_score.py song.notes.json [--metre 3/4] [--piano] [--report r.json]
-                                                  # → song.musicxml，在 AIlegro Score 里打开或拖进窗口
+                                                  # → song.musicxml，在 Cantelvio Score 里打开或拖进窗口
 ```
 
 - **第 1 步**（`scripts/audio_transcribe_muscriptor.py`）：MuScriptor large 逐个音符给出起止时间（秒）、音高、乐器组
@@ -593,10 +593,10 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
     音符很少的乐器组并进音区最近的声部；打击乐不要。钢琴、管风琴、竖琴两行谱，左右手按跟随的分界线分。
   - **保留该保留的音符**：去掉重复的音；去掉与一个更长的音同时开始、高八度 / 十二度 / 两个八度、在自己音区没有邻音的短音
     （泛音“鬼音”）；去掉孤立的极短音；乐器演奏不了的音（远超音域，或人声、管乐同时多于一个音）移到能演奏的声部
-    （优先键盘），没有就去掉；用 **AIlegro 的和声分析模型**（配和声模型 v2）标出每个十六分音符的和弦，去掉既不是和弦音、
+    （优先键盘），没有就去掉；用 **Cantelvio Compose 的和声分析模型**（配和声模型 v2）标出每个十六分音符的和弦，去掉既不是和弦音、
     也不在级进线条上、这个声部前后两拍内也不再出现这个音级的短音（最高声部总是保留）。每谱表最多 4 个声部；
     比下一个音略早结束的音延到下一个音。
-  - **补音**：**AIlegro 的补音模型**（`note_filler_v1.py`，见下面“补漏掉的音”）读整理好的乐谱，把转写最可能漏掉的音补上，
+  - **补音**：**Cantelvio Compose 的补音模型**（`note_filler_v1.py`，见下面“补漏掉的音”）读整理好的乐谱，把转写最可能漏掉的音补上，
     放进这一刻离它最近的声部。`--filler none` 关掉，`--filler-threshold 0.7` 补得少一些、更准。
   - **记谱**：按音级分布估调（Krumhansl），按调拼写升降号；移调乐器写记谱音高并加 `<transpose>`；跨拍、跨小节用连音线；
     三连音括号按声部加（伴奏的三连音和旋律的十六分音符各写各的）。`--piano` 把所有乐器缩成一份钢琴谱；
@@ -610,7 +610,7 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 
 最初一版（没有跑动处理）是 `training/reports/audio-to-score-20261003.json`，每首取前 24 小节，云端约 10 秒：
 
-| 测试集 | 不清理 F1 | 规则清理 F1（精确率 / 召回率） | + AIlegro 和声检查 F1 | 时值正确 | 拍号正确 |
+| 测试集 | 不清理 F1 | 规则清理 F1（精确率 / 召回率） | + Cantelvio Compose 和声检查 F1 | 时值正确 | 拍号正确 |
 |---|---:|---:|---:|---:|---:|
 | 艺术歌曲（测试集 30 首，人声 + 钢琴） | 84.2% | 86.3%（88.1% / 84.5%） | 86.3% | 82% | 90% |
 | 同上，节拍跟踪有错 | 79.8% | 81.8% | 81.8% | 82% | 87% |
@@ -626,7 +626,7 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 最初一版的跑动音有约 10% 写错了位置：三连音和二分的细分混淆、全曲只有一套细分（四重奏里一件乐器的六连音和另一件的
 十六分音符互相拉扯）、快速音阶的几个音挤到同一个格点上。现在每件乐器各选细分、跑动单独定网格并保持音的先后
 （见上面“节奏”“跑动”两条）。`training/reports/audio-to-score-v2-20261003.json`（`--fast-errors`，
-云端约 18 秒），“规则 + AIlegro 和声检查”，箭头前是最初一版在同样模拟上的结果（各行的模拟随机数不同，只在行内比较）：
+云端约 18 秒），“规则 + Cantelvio Compose 和声检查”，箭头前是最初一版在同样模拟上的结果（各行的模拟随机数不同，只在行内比较）：
 
 | 测试集 | F1 | 时值正确 | 拍号正确 | 跑动音找到 | 跑动音位置错 |
 |---|---:|---:|---:|---:|---:|
@@ -646,7 +646,7 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 - 示例的四段（试听页的扒谱示例也是其中三段）：Brahms《Der Strom》（钢琴跑动多）F1 62.0% → 75.5%（跑动音找到
   28 → 48 / 66），Mayer 四重奏 94.1% → 94.4%，Bartók 四重奏 88.7% → 88.9%，Lang 不变（85.3%）。
 - 这些都是模拟的结果，不代表 MuScriptor 在真实录音上的错误分布。下一步：在 Mac 上把测试集乐谱合成成音频，用 MuScriptor
-  真实转写，再用 `(MuScriptor 的输出, 原谱)` 训练 AIlegro 自己的“保留 / 去掉”模型，跑动的节奏也可以从中学。
+  真实转写，再用 `(MuScriptor 的输出, 原谱)` 训练 Cantelvio Compose 自己的“保留 / 去掉”模型，跑动的节奏也可以从中学。
 - 示例：`reports/audio-to-score-v2-20261003/`（两首艺术歌曲、两个四重奏乐章的模拟输入 `*.notes.json` 和结果 `*.musicxml`）；
   最初一版的示例在 `reports/audio-to-score-20261003/`。
 
@@ -686,7 +686,7 @@ MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_m
 ```
 
 - **读什么**：清理和跑动修补之后的乐谱。每个起音和每个网格点是一个位置，读这里开始的音和正在响的音（88 个音高，
-  移到 C 大调 / a 小调）、AIlegro 和声分析的和弦、小节里第几拍、拍内位置、前后间距；4 层 Transformer（宽 128，
+  移到 C 大调 / a 小调）、Cantelvio Compose 和声分析的和弦、小节里第几拍、拍内位置、前后间距；4 层 Transformer（宽 128，
   每段最多 384 个位置，长曲重叠分段）读上下文，再用一个小网络读每个音高自己的证据（一拍、两拍、一小节前后同一音高
   有没有出现，八度、和弦音、调内音、同时的邻近音）。输出每个位置、每个音高“原谱在这里有一个音开始”的概率。
 - **怎么补**：乐谱里没有、概率不低于阈值的音补上，放进这一刻离它最近的声部（同时开始的音优先，否则正在响的、

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MIDI files -> compact note/bar arrays for the AIlegro orchestral model.
+"""MIDI files -> compact note/bar arrays for the Cantelvio Compose orchestral model.
 
 For every file: map each note to one of six instrument groups (groups.py), quantize
 onsets and durations to 1/12 quarter, build bars from the time signatures, merge

@@ -13,7 +13,7 @@
 4. **一个发声的音 = 一个事件**：事件时值可以跨过小节线；小节线处的连线由排版推导。
    用户刻意写的连线用 `Note.tieForward` 表示（例如和弦里只连一部分音）。
 5. **实际音高（concert pitch）**：音符存发声音高并带拼写；移调乐器的记谱音高由推导得到。
-   AIlegro 直接使用发声 MIDI 音高。
+   Cantelvio 直接使用发声 MIDI 音高。
 6. **隐式休止符**：声部里的空隙就是休止符，排版按拍号把它们写成合适的休止符。
 7. **纯 JSON**：没有类、没有 Map；序列化是确定的，在 git 里能干净地比较。
 
@@ -31,7 +31,7 @@ ScoreDoc
 │   └─ timeSig? keySig? actualLength? barline? repeatStart/End? rehearsalMark? tempo[]? breakAfter?
 ├─ content     staffId → measureId → StaffMeasure（缺省 = 空小节）
 │   └─ voices[0..3]（事件列表）、tuplets?、clefChanges?、dynamics?
-├─ harmony[]   和弦记号（也是 AIlegro 的和声条件）
+├─ harmony[]   和弦记号（也是 Cantelvio 的和声条件）
 └─ spanners[]  连线与线条：连线（slur）、渐强渐弱、八度记号、踏板、颤音线（v2）
 ```
 
@@ -54,12 +54,12 @@ ScoreDoc
   不写则用乐器目录里的默认值。
 - 调号 `keySig = { fifths, mode? }` 是**实际音高的调号**；`mode` 缺省按大调处理（新建乐谱总是写明）。
   移调乐器的记谱调号由推导得到。
-- 拼写很重要：AIlegro 返回的 MIDI 音高在导入时按调号和和弦拼写（`bridge/spelling.ts`）。
+- 拼写很重要：Cantelvio 返回的 MIDI 音高在导入时按调号和和弦拼写（`bridge/spelling.ts`）。
 
 ## 乐器、谱表、括号
 
 - `Part.instrument` 是乐器目录的 id（`instruments/catalog.ts`，约 50 种乐器，含中英文名、
-  音域、GM 音色、AIlegro 乐器组、总谱顺序）。
+  音域、GM 音色、Cantelvio 乐器组、总谱顺序）。
 - 多谱表乐器（钢琴、竖琴、管风琴）有多个 `staves`，用 brace 连起来。
 - `groups` 用首尾谱表 id 表示范围，必须按总谱顺序；删除乐器时会自动收缩或删除括号。
 
@@ -147,9 +147,9 @@ ScoreDoc
 {"id":"ch_1","measureId":"m_3","offset":"0","root":{"step":"B","alter":-1},"quality":"dom7","bass":{"step":"D","alter":0}}
 ```
 
-`quality` 使用 **AIlegro 的和弦性质 id**（`maj`、`min`、`dom7`、`half`、`sus4`……共 40 种，顺序与
-AIlegro 的 `chord-qualities.json` 一致，见 `bridge/qualities.ts`），所以和弦记号可以直接作为
-AIlegro 的和声条件。
+`quality` 使用 **Cantelvio 的和弦性质 id**（`maj`、`min`、`dom7`、`half`、`sus4`……共 40 种，顺序与
+Cantelvio 的 `chord-qualities.json` 一致，见 `bridge/qualities.ts`），所以和弦记号可以直接作为
+Cantelvio 的和声条件。
 
 ## 来源（provenance）
 
@@ -158,14 +158,14 @@ AIlegro 的和声条件。
 - 缺省：用户输入。
 - `{ "kind": "import", "format": "musicxml", "file": "…" }`：导入。
 - `{ "kind": "ai", "model": "four-pillar-v3.1", "runId": "ai_…", "accepted": false }`：AI 建议。
-  `accepted: false` 的内容画成蓝色，**默认不会作为材料再导出给 AIlegro**；
+  `accepted: false` 的内容画成蓝色，**默认不会作为材料再导出给 Cantelvio**；
   `provenance.accept` / `provenance.reject` 命令按 runId 接受或删除。
 
 ## id
 
 - 格式 `<前缀>_<12 位 base36>`：`sc` 乐谱、`pt` 乐器、`st` 谱表、`gr` 括号、`m` 小节、`e` 事件、
   `n` 音符、`gc` 倚音、`tu` 连音、`cl` 谱号变化、`dy` 力度、`tm` 速度、`ch` 和弦、`sp` 线条、
-  `ai` AIlegro 请求/运行。
+  `ai` Cantelvio 请求/运行。
 - 新 id 要和文档里**所有**元素的 id 都不同（不只是同类元素），命令会检查。
 - **由调用方生成并放进命令里**（编辑器用随机 id，测试用 `sequentialIds()` 得到 `e_1`、`n_1`）。
   这是命令可重放、可协作的前提。
@@ -180,12 +180,14 @@ AIlegro 的和声条件。
 锚点在小节内且 `end` 晚于 `start`）、同一谱表的八度线不重叠。
 **命令保证这些不变量**；导入的文件、AI 生成的文档要先校验。
 
-## 文件格式 `.ailegro.json`
+## 文件格式 `.cantelvio.json`
 
+- 新保存和另存为使用 `.cantelvio.json`；旧的 `.ailegro.json` 仍能直接打开。
+  此次品牌更新保留内部 `format: "ailegro-score"` 和格式版本 2，音乐数据及旧文件读写保持兼容。
 - 规范化的 JSON：键顺序固定，内容按总谱顺序（谱表）和小节顺序排列；同一文档保存两次字节相同。
 - 有理数写成字符串（`"1/4"`），音高写成名字（`"C#4"`）。
 - **每个事件一行**（还有连音、力度、谱号变化、和弦、速度、谱表、括号各一行），
-  所以 `git diff` 能逐个音符显示修改。`.gitattributes` 把 `*.ailegro.json` 设为 LF 文本。
+  所以 `git diff` 能逐个音符显示修改。`.gitattributes` 把 `*.cantelvio.json` 设为 LF 文本。
 - `version: 2`。**任何字段的增删改都要**：升版本号、在 `io/json.ts` 写从旧版本的迁移、
   加测试、更新本文档。读取更新版本的文件时报错，而不是猜。
 - 版本历史：v1（2026-10-01）初版；v2（2026-10-02）加入事件上的记号、倚音和 `spanners`。

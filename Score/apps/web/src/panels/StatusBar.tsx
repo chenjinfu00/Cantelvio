@@ -3,7 +3,7 @@ import {
   type ScorePosition,
   findEventOfNote,
   measureInfo,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { useState } from 'react';
 import { type MessageKey, useT } from '../i18n';
 import { type Selection, isDirty, useEditor } from '../state/store';

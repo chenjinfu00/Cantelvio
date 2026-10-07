@@ -41,7 +41,7 @@ function setStatus(en, zh, state = '') {
 
 function translate() {
   document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-  document.title = t('AIlegro · Orchestral Listening Room', 'AIlegro · 管弦乐试听室');
+  document.title = t('Cantelvio Compose · Orchestral Listening Room', 'Cantelvio Compose · 管弦乐试听室');
   document.querySelectorAll('[data-en][data-zh]').forEach(el => {
     el.textContent = el.dataset[language];
   });

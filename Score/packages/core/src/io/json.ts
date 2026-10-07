@@ -1,5 +1,5 @@
 /**
- * The .ailegro.json file format: the ScoreDoc as canonical, git-friendly JSON.
+ * The .cantelvio.json file format: the ScoreDoc as canonical, git-friendly JSON.
  *
  * - Stable key order and content ordered by score order (staves) and bar order (measures),
  *   so saving the same document twice produces identical bytes.

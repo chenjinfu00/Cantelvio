@@ -11,7 +11,7 @@ Its original README is included as SOURCE-README.txt.
 The original author additionally declared the library public domain on 2022-03-04:
 https://rytmenpinne.wordpress.com/sounds-and-such/salamander-grandpiano/
 
-AIlegro Score uses an unmodified subset of 17 MP3 samples (C2 through C6,
+Cantelvio Score uses an unmodified subset of 17 MP3 samples (C2 through C6,
 sampled every minor third). Runtime pitch shifting, gain and release envelopes
 are applied. This is a compact single-layer web subset, not the full
 16-velocity-layer library. SHA-256 provenance is in manifest.json.

@@ -9,7 +9,7 @@ import {
   add,
   divInt,
   parseRational,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { describe, expect, it } from 'vitest';
 import { buildScoreRecord } from './record';
 import { planComposeImport } from './result';

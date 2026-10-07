@@ -1,6 +1,6 @@
-# AIlegro 管弦乐模型：在 Mac 上运行
+# Cantelvio Compose 管弦乐模型：在 Mac 上运行
 
-设计见 [DESIGN.md](DESIGN.md)。所有命令都在 macOS 的"终端"里运行。原始数据、处理后的语料、检查点、模型和日志都写到本目录下的 `work/`。AIlegro 项目位于 iCloud Drive 内，因此这些文件由 iCloud 同步；首次上传约 5.6 GB，完成时间取决于网络与可用的 iCloud 空间。不要在两台设备上同时训练或修改同一组检查点，以免产生同步冲突。
+设计见 [DESIGN.md](DESIGN.md)。所有命令都在 macOS 的"终端"里运行。原始数据、处理后的语料、检查点、模型和日志都写到本目录下的 `work/`。Cantelvio Compose 项目位于 iCloud Drive 内，因此这些文件由 iCloud 同步；首次上传约 5.6 GB，完成时间取决于网络与可用的 iCloud 空间。不要在两台设备上同时训练或修改同一组检查点，以免产生同步冲突。
 
 **Python 环境**：优先用项目已有的 `.venv-training`（已安装 PyTorch）；也可指定其他装有 PyTorch 的 Python。
 
@@ -32,7 +32,7 @@ cd "$HOME/software develop/Cantelvio/Compose/training/orchestra"
 - `bash mac.sh stop <配置>`：在下一个保存点停止。再运行一次 `train`，或 `ablation`，会接着训练。
 - `bash mac.sh sample <配置> [小节数]`：用当前最好的模型生成一段 MIDI，写入 `work/samples/`。
 
-AIlegro 的 `/orchestra/` 本地试听页可使用这五组检查点。一次性生成调用 `sample.py`；连续演奏调用 `stream.py`，每四小节将模型上下文和随机状态保存在 `work/sessions/`，并将分段 MIDI/事件写入 `work/samples/`。网页中的两排和弦是音符统计分析，不是这些模型的直接输出。乐器组的 `on` 是允许参与该小节，不保证实际出现；`off` 会将其排除。
+Cantelvio Compose 的 `/orchestra/` 本地试听页可使用这五组检查点。一次性生成调用 `sample.py`；连续演奏调用 `stream.py`，每四小节将模型上下文和随机状态保存在 `work/sessions/`，并将分段 MIDI/事件写入 `work/samples/`。网页中的两排和弦是音符统计分析，不是这些模型的直接输出。乐器组的 `on` 是允许参与该小节，不保证实际出现；`off` 会将其排除。
 
 后台训练用 `caffeinate` 让 Mac 保持唤醒，终端可以关掉。
 

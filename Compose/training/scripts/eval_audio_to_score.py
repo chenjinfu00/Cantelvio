@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Evaluate audio_to_score.py on simulated transcriptions of real scores (no audio model involved).
 
-Each score of the AIlegro score database (the Lieder test split, voice + piano, and string quartets) is
+Each score of the Cantelvio Compose score database (the Lieder test split, voice + piano, and string quartets) is
 "performed" and "transcribed" by a simulation, then turned back into a score and compared with the original:
 
   performance    a tempo that drifts beat by beat (log-tempo AR(1)) with a final ritardando, onset jitter
@@ -19,7 +19,7 @@ Each score of the AIlegro score database (the Lieder test split, voice + piano, 
 Metrics, against the score's pitched non-grace notes from the first full bar's downbeat (quarters) and pitch,
 instrument-agnostic like mir_eval's note F1: precision, recall, F1 of (position, pitch), the share of matched
 notes with the right duration, and how many notes each cleanup step removed or added. Variants: no cleanup, the
-rules, rules + AIlegro's harmonic-analysis model, and (when its weights are present) + AIlegro's note filler.
+rules, rules + Cantelvio Compose's harmonic-analysis model, and (when its weights are present) + Cantelvio Compose's note filler.
 Runs (six or more consecutive notes of one voice, each a triplet eighth or shorter, steps of at most a fourth)
 are also scored on their own: recall, notes found at a wrong position (same pitch within a beat's quarter: a
 rhythm error), at the right position with a wrong pitch (within a whole tone), or not at all.

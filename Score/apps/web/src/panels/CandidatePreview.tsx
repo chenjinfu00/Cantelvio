@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
+import { layoutScore, renderPageSvg } from '@cantelvio-score/engraving';
 import {
   type ComposeCandidate,
   acceptCandidate,

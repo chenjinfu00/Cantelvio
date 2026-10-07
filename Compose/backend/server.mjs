@@ -86,4 +86,4 @@ http.createServer(async(req,res)=>{
     res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});
     res.end(req.method==='HEAD'?undefined:await readFile(file));
   }catch{res.writeHead(404);res.end('Not found');}
-}).listen(Number(process.env.PORT||4187),process.env.HOST||'127.0.0.1',()=>console.log(`AIlegro local: http://${process.env.HOST||'127.0.0.1'}:${process.env.PORT||4187}`));
+}).listen(Number(process.env.PORT||4187),process.env.HOST||'127.0.0.1',()=>console.log(`Cantelvio Compose local: http://${process.env.HOST||'127.0.0.1'}:${process.env.PORT||4187}`));

@@ -22,6 +22,7 @@
 | [0015](0015-open-source-engines-and-score-workflow.md) | 可替换生成引擎、Score 候选审阅与局部接受，服务扩展单独版本化 | 提议 |
 | [0016](0016-seamless-score-view.md) | 无缝曲谱按宽度换行，在单张纵向长画布上连续滚动 | 已接受 |
 | [0017](0017-instrument-aware-difficulty.md) | 在线生成候选的三档难度、钢琴双手编配和乐器约束，处理后的音符统一用于预览/播放/输出 | 已接受 |
+| [0018](0018-cantelvio-brand-compatibility.md) | 统一 Cantelvio 品牌、包名与新文件扩展名，保留既有音乐契约和浏览器数据 | 已接受 |
 
 ## 模板
 

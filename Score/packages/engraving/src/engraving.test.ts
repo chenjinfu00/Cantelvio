@@ -9,7 +9,7 @@ import {
   textToCommands,
   toString,
   type ScoreDoc,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { describe, expect, it } from 'vitest';
 import type { GlyphGraphic, Graphic } from './graphics';
 import { STYLE } from './options';

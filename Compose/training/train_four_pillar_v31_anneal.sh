@@ -1,5 +1,5 @@
 #!/bin/bash
-# AIlegro 四大件 v3.1：学习率衰减 + 权重滑动平均（EMA）的 9 小时收尾训练。在 Mac 的“终端”里、于 AIlegro 文件夹运行：
+# Cantelvio Compose 四大件 v3.1：学习率衰减 + 权重滑动平均（EMA）的 9 小时收尾训练。在 Mac 的“终端”里、于 Cantelvio Compose 文件夹运行：
 #
 #   bash training/train_four_pillar_v31_anneal.sh            开始（从第 101,129 步的权重起，新运行；Mac 不睡眠，请接电源）
 #   bash training/train_four_pillar_v31_anneal.sh status     进度：步数、学习率、近 500 步平均损失

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Transcription -> score: put a recording's transcribed notes (seconds) on bars and beats, keep the notes a score
-should keep, and write MusicXML that AIlegro Score opens.
+should keep, and write MusicXML that Cantelvio Score opens.
 
     # 1. notes and beats (on the Mac, in MuScriptor's environment; see audio_transcribe_muscriptor.py)
     MuScriptor-large-1.3B/.venv-py312/bin/python training/scripts/audio_transcribe_muscriptor.py song.wav
-    # 2. the score (AIlegro's environment)
+    # 2. the score (Cantelvio Compose's environment)
     .venv-training/bin/python training/scripts/audio_to_score.py song.notes.json --output song.musicxml
-    # 3. open song.musicxml in AIlegro Score (Open, or drop it on the window)
+    # 3. open song.musicxml in Cantelvio Score (Open, or drop it on the window)
 
 Steps:
   beats      the tracked beats give a tempo map that follows the performance (rubato included); tracker slips are
@@ -33,11 +33,11 @@ Steps:
              register; very short blips outside any run; notes an instrument cannot play (well out of range, or
              more notes than a voice or a wind sounds at once; for a single line a new note ends the previous one)
              move to a part that can take them, or go; with
-             AIlegro's harmonic-analysis model (harmonizer v2), short notes that fit neither the chord nor a
+             Cantelvio Compose's harmonic-analysis model (harmonizer v2), short notes that fit neither the chord nor a
              stepwise line and whose pitch class their part does not play within two beats (the top line is always
              kept). At most four voices per staff; releases that stop just short of the next note of their voice
              reach it.
-  fill       AIlegro's note filler (note_filler_v1.py, when torch and its weights are present; --filler none turns
+  fill       Cantelvio Compose's note filler (note_filler_v1.py, when torch and its weights are present; --filler none turns
              it off) reads the cleaned score around every onset and beat-grid point and adds the notes the
              transcription most likely missed, each to the part playing nearest.
   notation   key from the pitch-class profile, spelling in that key, written pitch and <transpose> for transposing
@@ -137,7 +137,7 @@ CHOIR_MIN_ONSETS = 12                # ... (and at least this many such onsets) 
 TRANSPOSITION = {'trumpet-bb': (-1, -2), 'clarinet-bb': (-1, -2), 'horn-f': (-4, -7), 'english-horn': (-4, -7),
                  'alto-sax': (-5, -9), 'tenor-sax': (-8, -14), 'baritone-sax': (-12, -21), 'double-bass': (-7, -12)}
 TWO_STAVES = {'piano', 'organ', 'harp'}
-# playable ranges (MIDI, as in AIlegro Score's catalog) and how many notes one player sounds at once
+# playable ranges (MIDI, as in Cantelvio Score's catalog) and how many notes one player sounds at once
 RANGES = {'soprano': (60, 84), 'alto': (53, 77), 'tenor': (48, 72), 'bass-voice': (40, 64), 'violin': (55, 103),
           'viola': (48, 91), 'cello': (36, 76), 'double-bass': (28, 67), 'flute': (60, 96), 'oboe': (58, 91),
           'english-horn': (52, 81), 'clarinet-bb': (50, 94), 'bassoon': (34, 75), 'horn-f': (34, 77),
@@ -580,7 +580,7 @@ def repair_runs(notes: list[Note], score: 'Score', chords: dict[int, set[int]] |
     run's own pitch classes nearby that are also tones of the analysed chord), when the line goes the same way
     before, through and after the gap and exactly one pitch fits each empty point. A note of a diatonic scale run
     that lies a semitone off the key (and is no chord tone) between two scale notes a third apart is moved onto the
-    scale step. The key's pitch classes count as the scale, plus the chord tones of AIlegro's harmonic analysis
+    scale step. The key's pitch classes count as the scale, plus the chord tones of Cantelvio Compose's harmonic analysis
     when it ran."""
     scale = scale_classes(score.fifths, score.mode)
 
@@ -913,7 +913,7 @@ def clean_rules(notes: list[Note], stats: Counter) -> None:
 
 def clean_harmony(notes: list[Note], chords: dict[int, set[int]], beat_quarters: F, seconds_per_quarter: float,
                   stats: Counter) -> None:
-    """Short notes that are neither chord tones (AIlegro's harmonic analysis, per sixteenth step) nor on a stepwise
+    """Short notes that are neither chord tones (Cantelvio Compose's harmonic analysis, per sixteenth step) nor on a stepwise
     line (a note of the same part a step away within three quarters of a beat), and whose pitch class the part does
     not play within two beats either (passing and neighbour figures of an accompaniment come back; noise does not);
     the top line (no higher note sounding when it starts) is always kept."""
@@ -1097,7 +1097,7 @@ def parse_metre(text: str) -> tuple[int, bool]:
 def transcription_to_score(doc: dict, *, chords_model=None, keep_all: bool = False, piano: bool = False,
                            title: str | None = None, metre_override: str | None = None, filler=None) -> Score:
     """Build a Score from an ailegro.transcription/1 document. `chords_model`: (harmonizer module, model, info) of
-    AIlegro's harmonic-analysis model, or None for the rules only; `keep_all` skips the cleanup; `piano` puts
+    Cantelvio Compose's harmonic-analysis model, or None for the rules only; `keep_all` skips the cleanup; `piano` puts
     everything on one piano part; `metre_override` ('3/4', '6/8', ...) replaces the metre read from the beats;
     `filler(notes, score, chords, seconds)` may add the notes the transcription missed (note_filler_v1.Filler)
     after the cleanup, before hands, durations and voices are settled (`seconds`: score time in quarters ->
@@ -1235,7 +1235,7 @@ def transcription_to_score(doc: dict, *, chords_model=None, keep_all: bool = Fal
 
 
 def analysed_chords(score: Score, chords_model, notes: list[Note]) -> dict[int, set[int]]:
-    """Chord tones per sixteenth step of score time from AIlegro's harmonic-analysis model (melody = the top
+    """Chord tones per sixteenth step of score time from Cantelvio Compose's harmonic-analysis model (melody = the top
     line, texture = every note)."""
     module, model, info = chords_model
     live = [n for n in notes if not n.removed]
@@ -1257,7 +1257,7 @@ def analysed_chords(score: Score, chords_model, notes: list[Note]) -> dict[int, 
 
 
 def load_chords_model(path: str | None):
-    """AIlegro's harmonic-analysis model (harmonizer v2), or None when torch or the weights are missing."""
+    """Cantelvio Compose's harmonic-analysis model (harmonizer v2), or None when torch or the weights are missing."""
     if path == 'none':
         return None
     try:
@@ -1273,7 +1273,7 @@ def load_chords_model(path: str | None):
 
 
 def load_filler(path: str | None, threshold: float | None = None):
-    """AIlegro's note filler (note_filler_v1.Filler), or None when torch or the weights are missing ('none': off)."""
+    """Cantelvio Compose's note filler (note_filler_v1.Filler), or None when torch or the weights are missing ('none': off)."""
     if path == 'none':
         return None
     sys.modules.setdefault('audio_to_score', sys.modules[__name__])     # run as a script: one module, one Note
@@ -1352,7 +1352,7 @@ def musicxml(score: Score) -> str:
              '"http://www.musicxml.org/dtds/partwise.dtd">',
              '<score-partwise version="4.0">',
              f'<work><work-title>{escape(score.title)}</work-title></work>',
-             '<identification><encoding><software>AIlegro audio_to_score (transcribed audio)</software>'
+             '<identification><encoding><software>Cantelvio Compose audio_to_score (transcribed audio)</software>'
              '</encoding></identification>', '<part-list>']
     for i, p in enumerate(score.parts):
         lines.append(f'<score-part id="P{i + 1}"><part-name>{escape(p.name)}</part-name>'
@@ -1503,11 +1503,11 @@ def main() -> None:
     parser.add_argument('--output', type=Path, help='MusicXML file (default: next to the input, .musicxml)')
     parser.add_argument('--report', type=Path, help='JSON report of what was kept, removed and why')
     parser.add_argument('--analyzer', default=None,
-                        help="harmonic-analysis weights for the harmony check (default: AIlegro's harmonizer v2 when "
+                        help="harmonic-analysis weights for the harmony check (default: Cantelvio Compose's harmonizer v2 when "
                              "present; 'none' = rules only)")
     parser.add_argument('--filler', default=None,
                         help="note-filler weights that add the notes the transcription most likely missed (default: "
-                             "AIlegro's note filler v1 when present; 'none' = off)")
+                             "Cantelvio Compose's note filler v1 when present; 'none' = off)")
     parser.add_argument('--filler-threshold', type=float,
                         help='probability a missing note needs to be added (default: the one tuned with the weights; '
                              'higher adds fewer)')

@@ -9,7 +9,7 @@ import {
   toString,
   validateScore,
   voiceEvents,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as actions from './actions';
 import * as marks from './marks';
@@ -287,7 +287,7 @@ describe('keypad actions', () => {
     const staff = allStaves(st().doc)[0]!.staff.id;
     expect(st().doc.content[staff]![st().doc.measures[0]!.id]!.dynamics![0]!.value).toBe('mf');
     expect(isDirty(st())).toBe(true);
-    st().markSaved('x.ailegro.json');
+    st().markSaved('x.cantelvio.json');
     expect(isDirty(st())).toBe(false);
     st().undo();
     expect(isDirty(st())).toBe(true);

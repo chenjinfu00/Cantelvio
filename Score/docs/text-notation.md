@@ -1,10 +1,10 @@
-# 文字记谱输入（AIlegro text notation v1）
+# 文字记谱输入（Cantelvio text notation v1）
 
 代码：`packages/core/src/io/text.ts`（`parseText`、`textToCommands`）。编辑器：侧栏“文字输入”。
 灵感来自 LilyPond 的相对音高模式，但更简单，并且**默认按调号解释音名**（像键盘输入一样）。
 
 用途：快速输入一段音乐；测试与示例乐谱（`core/src/samples` 全部用它写成）；
-让语言模型（包括将来的 AIlegro 文字接口）直接写出可读的乐谱。
+让语言模型（包括将来的 Cantelvio 文字接口）直接写出可读的乐谱。
 
 ## 例子
 

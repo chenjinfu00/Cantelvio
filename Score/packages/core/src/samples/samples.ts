@@ -1,6 +1,6 @@
 /**
  * Demo scores (original material written for this project), built with the text notation so they
- * double as end-to-end fixtures for the model, the engraver and the AIlegro bridge.
+ * double as end-to-end fixtures for the model, the engraver and the Cantelvio bridge.
  */
 import { applyCommand } from '../commands/apply';
 import type { Command } from '../commands/types';
@@ -57,7 +57,7 @@ export function samplePianoPiece(lang: 'en' | 'zh' = 'en'): ScoreDoc {
       template: 'piano',
       lang,
       title: lang === 'zh' ? 'G 大调小练习曲' : 'Little Study in G',
-      composer: 'AIlegro Score demo',
+      composer: 'Cantelvio Score demo',
       measures: 8,
       timeSig: { beats: 4, beatType: 4 },
       keySig: { fifths: 1, mode: 'major' },
@@ -76,7 +76,7 @@ export function sampleStringQuartet(lang: 'en' | 'zh' = 'en'): ScoreDoc {
       template: 'string-quartet',
       lang,
       title: lang === 'zh' ? '众赞歌' : 'Chorale',
-      composer: 'AIlegro Score demo',
+      composer: 'Cantelvio Score demo',
       measures: 8,
       timeSig: { beats: 4, beatType: 4 },
       keySig: { fifths: -1, mode: 'major' },
@@ -97,7 +97,7 @@ export function sampleOrchestra(lang: 'en' | 'zh' = 'en'): ScoreDoc {
       template: 'classical-orchestra',
       lang,
       title: lang === 'zh' ? '序曲片段' : 'Overture Fragment',
-      composer: 'AIlegro Score demo',
+      composer: 'Cantelvio Score demo',
       measures: 6,
       timeSig: { beats: 4, beatType: 4 },
       keySig: { fifths: 0, mode: 'major' },
@@ -127,7 +127,7 @@ export function sampleOrnaments(lang: 'en' | 'zh' = 'en'): ScoreDoc {
       template: 'piano',
       lang,
       title: lang === 'zh' ? '装饰音与线条' : 'Ornaments and Lines',
-      composer: 'AIlegro Score demo',
+      composer: 'Cantelvio Score demo',
       measures: 8,
       timeSig: { beats: 4, beatType: 4 },
       keySig: { fifths: 0, mode: 'major' },

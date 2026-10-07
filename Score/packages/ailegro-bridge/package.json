@@ -1,9 +1,9 @@
 {
-  "name": "@ailegro-score/ailegro-bridge",
+  "name": "@cantelvio-score/compose-bridge",
   "version": "0.1.0",
   "private": true,
   "license": "UNLICENSED",
-  "description": "AIlegro interchange: score-record export, compose requests and import of generated music. Pure TypeScript, no DOM.",
+  "description": "Cantelvio interchange: score-record export, compose requests and import of generated music. Pure TypeScript, no DOM.",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -11,6 +11,6 @@
   },
   "types": "./src/index.ts",
   "dependencies": {
-    "@ailegro-score/core": "0.1.0"
+    "@cantelvio-score/core": "0.1.0"
   }
 }

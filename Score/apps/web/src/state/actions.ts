@@ -47,7 +47,7 @@ import {
   keyAlter,
   tupletContaining,
   voiceEvents,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { type Selection, getStore } from './store';
 import { endPendingLine, extendPendingLine } from './marks';
 import { previewMidi } from '../playback/player';

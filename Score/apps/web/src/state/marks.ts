@@ -39,7 +39,7 @@ import {
   staffInfo,
   voiceTimeline,
   writtenFromLength,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { translate } from '../i18n';
 import { type PendingLine, type Selection, getStore } from './store';
 

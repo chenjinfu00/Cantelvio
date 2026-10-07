@@ -1,5 +1,5 @@
-import type { NoteValue } from '@ailegro-score/core';
-import type { GlyphName } from '@ailegro-score/engraving';
+import type { NoteValue } from '@cantelvio-score/core';
+import type { GlyphName } from '@cantelvio-score/engraving';
 import { Glyph } from '../components/Glyph';
 import { type MessageKey, useT } from '../i18n';
 import * as actions from '../state/actions';

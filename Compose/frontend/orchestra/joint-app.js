@@ -210,7 +210,7 @@ async function preview() {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     previewUrl = URL.createObjectURL(blob); previewSample = sample;
     $('player').src = previewUrl; $('player').load();
-    $('wav').href = previewUrl; $('wav').download = `AIlegro-joint-orchestra-${sample.seed}.wav`;
+    $('wav').href = previewUrl; $('wav').download = `cantelvio-joint-orchestra-${sample.seed}.wav`;
     $('wav').classList.remove('disabled'); $('wav').setAttribute('aria-disabled', 'false');
     drawPreviewChart(sample); drawRoll(sample);
     status('Ready to listen', '可以试听', 'ready');
@@ -220,7 +220,7 @@ async function preview() {
 
 function translate() {
   document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-  document.title = tr('AIlegro · Joint-model orchestra prototype', 'AIlegro · 旧模型管弦乐原型');
+  document.title = tr('Cantelvio Compose · Joint-model orchestra prototype', 'Cantelvio Compose · 旧模型管弦乐原型');
   document.querySelectorAll('[data-en][data-zh]').forEach(el => { el.textContent = el.dataset[language]; });
   $('language').textContent = language === 'en' ? '中文' : 'EN';
   renderGroups(); chartKey = ''; drawChart();

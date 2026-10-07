@@ -1,5 +1,5 @@
 {
-  "name": "ailegro-frontend",
+  "name": "@cantelvio/compose-frontend",
   "private": true,
   "type": "module",
   "scripts": {

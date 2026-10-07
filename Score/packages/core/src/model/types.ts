@@ -1,10 +1,10 @@
 /**
- * The AIlegro Score document model (format "ailegro-score", version 2).
+ * The Cantelvio Score document model (format "ailegro-score", version 2).
  *
  * Design rules (see docs/score-model.md and docs/adr/0002-score-model.md):
  *
  * 1. SEMANTIC, NOT GRAPHICAL. The document stores music (pitches, durations, structure).
- *    Layout is derived by @ailegro-score/engraving; layout hints are explicit, optional fields.
+ *    Layout is derived by @cantelvio-score/engraving; layout hints are explicit, optional fields.
  * 2. STABLE IDS. Every addressable element has a string id that never changes. Selections, AI
  *    patches, version diffs and (future) real-time collaboration all refer to ids.
  * 3. EXACT TIME. Offsets and durations are rationals in whole notes (quarter = 1/4).
@@ -12,7 +12,7 @@
  *    barlines are derived for display. Explicit ties (`Note.tieForward`) exist for cases the
  *    user writes deliberately (e.g. partial chord ties).
  * 5. CONCERT PITCH. Notes store sounding pitch with spelling; written pitch for transposing
- *    instruments is derived. AIlegro consumes sounding MIDI pitch directly.
+ *    instruments is derived. Cantelvio consumes sounding MIDI pitch directly.
  * 6. IMPLICIT RESTS. Gaps in a voice are rests; the engraver fills them according to the meter.
  * 7. PLAIN JSON. No classes, no Maps, no undefined-vs-missing ambiguity in persisted data, so
  *    documents serialize deterministically and diff cleanly in git.
@@ -43,7 +43,7 @@ export interface ScoreDoc {
   readonly measures: readonly Measure[];
   /** Musical content: staffId -> measureId -> content. Missing entries are empty bars. */
   readonly content: Readonly<Record<ID, Readonly<Record<ID, StaffMeasure>>>>;
-  /** Chord symbols (harmony track), also the harmony condition for AIlegro. */
+  /** Chord symbols (harmony track), also the harmony condition for Cantelvio. */
   readonly harmony: readonly ChordSymbol[];
   /** Slurs, hairpins, octave lines, pedal marks and trill lines, by staff then start time. */
   readonly spanners: readonly Spanner[];
@@ -284,7 +284,7 @@ export interface DynamicMark {
 
 // ------------------------------------------------------------------------------- harmony
 
-/** A chord symbol. `quality` uses AIlegro's chord-quality ids ("maj", "min", "dom7", ...). */
+/** A chord symbol. `quality` uses Cantelvio's chord-quality ids ("maj", "min", "dom7", ...). */
 export interface ChordSymbol {
   readonly id: ID;
   readonly measureId: ID;
@@ -361,7 +361,7 @@ export const isTimeSpan = (s: Spanner): s is TimeSpan => s.kind !== 'slur';
 
 /**
  * Who produced an element. Kept so that AI suggestions can be reviewed, so version diffs can
- * attribute changes, and so material exported to AIlegro can be filtered by origin
+ * attribute changes, and so material exported to Cantelvio can be filtered by origin
  * (e.g. never train on unreviewed model output).
  */
 export type Provenance =

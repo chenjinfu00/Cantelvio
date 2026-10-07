@@ -7,8 +7,8 @@ import {
   randomIds,
   rat,
   type ScoreDoc,
-} from '@ailegro-score/core';
-import { type ComposeTask } from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/core';
+import { type ComposeTask } from '@cantelvio-score/compose-bridge';
 export const DEMO_TASKS: Record<string, ComposeTask> = {
   accompaniment: 'accompany-melody',
   continue: 'continue',
@@ -28,7 +28,7 @@ export function demoDocument(id: string): ScoreDoc {
   if (id === 'continue') return { ...SAMPLES[0]!.build('zh'), id: `demo-${id}-${ids.next('sc')}` };
   const base = createScore({
     template: 'violin-piano',
-    title: 'AIlegro · 旋律与伴奏演示',
+    title: 'Cantelvio · 旋律与伴奏演示',
     subtitle: '欢乐颂旋律 · 可自由修改与试听',
     lang: 'zh',
     measures: 8,

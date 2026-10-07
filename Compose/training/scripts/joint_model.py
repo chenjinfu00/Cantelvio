@@ -1,4 +1,4 @@
-"""AIlegro joint Transformer prototype: rhythm (R), harmony (H), bass (B), melody (M).
+"""Cantelvio Compose joint Transformer prototype: rhythm (R), harmony (H), bass (B), melody (M).
 
 StructuredJoint - four stream sub-networks trained end to end. Every layer has
     per-stream Q/K/V/O and FFN weights (the "bass layer", "rhythm transformer",

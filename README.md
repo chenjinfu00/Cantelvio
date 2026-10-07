@@ -25,6 +25,9 @@ Cantelvio is a research project on Transformer-based music generation, focused o
 公开网页可直接使用编辑器的示例、编辑、回放和导出，Harmony，以及 Stage 的 PDF 读谱与批注；Compose 提供浏览器联合模型和预生成试听。公开编辑器不会连接访客的本机生成服务。AI 作曲、和声分析、PDF 识谱和录音转谱需使用本机完整版。MusicXML 目前支持导入，导出尚未实现。
 The public editor supports examples, editing, playback, MusicXML import, and MIDI/PDF/SVG export. AI composition, harmony analysis, PDF recognition and audio transcription require the local version. MusicXML export is not implemented yet.
 
+所有公开页面共用「⚙ 外观设置」：可选择跟随系统、浅色、深色，调整主色和自定义背景色；切换页面或刷新后继续沿用，同源的已打开页面也会同步更新。偏好保存在当前浏览器，按项目隔离；恢复默认只重置外观，不影响作品或模块设置。谱纸、批注、声部和乐器标记保留各自的功能颜色。
+Every public page shares the Appearance settings: system/light/dark mode, accent and custom background. Preferences persist in this browser and sync between open pages of this project. Reset affects appearance only; music paper and functional music/annotation colors retain their meaning.
+
 ```sh
 npm ci --prefix Score
 npm run site:build             # 构建公开试用模式的编辑器与完整静态站
@@ -48,14 +51,14 @@ cd Compose && npm start
 # Score：编辑器（http://127.0.0.1:5178/）
 cd Score && npm ci && npm run dev
 # Score ↔ Compose：让编辑器调用本机生成服务
-cd Score && npm run ailegro:serve
+cd Score && npm run cantelvio:serve
 # Harmony（http://127.0.0.1:4174/tonnetz/）
 cd Harmony && npm start
 # Stage
 cd Stage && npm run preview
 ```
 
-测试：在根目录 `npm test` 运行 Compose / Harmony / Stage 的测试，`npm run check:score` 运行 Score 的检查；`npm run site:build && npm run site:check` 建站并检查链接。
+测试：在根目录 `npm test` 运行 Compose / Harmony / Stage 及共用外观的测试，`npm run check:score` 运行 Score 的检查；`npm run site:build && npm run site:check` 建站并检查链接。
 
 ## 路线图 / Roadmap
 

@@ -71,8 +71,8 @@ export function App() {
     return () => window.removeEventListener('beforeunload', onLeave);
   }, []);
 
-  // Drop a .ailegro.json or MusicXML file anywhere to open (import) it; PDFs, scanned pages and
-  // recordings go to the local AIlegro service.
+  // Drop a .cantelvio.json or MusicXML file anywhere to open (import) it; PDFs, scanned pages and
+  // recordings go to the local Cantelvio service.
   useEffect(() => {
     const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
     const over = (e: DragEvent) => {
@@ -125,7 +125,7 @@ export function App() {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   }, [lang]);
   useEffect(() => {
-    document.title = `${title} · AIlegro Score`;
+    document.title = `${title} · Cantelvio Score`;
   }, [title]);
 
   return (

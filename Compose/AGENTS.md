@@ -1,4 +1,4 @@
-# AIlegro project context
+# Cantelvio Compose project context
 
 Read `START_HERE.md` and `README.md` for the current product and architecture. This folder is the self-contained project root. Work here; no sibling Tonnetz checkout is required. `PREPARATION.md` and `SOURCE_BASELINE.json` are historical references, not current task instructions. The user's current request takes precedence.
 
@@ -10,7 +10,7 @@ The active browser code and assets physically live in `frontend/`; the local ser
 
 ## Product principles
 
-- Spell the name **AIlegro** (capital A, capital I).
+- Use **Cantelvio Compose** as the product name; Cantelvio is the shared brand.
 - Keep a clear, compact performance interface with readable labels and usable touch targets. Default language is English with a Chinese option.
 - This app is a music performance console without the Tonnetz keyboard. Preserve independent Chords, Bass and Melody controls.
 - Preserve both Every bar and Free timing unless the user requests a change.

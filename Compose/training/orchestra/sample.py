@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate orchestral music with the AIlegro orchestral model and write a MIDI file.
+"""Generate orchestral music with the Cantelvio Compose orchestral model and write a MIDI file.
 
 Instrument groups: woodwinds brass percussion keys high_strings low_strings. For each group
 say 'on' (available, not guaranteed to sound), 'off' (silent) or 'auto' (the model decides, bar by bar). A plan

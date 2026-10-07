@@ -16,8 +16,8 @@ import {
   rat,
   scoreLength,
   sub,
-} from '@ailegro-score/core';
-import { CHORD_QUALITIES } from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/core';
+import { CHORD_QUALITIES } from '@cantelvio-score/compose-bridge';
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { type MessageKey, useT } from '../i18n';
 import { type EditorState, getStore, useEditor } from '../state/store';

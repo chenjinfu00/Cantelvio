@@ -1,9 +1,9 @@
 {
-  "name": "@ailegro-score/web",
+  "name": "@cantelvio-score/web",
   "version": "0.1.0",
   "private": true,
   "license": "UNLICENSED",
-  "description": "AIlegro Score web editor (React + Vite).",
+  "description": "Cantelvio Score web editor (React + Vite).",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,9 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ailegro-score/ailegro-bridge": "0.1.0",
-    "@ailegro-score/core": "0.1.0",
-    "@ailegro-score/engraving": "0.1.0",
+    "@cantelvio-score/compose-bridge": "0.1.0",
+    "@cantelvio-score/core": "0.1.0",
+    "@cantelvio-score/engraving": "0.1.0",
     "@tonejs/midi": "^2.0.28",
     "jspdf": "^4.2.1",
     "react": "^19.3.0",

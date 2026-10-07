@@ -1,9 +1,9 @@
 /**
- * PDF or scanned image → AIlegro Score, through Audiveris (optical music recognition; AGPL-3.0,
+ * PDF or scanned image → Cantelvio Score, through Audiveris (optical music recognition; AGPL-3.0,
  * installed separately: https://github.com/Audiveris/audiveris/releases) and the MusicXML importer.
  *
- *   npm run import:pdf -- score.pdf                                # → score.ailegro.json next to it
- *   npm run import:pdf -- score.pdf --instruments clarinet-bb,piano --out out/score.ailegro.json
+ *   npm run import:pdf -- score.pdf                                # → score.cantelvio.json next to it
+ *   npm run import:pdf -- score.pdf --instruments clarinet-bb,piano --out out/score.cantelvio.json
  *   npm run import:pdf -- page.png --keep out/omr                  # also keep Audiveris' .mxl / .omr
  *
  * Audiveris is found through --audiveris, $AUDIVERIS, the PATH, or its default install location
@@ -31,7 +31,7 @@ import {
   sequentialIds,
   serializeScore,
   validateScore,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { importMusicXmlFile } from './musicxml-file';
 
 const { values, positionals } = parseArgs({
@@ -56,7 +56,7 @@ function fail(message: string): never {
 const input = positionals[0];
 if (!input || positionals.length > 1)
   fail(
-    'usage: npm run import:pdf -- <score.pdf|.png|.jpg|.tif> [--out file.ailegro.json] ' +
+    'usage: npm run import:pdf -- <score.pdf|.png|.jpg|.tif> [--out file.cantelvio.json] ' +
       '[--instruments id,id,…] [--sheets "1 3-4"] [--keep dir] [--concert] [--audiveris path]',
   );
 if (!existsSync(input)) fail(`no such file: ${input}`);
@@ -91,7 +91,7 @@ for (const id of instruments ?? [])
 
 // ---------------------------------------------------------------------------------- recognition
 
-const work = mkdtempSync(join(tmpdir(), 'ailegro-omr-'));
+const work = mkdtempSync(join(tmpdir(), 'cantelvio-omr-'));
 const stem = basename(input, extname(input));
 const args = ['-batch', '-export', '-output', work];
 if (values.sheets) args.push('-sheets', ...values.sheets.split(/[\s,]+/).filter(Boolean));
@@ -154,8 +154,8 @@ for (const [k, mxl] of files.entries()) {
     values.out && files.length === 1
       ? values.out
       : values.out
-        ? values.out.replace(/(\.ailegro)?\.json$/i, '') + `${suffix}.ailegro.json`
-        : join(dirname(input), `${stem}${suffix}.ailegro.json`);
+        ? values.out.replace(/(\.(?:cantelvio|ailegro))?\.json$/i, '') + `${suffix}.cantelvio.json`
+        : join(dirname(input), `${stem}${suffix}.cantelvio.json`);
   const { doc, warnings } = await importMusicXmlFile(mxl, {
     ids: values['sequential-ids'] ? sequentialIds() : randomIds(),
     fileName: basename(input),

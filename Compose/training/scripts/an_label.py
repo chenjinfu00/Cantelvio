@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Run AugmentedNet on MusicXML files and store the chords reduced to AIlegro's 40 qualities.
+"""Run AugmentedNet on MusicXML files and store the chords reduced to Cantelvio Compose's 40 qualities.
 
 Same convention as training/scripts/build_joint_lieder.py (which reads AugmentedNet's analysis_automatic.rntxt for the
 OpenScore Lieder): the Roman numeral is resolved in the local key with music21, root = rn.root(), pitch classes =
-rn.pitchClasses, quality = the AIlegro quality whose interval set matches (or the best Jaccard match).
+rn.pitchClasses, quality = the Cantelvio Compose quality whose interval set matches (or the best Jaccard match).
 Output per score: JSON with chords [[offset_quarters, root_pc, quality, quality_match, key_tonic_pc, key_minor, rn]].
 Run with the Python 3.9 / TensorFlow 2.5 environment (AugmentedNet's own), PYTHONPATH containing a mlflow stub.
 """

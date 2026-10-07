@@ -1,5 +1,5 @@
 #!/bin/bash
-# AIlegro 四大件 v3.1 训练。在 Mac 的“终端”里、于 AIlegro 文件夹运行；默认训练 7 个半小时（整个过程约 7 小时 40 分）。
+# Cantelvio Compose 四大件 v3.1 训练。在 Mac 的“终端”里、于 Cantelvio Compose 文件夹运行；默认训练 7 个半小时（整个过程约 7 小时 40 分）。
 #
 #   bash training/train_four_pillar_v31.sh          开始训练；中断后再运行同一命令，会从最近的保存点接着训练
 #   bash training/train_four_pillar_v31.sh status   查看进度：步数、损失、剩余时间

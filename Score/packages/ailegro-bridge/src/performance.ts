@@ -18,7 +18,7 @@ import {
   toNumber,
   midiOf,
   isMultipleOf,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import type { ComposeResult, ComposeTask, ResultNote } from './schemas';
 import { qualityOf } from './qualities';
 

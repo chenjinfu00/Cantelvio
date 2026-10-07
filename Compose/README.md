@@ -1,10 +1,10 @@
-# AIlegro
+# Cantelvio Compose
 
 本机联合演示：[全部功能入口](http://127.0.0.1:4187/demo/)，可用项和限制见 [Score 演示验证](../Score/docs/demo-verification.md)。
 
 ## 2026-10-05 联合开发方向
 
-[AIlegro 与 AIlegro Score 联合开发计划](JOINT-DEVELOPMENT-PLAN.md)：先完成给定旋律到可编辑伴奏的工作流程，再实测接入 AMT 等引擎，扩展连续生成与完整作品。曲谱编辑、审阅、回放和导出任务见 [Score 实施计划](../Score/docs/open-source-integration-plan.md)。这部分为待实施方案，下文保留此前模型与页面的历史记录。
+[Cantelvio Compose 与 Cantelvio Score 联合开发计划](JOINT-DEVELOPMENT-PLAN.md)：先完成给定旋律到可编辑伴奏的工作流程，再实测接入 AMT 等引擎，扩展连续生成与完整作品。曲谱编辑、审阅、回放和导出任务见 [Score 实施计划](../Score/docs/open-source-integration-plan.md)。这部分为待实施方案，下文保留此前模型与页面的历史记录。
 
 2026-10-01 试听更新：主页和 `/four-pillar/` 已切到续训第 19,193 步（父模型第 20,134 步）的固定快照 `training/runs/four-pillar-v2-preview-20261001-step19193/`。源续训目录保留用于 `--resume`；网页读取独立快照，恢复训练不会改变正在试听的权重。以下 2026-09-30 模型信息为此前记录。
 
@@ -27,7 +27,7 @@
 下文提及旧四轨主页的说明为历史版本记录；`/four-pillar/` 保留独立短段试听和连续试听入口。自动检查只能证明接口、时序和声部结构，音乐质量仍需试听。
 
 
-**Independent project root:** this `AIlegro/` folder contains everything needed to run and modify the app. Start with [START_HERE.md](START_HERE.md) for the Chinese handoff guide and [AGENTS.md](AGENTS.md) for coding-agent context. You can copy the entire folder elsewhere; no sibling Tonnetz checkout is required.
+**Independent project root:** this `Compose/` folder contains everything needed to run and modify the app. Start with [START_HERE.md](START_HERE.md) for the Chinese handoff guide and [AGENTS.md](AGENTS.md) for coding-agent context. You can copy the entire folder elsewhere; no sibling Tonnetz checkout is required.
 
 A standalone, locally served performance workbench. Since 2026-09-27 one local **joint Transformer** writes the music: accompaniment rhythm, chords, bass and melody, generated together one sixteenth note at a time. It replaced the earlier pair of frozen Tonnetz v91 models (Harmony v2 and Melody v5) and the rule-based accompaniment/bass planner; those files are kept, unchanged, in `archive/pre-joint-runtime-20260927/`. No account, network service or deployment is involved. The model weights and sampled instruments are bundled.
 
@@ -59,7 +59,7 @@ The listening room also has **continuous play**: four-bar segments keep the sele
 
 The four-pillar v2 training preparation now includes complete long-bar sampling, source-aligned harmony/expression targets, four supported tasks, ordered motif and sounding-note state, offline constrained free decoding, and exact checkpoint recovery. All 58 relevant tests and eight real-source/task no-update checks passed. MIDI contents are fingerprinted; independent musical evaluation and browser deployment remain separate gates. The launcher now uses 512 completed-bar summaries (6,965,881 total parameters; 5,384,572 trainable) and a separate `training/runs/four-pillar-v2-history512-20260930/` directory. Training and offline decoding share the configured history length; exact event context remains 2048 tokens. The user will launch training locally; `bash training/run_four_pillar_v2.sh --preflight` checks only. The expanded window passed 61 tests, eight real-source/task no-update checks, and an additional full-512-bar real-score forward/backward resource check. The earlier 58-test evidence remains historical. See [the revised v2 training record](training/FOUR-PILLAR-V2-TRAINING.md) for training, recovery and compatible checkpoint continuation.
 
-All automatic-accompaniment and model development belongs to AIlegro. The sibling Tonnetz project retains its existing runtime; Volta remains the score reader. Training scripts, data preparation, the pinned OpenScore source archive, processed corpora, checkpoints and evaluation tools are in [training/README.md](training/README.md); the joint model's design and results are in [training/JOINT-MODEL-DESIGN.md](training/JOINT-MODEL-DESIGN.md). New training outputs go to `training/runs/` and never replace runtime weights automatically.
+All automatic-accompaniment and model development belongs to Cantelvio Compose. The sibling Tonnetz project retains its existing runtime; Volta remains the score reader. Training scripts, data preparation, the pinned OpenScore source archive, processed corpora, checkpoints and evaluation tools are in [training/README.md](training/README.md); the joint model's design and results are in [training/JOINT-MODEL-DESIGN.md](training/JOINT-MODEL-DESIGN.md). New training outputs go to `training/runs/` and never replace runtime weights automatically.
 
 The next-generation four-pillar composition network (harmony, counterpoint, form, orchestration) has an integrated implementation and a five-minute **private pilot** checkpoint, not a full-corpus trained model. [The separate pilot listening page](http://127.0.0.1:4187/four-pillar/) uses two completed validation-score bars as a prompt and a rhythm/duration scaffold from the already-heard bar; the pilot checkpoint samples voice pointers and pitches for two further bars. The old four-track prior can be toggled for aligned Lieder prompts, but transplanted H/M weights remain in both modes. This is not unconstrained score generation, and it does not change homepage weights. The remaining training/inference gates are documented in [training/FOUR-PILLAR-V1-IMPLEMENTATION.md](training/FOUR-PILLAR-V1-IMPLEMENTATION.md).
 

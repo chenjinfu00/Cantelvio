@@ -1,8 +1,8 @@
-# AIlegro — 从这里开始
+# Cantelvio Compose — 从这里开始
 
 2026-10-05 网页演示：[全部功能入口](http://127.0.0.1:4187/demo/)，含 v3.1 五项作曲、候选试听/接受、编辑保存与 MIDI/PDF 导出。连续演奏仍用固定 v2，首次准备八小节。实际验证与重启步骤见 [Score 演示记录](../Score/docs/demo-verification.md)。
 
-2026-10-05：当前联合开发方向见 [AIlegro + Score 计划](JOINT-DEVELOPMENT-PLAN.md)。首期完成给定旋律配伴奏，开源模型按效果与速度对照接入；编辑任务归 Score，训练和推理归 AIlegro。以下试听记录保留为历史依据。
+2026-10-05：当前联合开发方向见 [Cantelvio Compose + Score 计划](JOINT-DEVELOPMENT-PLAN.md)。首期完成给定旋律配伴奏，开源模型按效果与速度对照接入；编辑任务归 Score，训练和推理归 Cantelvio Compose。以下试听记录保留为历史依据。
 
 2026-10-01 试听更新：主页和 `/four-pillar/` 已切到续训第 19,193 步（父模型第 20,134 步）的固定快照 `training/runs/four-pillar-v2-preview-20261001-step19193/`。源续训目录保留用于 `--resume`；网页读取独立快照，恢复训练不会改变正在试听的权重。以下 2026-09-30 模型信息为此前记录。
 
@@ -17,11 +17,11 @@
 下文提及旧四轨主页的说明为历史版本记录；`/four-pillar/` 保留独立短段试听和连续试听入口。自动检查只能证明接口、时序和声部结构，音乐质量仍需试听。
 
 
-这是可以单独运行、单独修改的 AIlegro 项目。名称是 **AIlegro**：A 和第二个字母 I 大写，后面是小写 legro。
+这是可以单独运行、单独修改的 **Cantelvio Compose** 模块，属于 Cantelvio 音乐工作台。
 
 现在可以只打开 [`frontend/`](frontend/README.md) 做 UI 优化：主页面、管弦乐页面、样式、浏览器模型和音源都在里面；[`backend/`](backend/README.md) 存放本地服务与生成接口。`training/` 和 `.venv-training/` 仍在项目根目录，由后端使用，没有复制大型语料或检查点。根目录原有的 `src/`、`vendor/` 等路径是指向前端的兼容软链接；原来的网址和根目录 `npm start` 保持不变，进入 `frontend/` 后也能运行 `npm start`。
 
-本目录于 2026-09-27 从已验证的本地演示版本独立整理，并补齐训练与原始数据。同一天，网页里的旧模型（Harmony v2、Melody v5 与规则伴奏/低音）换成了新的**四轨联合 Transformer**。旧的运行时代码与权重原样保存在 `archive/pre-joint-runtime-20260927/`。把整个 `AIlegro` 文件夹作为其他 AI 编辑器的工作区即可，也可以完整复制到其他位置。运行时不需要在线服务或账号。
+本目录于 2026-09-27 从已验证的本地演示版本独立整理，并补齐训练与原始数据。同一天，网页里的旧模型（Harmony v2、Melody v5 与规则伴奏/低音）换成了新的**四轨联合 Transformer**。旧的运行时代码与权重原样保存在 `archive/pre-joint-runtime-20260927/`。把整个 `Compose/` 文件夹作为其他 AI 编辑器的工作区即可，也可以完整复制到其他位置。运行时不需要在线服务或账号。
 
 ## 启动
 
@@ -124,7 +124,7 @@ node validation/check-chart-edits.mjs
 
 可以把下面这句话交给其他 AI：
 
-> 这是 AIlegro 的独立项目。先阅读 START_HERE.md、AGENTS.md 和 README.md，查看 QA-REPORT.md 的最近更新。以实际代码和当前功能为基准，按我的下一条要求修改；完成后运行相关测试并检查浏览器中的声音、两行和弦谱及响应式布局。
+> 这是 Cantelvio Compose 的独立项目。先阅读 START_HERE.md、AGENTS.md 和 README.md，查看 QA-REPORT.md 的最近更新。以实际代码和当前功能为基准，按我的下一条要求修改；完成后运行相关测试并检查浏览器中的声音、两行和弦谱及响应式布局。
 
 ## 2026-09-30：训练后 v2 网页试听
 

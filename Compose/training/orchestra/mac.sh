@@ -1,5 +1,5 @@
 #!/bin/bash
-# AIlegro 管弦乐模型：在 Mac 的“终端”里运行。所有数据和训练结果都放在 iCloud Drive 项目内的 work/。
+# Cantelvio Compose 管弦乐模型：在 Mac 的“终端”里运行。所有数据和训练结果都放在 iCloud Drive 项目内的 work/。
 #
 #   bash mac.sh setup          选定 Python（默认用已装好 PyTorch 的 Anaconda），补装两个小依赖并自检
 #   bash mac.sh check          检测芯片、内存、GPU 速度和剩余磁盘，写入 work/hardware.json

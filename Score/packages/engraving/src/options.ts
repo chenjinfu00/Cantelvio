@@ -1,4 +1,4 @@
-import type { ScoreDoc } from '@ailegro-score/core';
+import type { ScoreDoc } from '@cantelvio-score/core';
 
 /** Measures text width in staff spaces for a font size in staff spaces. */
 export type TextMeasurer = (

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""AIlegro Score -> AIlegro four-pillar v3.1 adapter (reference implementation).
+"""Cantelvio Score -> Cantelvio four-pillar v3.1 adapter (reference implementation).
 
-Reads an `ailegro.compose-request/1` written by AIlegro Score, feeds the context bars to the
+Reads an `ailegro.compose-request/1` written by Cantelvio Score, feeds the context bars to the
 v3.1 composer through `feed_bar()` (exactly the generation path), writes the requested bars and
-returns an `ailegro.compose-result/1` that AIlegro Score imports as reviewable suggestions.
+returns an `ailegro.compose-result/1` that Cantelvio Score imports as reviewable suggestions.
 
 Tasks (all five of the contract):
 
@@ -18,27 +18,27 @@ Tasks (all five of the contract):
                         notes, or the request's reference bar) through a reference: repeat, a diatonic
                         sequence, fragment, free bar, inversion, ... (see `four_pillar_v31_tasks`)
 
-The locked-material tasks need AIlegro's `training/scripts/four_pillar_v31_tasks.py` (2026-10-02).
-Context bars without chord symbols get chord changes from AIlegro's own chord tracker, as in training.
+The locked-material tasks need Cantelvio's `training/scripts/four_pillar_v31_tasks.py` (2026-10-02).
+Context bars without chord symbols get chord changes from Cantelvio's own chord tracker, as in training.
 
-Run it from the AIlegro project root with AIlegro's own environment. Modes:
+Run it from Cantelvio's Compose folder with its own environment. Modes:
 
     # one request file -> one result file
-    .venv-training/bin/python "<AIlegro Score>/integrations/ailegro/score_compose.py" \\
+    .venv-training/bin/python "<Cantelvio Score>/integrations/ailegro/score_compose.py" \\
         --request request.json --checkpoint training/runs/<run>/weights.pt --output result.json
 
     # local server for the editor's "Generate" button (model loaded once, 127.0.0.1:8765); it also opens PDFs /
-    # images (Audiveris) and recordings (MuScriptor + AIlegro's audio_to_score.py) for the editor as background
+    # images (Audiveris) and recordings (MuScriptor + Cantelvio's audio_to_score.py) for the editor as background
     # jobs: POST /import/pdf or /import/audio with the file as the body, then GET /jobs/<id> (score_imports.py).
-    # `npm run ailegro:serve` in AIlegro Score finds the paths and starts this.
-    .venv-training/bin/python "<AIlegro Score>/integrations/ailegro/score_compose.py" \\
+    # `npm run cantelvio:serve` in Cantelvio Score finds the paths and starts this.
+    .venv-training/bin/python "<Cantelvio Score>/integrations/ailegro/score_compose.py" \\
         --serve --checkpoint training/runs/<run>/weights.pt [--audiveris PATH] [--muscriptor-python PATH]
 
-    # conversion check against AIlegro's time vocabulary (no torch, no checkpoint)
-    python3 "<AIlegro Score>/integrations/ailegro/score_compose.py" --request request.json --dry-run
+    # conversion check against Cantelvio's time vocabulary (no torch, no checkpoint)
+    python3 "<Cantelvio Score>/integrations/ailegro/score_compose.py" --request request.json --dry-run
 
-    # placeholder music without AIlegro or torch, to test the editor round trip
-    python3 "<AIlegro Score>/integrations/ailegro/score_compose.py" --serve --mock
+    # placeholder music without Cantelvio or torch, to test the editor round trip
+    python3 "<Cantelvio Score>/integrations/ailegro/score_compose.py" --serve --mock
 """
 from __future__ import annotations
 
@@ -65,9 +65,9 @@ KEY_NAMES = ('C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B')
 BASIC_TASKS = ('continue', 'melody-from-chords')
 LOCKED_TASKS = ('accompany-melody', 'develop-motif', 'orchestrate')
 SUPPORTED_TASKS = BASIC_TASKS + LOCKED_TASKS
-# AIlegro's six native instrument groups (four_pillar_codec.GROUPS); used by --mock without AIlegro.
+# Cantelvio's six native instrument groups (four_pillar_codec.GROUPS); used by --mock without Cantelvio.
 GROUPS_FALLBACK = ('woodwinds', 'brass', 'percussion', 'keys', 'high_strings', 'low_strings')
-OUTSIDE_GROUPS = 6   # AIlegro's group index for parts outside the six groups (e.g. voices)
+OUTSIDE_GROUPS = 6   # Cantelvio's group index for parts outside the six groups (e.g. voices)
 # Velocity used for given material that carries a score dynamic but no MIDI velocity.
 DYNAMIC_VELOCITY = {'pppp': 20, 'ppp': 30, 'pp': 42, 'p': 56, 'mp': 70, 'mf': 84, 'f': 98, 'ff': 110, 'fff': 120,
                     'ffff': 127, 'sf': 108, 'sfz': 112, 'sffz': 118, 'fz': 108, 'fp': 98, 'sfp': 108, 'rf': 104,
@@ -92,12 +92,12 @@ def qs(value: Fraction) -> str:
 
 def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto', analyzer: str = 'auto',
                  harmonic_rhythm: str = 'auto'):
-    """AIlegro modules (and with need_model the torch-based ones). harmonizer / analyzer: 'auto' loads
-    AIlegro's melody -> chords model / its harmonic-analysis model (melody + all notes -> chords) from the
+    """Cantelvio modules (and with need_model the torch-based ones). harmonizer / analyzer: 'auto' loads
+    Cantelvio's melody -> chords model / its harmonic-analysis model (melody + all notes -> chords) from the
     default runs when present, 'none' never, otherwise a weights path."""
     scripts = root / 'training' / 'scripts'
     if not scripts.is_dir():
-        raise AdapterError(f'not an AIlegro project root (missing {scripts}); pass --ailegro-root')
+        raise AdapterError(f'not a Cantelvio project root (missing {scripts}); pass --cantelvio-root')
     sys.path.insert(0, str(scripts))
     from four_pillar_codec import DYNAMICS, GROUPS, WEDGES  # noqa: E402  (pure Python)
     from four_pillar_v31_time import TimeVocabulary  # noqa: E402  (pure Python)
@@ -129,7 +129,7 @@ def load_ailegro(root: Path, need_model: bool, harmonizer: str = 'auto', analyze
     def load_chords_model(choice: str, default_name: str, what: str):
         if harmonizer_v1 is None or choice == 'none':
             if choice not in ('auto', 'none'):
-                raise AdapterError(f'{what} needs AIlegro training/scripts/harmonizer_v1.py')
+                raise AdapterError(f'{what} needs Cantelvio training/scripts/harmonizer_v1.py')
             return None
         path = getattr(harmonizer_v1, default_name, None) if choice == 'auto' else Path(choice)
         if path is not None and Path(path).is_file():
@@ -181,7 +181,7 @@ def note_event(n: dict, start: Fraction, env: dict, stats: dict) -> dict:
 
 def bar_events(record: dict, bar: int, env: dict, stats: dict, chords: list | None = None,
                current: list | None = None) -> list[dict]:
-    """Feed events of one bar in AIlegro's commit order: per onset, chord changes first, then
+    """Feed events of one bar in Cantelvio's commit order: per onset, chord changes first, then
     unpitched notes, then pitched notes from the lowest up. `chords` replaces the score's chord
     symbols ((offset, root, quality index), e.g. from the chord tracker); a change to the chord
     already in effect (`current[0]`, updated here) is skipped, as in training."""
@@ -235,7 +235,7 @@ def material_parts(request: dict, kind: str) -> list[str]:
 
 
 def tracked_chords(record: dict, env: dict, bars: list[int], parts: list[str] | None, key_of) -> dict:
-    """Chord changes per bar from AIlegro's chord tracker (the labeler used for v3.1's training data),
+    """Chord changes per bar from Cantelvio's chord tracker (the labeler used for v3.1's training data),
     over all notes of those bars or only `parts`. {bar: [(offset, root, quality index), ...]}"""
     tonal, ScoreEvents = env.get('tonal'), env.get('ScoreEvents')
     if tonal is None or not bars:
@@ -261,7 +261,7 @@ def tracked_chords(record: dict, env: dict, bars: list[int], parts: list[str] | 
 
 def harmonized_chords(record: dict, env: dict, context: list[int], bars: list[int], parts: list[str],
                       in_effect, rhythm: str = 'auto') -> dict:
-    """Chord changes for `bars` from AIlegro's harmonizer, read from the given melody (`parts`) over the context
+    """Chord changes for `bars` from Cantelvio's harmonizer, read from the given melody (`parts`) over the context
     and generated bars. The chord in effect at the first generated bar is written there when it differs from
     the one the context left. {bar: [(offset, root, quality index), ...]}"""
     chords_model = env.get('harmonizer')
@@ -306,15 +306,15 @@ def request_rhythm(request: dict, env: dict | None) -> str:
 
 def prepare(request: dict, env: dict | None) -> dict:
     """Validate a request and turn it into feeds (context bars) and a per-bar generation plan.
-    `env` is None only for --mock without an AIlegro checkout (no context feeds then)."""
+    `env` is None only for --mock without a Cantelvio checkout (no context feeds then)."""
     if request.get('schema') != REQUEST_SCHEMA:
         raise AdapterError(f'expected {REQUEST_SCHEMA}, got {request.get("schema")}')
     task = request.get('task')
     if task not in SUPPORTED_TASKS:
         raise AdapterError(f'unknown task {task!r} (supported: {", ".join(SUPPORTED_TASKS)})')
     if task in LOCKED_TASKS and env is not None and not env.get('has_tasks'):
-        raise AdapterError(f'task {task!r} needs AIlegro training/scripts/four_pillar_v31_tasks.py '
-                           '(update the AIlegro folder)')
+        raise AdapterError(f'task {task!r} needs Cantelvio training/scripts/four_pillar_v31_tasks.py '
+                           '(update the Cantelvio folder)')
     record = request['score']
     gen = request['generate']
     first = gen['bars']['from']
@@ -454,7 +454,7 @@ def find_motif(request: dict, record: dict, measures: dict, context_bars: list[i
 
 
 def analyze(request: dict, env: dict | None) -> dict:
-    """Run an ailegro.analysis-request/1: chords (and local keys) of the requested bars, from AIlegro's
+    """Run an ailegro.analysis-request/1: chords (and local keys) of the requested bars, from Cantelvio's
     harmonic-analysis model (melody + every note of the score) or its chord tracker."""
     if request.get('schema') != ANALYSIS_REQUEST_SCHEMA:
         raise AdapterError(f'expected {ANALYSIS_REQUEST_SCHEMA}, got {request.get("schema")}')
@@ -472,7 +472,7 @@ def analyze(request: dict, env: dict | None) -> dict:
         raise AdapterError(f'unknown harmonic rhythm {rhythm!r}')
     warnings = []
     if env is None or env.get('tonal') is None:
-        raise AdapterError('harmonic analysis needs the AIlegro project (not available with --mock alone)')
+        raise AdapterError('harmonic analysis needs the Cantelvio project (not available with --mock alone)')
     notes = [n for n in record['notes'] if n['bar'] in measures and not n.get('grace') and n.get('pitch') is not None]
     melody_part = spec.get('melodyPart')
     if not melody_part:
@@ -483,7 +483,7 @@ def analyze(request: dict, env: dict | None) -> dict:
     analysis_model = env.get('analyzer')
     use_model = engine in ('auto', 'model') and analysis_model is not None
     if engine == 'model' and analysis_model is None:
-        raise AdapterError('no harmonic-analysis model (train AIlegro harmonizer v2 or use engine "rules")')
+        raise AdapterError('no harmonic-analysis model (train Cantelvio harmonizer v2 or use engine "rules")')
     chords = {}
     if use_model and melody_part:
         t0 = q(measures[bars[0]]['on'])
@@ -495,16 +495,16 @@ def analyze(request: dict, env: dict | None) -> dict:
         changes, _ = module.harmonize(analysis_model['model'], analysis_model['info'], melody, shapes,
                                       texture=texture, rhythm=rhythm)
         chords = {b: changes.get(i, []) for i, b in enumerate(bars)}
-        name = 'ailegro-harmony-analysis'
+        name = 'cantelvio-harmony-analysis'
         info = {'name': name, 'checkpoint': analysis_model['path'], 'step': analysis_model['info'].get('step')}
     else:
         if engine == 'auto' and analysis_model is None:
-            warnings.append('no harmonic-analysis model found: chords from the AIlegro chord tracker')
+            warnings.append('no harmonic-analysis model found: chords from the Cantelvio chord tracker')
         if rhythm != 'auto':
             warnings.append('the chord tracker ignores the harmonic rhythm setting')
         key_of = lambda b: keys.get(b)  # noqa: E731
         chords = tracked_chords(record, env, bars, None, key_of)
-        info = {'name': 'ailegro-chord-tracker'}
+        info = {'name': 'cantelvio-chord-tracker'}
     out_bars = []
     for b in bars:
         tonic, mode = keys.get(b, (0, 0))
@@ -518,7 +518,7 @@ def analyze(request: dict, env: dict | None) -> dict:
 
 
 def analysed_keys(record: dict, env: dict, bars: list[int]) -> dict:
-    """Local key (tonic, mode) per bar from AIlegro's key tracker over all notes of those bars."""
+    """Local key (tonic, mode) per bar from Cantelvio's key tracker over all notes of those bars."""
     tonal, ScoreEvents = env.get('tonal'), env.get('ScoreEvents')
     measures = {m['number'] - 1: m for m in record['measures']}
     local = {bar: i for i, bar in enumerate(bars)}
@@ -548,9 +548,9 @@ def result_document(prep: dict, model: dict, bars: list, warnings: list[str]) ->
     if stats['remapped']:
         notes.append(f'{stats["remapped"]} context times were mapped to the nearest vocabulary value')
     if stats.get('trackedChordBars'):
-        notes.append(f'chords of {stats["trackedChordBars"]} context bars estimated by the AIlegro chord tracker')
+        notes.append(f'chords of {stats["trackedChordBars"]} context bars estimated by the Cantelvio chord tracker')
     if stats.get('harmonizedBars'):
-        notes.append(f'chords of {stats["harmonizedBars"]} bars from the AIlegro harmonizer (read from the given '
+        notes.append(f'chords of {stats["harmonizedBars"]} bars from the Cantelvio harmonizer (read from the given '
                      'melody); edit the chord symbols and generate with given chords to change them')
     return {
         'schema': RESULT_SCHEMA,
@@ -635,7 +635,7 @@ class Model:
         env, task = self.env, prep['task']
         sample, tasks = env['sample'], env['tasks']
         if task in LOCKED_TASKS and tasks is None:
-            raise AdapterError(f'task {task!r} needs AIlegro training/scripts/four_pillar_v31_tasks.py')
+            raise AdapterError(f'task {task!r} needs Cantelvio training/scripts/four_pillar_v31_tasks.py')
         key_of, tempo_at, gen = prep['key_of'], prep['tempo_at'], prep['gen']
         sampling = gen['sampling']
         first_key = key_of(prep['context_from']) or key_of(prep['first']) or (0, 0)
@@ -711,9 +711,9 @@ BASS_PREFERENCE = ('low_strings', 'keys', 'brass', 'woodwinds')
 
 
 class MockModel:
-    """Deterministic placeholder music in AIlegro's result format (scales over a tonic bass; given notes copied
+    """Deterministic placeholder music in Cantelvio's result format (scales over a tonic bass; given notes copied
     for orchestrate, the motif bar repeated for develop-motif, a bass line only for accompany-melody).
-    It is NOT AIlegro output; it exists to test the editor <-> adapter round trip anywhere."""
+    It is NOT Cantelvio output; it exists to test the editor <-> adapter round trip anywhere."""
 
     name = 'mock'
 
@@ -772,7 +772,7 @@ class MockModel:
                       for on, root, quality in item['chords']] or [{'onset': '0', 'root': tonic, 'quality': 'min' if mode else 'maj'}]
             bars.append({'bar': item['bar'], 'length': qs(item['length']), 'meter': list(meter),
                          'key': {'tonic': tonic, 'mode': mode}, 'chords': chords, 'notes': notes})
-        return result_document(prep, self.describe(), bars, ['mock generator: placeholder music, not AIlegro output'])
+        return result_document(prep, self.describe(), bars, ['mock generator: placeholder music, not Cantelvio output'])
 
 
 # ------------------------------------------------------------------------------------------ server
@@ -785,7 +785,7 @@ def make_handler(model, env, allow_origins: set[str], jobs: 'imports.Jobs | None
     tasks = list(SUPPORTED_TASKS if isinstance(model, MockModel) or (env and env.get('tasks')) else BASIC_TASKS)
 
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'AIlegroScoreAdapter/1'
+        server_version = 'CantelvioScoreAdapter/1'
 
         def log_message(self, fmt, *args):  # quieter than the default, still on stderr
             sys.stderr.write('[adapter] ' + (fmt % args) + '\n')
@@ -921,7 +921,7 @@ def serve(model, env, host: str, port: int, allow_origins: set[str], jobs: 'impo
     if host not in LOOPBACK:
         print(f'warning: listening on {host}; anyone on the network can use this model', file=sys.stderr)
     httpd = ThreadingHTTPServer((host, port), make_handler(model, env, allow_origins, jobs))
-    print(f'AIlegro adapter ({model.name}) on http://{host}:{port}  — POST /compose, POST /analyze, GET /health',
+    print(f'Cantelvio adapter ({model.name}) on http://{host}:{port}  — POST /compose, POST /analyze, GET /health',
           file=sys.stderr)
     if jobs:
         info = jobs.tools.describe()
@@ -941,18 +941,18 @@ def main() -> None:
     parser.add_argument('--request', type=Path, help='compose request file (file mode)')
     parser.add_argument('--output', type=Path, help='result file to write (file mode)')
     parser.add_argument('--checkpoint', type=Path)
-    parser.add_argument('--ailegro-root', type=Path, default=Path.cwd())
+    parser.add_argument('--cantelvio-root', '--ailegro-root', dest='ailegro_root', metavar='COMPOSE_ROOT', type=Path, default=Path.cwd())
     parser.add_argument('--threads', type=int, default=1)
     parser.add_argument('--candidates', type=int, default=16,
                         help='accompany-melody: versions written per bar; the one fitting the melody best is kept')
     parser.add_argument('--harmonizer', default='auto',
-                        help="accompany-melody without given chords: 'auto' uses AIlegro's melody -> chords model "
+                        help="accompany-melody without given chords: 'auto' uses Cantelvio's melody -> chords model "
                              "when its weights are present, 'none' lets v3.1 choose, or a weights path")
     parser.add_argument('--harmonic-rhythm', default='auto', choices=HARMONIC_RHYTHMS,
                         help='how often harmonizer chords may change when the request does not say '
                              '(intent tag harmonic-rhythm:<value>)')
     parser.add_argument('--analyzer', default='auto',
-                        help="harmonic analysis: 'auto' uses AIlegro's analysis model (harmonizer v2) when its "
+                        help="harmonic analysis: 'auto' uses Cantelvio's analysis model (harmonizer v2) when its "
                              "weights are present, 'none' always uses the chord tracker, or a weights path")
     parser.add_argument('--doublings', choices=DOUBLINGS, default='light',
                         help='orchestrate: octave/unison doublings the model may add (light: at most half as '
@@ -968,7 +968,7 @@ def main() -> None:
                                             'the PATH, then the default install location)')
     parser.add_argument('--muscriptor-python',
                         help="Python of MuScriptor's environment for opening recordings "
-                             '(default: <AIlegro>/MuScriptor-large-1.3B/.venv-py312/bin/python)')
+                             '(default: <Cantelvio/Compose>/MuScriptor-large-1.3B/.venv-py312/bin/python)')
     args = parser.parse_args()
 
     try:

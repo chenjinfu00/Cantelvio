@@ -1,6 +1,6 @@
 /** Vector PDF uses the existing engraver; Chinese text has an embedded OFL font. */
-import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
-import type { ScoreDoc } from '@ailegro-score/core';
+import { layoutScore, renderPageSvg } from '@cantelvio-score/engraving';
+import type { ScoreDoc } from '@cantelvio-score/core';
 
 let fontData: Promise<string> | null = null;
 async function chineseFont(): Promise<string> {
@@ -39,8 +39,8 @@ export async function scoreToPdf(doc: ScoreDoc, concertPitch: boolean): Promise<
   pdf.addFileToVFS('LXGWWenKaiLite-Regular.ttf', font);
   // The same Unicode face is registered for all SVG styles to avoid unsupported CJK fallback.
   for (const style of ['normal', 'bold', 'italic', 'bolditalic'])
-    pdf.addFont('LXGWWenKaiLite-Regular.ttf', 'AIlegroText', style);
-  pdf.setProperties({ title: doc.meta.title, creator: 'AIlegro Score' });
+    pdf.addFont('LXGWWenKaiLite-Regular.ttf', 'CantelvioText', style);
+  pdf.setProperties({ title: doc.meta.title, creator: 'Cantelvio Score' });
   for (const page of layout.pages) {
     if (page.index)
       pdf.addPage([mm(page.width), mm(page.height)], orientation(page.width, page.height));
@@ -49,7 +49,7 @@ export async function scoreToPdf(doc: ScoreDoc, concertPitch: boolean): Promise<
       'image/svg+xml',
     ).documentElement;
     for (const text of svg.querySelectorAll('text'))
-      text.setAttribute('font-family', 'AIlegroText');
+      text.setAttribute('font-family', 'CantelvioText');
     await svg2pdf(svg as unknown as SVGElement, pdf, {
       x: 0,
       y: 0,

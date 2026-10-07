@@ -9,15 +9,15 @@
 ## 运行方式
 
 - **本机运行**（完整功能）：`npm install && npm run dev`，打开 http://127.0.0.1:5178/ 。
-- **GitHub Pages 网页试用**：静态编辑器可编辑、新建、打开 `.ailegro.json` / MusicXML、
+- **GitHub Pages 网页试用**：静态编辑器可编辑、新建、打开 `.cantelvio.json` / MusicXML、
   播放和导出 MIDI / PDF / SVG；顶栏「示例」提供钢琴、室内乐和管弦乐曲谱。
   `?demo=continue` 打开可编辑的钢琴示例，并使用独立演示草稿，不覆盖普通编辑草稿。
   此网页不托管模型，不探测访问者电脑的服务，也不上传 PDF、图片或录音；
-  AI 生成、和声分析、识谱和扒谱需要下载项目并在本机启动编辑器和 AIlegro 服务。
+  AI 生成、和声分析、识谱和扒谱需要下载项目并在本机启动编辑器和 Cantelvio 服务。
   请求 / 结果文件交换仍可用。部署时设 `VITE_STATIC_PREVIEW=true`（自定义域名也适用）；
   `*.github.io` 自动采用相同行为。返回项目主页的链接使用相对路径，支持 `/Cantelvio/score/`。
 - **claude.ai 上的托管版**（免安装试用，作者私有的 artifact 链接）：同一份构建产物发布成 claude.ai artifact。
-  在那里：保存 / 导出由查看器弹出确认后下载；不能打印；**连不到本机的 AIlegro 服务**（浏览器沙盒禁止），
+  在那里：保存 / 导出由查看器弹出确认后下载；不能打印；**连不到本机的 Cantelvio 服务**（浏览器沙盒禁止），
   所以“直接生成”只在本机运行时可用，文件交换（导出请求 → 运行脚本 → 导入结果）两边都能用。
   自动保存只存在于这个浏览器里。发布方式：`npm run build` 后把 `apps/web/dist` 的页面、`assets/` 和
   `audio/` 作为 artifact 的文件发布（`src/host.ts` 负责识别查看器环境）。
@@ -29,7 +29,7 @@
 ├ 工具条：音符输入(N) │ 时值 64分…全音符 · 附点 │ 休止 · 延音线 · 三连音 │ ♭ ♮ ♯ │ 声部 1–4 │ 小节
 ├───────────────────────────────────────────────┬───────────────┬──┐
 │ 乐谱（页面 / 无缝 / 横向连续）┌ 小键盘（浮动）┐ │ 侧栏面板       │标│
-│                              │ 常用 更多 演奏 │ │ AIlegro / 乐器 │签│
+│                              │ 常用 更多 演奏 │ │ Cantelvio / 乐器 │签│
 │                              │ 装饰 线条 力度 │ │ 文字输入 / 属性 │  │
 ├ 状态栏：模式 · 位置（小节/拍/声部）· 当前时值 · 乐器数/小节数 · 文件状态 · 快捷键
 ```
@@ -127,8 +127,8 @@ Mac 上带 `Alt`（Option）的快捷键按键位识别（Option 会改变打出
 
 ## 侧栏面板
 
-- **AIlegro**：任务、从第几小节、小节数（选中小节范围会自动填入）、可用乐器组、给定材料所在声部、
-  和声方式、采样参数；“本机 AIlegro 服务”一键生成，或导出请求 / 导入结果 / 导出乐谱记录；
+- **Cantelvio**：任务、从第几小节、小节数（选中小节范围会自动填入）、可用乐器组、给定材料所在声部、
+  和声方式、采样参数；“本机 Cantelvio 服务”一键生成，或导出请求 / 导入结果 / 导出乐谱记录；
   “待审阅的 AI 建议”按生成批次接受或拒绝。见 [ailegro-integration.md](ailegro-integration.md)。
 - **乐器**：改名和缩写、移除（二次确认）、添加乐器（自动按管弦乐总谱顺序插入）。
 - **文字输入**：在光标或选中处写入文字记谱（`Ctrl/⌘ + Enter`），见 [text-notation.md](text-notation.md)。
@@ -138,22 +138,22 @@ Mac 上带 `Alt`（Option）的快捷键按键位识别（Option 会改变打出
 
 ## 文件
 
-乐谱文件是 `.ailegro.json`（规范格式，适合放进 git，见 [score-model.md](score-model.md#文件格式-ailegrojson)）。
+乐谱文件是 `.cantelvio.json`（规范格式，适合放进 git，见 [score-model.md](score-model.md#文件格式-ailegrojson)）。
 
 - **Chrome / Edge（本机运行）** 用 File System Access：**打开**弹出系统的文件对话框；之后**保存**直接写回
   这个文件，不再询问；**另存为**选新的位置和名字；**打开 ▾** 列出最近打开或保存过的 8 个文件
   （文件句柄存在本浏览器的 IndexedDB 里，第一次重新打开时浏览器会请求权限）。
 - **Safari、Firefox、claude.ai 托管版**没有这个接口：保存 = 下载文件（托管版由查看器弹出确认），
   打开 = 选择文件。没有“最近打开”。
-- 把 `.ailegro.json` **拖进窗口**任何地方就会打开（Chrome 里拖进来的文件之后也能直接保存回去）。
+- 把 `.cantelvio.json` **拖进窗口**任何地方就会打开（Chrome 里拖进来的文件之后也能直接保存回去）。
 - **MusicXML**（`.musicxml`、`.xml`、`.mxl`）用同样的方式打开或拖进来：导入成一份新的未保存乐谱，
-  保存时另存为 `.ailegro.json`，不会写回 MusicXML。没导入或近似处理的内容（歌词、房子等）在提示里列出前两条，
+  保存时另存为 `.cantelvio.json`，不会写回 MusicXML。没导入或近似处理的内容（歌词、房子等）在提示里列出前两条，
   完整列表在浏览器控制台。转换规则见 [musicxml-import.md](musicxml-import.md)。
 - **PDF / 扫描图片**（PDF、PNG、JPG、TIFF）和**录音**（WAV、MP3、FLAC、OGG、M4A、AIFF）也可以打开或拖进来，
-  前提是本机 AIlegro 服务在运行（`npm run ailegro:serve`，[try-it.md](try-it.md)）：服务在后台识谱（Audiveris，
-  [pdf-import.md](pdf-import.md)）或扒谱（MuScriptor + AIlegro，[audio-import.md](audio-import.md)），
+  前提是本机 Cantelvio 服务在运行（`npm run cantelvio:serve`，[try-it.md](try-it.md)）：服务在后台识谱（Audiveris，
+  [pdf-import.md](pdf-import.md)）或扒谱（MuScriptor + Cantelvio，[audio-import.md](audio-import.md)），
   左下角显示进度、可以取消，完成后作为新的未保存乐谱打开；这期间可以继续编辑当前乐谱，打开结果前有未保存的
-  修改会先问。选项在 AIlegro 面板“从 PDF 或录音开始”里。没有服务时用命令行 `npm run import:pdf` 或 AIlegro 的
+  修改会先问。选项在 Cantelvio 面板“从 PDF 或录音开始”里。没有服务时用命令行 `npm run import:pdf` 或 Cantelvio 的
   两步脚本，再打开结果。
 - 新建、打开、换示例之前，如果有未保存的修改，会问“保存 / 不保存 / 取消”。选“保存”且需要先弹出保存对话框时，
   保存完会再问一次“继续打开吗？”——浏览器只允许在一次点击之后打开文件对话框，保存对话框已经用掉了那次点击。
@@ -182,7 +182,7 @@ Mac 上带 `Alt`（Option）的快捷键按键位识别（Option 会改变打出
 ## 界面文字
 
 所有界面文字在 `src/i18n/index.ts`，中文与英文两份（类型检查保证两份键一致）。
-“AIlegro” 在界面里把 **AI** 用强调色显示，避免在无衬线字体里看成 “Allegro”。
+“Cantelvio” 在界面里把 **AI** 用强调色显示，避免在无衬线字体里看成 “Allegro”。
 
 ## 手动检查清单（改编辑器后过一遍）
 
@@ -191,7 +191,7 @@ Mac 上带 `Alt`（Option）的快捷键按键位识别（Option 会改变打出
 3. 选中一小节 → `Delete` 清空；`Ctrl+B` 加小节。
 4. 新建弦乐四重奏；乐器面板添加长笛（应插在最上面）。
 5. 文字输入写入 `c4 d e f | g1`；属性面板改速度、加和弦记号。
-6. AIlegro 面板：`--mock` 服务器“连接”→“直接生成”→ 出现蓝色音符和待审阅条目 → 接受 / 拒绝。
+6. Cantelvio 面板：`--mock` 服务器“连接”→“直接生成”→ 出现蓝色音符和待审阅条目 → 接受 / 拒绝。
 7. 保存 → 打开刚保存的文件 → 内容一致；再改一个音按 `Ctrl+S`，不再弹对话框；“打开 ▾”里有这个文件；
    有修改时打开别的文件会先问；把文件拖进窗口能打开。导出 SVG；播放 / 停止无报错。
 8. 小键盘：选两个音加颤音和断音（按钮高亮）；线条页加连线和 8va；`N` 输入 `C`、按 `<`、再输入 `D E F`，

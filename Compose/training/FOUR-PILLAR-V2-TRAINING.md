@@ -51,7 +51,7 @@
 
 ## 检查、训练与恢复
 
-从 AIlegro 项目根目录执行，仅检查：
+从 Cantelvio Compose 项目根目录执行，仅检查：
 
 ```sh
 bash training/run_four_pillar_v2.sh --preflight

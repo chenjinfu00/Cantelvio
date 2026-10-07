@@ -1,5 +1,5 @@
 /** Drawing of chords, rests, beams, ties and tuplet marks into staff-local graphics. */
-import { NOTE_VALUE_BEAMS, type DynamicValue } from '@ailegro-score/core';
+import { NOTE_VALUE_BEAMS, type DynamicValue } from '@cantelvio-score/core';
 import { type Graphic, fmt, group } from '../graphics';
 import { STYLE } from '../options';
 import { type GlyphName, TUPLET_DIGITS, glyphWidth } from '../smufl/glyphs';

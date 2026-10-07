@@ -1,4 +1,4 @@
-import { SAMPLES } from '@ailegro-score/core';
+import { SAMPLES } from '@cantelvio-score/core';
 import { useEffect, useRef, useState } from 'react';
 import { BrandText } from '../components/BrandText';
 import { IN_ARTIFACT } from '../host';
@@ -69,7 +69,7 @@ export function TopBar() {
           ♪
         </span>
         <strong>
-          <BrandText text="AIlegro Score" />
+          <BrandText text="Cantelvio Score" />
         </strong>
         <span className="doc-title" title={title}>
           {title}

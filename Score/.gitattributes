@@ -26,4 +26,5 @@
 package-lock.json linguist-generated=true -diff
 
 # Score documents are pretty-printed, stable-ordered JSON so they diff and merge well in git.
+*.cantelvio.json text eol=lf linguist-language=JSON
 *.ailegro.json text eol=lf linguist-language=JSON

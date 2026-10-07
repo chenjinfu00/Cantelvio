@@ -1,4 +1,4 @@
-/** Export a ScoreDoc as an AIlegro exact-notation score record (ailegro.score-record/1). */
+/** Export a ScoreDoc as a Cantelvio exact-notation score record (ailegro.score-record/1). */
 import {
   type DynamicValue,
   type Interval,
@@ -26,7 +26,7 @@ import {
   tempoMap,
   transpose,
   invertInterval,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import {
   RECORD_SCHEMA,
   type RecordChord,
@@ -199,7 +199,7 @@ export function buildScoreRecord(doc: ScoreDoc, options: RecordOptions = {}): Sc
           const arts = new Set(e.articulations ?? []);
           const accent = arts.has('marcato') ? 2 : arts.has('accent') ? 1 : 0;
           const nextOpen = new Map<number, Pending>();
-          // grace notes: zero duration at the principal's onset (as AIlegro reads MusicXML)
+          // grace notes: zero duration at the principal's onset (as Cantelvio reads MusicXML)
           for (const g of e.graces ?? []) {
             for (const n of g.notes) {
               const midi = midiOf(n.pitch);
@@ -331,7 +331,7 @@ export function buildScoreRecord(doc: ScoreDoc, options: RecordOptions = {}): Sc
     harmony,
     tempo,
     provenance: {
-      app: 'AIlegro Score',
+      app: 'Cantelvio Score',
       exportedAt: options.exportedAt ?? null,
       license: options.license ?? null,
     },

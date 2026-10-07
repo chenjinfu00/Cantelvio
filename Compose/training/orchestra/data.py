@@ -1,4 +1,4 @@
-"""Training windows for the AIlegro orchestral model (reads the arrays written by prepare.py).
+"""Training windows for the Cantelvio Compose orchestral model (reads the arrays written by prepare.py).
 
 A window starts at a bar of a piece and contains, in order, for every bar:
   BAR token  (meter, tempo, position of the bar in the piece, which groups play in it)

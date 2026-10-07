@@ -7,12 +7,12 @@
 ## 怎么用
 
 - 编辑器：**打开**（或拖进窗口）选 MusicXML 文件即可。导入的乐谱是一份新的、未保存的文档，
-  **保存**时另存为 `.ailegro.json`，不会写回 MusicXML 文件。没导入或做了近似的内容在提示里列出前两条，
+  **保存**时另存为 `.cantelvio.json`，不会写回 MusicXML 文件。没导入或做了近似的内容在提示里列出前两条，
   完整列表在浏览器控制台（`[MusicXML]`）。
 - 命令行：
 
   ```sh
-  npm run import:musicxml -- score.mxl --out out/score.ailegro.json   # 打印提示和校验问题
+  npm run import:musicxml -- score.mxl --out out/score.cantelvio.json   # 打印提示和校验问题
   npm run import:musicxml -- corpus/*.mxl --summary                    # 每个文件一行
   npm run render -- --file score.mxl --out out/                        # 导入后直接排版成 PNG
   ```
@@ -48,7 +48,7 @@
   `part-group` 变成括号 / 花括号。
 - **记号**：演奏法、延长记号、装饰记号、震音（单音）、琶音、换气、小音符、倚音（附在同一声部的下一个音上）、
   力度（谱表力度）、渐强渐弱、连线（同一声部内）、八度记号、踏板、颤音线、和弦记号（`<kind>` 和 `<degree>`
-  换成 AIlegro 的和弦性质，带低音）、速度（`<metronome>`、`<sound tempo>`，或速度术语）、排练号、
+  换成 Cantelvio 的和弦性质，带低音）、速度（`<metronome>`、`<sound tempo>`，或速度术语）、排练号、
   反复记号、小节线样式、元信息（标题、作曲、作词、编曲、版权）、纸张大小和谱表大小。
 
 ## 没有导入的内容（都会计数提示，从不静默丢弃）

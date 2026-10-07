@@ -1,7 +1,7 @@
-// Editor-side AIlegro flow without a browser: defaults, request building, import as suggestions,
-// review and accept/reject — the same calls the AIlegro panel makes.
-import { SAMPLES, randomIds } from '@ailegro-score/core';
-import type { ComposeResult } from '@ailegro-score/ailegro-bridge';
+// Editor-side Cantelvio flow without a browser: defaults, request building, import as suggestions,
+// review and accept/reject — the same calls the Cantelvio panel makes.
+import { SAMPLES, randomIds } from '@cantelvio-score/core';
+import type { ComposeResult } from '@cantelvio-score/compose-bridge';
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   acceptRun,
@@ -69,7 +69,7 @@ function result(requestId: string, startBar: number): ComposeResult {
   };
 }
 
-describe('AIlegro panel flow', () => {
+describe('Cantelvio panel flow', () => {
   beforeEach(() => {
     initStore({ ...SAMPLES[0]!.build('zh'), id: randomIds().next('sc') });
   });

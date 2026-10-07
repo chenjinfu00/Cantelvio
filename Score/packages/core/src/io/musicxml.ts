@@ -357,7 +357,7 @@ const EXACT_DYNAMICS = new Set<string>([
 ]);
 
 /**
- * MusicXML `<kind>` → AIlegro chord-quality id (packages/ailegro-bridge/src/qualities.ts).
+ * MusicXML `<kind>` → Cantelvio chord-quality id (packages/ailegro-bridge/src/qualities.ts).
  * Kinds without an exact quality are approximated (`approx`).
  */
 export const MUSICXML_CHORD_KINDS: Readonly<

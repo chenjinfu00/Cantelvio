@@ -1,7 +1,7 @@
 /**
- * Files: open and save `.ailegro.json`, import MusicXML (`.musicxml`, `.xml`, `.mxl`), recent
+ * Files: open and save `.cantelvio.json`, import MusicXML (`.musicxml`, `.xml`, `.mxl`), recent
  * files, downloads, autosave to this browser. PDFs, scanned pages and recordings are opened through
- * the local AIlegro service (./service-import.ts).
+ * the local Cantelvio service (./service-import.ts).
  *
  * Where the browser offers the File System Access API (Chrome, Edge; a top-level page), Save
  * writes straight back to the file the score came from, Save As picks a place, and recent files
@@ -16,13 +16,14 @@ import {
   parseScore,
   serializeScore,
   validateScore,
-} from '@ailegro-score/core';
-import { layoutScore, renderPageSvg } from '@ailegro-score/engraving';
+} from '@cantelvio-score/core';
+import { layoutScore, renderPageSvg } from '@cantelvio-score/engraving';
 import { IN_ARTIFACT, artifactDownloads } from '../host';
 import { translate } from '../i18n';
 import { importKindOf, importViaService } from './service-import';
 import { currentEntry, getStore, isDirty } from './store';
 import { demoId } from './demo';
+import { rebrandBuiltinDraft } from './branding';
 
 const AUTOSAVE_KEY = demoId()
   ? `ailegro-score:demo-autosave:${demoId()}`
@@ -74,18 +75,18 @@ export const CAN_PICK =
 
 const PICKER: PickerOptions = {
   id: 'ailegro-score',
-  types: [{ description: 'AIlegro Score', accept: { 'application/json': ['.json'] } }],
+  types: [{ description: 'Cantelvio Score', accept: { 'application/json': ['.json'] } }],
 };
 
 /**
- * Open also offers MusicXML, which is imported (Save then writes an .ailegro.json), and PDFs,
- * scanned pages and recordings, which the local AIlegro service turns into MusicXML first.
+ * Open also offers MusicXML, which is imported (Save then writes a .cantelvio.json), and PDFs,
+ * scanned pages and recordings, which the local Cantelvio service turns into MusicXML first.
  */
 const OPEN_PICKER: PickerOptions = {
   id: 'ailegro-score',
   types: [
     {
-      description: 'AIlegro Score, MusicXML',
+      description: 'Cantelvio Score, MusicXML',
       accept: {
         'application/json': ['.json'],
         'application/vnd.recordare.musicxml+xml': ['.musicxml', '.xml'],
@@ -116,7 +117,7 @@ const OPEN_PICKER: PickerOptions = {
 };
 
 const OPEN_ACCEPT =
-  '.json,.ailegro.json,application/json,.musicxml,.xml,.mxl,' +
+  '.json,.cantelvio.json,.ailegro.json,application/json,.musicxml,.xml,.mxl,' +
   '.pdf,.png,.jpg,.jpeg,.tif,.tiff,.wav,.mp3,.flac,.ogg,.m4a,.aac,.aif,.aiff';
 
 /** The file the current document was opened from or last saved to. */
@@ -146,6 +147,7 @@ export interface RecentFile {
   readonly handle: FileHandleLike;
 }
 
+// Keep the existing database and storage keys so the rebrand preserves saved file handles.
 const DB = 'ailegro-score';
 const STORE = 'recent';
 const MAX_RECENT = 8;
@@ -310,7 +312,9 @@ export async function saveScore(): Promise<boolean> {
 /** Save under a new name (a download where the browser has no save dialog). */
 export async function saveScoreAs(): Promise<boolean> {
   const s = getStore().getState();
-  const name = s.fileName ?? safeFileName(s.doc.meta.title, '.ailegro.json');
+  const name =
+    s.fileName?.replace(/\.ailegro\.json$/i, '.cantelvio.json') ??
+    safeFileName(s.doc.meta.title, '.cantelvio.json');
   if (CAN_PICK) {
     try {
       const h = await window.showSaveFilePicker!({
@@ -405,8 +409,8 @@ function invalid(doc: ScoreDoc, fileName: string): boolean {
 }
 
 /**
- * Load an imported document (MusicXML, or what the AIlegro service made of a PDF or recording) as
- * a new, unsaved score: Save asks where to write the `.ailegro.json`, never over the source file.
+ * Load an imported document (MusicXML, or what the Cantelvio service made of a PDF or recording) as
+ * a new, unsaved score: Save asks where to write the `.cantelvio.json`, never over the source file.
  * `message` replaces the default notice; skipped or approximated content goes to the console.
  */
 export function openImportedDoc(
@@ -434,7 +438,7 @@ export function openImportedDoc(
 
 /**
  * Open a score file; `handle` (when known) lets Save write back to it. MusicXML is imported into
- * a new, unsaved document. PDFs, scanned pages and recordings go to the local AIlegro service,
+ * a new, unsaved document. PDFs, scanned pages and recordings go to the local Cantelvio service,
  * which runs in the background; the result opens when it is ready (resolves true once started).
  */
 export async function openFile(file: File, handle: FileHandleLike | null = null): Promise<boolean> {
@@ -591,7 +595,7 @@ export function restoreAutosave(): ScoreDoc | null {
   try {
     const text = localStorage.getItem(AUTOSAVE_KEY);
     const doc = text ? parseScore(text) : null;
-    return doc && validateScore(doc).length === 0 ? doc : null;
+    return doc && validateScore(doc).length === 0 ? rebrandBuiltinDraft(doc) : null;
   } catch {
     return null;
   }

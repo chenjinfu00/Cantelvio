@@ -69,7 +69,7 @@
 | D1 | 根脚本与 CI | Claude / Codex | ✅ H0 | 根 CI 与 Pages 发布均测试浏览器模块、检查 Score 并构建检查站点；预览 API 测试已不再依赖被忽略的训练清单 |
 | D2 | 仓库瘦身 | Claude + **用户**决定 | H0–H1 | `Compose/archive`（67 MB，4 份相同的 4 MB 权重）移出主线（打 tag 保留）；评估 `Compose/validation`（38 MB）、`Harmony/demos`（33 MB） |
 | D3 | 个人信息与历史 | **用户**决定 | H1 | 18 个文件含 `/Users/chenjinfu` 路径；162 个提交的作者邮箱是个人邮箱。公开宣传前决定：改写历史（git filter-repo + mailmap，之后强制推送）或保留 |
-| D4 | 改名收尾 | Claude | H1 | 包名（`ailegro`→`@cantelvio/compose` 等）、页面标题、localStorage 键迁移；保留 `ailegro:serve` 等旧命令别名 |
+| D4 | 改名收尾 | Claude / Codex | ✅ 展示与入口 | 当前界面、现行说明与包名统一 Cantelvio；推荐 `cantelvio:serve` 启动服务。旧协议、保存键与命令别名保留兼容，历史训练证据保持原样 |
 | D5 | 可复现训练 | Claude | H2 | 锁定 Python 环境（已有 `requirements-lock.txt`）；一条命令评估；训练手册 |
 | D6 | git-lfs | **用户** | H0 | 仓库装了 LFS 钩子但没有 `.gitattributes`；决定要不要用（大文件见 D2），不用就 `git lfs uninstall` |
 | D7 | 文档 | Claude | H1 | 一张架构图、ADR 索引提到根目录、CONTRIBUTING、CHANGELOG、`CITATION.cff` |

@@ -2,8 +2,8 @@
   "schema": "ailegro.open-source-inventory/1",
   "date": "2026-10-05",
   "scope": [
-    "AIlegro local project",
-    "AIlegro Score local project"
+    "Cantelvio Compose local project",
+    "Cantelvio Score local project"
   ],
   "notes": [
     "Node records cover package-lock entries including optional platforms; installed field records this machine.",
@@ -3607,5 +3607,5 @@
   ],
   "sourceManifest": "SOURCE_MANIFEST.json",
   "modelManifest": "../Anticipatory-Music-Transformer/DOWNLOAD_MANIFEST.json",
-  "scoreNewDependencyNotices": "../../AIlegro Score/apps/web/public/licenses/manifest.json"
+  "scoreNewDependencyNotices": "../../Score/apps/web/public/licenses/manifest.json"
 }

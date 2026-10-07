@@ -7,7 +7,7 @@ import {
   toString as ratString,
   validateScore,
   type ScoreDoc,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { describe, expect, it } from 'vitest';
 import { buildAnalysisRequest, planAnalysisImport } from './analysis';
 import { buildComposeRequest } from './request';

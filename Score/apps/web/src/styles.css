@@ -1,4 +1,4 @@
-/* AIlegro Score editor styles. Pages are always white paper with black ink; the chrome follows
+/* Cantelvio Score editor styles. Pages are always white paper with black ink; the chrome follows
    the system light/dark theme. Colours are tokens so themes stay consistent. */
 
 :root {
@@ -245,13 +245,6 @@ kbd {
   font-size: 14px;
   letter-spacing: 0.2px;
   white-space: nowrap;
-}
-
-/* "AIlegro": capital I and lowercase l look alike in sans fonts, so the AI is set apart. */
-.brand-ai {
-  color: var(--accent);
-  font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
 .doc-title {
@@ -1301,7 +1294,7 @@ textarea.code {
   background: #8f1d14;
 }
 
-/* PDF / recording job on the local AIlegro service (bottom left, above the status bar) */
+/* PDF / recording job on the local Cantelvio service (bottom left, above the status bar) */
 .import-status {
   position: fixed;
   left: 16px;

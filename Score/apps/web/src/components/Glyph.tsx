@@ -1,4 +1,4 @@
-import { type GlyphName, glyph } from '@ailegro-score/engraving';
+import { type GlyphName, glyph } from '@cantelvio-score/engraving';
 
 /** A SMuFL glyph as a small inline SVG icon (uses the same outlines as the engraver). */
 export function Glyph({

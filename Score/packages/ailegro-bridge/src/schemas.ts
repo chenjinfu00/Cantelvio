@@ -1,7 +1,7 @@
 /**
- * Interchange schemas between AIlegro Score and AIlegro (see docs/ailegro-integration.md).
+ * Interchange schemas between Cantelvio Score and Cantelvio (see docs/ailegro-integration.md).
  *
- * Conventions shared with AIlegro's training code (training/scripts/score_events_v2.py,
+ * Conventions shared with Cantelvio's training code (training/scripts/score_events_v2.py,
  * four_pillar_codec.py, four_pillar_v31_sample.py):
  * - musical time in QUARTER notes as exact fraction strings ("3/2"), never floats;
  * - sounding MIDI pitch (60 = C4); unpitched percussion has pitch null plus a GM drum key;
@@ -10,7 +10,7 @@
  *
  * All three documents are versioned. Changing a field = new schema version + migration + tests.
  */
-import { AILEGRO_GROUPS, type AilegroGroup } from '@ailegro-score/core';
+import { AILEGRO_GROUPS, type AilegroGroup } from '@cantelvio-score/core';
 
 export { AILEGRO_GROUPS, type AilegroGroup };
 
@@ -23,7 +23,7 @@ export const RESULT_SCHEMA = 'ailegro.compose-result/1' as const;
 export const ANALYSIS_REQUEST_SCHEMA = 'ailegro.analysis-request/1' as const;
 export const ANALYSIS_RESULT_SCHEMA = 'ailegro.analysis-result/1' as const;
 
-/** AIlegro's score-dynamic vocabulary (four_pillar_codec.DYNAMICS). */
+/** Cantelvio's score-dynamic vocabulary (four_pillar_codec.DYNAMICS). */
 export const AILEGRO_DYNAMICS = [
   'p',
   'f',
@@ -62,7 +62,7 @@ export interface RecordPart {
   readonly program: number | null;
   /** How the group was decided: "catalog" (instrument definition) or "vocal". */
   readonly mapping: string | null;
-  /** AIlegro Score instrument id (extension). */
+  /** Cantelvio Score instrument id (extension). */
   readonly instrument?: string;
   readonly staves?: number;
 }
@@ -98,10 +98,10 @@ export interface RecordNote {
   readonly accent: number;
   readonly grace: boolean;
   readonly unpitched: boolean;
-  /** Extensions (ignored by AIlegro's reader): */
+  /** Extensions (ignored by Cantelvio's reader): */
   readonly drum?: number | null;
   readonly velocity?: number | null;
-  /** AIlegro Score note id, so results and diffs can refer back. */
+  /** Cantelvio Score note id, so results and diffs can refer back. */
   readonly id?: string;
   readonly source?: string;
 }
@@ -112,7 +112,7 @@ export interface RecordChord {
   /** Root pitch class 0..11 and spelling. */
   readonly root: number;
   readonly rootName: string;
-  /** AIlegro chord-quality id ("maj", "min7", ...). */
+  /** Cantelvio chord-quality id ("maj", "min7", ...). */
   readonly quality: string;
   readonly bass: number | null;
   readonly id?: string;
@@ -125,7 +125,7 @@ export interface RecordTempo {
   readonly text: string | null;
 }
 
-/** A score in AIlegro's exact-notation record format (compatible with classical-score-v1). */
+/** A score in Cantelvio's exact-notation record format (compatible with classical-score-v1). */
 export interface ScoreRecord {
   readonly schema: typeof RECORD_SCHEMA;
   readonly scoreId: string;
@@ -168,7 +168,7 @@ export interface TimeSpan {
   readonly to: QuarterTime;
 }
 
-/** Common fields of every condition, following AIlegro's unified request contract. */
+/** Common fields of every condition, following Cantelvio's unified request contract. */
 export interface ConditionBase {
   readonly id: string;
   readonly timeSpan: TimeSpan;
@@ -226,7 +226,7 @@ export interface ComposeRequest {
   readonly schema: typeof REQUEST_SCHEMA;
   readonly requestId: string;
   readonly createdAt: string | null;
-  readonly client: { readonly app: 'AIlegro Score'; readonly version: string };
+  readonly client: { readonly app: 'Cantelvio Score'; readonly version: string };
   readonly task: ComposeTask;
   readonly intent: { readonly text: string; readonly tags: readonly string[] } | null;
   /** Context and given material, as a score record (notes before/inside the target span). */
@@ -239,7 +239,7 @@ export interface ComposeRequest {
 
 // ------------------------------------------------------------------------------- compose result
 
-/** One generated bar exactly as AIlegro's v3.1 Composer.next_bar() returns it. */
+/** One generated bar exactly as Cantelvio's v3.1 Composer.next_bar() returns it. */
 export interface ResultBar {
   readonly bar: number;
   readonly length: QuarterTime;
@@ -288,12 +288,12 @@ export interface ComposeResult {
 
 // ------------------------------------------------------------------------------- harmonic analysis
 
-/** Ask AIlegro to label the chords (and local keys) of existing music. */
+/** Ask Cantelvio to label the chords (and local keys) of existing music. */
 export interface AnalysisRequest {
   readonly schema: typeof ANALYSIS_REQUEST_SCHEMA;
   readonly requestId: string;
   readonly createdAt: string | null;
-  readonly client: { readonly app: 'AIlegro Score'; readonly version: string };
+  readonly client: { readonly app: 'Cantelvio Score'; readonly version: string };
   /** The music to analyse (all parts of the analysed bars). */
   readonly score: ScoreRecord;
   readonly analyze: {
@@ -301,7 +301,7 @@ export interface AnalysisRequest {
     readonly bars: { readonly from: number; readonly count: number };
     /** Part whose top line is read as the melody; null = the first part with notes. */
     readonly melodyPart: string | null;
-    /** `auto` = AIlegro's best available engine; `model` = its trained analysis model; `rules` = its chord tracker. */
+    /** `auto` = Cantelvio's best available engine; `model` = its trained analysis model; `rules` = its chord tracker. */
     readonly engine: 'auto' | 'model' | 'rules';
     /** How often chords may change: `auto` (as learned), `beat`, `half-bar`, `bar`, `two-bars`. */
     readonly harmonicRhythm: 'auto' | 'beat' | 'half-bar' | 'bar' | 'two-bars';
@@ -310,7 +310,7 @@ export interface AnalysisRequest {
 
 export interface AnalysisBar {
   readonly bar: number;
-  /** Local key AIlegro reads in the bar. */
+  /** Local key Cantelvio reads in the bar. */
   readonly key: { readonly tonic: number; readonly mode: number; readonly name?: string };
   /** Chord changes in the bar; the first analysed bar starts with the chord in effect at onset 0. */
   readonly chords: readonly {

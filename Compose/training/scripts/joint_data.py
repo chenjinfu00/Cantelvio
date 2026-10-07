@@ -1,4 +1,4 @@
-"""Windowing and token encoding for the AIlegro joint (R/H/B/M) Transformer.
+"""Windowing and token encoding for the Cantelvio Compose joint (R/H/B/M) Transformer.
 
 Generation order (fixed): every sixteenth-note step t, streams in the order
 R (accompaniment rhythm) -> H (harmony) -> B (bass) -> M (melody).

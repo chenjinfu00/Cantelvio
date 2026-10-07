@@ -1,4 +1,4 @@
-"""Instrument groups, token vocabularies and quantization of the AIlegro orchestral model.
+"""Instrument groups, token vocabularies and quantization of the Cantelvio Compose orchestral model.
 
 Six instrument groups (the user's choice, 2026-09-28):
   0 woodwinds  木管        1 brass        铜管        2 percussion  打击乐

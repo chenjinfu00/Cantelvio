@@ -17,9 +17,9 @@ import {
   hasMeasure,
   hasStaff,
   randomIds,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { create } from 'zustand';
-import type { LayoutOptions } from '@ailegro-score/engraving';
+import type { LayoutOptions } from '@cantelvio-score/engraving';
 import type { Lang } from '../i18n';
 
 export type Selection =

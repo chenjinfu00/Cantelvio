@@ -1,4 +1,4 @@
-import { SAMPLES, randomIds } from '@ailegro-score/core';
+import { SAMPLES, randomIds } from '@cantelvio-score/core';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';

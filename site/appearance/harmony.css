@@ -1,0 +1,397 @@
+/* Shared site appearance changes the instrument chrome, never its geometry. */
+html[data-cv-app="harmony"] {
+  --bg: var(--cv-bg);
+  --panel: var(--cv-surface);
+  --panel-border: var(--cv-border);
+  --text: var(--cv-text);
+  --muted: var(--cv-muted);
+  --cyan: var(--cv-accent);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="harmony"][data-cv-theme="light"] { color-scheme: light; }
+html[data-cv-app="harmony"][data-cv-theme="dark"] { color-scheme: dark; }
+
+html[data-cv-app="harmony"] .instrument {
+  --wb-cyan: var(--cv-accent);
+  --wb-gold: var(--cv-warning);
+  --wb-panel: var(--cv-surface);
+  --wb-line: var(--cv-border);
+  --wb-muted: var(--cv-muted);
+  background: var(--cv-bg);
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="harmony"] .instrument::before {
+  background-image:
+    linear-gradient(var(--cv-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cv-border) 1px, transparent 1px);
+  opacity: .18;
+}
+
+html[data-cv-app="harmony"] .instrument :is(.topbar, .performance-dock, .wb, .settings-sheet) {
+  border-color: var(--cv-border);
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  box-shadow: var(--cv-shadow);
+  font-family: var(--cv-font);
+}
+
+html[data-cv-app="harmony"] .keyboard-viewport {
+  background: var(--cv-bg);
+  box-shadow: none;
+}
+html[data-cv-app="harmony"] .keyboard-viewport::before {
+  background: linear-gradient(90deg, var(--cv-bg), transparent);
+}
+html[data-cv-app="harmony"] .keyboard-viewport::after {
+  background: linear-gradient(-90deg, var(--cv-bg), transparent);
+}
+
+/* The default unselected keys follow the theme. Scale, tonic and orchestral
+   colors remain musical cues; the user's Piano and Walnut skins stay intact. */
+html[data-cv-app="harmony"] .keyboard[data-skin="tonnetz"] .hex-key:not(.scale-key):not(.tonic-key):not(.instrument-key) {
+  --key-a: var(--cv-raised);
+  --key-b: var(--cv-surface);
+  --key-edge: var(--cv-border);
+  color: var(--cv-muted);
+}
+html[data-cv-app="harmony"] .keyboard[data-skin="tonnetz"] .hex-key:not(.scale-key):not(.tonic-key):not(.instrument-key).is-active {
+  --key-a: var(--cv-accent);
+  --key-b: var(--cv-accent-hover);
+  --key-edge: var(--cv-accent);
+  color: var(--cv-on-accent);
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .control-select, .volume-control, .transpose-control, .count-control,
+  .toggle-button, .labels-button, .panic-button, .performance-layout-select,
+  .performance-toggle-button, .keyboard-overview, .layout-name, .ensemble-legend,
+  .wb-control-grid label, .wb-range, .wb-block, .wb-chord-drawer, .wb-sequence,
+  .wb-candidates button, .wb-candidate-other, .wb-key-split, .wb-performance-detail
+) {
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-raised);
+  color: var(--cv-text);
+}
+html[data-cv-app="harmony"] .instrument :is(.performance-layout-select, .performance-toggle-button, .keyboard-overview) {
+  box-shadow: var(--cv-shadow);
+}
+
+html[data-cv-app="harmony"] .overview-window {
+  border-color: var(--cv-accent);
+  background: var(--cv-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--cv-border);
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .control-select select, .performance-layout-select select,
+  .settings-sheet select, .wb-control-grid select,
+  .wb-timeline select, .wb-quick select, .wb-key-clock select,
+  .wb-library-controls select, .wb-attention-selects select,
+  .wb-chord-editor select
+) {
+  color: var(--cv-text);
+  color-scheme: inherit;
+}
+html[data-cv-app="harmony"] .instrument :is(select option, select optgroup) {
+  color: var(--cv-text);
+  background: var(--cv-surface);
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .performance-layout-select > span, .layout-readout, .bottom-row p, .sheet-tip,
+  .ensemble-legend small, .wb-formula, .wb-block-title > span,
+  .wb-provenance, .wb-parameters dt, .wb-parameters p, .wb-attention p,
+  .wb-history span, .wb-timeline-tempo span, .wb-timeline-inline span,
+  .wb-timeline-inline small, .wb-short-hint, .wb-editor-candidates small
+) { color: var(--cv-muted); }
+
+html[data-cv-app="harmony"] .instrument :is(
+  .ensemble-legend strong, .wb-block-title strong, .wb-chord-drawer summary,
+  .wb-evidence summary, .wb-range output, .wb-parameters dd
+) { color: var(--cv-text); }
+
+html[data-cv-app="harmony"] .instrument :is(
+  .sheet-tip a, .wb-audio-credit a, .wb-audio-credit small,
+  .wb-next-key, .wb-state-badge
+) { color: var(--cv-accent); }
+
+html[data-cv-app="harmony"] .instrument :is(
+  .sheet-header, .wb-tabs, .wb-parameters dl div, .wb-evidence,
+  .wb-performance-detail
+) { border-color: var(--cv-border); }
+
+html[data-cv-app="harmony"] .instrument :is(.sheet-grabber span, .wb-grabber span) {
+  background: var(--cv-muted);
+  box-shadow: none;
+}
+
+/* Compact instrument controls keep their existing sizing and arrangement. */
+html[data-cv-app="harmony"] .instrument :is(
+  .performance-dock .settings-handle, .performance-dock .wb-toggle,
+  .wb-tabs button, .wb-mode-row button, .wb-model-tabs button,
+  .wb-style-grid button, .wb-sequence-chords button, .wb-chord-grid button,
+  .wb-attention-head button, .wb-timeline button:not(.wb-timeline-inline),
+  .wb-timeline select, .wb-timeline-tempo, .wb-quick button, .wb-quick select,
+  .wb-key-clock select, .wb-library-controls select, .wb-attention-selects select,
+  .wb-chord-editor button, .wb-chord-editor select, .wb-new-mix
+) {
+  border-color: var(--cv-border);
+  background: var(--cv-raised);
+  color: var(--cv-text);
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .performance-dock .settings-handle[aria-expanded="true"],
+  .performance-dock .wb-toggle[aria-expanded="true"],
+  .wb-tabs button.is-active, .wb-mode-row button.is-active,
+  .wb-model-tabs button.is-active, .wb-style-grid button.is-active,
+  .wb-sequence-chords button.is-current, .wb-chord-grid button.is-current,
+  .wb-history span.is-current, .wb-key-button.is-active,
+  .performance-toggle-button[aria-pressed="true"],
+  .toggle-button[aria-pressed="true"], .settings-sheet .labels-button[aria-pressed="true"]
+) {
+  border-color: var(--cv-accent);
+  color: var(--cv-accent);
+  background: var(--cv-accent-soft);
+  box-shadow: none;
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .count-control button, .done-button, .mini-button:active,
+  .mini-button:focus-visible
+) {
+  color: var(--cv-accent);
+  background: var(--cv-accent-soft);
+}
+html[data-cv-app="harmony"] .count-control .bound-button { color: var(--cv-accent); }
+html[data-cv-app="harmony"] .wb-key-button.is-active i {
+  color: var(--cv-accent);
+  text-shadow: none;
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .wb-probability-head button, .wb-attention-head button.is-active,
+  .wb-timeline button[data-timeline-action="toggle"],
+  .wb-timeline button[data-timeline-action="auto"][aria-pressed="true"],
+  .wb-quick button[aria-pressed="true"], .wb-chord-editor .wb-editor-apply,
+  .start-icon
+) {
+  border-color: var(--cv-accent);
+  background: var(--cv-accent);
+  color: var(--cv-on-accent);
+  box-shadow: none;
+}
+html[data-cv-app="harmony"] .wb-timeline button:is([data-state="playing"], [data-state="starting"]) {
+  background: var(--cv-danger-soft);
+  color: var(--cv-danger);
+  border-color: var(--cv-danger);
+}
+
+html[data-cv-app="harmony"] .instrument :is(.toggle-light, .wb-meter i) {
+  background: var(--cv-border);
+  box-shadow: none;
+}
+html[data-cv-app="harmony"] .instrument :is(
+  .toggle-button[aria-pressed="true"] .toggle-light,
+  .performance-toggle-button[aria-pressed="true"] .toggle-light,
+  .wb-meter i.is-active
+) {
+  background: var(--cv-accent);
+  box-shadow: 0 0 8px var(--cv-accent-soft);
+}
+
+html[data-cv-app="harmony"] .instrument :is(
+  .wb-status, .wb-timeline-inspector, .wb-quick-popover, .wb-chord-editor
+) {
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  box-shadow: var(--cv-shadow);
+}
+html[data-cv-app="harmony"] .instrument :is(
+  .wb-status[data-kind="error"], .wb-model-error, .wb-editor-error,
+  .settings-sheet .panic-button, .panic-button:active
+) { color: var(--cv-danger); }
+html[data-cv-app="harmony"] .wb-status[data-kind="error"] { border-color: var(--cv-danger); }
+
+html[data-cv-app="harmony"] .instrument :is(
+  .volume-control input, .wb-range input, .wb-temperature input,
+  .wb-quick-popover input, .wb-checks input
+) { accent-color: var(--cv-accent); }
+
+html[data-cv-app="harmony"] .instrument :is(
+  .performance-dock button, .wb button, .wb select, .wb input, .wb summary,
+  .wb-timeline button, .wb-timeline select, .wb-timeline input,
+  .settings-sheet button, .settings-sheet select, .settings-sheet input,
+  .performance-toggle-button, .performance-layout-select select
+):focus-visible {
+  outline: 2px solid var(--cv-accent);
+  outline-offset: 2px;
+}
+html[data-cv-app="harmony"] .instrument :is(.count-control button, .mini-button):disabled {
+  color: var(--cv-muted);
+  background: transparent;
+  opacity: .45;
+}
+
+html[data-cv-app="harmony"] .wb-sequence.is-active { border-color: var(--cv-accent); }
+html[data-cv-app="harmony"] .wb-candidates button:is(:hover, .is-selected) {
+  border-color: var(--cv-accent);
+  background: var(--cv-accent-soft);
+}
+html[data-cv-app="harmony"] .instrument :is(.wb-candidates i, .wb-candidate-other i) {
+  background: var(--cv-border);
+}
+html[data-cv-app="harmony"] .instrument :is(.wb-candidates i, .wb-candidate-other i)::after {
+  background: var(--cv-accent);
+}
+html[data-cv-app="harmony"] .wb-full-distribution span {
+  color: var(--cv-text);
+  background: var(--cv-raised);
+}
+html[data-cv-app="harmony"] .wb-block-title > span:not(:has(.katex)) {
+  background: var(--cv-accent-soft);
+  color: var(--cv-accent);
+}
+
+html[data-cv-app="harmony"] .wb-timeline-chord {
+  background: var(--cv-raised);
+  border-color: var(--cv-surface);
+  box-shadow: inset 1px 0 var(--cv-border);
+}
+html[data-cv-app="harmony"] .wb-timeline-chord.is-current { background: var(--cv-accent-soft); }
+html[data-cv-app="harmony"] .wb-timeline-track i { border-color: var(--cv-surface); }
+html[data-cv-app="harmony"] .wb-timeline button.wb-timeline-inline { color: var(--cv-text); }
+html[data-cv-app="harmony"] .wb-timeline-inline input { color: var(--cv-text); }
+
+/* The attention strength remains a heat map on a theme-aware neutral base. */
+html[data-cv-app="harmony"] .wb-matrix td {
+  color: var(--cv-text);
+  background: color-mix(in srgb, var(--cv-accent) calc(8% + var(--attention) * 55%), var(--cv-surface));
+}
+html[data-cv-app="harmony"] .wb-matrix td.is-masked {
+  color: var(--cv-muted);
+  background: var(--cv-raised);
+}
+
+html[data-cv-app="harmony"] .instrument :is(.settings-backdrop, .wb-backdrop, .start-overlay) {
+  background: color-mix(in srgb, var(--cv-bg) 74%, transparent);
+}
+html[data-cv-app="harmony"] .start-overlay button {
+  border-color: var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  box-shadow: var(--cv-shadow);
+}
+html[data-cv-app="harmony"] .start-overlay small { color: var(--cv-muted); }
+html[data-cv-app="harmony"] .rotate-hint { background: var(--cv-bg); }
+
+/* Learning diagrams retain their interval and chord-quality colors. */
+html[data-cv-app="harmony"] .tonnetz-learn {
+  --learn-cyan: var(--cv-accent);
+  --learn-gold: var(--cv-warning);
+  --learn-bg: var(--cv-raised);
+  --learn-border: var(--cv-border);
+  --learn-text: var(--cv-text);
+  --learn-muted: var(--cv-muted);
+}
+html[data-cv-app="harmony"] .tonnetz-learn :is(
+  .learn-card, .learn-stage-tab, .learn-action-button, .learn-chord-choice,
+  .learn-icon-button, .learn-reset-button, .learn-play-chord,
+  .learn-formula, .learn-current-chord
+) {
+  border-color: var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-raised);
+  box-shadow: none;
+}
+html[data-cv-app="harmony"] .learn-formula { color: var(--cv-text); }
+html[data-cv-app="harmony"] .learn-stage-tab span { background: var(--cv-surface); }
+html[data-cv-app="harmony"] .learn-stage-tab.is-active {
+  background: var(--cv-accent-soft);
+  color: var(--cv-accent);
+  border-color: var(--cv-accent);
+}
+html[data-cv-app="harmony"] .learn-stage-tab.is-active span {
+  background: var(--cv-accent);
+  color: var(--cv-on-accent);
+}
+html[data-cv-app="harmony"] .learn-chord-choice.is-active {
+  background: var(--cv-warning-soft);
+  border-color: var(--learn-gold);
+  color: var(--cv-warning);
+}
+html[data-cv-app="harmony"] .learn-diagram-scroll svg { background: var(--cv-surface); }
+html[data-cv-app="harmony"] .tonnetz-learn :is(
+  .learn-ring text, .learn-cell text, .learn-chord-grid text, .learn-edge-legend text
+) { stroke: var(--cv-surface); }
+html[data-cv-app="harmony"] .learn-note circle,
+html[data-cv-app="harmony"] .tonnetz-learn :is(.learn-cell-note, .learn-grid-note) path,
+html[data-cv-app="harmony"] .learn-edge-sample circle {
+  fill: var(--cv-raised);
+}
+html[data-cv-app="harmony"] .learn-note circle,
+html[data-cv-app="harmony"] .tonnetz-learn :is(.learn-cell-note, .learn-grid-note) path {
+  stroke: var(--cv-border);
+}
+html[data-cv-app="harmony"] .tonnetz-learn :is(
+  .learn-note:hover circle, .learn-note:focus-visible circle,
+  .learn-cell-note:hover path, .learn-cell-note:focus-visible path,
+  .learn-grid-note:hover path, .learn-grid-note:focus-visible path,
+  .learn-cell-note.is-origin path
+) {
+  fill: var(--cv-accent-soft);
+  stroke: var(--cv-accent);
+}
+html[data-cv-app="harmony"] .learn-cell-note.is-plane.tone-0 path {
+  fill: color-mix(in srgb, var(--learn-cyan) 14%, var(--cv-surface));
+}
+html[data-cv-app="harmony"] .learn-cell-note.is-plane.tone-1 path {
+  fill: color-mix(in srgb, var(--learn-gold) 14%, var(--cv-surface));
+}
+html[data-cv-app="harmony"] .learn-cell-note.is-plane.tone-2 path {
+  fill: color-mix(in srgb, var(--learn-violet) 14%, var(--cv-surface));
+}
+html[data-cv-app="harmony"] .learn-cell-note.is-plane.tone-3 path {
+  fill: color-mix(in srgb, #79d6ff 14%, var(--cv-surface));
+}
+html[data-cv-app="harmony"] .learn-grid-note.is-active path {
+  fill: var(--cv-warning-soft);
+  stroke: var(--cv-warning);
+}
+html[data-cv-app="harmony"] .learn-grid-note.is-active.minor path { fill: var(--learn-violet); }
+html[data-cv-app="harmony"] .learn-grid-note.is-active.augmented path { fill: #ff9067; }
+html[data-cv-app="harmony"] .learn-grid-note.is-active.diminished path { fill: #ff7098; }
+html[data-cv-app="harmony"] .learn-grid-note.is-active.suspended path { fill: var(--learn-cyan); }
+html[data-cv-app="harmony"] .learn-grid-note.is-active text {
+  fill: var(--cv-text);
+  stroke: var(--cv-warning-soft);
+}
+html[data-cv-app="harmony"] .learn-grid-note.is-active:is(.minor, .augmented, .diminished) text {
+  fill: #171006;
+  stroke: rgba(255, 255, 255, .18);
+}
+html[data-cv-app="harmony"] .learn-grid-note.is-active.suspended text {
+  fill: var(--cv-on-accent);
+  stroke: var(--cv-accent);
+}
+html[data-cv-app="harmony"] .tonnetz-learn :is(
+  .learn-note.is-path-active circle, .learn-cell-note.is-path-active path,
+  .learn-grid-note.is-path-active path
+) {
+  fill: #fff2bb;
+  stroke: var(--learn-gold);
+}
+html[data-cv-app="harmony"] .tonnetz-learn :is(
+  .learn-note.is-path-active text, .learn-cell-note.is-path-active text,
+  .learn-grid-note.is-path-active text
+) {
+  fill: #181006;
+  stroke: rgba(255, 255, 255, .2);
+}

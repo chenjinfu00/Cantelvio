@@ -27,7 +27,7 @@ describe('service imports', () => {
       expect(importKindOf(name)).toBe('pdf');
     for (const name of ['a.wav', 'b.MP3', 'c.flac', 'd.m4a', 'e.aiff', 'f.aif', 'g.ogg'])
       expect(importKindOf(name)).toBe('audio');
-    for (const name of ['s.ailegro.json', 's.musicxml', 's.mxl', 's.xml', 's.mid', 'pdf'])
+    for (const name of ['s.cantelvio.json', 's.musicxml', 's.mxl', 's.xml', 's.mid', 'pdf'])
       expect(importKindOf(name)).toBeNull();
   });
 
@@ -75,7 +75,7 @@ describe('service imports', () => {
       },
     });
     expect(importSummary('zh', audio)).toBe(
-      '扒谱完成：take.wav，保留 300/317 个音，2/4，♩ = 97，24 小节（保存时另存为 .ailegro.json）',
+      '扒谱完成：take.wav，保留 300/317 个音，2/4，♩ = 97，24 小节（保存时另存为 .cantelvio.json）',
     );
     const pdf = job({
       kind: 'pdf',
@@ -90,7 +90,7 @@ describe('service imports', () => {
       },
     });
     expect(importSummary('en', pdf)).toBe(
-      'Read quartet.pdf: 6 page(s) (saving writes an .ailegro.json). Audiveris found 2 movements; the first one is open',
+      'Read quartet.pdf: 6 page(s) (saving writes a .cantelvio.json). Audiveris found 2 movements; the first one is open',
     );
   });
 });

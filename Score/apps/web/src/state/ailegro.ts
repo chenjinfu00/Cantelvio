@@ -1,6 +1,6 @@
 /**
- * The AIlegro workflow inside the editor: describe a task, build an `ailegro.compose-request/1`,
- * hand it to AIlegro (file download or the local adapter server), and import the
+ * The Cantelvio workflow inside the editor: describe a task, build an `ailegro.compose-request/1`,
+ * hand it to Cantelvio (file download or the local adapter server), and import the
  * `ailegro.compose-result/1` as reviewable suggestions. The contract lives in
  * packages/ailegro-bridge and docs/ailegro-integration.md; this file is only UI glue.
  */
@@ -10,7 +10,7 @@ import {
   type ScoreDoc,
   findEventOfNote,
   findInstrument,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import {
   ANALYSIS_RESULT_SCHEMA,
   type AnalysisRequest,
@@ -29,7 +29,7 @@ import {
   buildScoreRecord,
   planAnalysisImport,
   planComposeImport,
-} from '@ailegro-score/ailegro-bridge';
+} from '@cantelvio-score/compose-bridge';
 import { translate } from '../i18n';
 import { IN_STATIC_PREVIEW, LOCAL_SERVICE_UNAVAILABLE } from '../host';
 import { download, safeFileName } from './files';
@@ -76,7 +76,7 @@ export interface PanelSpec {
   readonly topP: number;
   /** null = let the model decide. */
   readonly density: number | null;
-  /** How often chords may change where AIlegro chooses them (accompaniment, harmonic analysis). */
+  /** How often chords may change where Cantelvio chooses them (accompaniment, harmonic analysis). */
   readonly harmonicRhythm: HarmonicRhythm;
 }
 
@@ -93,7 +93,7 @@ export function lastContentMeasure(doc: ScoreDoc): number {
   return last;
 }
 
-/** Groups of the instruments in the score, in AIlegro's order. */
+/** Groups of the instruments in the score, in Cantelvio's order. */
 export function scoreGroups(doc: ScoreDoc): AilegroGroup[] {
   const present = new Set(doc.parts.map((p) => findInstrument(p.instrument)?.ailegroGroup ?? null));
   return AILEGRO_GROUPS.filter((g) => present.has(g));
@@ -194,11 +194,11 @@ export function newRequest(spec: PanelSpec): ComposeRequest {
 }
 
 export function requestFileName(request: ComposeRequest | AnalysisRequest): string {
-  return `ailegro-request-${request.requestId}.json`;
+  return `cantelvio-request-${request.requestId}.json`;
 }
 
 export function resultFileName(request: ComposeRequest | AnalysisRequest): string {
-  return `ailegro-result-${request.requestId}.json`;
+  return `cantelvio-result-${request.requestId}.json`;
 }
 
 /** Download the request; returns it so the panel can show the adapter command. */
@@ -258,14 +258,14 @@ export function importAnalysisResult(result: AnalysisResult): boolean {
     s.notify(translate(lang, 'ai.analysisEmpty'), 'error');
     return false;
   }
-  if (!s.apply(plan.commands, 'AIlegro', { selection: { kind: 'none' } })) return false;
+  if (!s.apply(plan.commands, 'Cantelvio', { selection: { kind: 'none' } })) return false;
   const w = plan.warnings.length
     ? plan.warnings.slice(0, 2).join('; ')
     : translate(lang, 'ai.noWarnings');
   getStore()
     .getState()
     .notify(translate(lang, 'ai.analyzed', { n: plan.stats.chords, w }));
-  for (const warning of plan.warnings) console.info('[AIlegro]', warning);
+  for (const warning of plan.warnings) console.info('[Cantelvio]', warning);
   return true;
 }
 
@@ -294,17 +294,17 @@ export async function analyzeWithService(base: string, rhythm: HarmonicRhythm): 
   return importAnalysisResult(JSON.parse(text) as AnalysisResult);
 }
 
-/** Shell command for the reference adapter, run from the AIlegro project root. */
+/** Shell command for the reference adapter, run from the Cantelvio project root. */
 export function adapterCommand(
   request: ComposeRequest | AnalysisRequest,
   mode: 'file' | 'serve',
 ): string {
   const script = '"../Score/integrations/ailegro/score_compose.py"';
   if (mode === 'serve') {
-    return `cd "<AIlegro>"\n.venv-training/bin/python ${script} \\\n  --serve --checkpoint training/runs/<run>/weights.pt`;
+    return `cd "<Cantelvio/Compose>"\n.venv-training/bin/python ${script} \\\n  --serve --checkpoint training/runs/<run>/weights.pt`;
   }
   return (
-    `cd "<AIlegro>"\n.venv-training/bin/python ${script} \\\n` +
+    `cd "<Cantelvio/Compose>"\n.venv-training/bin/python ${script} \\\n` +
     `  --request ~/Downloads/${requestFileName(request)} \\\n` +
     `  --checkpoint training/runs/<run>/weights.pt \\\n` +
     `  --output ~/Downloads/${resultFileName(request)}`
@@ -339,14 +339,14 @@ export function importResult(result: ComposeResult | AnalysisResult): boolean {
     s.notify(translate(lang, 'ai.empty'), 'error');
     return false;
   }
-  if (!s.apply(plan.commands, 'AIlegro', { selection: { kind: 'none' } })) return false;
+  if (!s.apply(plan.commands, 'Cantelvio', { selection: { kind: 'none' } })) return false;
   const w = plan.warnings.length
     ? plan.warnings.slice(0, 2).join('; ')
     : translate(lang, 'ai.noWarnings');
   getStore()
     .getState()
     .notify(translate(lang, 'ai.imported', { n: plan.stats.notes, w }));
-  for (const warning of plan.warnings) console.info('[AIlegro]', warning);
+  for (const warning of plan.warnings) console.info('[Cantelvio]', warning);
   return true;
 }
 
@@ -365,7 +365,7 @@ export async function importResultFile(file: File): Promise<boolean> {
 export const DEFAULT_SERVICE_URL = 'http://127.0.0.1:8765';
 export const SERVICE_KEY = 'ailegro-score:service-url';
 
-/** The adapter server the editor talks to (set and remembered in the AIlegro panel). */
+/** The adapter server the editor talks to (set and remembered in the Cantelvio panel). */
 export function serviceUrl(): string {
   try {
     if (typeof window !== 'undefined') {

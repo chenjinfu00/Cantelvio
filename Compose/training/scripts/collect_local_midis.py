@@ -71,7 +71,7 @@ def main():
         'See `manifest.json` for paths, hashes and selection counts. '
         'The doctoral-phase directory, obvious raw transcription outputs, '
         'and older or near-duplicate versions were excluded by the current '
-        'AIlegro selection rule. This does not establish redistribution rights '
+        'Cantelvio Compose selection rule. This does not establish redistribution rights '
         'or guarantee that every subtle near-duplicate was detected. '
         'Do not publish this corpus without a separate rights review.\n')
     os.replace(staging, destination)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train the AIlegro 4-layer / 8-head conditional causal Transformer.
+"""Train the Cantelvio Compose 4-layer / 8-head conditional causal Transformer.
 Reproducible, original synthetic phrase grammar; no copyrighted music corpus.
 Use the project .venv-training Python environment.
 """

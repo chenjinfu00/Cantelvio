@@ -50,7 +50,7 @@ git push -u origin main
 - type：`feat`、`fix`、`docs`、`test`、`refactor`、`perf`、`chore`、`ci`。
 - scope：`core`、`engraving`、`bridge`、`web`、`tools`、`docs`、`ci`。
 - 例：`feat(engraving): beam 16ths across beat pairs`、`fix(core): keep ties when re-barring`。
-- 破坏性变更（文件格式、AIlegro 契约）：在正文写 `BREAKING CHANGE: …`，并按
+- 破坏性变更（文件格式、Cantelvio 契约）：在正文写 `BREAKING CHANGE: …`，并按
   [score-model.md](score-model.md#文件格式-ailegrojson) / [ailegro-integration.md](ailegro-integration.md#修改契约的规则) 的规则升版本。
 
 ## 一个任务的完整流程
@@ -79,7 +79,7 @@ gh pr create --fill               # 按 PR 模板填写：做了什么、怎么�
   > 做 roadmap 里的 `M2-ENG-03`（连线 slur）：模型字段 + 命令 + 排版 + 测试，按 AGENTS.md 的规则，
   > 分支 `codex/M2-ENG-03-slurs`，完成后开 PR。
 - **同一时间不要让两个助手改同一个包的同一块代码**；在 roadmap 的“负责人”列登记。
-- 助手不得：直接推送到 `main`、手改 `*.generated.ts`、悄悄修改契约（文件格式、AIlegro schema）、
+- 助手不得：直接推送到 `main`、手改 `*.generated.ts`、悄悄修改契约（文件格式、Cantelvio schema）、
   修改 `../Compose` 项目、提交 `node_modules` / `dist` / `out` / 本地乐谱。
 - 审阅 AI 的 PR 时重点看：测试是否真的覆盖了改动、是否违反架构不变量、排版截图。
 
@@ -98,7 +98,7 @@ gh pr create --fill               # 按 PR 模板填写：做了什么、怎么�
 - 语义化版本，`0.x` 期间允许破坏性变更但必须写明。
 - 发布：更新 `package.json` 版本 → `git tag -a v0.2.0 -m "v0.2.0"` → `git push --tags` →
   GitHub Release（从提交历史生成变更说明）。
-- 文件格式版本（`.ailegro.json` 的 `version`）和 AIlegro schema 版本独立于应用版本。
+- 文件格式版本（`.cantelvio.json` 的 `version`）和 Cantelvio schema 版本独立于应用版本。
 
 ## 同步冲突副本
 
@@ -110,4 +110,4 @@ find . -path ./node_modules -prune -o -name "* [2-9]*" -print     # 找出冲突
 git status --ignored --short | grep " [2-9]"                         # 同上（git 视角）
 ```
 
-2026-10-02 已清理同级 AIlegro 文件夹从 iCloud 带来的 25 个副本（如 `frontend/media/piano/Fs2 2.mp3`，都与原文件相同）。
+2026-10-02 已清理同级 Cantelvio 文件夹从 iCloud 带来的 25 个副本（如 `frontend/media/piano/Fs2 2.mp3`，都与原文件相同）。

@@ -1,6 +1,6 @@
 # Volta · 听谱翻页
 
-本地整理后的项目入口见 [START_HERE.md](START_HERE.md)。AIlegro、Tonnetz 与本目录为同级项目。
+本地整理后的项目入口见 [START_HERE.md](START_HERE.md)。Cantelvio Compose、Tonnetz 与本目录为同级项目。
 
 一个用 iPad 或电脑读谱的工具。打开曲谱，学习一遍参考演奏并标记翻页点，之后通过麦克风跟随你的实际演奏自动翻页。也支持手动翻页、快速拖动翻页、演出模式和触控笔批注。
 

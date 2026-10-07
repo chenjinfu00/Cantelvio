@@ -13,7 +13,7 @@ import {
   parseRational,
   rat,
   toString as ratString,
-} from '@ailegro-score/core';
+} from '@cantelvio-score/core';
 import { qualityIndex, qualityOf } from './qualities';
 import { buildScoreRecord } from './record';
 import type { RequestMeta } from './request';
@@ -60,7 +60,7 @@ export function buildAnalysisRequest(
     schema: ANALYSIS_REQUEST_SCHEMA,
     requestId: meta.requestId,
     createdAt: meta.createdAt ?? null,
-    client: { app: 'AIlegro Score', version: meta.appVersion ?? '0.0.0' },
+    client: { app: 'Cantelvio Score', version: meta.appVersion ?? '0.0.0' },
     score: buildScoreRecord(doc, { bars: { from: spec.from, to } }),
     analyze: {
       bars: { from: spec.from, count: to - spec.from },

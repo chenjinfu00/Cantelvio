@@ -1,4 +1,4 @@
-import { TextNotationError, findEvent, textToCommands } from '@ailegro-score/core';
+import { TextNotationError, findEvent, textToCommands } from '@cantelvio-score/core';
 import { useState } from 'react';
 import { useT } from '../i18n';
 import { cursorFromSelection } from '../state/actions';
