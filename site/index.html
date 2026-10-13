@@ -1,82 +1,29 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-cv-page="workspace">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cantelvio · 从旋律到完整乐谱</title>
-<meta name="description" content="Cantelvio：用 Transformer 生成旋律与和声，在乐谱编辑器中比较、修改、回放与导出。">
-<style>
-:root{--bg:#f6f5ef;--fg:#1d2420;--mute:#5d665f;--card:#fff;--line:#dcdfd3;--acc:#2f6b4f;--acc-fg:#fff}
-@media (prefers-color-scheme:dark){:root{--bg:#141815;--fg:#e8ece6;--mute:#9aa59c;--card:#1c221e;--line:#2c352f;--acc:#6fbf94;--acc-fg:#0e1411}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
-main{max-width:980px;margin:0 auto;padding:0 16px 48px}
-header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:20px 0}
-.brand{font-weight:700;font-size:20px;letter-spacing:.02em}
-header nav{display:flex;flex-wrap:wrap;gap:16px;font-size:14px}header nav a{color:var(--mute);text-decoration:none}
-a:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:4px}.skip{position:absolute;top:-80px}.skip:focus{top:8px;background:var(--card);padding:10px;z-index:2}
-select{font:inherit;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
-.hero{padding:40px 0 24px}.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.15;margin:0 0 12px}
-.lead{color:var(--mute);max-width:640px;font-size:18px}
-.btn{display:inline-block;background:var(--acc);color:var(--acc-fg);padding:10px 18px;min-height:44px;border-radius:10px;text-decoration:none;font-weight:600;margin:8px 8px 0 0}
-.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:32px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column}
-.card h3{margin:0 0 2px}.card .sub{color:var(--mute);font-size:13px;margin-bottom:8px}.card p{flex:1;margin:0 0 12px;color:var(--mute);font-size:15px}
-.card a{color:var(--acc);font-weight:600;text-decoration:none}
-.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 28px;color:var(--mute)}
-.flow span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
-h2{margin:32px 0 8px}.note{color:var(--mute);font-size:14px;border-top:1px solid var(--line);padding-top:16px;margin-top:32px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}.step{padding:16px;border-left:3px solid var(--acc);background:var(--card);border-radius:0 10px 10px 0}.step strong{display:block}.step p{font-size:14px;color:var(--mute);margin:6px 0}.step a{color:var(--acc)}
-.capabilities{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}th:first-child{white-space:nowrap}
-@media(max-width:640px){.steps{grid-template-columns:1fr}.hero{padding-top:24px}header nav{order:3;width:100%}.btn{margin-right:4px}.flow{font-size:14px}}
-</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cantelvio · 音乐工作台</title>
+<meta name="description" content="打开 Cantelvio 的曲谱编辑、音乐生成、和声探索和演奏工作台。">
+<link rel="stylesheet" href="./workspace.css"><script type="module" src="./language.js"></script>
 </head>
 <body>
 <a class="skip" href="#main" data-zh="跳到正文" data-en="Skip to content">跳到正文</a>
 <main id="main">
-<header><span class="brand">♫ Cantelvio</span>
-<nav aria-label="Cantelvio"><a href="./results/#s-listen" data-zh="试听" data-en="Listen">试听</a><a href="./score/" data-zh="编辑" data-en="Edit">编辑</a><a href="./compose/" data-zh="生成" data-en="Generate">生成</a><a href="./harmony/" data-zh="和声" data-en="Harmony">和声</a><a href="./stage/" data-zh="演奏" data-en="Perform">演奏</a></nav>
+<header class="top"><a class="brand" href="./">♫ Cantelvio</a>
+<nav aria-label="Cantelvio"><a href="./" aria-current="page" data-zh="软件" data-en="Workspaces">软件</a><a href="./demo/" data-zh="演示与说明" data-en="Guide &amp; demos">演示与说明</a></nav>
 <select id="lang" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select></header>
-
-<section class="hero">
-<h1 data-zh="从一段旋律，写到完整曲谱。" data-en="From a melody to a finished score.">从一段旋律，写到完整曲谱。</h1>
-<p class="lead" data-zh="用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。" data-en="Transformer-based composition focused on better harmony and melody: generate, listen, compare, then edit, play back and export in a notation editor.">用 Transformer 改进自动作曲的和声与旋律：生成、试听、比较，再在编辑器里亲手修改、回放和导出。</p>
-<a class="btn" href="./score/?demo=continue" data-zh="体验曲谱编辑与回放" data-en="Try score editing & playback">体验曲谱编辑与回放</a>
-<a class="btn ghost" href="./results/#s-listen" data-zh="试听模型结果" data-en="Listen to model examples">试听模型结果</a>
-<a class="btn ghost" href="./compose/orchestra/joint.html" data-zh="浏览器内生成演示" data-en="In-browser generation demo">浏览器内生成演示</a>
+<section class="hero"><p class="eyebrow" data-zh="音乐工作台" data-en="MUSIC WORKSPACES">音乐工作台</p>
+<h1 data-zh="选择工作台，开始写音乐。" data-en="Choose a workspace. Make music.">选择工作台，开始写音乐。</h1>
+<p class="lead" data-zh="编辑曲谱、探索和声、生成音乐，或打开自己的 PDF 演奏。" data-en="Edit a score, explore harmony, generate music, or perform from your own PDF.">编辑曲谱、探索和声、生成音乐，或打开自己的 PDF 演奏。</p></section>
+<section class="editor" aria-labelledby="score-title"><div><p class="eyebrow">SCORE</p><h2 id="score-title" data-zh="写谱、修改、回放。" data-en="Write, edit and play.">写谱、修改、回放。</h2>
+<p data-zh="从曲谱编辑器开始。导入 MusicXML、修改音符，再回放或导出 MIDI、PDF 与 SVG。" data-en="Start in the score editor. Import MusicXML, change notes, then play back or export MIDI, PDF and SVG.">从曲谱编辑器开始。导入 MusicXML、修改音符，再回放或导出 MIDI、PDF 与 SVG。</p>
+<div class="actions"><a class="btn" href="./score/" data-zh="打开曲谱编辑器 →" data-en="Open the score editor →">打开曲谱编辑器 →</a><a class="btn ghost" href="./demo/#first-use" data-zh="第一次使用" data-en="Start here">第一次使用</a></div></div>
+<div class="editor-aside"><div><span>01</span><p data-zh="新建曲谱，或导入自己的 MusicXML" data-en="Create a score or import your MusicXML">新建曲谱，或导入自己的 MusicXML</p></div><div><span>02</span><p data-zh="修改音符，聆听变化" data-en="Edit notes and hear the changes">修改音符，聆听变化</p></div><div><span>03</span><p data-zh="保存曲谱，导出 MIDI 与谱面" data-en="Save your score and export MIDI or notation">保存曲谱，导出 MIDI 与谱面</p></div></div></section>
+<section class="modules" aria-label="More workspaces">
+<article class="module"><span class="label">COMPOSE</span><h2 data-zh="音乐生成" data-en="Generate music">音乐生成</h2><p data-zh="使用浏览器里的小型联合模型生成并试听音乐。肖邦钢琴伴奏目前在电脑上验收。" data-en="Generate and listen with the small in-browser joint model. Chopin piano accompaniment is being evaluated on the computer.">使用浏览器里的小型联合模型生成并试听音乐。肖邦钢琴伴奏目前在电脑上验收。</p><a href="./compose/orchestra/joint.html" data-zh="打开生成工作台 →" data-en="Open generation →">打开生成工作台 →</a></article>
+<article class="module"><span class="label">HARMONY</span><h2 data-zh="探索和声" data-en="Explore harmony">探索和声</h2><p data-zh="在键盘与调性网络中聆听和弦，查看和声关系。" data-en="Play chords on the keyboard and Tonnetz to explore harmonic relationships.">在键盘与调性网络中聆听和弦，查看和声关系。</p><a href="./harmony/" data-zh="打开和声工作台 →" data-en="Open harmony →">打开和声工作台 →</a></article>
+<article class="module"><span class="label">STAGE</span><h2 data-zh="读谱与演奏" data-en="Read and perform">读谱与演奏</h2><p data-zh="打开自己的 PDF 曲谱、批注，并学习参考演奏以跟随翻页。" data-en="Open and annotate your PDF score, then learn a reference performance for page following.">打开自己的 PDF 曲谱、批注，并学习参考演奏以跟随翻页。</p><a href="./stage/" data-zh="打开演奏工作台 →" data-en="Open performance →">打开演奏工作台 →</a></article>
 </section>
-
-<div class="flow" aria-label="workflow"><span>Compose</span>→<span>Score</span>→<span>Stage</span><span>Harmony</span></div>
-<p class="lead" style="font-size:15px" data-zh="四个工作台通过音乐文件连接。在线可以直接试听、编辑和读谱；完整的旋律配伴奏在电脑上运行。" data-en="Four workspaces connected through music files. Listen, edit and read scores online; run full melody accompaniment on your computer.">四个工作台通过音乐文件连接。在线可以直接试听、编辑和读谱；完整的旋律配伴奏在电脑上运行。</p>
-
-<section aria-labelledby="start-title"><h2 id="start-title" data-zh="第一次使用" data-en="Start here">第一次使用</h2><div class="steps">
-<div class="step"><strong data-zh="1 · 先听一段" data-en="1 · Listen first">1 · 先听一段</strong><p data-zh="同一旋律的不同模型结果可直接试听，并查看生成方式与局限。" data-en="Compare model outputs for the same melody, with their generation settings and limits.">同一旋律的不同模型结果可直接试听，并查看生成方式与局限。</p><a href="./results/#s-listen" data-zh="打开试听库 →" data-en="Open listening examples →">打开试听库 →</a></div>
-<div class="step"><strong data-zh="2 · 打开示例曲谱" data-en="2 · Open a sample score">2 · 打开示例曲谱</strong><p data-zh="修改音符、回放，再导出 MIDI 或 PDF。也可以导入自己的 MusicXML。" data-en="Edit notes, play the score, then export MIDI or PDF. You can also import your own MusicXML.">修改音符、回放，再导出 MIDI 或 PDF。也可以导入自己的 MusicXML。</p><a href="./score/?demo=continue" data-zh="开始编辑 →" data-en="Start editing →">开始编辑 →</a></div>
-<div class="step"><strong data-zh="3 · 用自己的 PDF 演奏" data-en="3 · Perform from your PDF">3 · 用自己的 PDF 演奏</strong><p data-zh="在 Stage 选择“临时打开 PDF”，即可读谱和批注。自动翻页需先学习参考演奏。" data-en="Choose “Open a temporary PDF” in Stage to read and annotate. Automatic page turning needs a learned reference performance.">在 Stage 选择“临时打开 PDF”，即可读谱和批注。自动翻页需先学习参考演奏。</p><a href="./stage/" data-zh="打开演奏工作台 →" data-en="Open the performance workspace →">打开演奏工作台 →</a></div>
-</div></section>
-
-<section class="grid">
-<div class="card"><h3>Compose</h3><div class="sub" data-zh="生成" data-en="Generation">生成</div><p data-zh="浏览器内运行的联合模型：旋律、和声、低音与配器。完整的伴奏与连续演奏使用本机 Python 服务（见 GitHub）。" data-en="A joint model that runs in the browser: melody, harmony, bass and orchestration. Full accompaniment and continuous performance use a local Python service (see GitHub).">浏览器内运行的联合模型：旋律、和声、低音与配器。完整的伴奏与连续演奏使用本机 Python 服务（见 GitHub）。</p><a href="./compose/orchestra/joint.html" data-zh="试用 →" data-en="Try it →">试用 →</a></div>
-<div class="card"><h3>Score</h3><div class="sub" data-zh="编辑" data-en="Editing">编辑</div><p data-zh="钢琴、室内乐与管弦乐编辑，支持回放、MusicXML 导入、MIDI / PDF / SVG 导出。AI 作曲与候选比较需在电脑上运行。" data-en="Edit piano, chamber and orchestral scores, with playback, MusicXML import and MIDI / PDF / SVG export. AI composition and candidate comparison run on your computer.">钢琴、室内乐与管弦乐编辑，支持回放、MusicXML 导入、MIDI / PDF / SVG 导出。AI 作曲与候选比较需在电脑上运行。</p><a href="./score/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
-<div class="card"><h3>Harmony</h3><div class="sub" data-zh="理论" data-en="Theory">理论</div><p data-zh="Tonnetz 和声关系可视化，辅助分析和声进行与转调。" data-en="Tonnetz visualization of harmonic relations, for analysing progressions and modulations.">Tonnetz 和声关系可视化，辅助分析和声进行与转调。</p><a href="./harmony/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
-<div class="card"><h3>Stage</h3><div class="sub" data-zh="演奏" data-en="Performance">演奏</div><p data-zh="PDF 读谱、演奏跟随与自动翻页（麦克风仅在本机处理）。" data-en="PDF score reading, performance following and automatic page turns (microphone audio is processed on-device).">PDF 读谱、演奏跟随与自动翻页（麦克风仅在本机处理）。</p><a href="./stage/" data-zh="打开 →" data-en="Open →">打开 →</a></div>
-</section>
-
-<section aria-labelledby="features-title"><h2 id="features-title" data-zh="在线能做什么" data-en="What works online">在线能做什么</h2><div class="capabilities"><table><thead><tr><th data-zh="工作台" data-en="Workspace">工作台</th><th data-zh="直接在网页使用" data-en="Use in your browser">直接在网页使用</th><th data-zh="需要在电脑上运行" data-en="Run on your computer">需要在电脑上运行</th></tr></thead><tbody>
-<tr><th>Compose</th><td data-zh="小型联合模型生成、试听与实验结果" data-en="Small joint-model generation, listening examples and results">小型联合模型生成、试听与实验结果</td><td data-zh="最新大型模型、完整配伴奏、连续演奏" data-en="Newer large models, full accompaniment and continuous performance">最新大型模型、完整配伴奏、连续演奏</td></tr>
-<tr><th>Score</th><td data-zh="编辑、示例、回放、MusicXML 导入、MIDI / PDF / SVG 导出" data-en="Editing, examples, playback, MusicXML import, MIDI / PDF / SVG export">编辑、示例、回放、MusicXML 导入、MIDI / PDF / SVG 导出</td><td data-zh="AI 作曲、和声分析、PDF 识谱与录音转谱" data-en="AI composition, harmony analysis, PDF recognition and audio transcription">AI 作曲、和声分析、PDF 识谱与录音转谱</td></tr>
-<tr><th>Harmony</th><td data-zh="键盘、Tonnetz 和声可视化与现有伴奏" data-en="Keyboard, Tonnetz harmonic visualization and accompaniment">键盘、Tonnetz 和声可视化与现有伴奏</td><td>—</td></tr>
-<tr><th>Stage</th><td data-zh="打开自己的 PDF、批注、参考学习与自动翻页" data-en="Your own PDFs, annotation, reference learning and automatic page turns">打开自己的 PDF、批注、参考学习与自动翻页</td><td data-zh="批量整理谱库时使用仓库脚本" data-en="Repository scripts for organising a large library">批量整理谱库时使用仓库脚本</td></tr>
-</tbody></table></div></section>
-
-<p class="note" data-zh="这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。" data-en="This is a research prototype: judge the output by ear, and see the repository for model and data licences. Some features (full accompaniment, continuous performance, audio-to-score) need a local service.">这是研究原型：生成结果需要试听判断，模型权重与数据的许可见仓库中的说明。部分功能（完整伴奏、连续演奏、录音转谱）需要在本机运行服务。</p>
-<p class="note"><a href="https://github.com/chenjinfu00/Cantelvio">GitHub</a> · <a href="./results/" data-zh="实验与评估结果" data-en="Experiments &amp; evaluation results">实验与评估结果</a></p>
-</main>
-<script>
-(function(){var s=document.getElementById('lang');function set(l){document.documentElement.lang=l==='en'?'en':'zh-CN';document.querySelectorAll('[data-zh]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});}
-var saved;try{saved=localStorage.getItem('cantelvio-lang')}catch(e){}
-var l=saved||((navigator.language||'').indexOf('zh')===0?'zh':'en');s.value=l;set(l);
-s.onchange=function(){set(s.value);try{localStorage.setItem('cantelvio-lang',s.value)}catch(e){}};})();
-</script>
-</body>
-</html>
+<p class="quiet-link"><span data-zh="想先了解整个软件？" data-en="Want a guided introduction?">想先了解整个软件？</span> <a href="./demo/" data-zh="查看演示、使用说明与试听结果 →" data-en="See the guide, demos and listening examples →">查看演示、使用说明与试听结果 →</a></p>
+<footer><span data-zh="Cantelvio · 曲谱、生成、和声与演奏" data-en="Cantelvio · Scores, generation, harmony and performance">Cantelvio · 曲谱、生成、和声与演奏</span><a href="https://github.com/chenjinfu00/Cantelvio">GitHub</a></footer>
+</main></body></html>

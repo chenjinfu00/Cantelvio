@@ -121,3 +121,21 @@ html[data-cv-app="compose"] .roll-viewport {
 html[data-cv-app="compose"] :is(.page-shell, main > p) :focus-visible {
   outline-color: var(--cv-accent);
 }
+
+/* Keep the shared settings and workspace link reachable on narrow screens. */
+@media (max-width: 600px) {
+  html[data-cv-app="compose"] .topbar {
+    height: auto;
+    min-height: 69px;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px 0;
+  }
+  html[data-cv-app="compose"] .top-actions {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+  html[data-cv-app="compose"] .top-actions .console-link {
+    margin-right: auto;
+  }
+}

@@ -1,16 +1,10 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cantelvio Compose</title>
-<style>:root{--bg:#f6f5ef;--fg:#1d2420;--mute:#5d665f;--acc:#256abf;--line:#dcdfd3}@media (prefers-color-scheme:dark){:root{--bg:#141815;--fg:#e8ece6;--mute:#a3ada5;--acc:#6da7ec;--line:#2f3832}}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"PingFang SC",sans-serif}main{max-width:720px;margin:0 auto;padding:24px 16px 48px}a{color:var(--acc)}.mute{color:var(--mute)}
-.btn{display:inline-block;background:var(--acc);color:var(--bg);padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:600}h1{margin:.4em 0}</style></head>
-<body><main>
-<p><a href="../">← Cantelvio</a> <select id="lang" aria-label="Language" style="float:right"><option value="zh">中文</option><option value="en">English</option></select></p>
-<h1>Cantelvio Compose</h1>
-<p data-zh="Compose 负责音乐生成。网页上只能运行在浏览器里的联合模型（旋律、和声、低音与配器）；给定旋律配伴奏、连续演奏和录音转谱需要本机的 Python 服务和模型权重，不在这个静态站里。" data-en="Compose handles generation. The web site can only run the joint model that fits in the browser (melody, harmony, bass and orchestration); accompaniment for a given melody, continuous performance and audio-to-score need the local Python service and model weights, which are not part of this static site.">Compose 负责音乐生成。</p>
-<p><a class="btn" href="orchestra/joint.html" data-zh="打开浏览器内的联合模型" data-en="Open the in-browser joint model">打开浏览器内的联合模型</a></p>
-<p class="mute"><a href="../results/" data-zh="实验与评估结果" data-en="Experiments &amp; results">实验与评估结果</a> · <a href="https://github.com/chenjinfu00/Cantelvio/tree/main/Compose" data-zh="在本机运行完整版（GitHub）" data-en="Run the full version locally (GitHub)">在本机运行完整版（GitHub）</a></p>
-</main>
-<script>(function(){var s=document.getElementById('lang'),l;try{l=localStorage.getItem('cantelvio-lang')}catch(e){}l=l||((navigator.language||'').indexOf('zh')===0?'zh':'en');
-function set(v){document.documentElement.lang=v==='en'?'en':'zh-CN';document.querySelectorAll('[data-zh]').forEach(function(e){e.textContent=e.getAttribute('data-'+v)})}
-s.value=l;set(l);s.onchange=function(){set(s.value);try{localStorage.setItem('cantelvio-lang',s.value)}catch(e){}}})();</script></body></html>
+<title>Cantelvio Compose</title><link rel="stylesheet" href="../workspace.css">
+<style>main{max-width:850px}.cv-landing-actions{padding-top:24px}.cv-landing-actions a{text-decoration:none}.cv-landing-actions select{float:right}.hero{padding-bottom:0}</style></head>
+<body><main><p class="cv-landing-actions"><a href="../" data-zh="← 返回软件" data-en="← Back to the workspaces">← 返回软件</a><select id="lang" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select></p>
+<section class="hero"><p class="eyebrow">COMPOSE</p><h1 data-zh="音乐生成" data-en="Generate music">音乐生成</h1><p class="lead" data-zh="浏览器里的小型联合模型，可以直接生成与试听。" data-en="Generate and listen directly with the small in-browser joint model.">浏览器里的小型联合模型，可以直接生成与试听。</p></section>
+<section class="editor" style="grid-template-columns:1fr;margin-top:28px"><div><h2 data-zh="在线生成工作台" data-en="Online generation workspace">在线生成工作台</h2><p data-zh="选择生成条件，聆听旋律、和声、低音与配器。" data-en="Choose the generation settings and listen to melody, harmony, bass and orchestration.">选择生成条件，聆听旋律、和声、低音与配器。</p><a class="btn" href="orchestra/joint.html" data-zh="打开生成工作台 →" data-en="Open generation →">打开生成工作台 →</a></div></section>
+<p class="quiet-link" data-zh="完整旋律配伴奏在电脑上使用。新肖邦钢琴模型仍在验收，尚未接入在线生成。" data-en="Full melody accompaniment runs on the computer. The new Chopin piano model is still being evaluated and is not yet available in online generation.">完整旋律配伴奏在电脑上使用。新肖邦钢琴模型仍在验收，尚未接入在线生成。</p>
+<footer><a href="../demo/" data-zh="演示与使用说明" data-en="Guide &amp; demos">演示与使用说明</a><a href="../results/" data-zh="实验与试听" data-en="Experiments &amp; listening">实验与试听</a><a href="https://github.com/chenjinfu00/Cantelvio/tree/main/Compose" data-zh="电脑版说明" data-en="Computer setup">电脑版说明</a></footer></main>
+<script>(function(){var s=document.getElementById('lang'),l;try{l=localStorage.getItem('cantelvio-lang')}catch(e){}l=(l==='en'||l==='zh')?l:((navigator.language||'').indexOf('zh')===0?'zh':'en');function set(v){document.documentElement.lang=v==='en'?'en':'zh-CN';document.querySelectorAll('[data-zh]').forEach(function(e){e.textContent=e.getAttribute('data-'+v)})}s.value=l;set(l);s.onchange=function(){set(s.value);try{localStorage.setItem('cantelvio-lang',s.value)}catch(e){}}})();</script></body></html>

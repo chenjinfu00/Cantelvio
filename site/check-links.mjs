@@ -3,7 +3,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-const out = path.resolve(fileURLToPath(new URL('..', import.meta.url)), 'site-dist');
+const index = process.argv.indexOf('--out');
+if (index >= 0 && (!process.argv[index + 1] || process.argv[index + 1].startsWith('--'))) throw new Error('--out needs a path');
+const out = index >= 0 ? path.resolve(process.argv[index + 1]) : path.resolve(fileURLToPath(new URL('..', import.meta.url)), 'site-dist');
 if (!fs.existsSync(out)) { console.error('site-dist missing; run `npm run site` first'); process.exit(2); }
 const pages = [];
 (function walk(d) { for (const e of fs.readdirSync(d, {withFileTypes: true})) { const p = path.join(d, e.name); if (e.isDirectory()) walk(p); else if (p.endsWith('.html')) pages.push(p); } })(out);
@@ -32,7 +34,7 @@ for (const page of pages) {
     }
   }
 }
-for (const relative of ['score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
+for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
 (function checkPublishedFiles(dir) {

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// Assemble the static Cantelvio demo site into ../site-dist/ (GitHub Pages ready).
-//   /            landing page (site/index.html)
+// Assemble the static Cantelvio software and guide (GitHub Pages ready).
+//   /            software launch page (site/index.html)
+//   /demo/       independent guide and demonstrations
 //   /score/      Score editor (Vite build, base './'; reuses Score/apps/web/dist unless --build)
 //   /harmony/    Harmony (Tonnetz) public pages
 //   /stage/      Stage (Volta) docs/ PWA
@@ -9,11 +10,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {execSync, execFileSync} from 'node:child_process';
+import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
-const out = path.join(root, 'site-dist');
+const args = process.argv.slice(2);
+const option = name => {
+  const index = args.indexOf(name);
+  if (index < 0) return undefined;
+  if (!args[index + 1] || args[index + 1].startsWith('--')) throw new Error(`${name} needs a path`);
+  return path.resolve(args[index + 1]);
+};
+const out = option('--out') || path.join(root, 'site-dist');
+// A separate checkout can supply the previously published modules while local
+// experiments remain untouched. Site pages/settings always come from this checkout.
+const modulesRoot = option('--modules-root') || root;
 const rebuild = process.argv.includes('--build');
 const skip = (src) => !/(^|\/)(\.DS_Store|node_modules|\.git)(\/|$)/.test(src);
 const rewrite = (relative, transform) => {
@@ -21,23 +32,29 @@ const rewrite = (relative, transform) => {
   fs.writeFileSync(file, transform(fs.readFileSync(file, 'utf8')));
 };
 
-fs.rmSync(out, {recursive: true, force: true});
+// Never erase an existing preview or a module build. Use a new output directory.
+if (fs.existsSync(out)) throw new Error(`Output already exists: ${out}. Choose a fresh directory with --out.`);
 fs.mkdirSync(out, {recursive: true});
 
 fs.copyFileSync(path.join(root, 'site/index.html'), path.join(out, 'index.html'));
+for (const file of ['workspace.css', 'language.js']) fs.copyFileSync(path.join(root, 'site', file), path.join(out, file));
+fs.cpSync(path.join(root, 'site/demo'), path.join(out, 'demo'), {recursive: true});
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 
-if (rebuild) execSync('npm run build', {
-  cwd: path.join(root, 'Score'), stdio: 'inherit',
-  env: {...process.env, VITE_STATIC_PREVIEW: 'true'},
-});
-const scoreDist = 'Score/apps/web/dist';
-if (!fs.existsSync(path.join(root, scoreDist, 'index.html'))) throw new Error('Score dist missing; run with --build');
-fs.cpSync(path.join(root, scoreDist), path.join(out, 'score'), {recursive: true, filter: (s) => skip(s) && !s.endsWith('.map')});
+if (rebuild) {
+  execFileSync('npm', ['run', 'build', '--', '--outDir', path.join(out, 'score'), '--emptyOutDir', 'false', '--sourcemap', 'false', '--configLoader', 'runner'], {
+    cwd: path.join(modulesRoot, 'Score'), stdio: 'inherit',
+    env: {...process.env, VITE_STATIC_PREVIEW: 'true'},
+  });
+} else {
+  const scoreDist = path.join(modulesRoot, 'Score/apps/web/dist');
+  if (!fs.existsSync(path.join(scoreDist, 'index.html'))) throw new Error('Score dist missing; run with --build');
+  fs.cpSync(scoreDist, path.join(out, 'score'), {recursive: true, filter: (s) => skip(s) && !s.endsWith('.map')});
+}
 rewrite('score/index.html', html => html.replace(/<title>[^<]*<\/title>/, '<title>Cantelvio Score</title>'));
 
-fs.cpSync(path.join(root, 'Harmony/public/tonnetz'), path.join(out, 'harmony'), {recursive: true, filter: skip});
-fs.cpSync(path.join(root, 'Stage/docs'), path.join(out, 'stage'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
+fs.cpSync(path.join(modulesRoot, 'Harmony/public/tonnetz'), path.join(out, 'harmony'), {recursive: true, filter: skip});
+fs.cpSync(path.join(modulesRoot, 'Stage/docs'), path.join(out, 'stage'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
 
 // The public modules share an entrance without changing their standalone/local navigation.
 rewrite('harmony/index.html', html => html
@@ -66,25 +83,28 @@ rewrite('stage/index.html', html => {
 const cf = 'Compose/frontend';
 fs.mkdirSync(path.join(out, 'compose'), {recursive: true});
 for (const d of ['orchestra', 'vendor', 'media', 'src']) {
-  if (fs.existsSync(path.join(root, cf, d))) fs.cpSync(path.join(root, cf, d), path.join(out, 'compose', d), {recursive: true, dereference: true, filter: skip});
+  const source = path.join(modulesRoot, cf, d);
+  if (fs.existsSync(source)) fs.cpSync(source, path.join(out, 'compose', d), {
+    recursive: true, dereference: true,
+    filter: s => skip(s) && s !== path.join(modulesRoot, cf, 'orchestra/index.html'),
+  });
 }
 // The five-model comparison page needs the local Python service: publish only the in-browser joint page.
-fs.rmSync(path.join(out, 'compose/orchestra/index.html'), {force: true});
 const jointPage = path.join(out, 'compose/orchestra/joint.html');
 const jointOld = 'href="./" data-en="← Five-model comparison" data-zh="← 返回五组模型对比">← Five-model comparison';
 const jointHtml = fs.readFileSync(jointPage, 'utf8');
 if (!jointHtml.includes(jointOld)) throw new Error('joint.html back link changed; update site/build.mjs');
 fs.writeFileSync(jointPage, jointHtml
-  .replace(jointOld, 'href="../" data-en="← About this demo" data-zh="← 关于这个演示">← About this demo')
+  .replace(jointOld, 'href="../" data-en="← Generation workspace" data-zh="← 音乐生成">← Generation workspace')
   .replace(/<title>[^<]*<\/title>/, '<title>Cantelvio Compose · Browser generation</title>')
   .replace(/<span>Cantelvio<small>JOINT ORCHESTRA<\/small><\/span>/, '<span>Cantelvio<small>COMPOSE</small></span>'));
 fs.copyFileSync(path.join(root, 'site/compose-index.html'), path.join(out, 'compose/index.html'));
-for (const f of ['style.css', 'favicon.svg']) fs.copyFileSync(path.join(root, cf, f), path.join(out, 'compose', f));
+for (const f of ['style.css', 'favicon.svg']) fs.copyFileSync(path.join(modulesRoot, cf, f), path.join(out, 'compose', f));
 
 // Results page and its listening clips.
 fs.mkdirSync(path.join(out, 'results'), {recursive: true});
 for (const f of fs.readdirSync(path.join(root, 'site/results'))) fs.copyFileSync(path.join(root, 'site/results', f), path.join(out, 'results', f));
-const clips = path.join(root, 'Compose/training/reports/amt-compare-20261005');
+const clips = path.join(modulesRoot, 'Compose/training/reports/amt-compare-20261005');
 fs.mkdirSync(path.join(out, 'results/audio'), {recursive: true});
 let nClips = 0;
 for (const f of fs.existsSync(clips) ? fs.readdirSync(clips) : []) if (f.endsWith('.mp3')) { fs.copyFileSync(path.join(clips, f), path.join(out, 'results/audio', f)); nClips++; }
@@ -106,6 +126,7 @@ for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
 }
 const publicPages = [
   ['index.html', 'home', './', './appearance/'],
+  ['demo/index.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],
@@ -138,8 +159,10 @@ rewrite('stage/cache-manifest.json', json => JSON.stringify([...new Set([...JSON
 
 // Identify the live release; this contains no local path or model/training artifact.
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim();
-fs.writeFileSync(path.join(out, 'version.json'), JSON.stringify({commit, builtAt: new Date().toISOString(), mode: 'static-preview'}, null, 2) + '\n');
+const modulesCommit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd: modulesRoot, encoding: 'utf8'}).trim();
+const siteSourceModified = Boolean(execFileSync('git', ['status', '--porcelain', '--', 'site'], {cwd: root, encoding: 'utf8'}).trim());
+fs.writeFileSync(path.join(out, 'version.json'), JSON.stringify({commit, modulesCommit, siteSourceModified, builtAt: new Date().toISOString(), mode: 'static-preview'}, null, 2) + '\n');
 
 let bytes = 0, files = 0;
 (function walk(d) { for (const e of fs.readdirSync(d, {withFileTypes: true})) { const p = path.join(d, e.name); e.isDirectory() ? walk(p) : (files++, bytes += fs.statSync(p).size); } })(out);
-console.log(`site-dist: ${files} files, ${(bytes / 1048576).toFixed(1)} MB`);
+console.log(`${out}: ${files} files, ${(bytes / 1048576).toFixed(1)} MB`);
