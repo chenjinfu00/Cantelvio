@@ -116,6 +116,8 @@ const appearanceDir = path.join(root, 'site/appearance');
 const sharedFiles = ['common.css', 'appearance.js', 'core.mjs'];
 const appearanceHash = createHash('sha256');
 for (const file of fs.readdirSync(appearanceDir).sort()) appearanceHash.update(fs.readFileSync(path.join(appearanceDir, file)));
+// Assembly repairs must also refresh the installed modules' offline caches.
+appearanceHash.update(fs.readFileSync(new URL(import.meta.url)));
 const appearanceVersion = appearanceHash.digest('hex').slice(0, 10);
 for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
   const destination = path.join(out, app === 'home' ? '' : app, 'appearance');
@@ -155,7 +157,8 @@ rewrite('harmony/sw.js', js => js
 for (const file of ['sw.js', 'offline.js', 'offline-deploy.js']) {
   rewrite('stage/' + file, js => js.replaceAll('20261008-onboarding-1', '20261008-appearance-' + appearanceVersion));
 }
-rewrite('stage/cache-manifest.json', json => JSON.stringify([...new Set([...JSON.parse(json), ...localAppearance('stage')])].sort(), null, 2) + '\n');
+// .nojekyll configures deployment; it is not a runtime asset served by Pages.
+rewrite('stage/cache-manifest.json', json => JSON.stringify([...new Set([...JSON.parse(json).filter(file => file !== './.nojekyll'), ...localAppearance('stage')])].sort(), null, 2) + '\n');
 
 // Identify the live release; this contains no local path or model/training artifact.
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim();

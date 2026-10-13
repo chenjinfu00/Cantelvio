@@ -37,6 +37,14 @@ for (const page of pages) {
 for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
+const stageManifest = path.join(out, 'stage/cache-manifest.json');
+if (!fs.existsSync(stageManifest)) fail('missing Stage offline cache manifest');
+else for (const ref of JSON.parse(fs.readFileSync(stageManifest, 'utf8'))) {
+  if (typeof ref !== 'string' || !ref.startsWith('./')) { fail(`invalid Stage offline asset: ${ref}`); continue; }
+  const target = path.resolve(path.dirname(stageManifest), ref);
+  if (!target.startsWith(path.dirname(stageManifest) + path.sep) || !fs.existsSync(target) || !fs.statSync(target).isFile()) fail(`missing Stage offline asset: ${ref}`);
+  if (ref === './.nojekyll') fail('Stage offline cache contains deployment-only .nojekyll');
+}
 (function checkPublishedFiles(dir) {
   for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
     const file = path.join(dir, entry.name);
