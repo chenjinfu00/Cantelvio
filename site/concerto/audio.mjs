@@ -1,8 +1,10 @@
 // No media leaves this page. Microphone samples are analysed and discarded.
 import {Fingerprinter,SAMPLE_RATE} from '../stage/matcher.js';
+import {OrchestraOutput,clampGain} from './output.mjs?v=20261018-gain-1';
 export class OrchestraSynth {
   async init(gain=.45) {
     this.cancelled=false;
+    this.gain=clampGain(gain);
     const context=this.context=new AudioContext({latencyHint:'interactive'});
     await context.resume();
     const [{WorkletSynthesizer},response]=await Promise.all([import('./vendor/synth.js'),fetch('../score/audio/soundfonts/MuseScore_General.sf3')]);
@@ -14,7 +16,7 @@ export class OrchestraSynth {
     const synth=this.synth=new WorkletSynthesizer(context);synth.setLogLevel(false,true,false);
     await synth.soundBankManager.addSoundBank(bank,'MuseScore_General');await synth.isReady;
     if(this.cancelled){synth.destroy();return;}
-    this.output=context.createGain();this.output.gain.value=gain;this.output.connect(context.destination);synth.connect(this.output);this.channels=new Map();
+    this.output=new OrchestraOutput(context,this.gain);synth.connect(this.output.input);this.channels=new Map();
   }
   channel(e) {
     const key=`${e.track}:${e.channel}`;
@@ -35,7 +37,7 @@ export class OrchestraSynth {
     else if(e.command===13)this.synth.channelPressure(ch,e.a,opts);
     else if(e.command===10)this.synth.polyPressure(ch,e.a,e.b,opts);
   }
-  volume(value) {this.output?.gain.setTargetAtTime(value,this.context.currentTime,.03);}
+  volume(value) {this.gain=clampGain(value);this.output?.volume(this.gain);}
   async stop() {this.cancelled=true;this.synth?.disconnect();this.synth?.destroy();this.synth=null;this.output?.disconnect();if(this.context && this.context.state!=='closed')await this.context.close();}
 }
 export class LiveMic {

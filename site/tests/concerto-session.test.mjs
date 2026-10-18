@@ -6,7 +6,7 @@ import {encodePreset,decodePreset,loadPublishedPreset,PUBLISHED_ASSETS} from '..
 const example=()=>({version:1,workId:WORK_ID,midi:{name:'local.mid',blob:new Blob([new Uint8Array([1,2,3])])},soloTrackIds:[13],confirmed:true,settings:{rate:94,volume:45,measure:1},page:13});
 test('saved configuration is bounded and contains files rather than remote URLs',()=>{
   const value=example();value.soloTrackIds=[13,13,-1,999,'13'];value.settings={measure:-2,rate:Infinity,volume:999,mode:'javascript:run',deviceId:'x'.repeat(900)};
-  const clean=snapshot(value);assert.deepEqual(clean.soloTrackIds,[13]);assert.equal(clean.settings.measure,1);assert.equal(clean.settings.rate,94);assert.equal(clean.settings.volume,100);assert.equal(clean.settings.mode,'fixed');assert.equal(clean.settings.deviceId.length,512);
+  const clean=snapshot(value);assert.deepEqual(clean.soloTrackIds,[13]);assert.equal(clean.settings.measure,1);assert.equal(clean.settings.rate,94);assert.equal(clean.settings.volume,500);assert.equal(clean.settings.mode,'fixed');assert.equal(clean.settings.deviceId.length,512);
   assert.throws(()=>snapshot({...value,midi:{name:'remote.mid',blob:'https://example.com/private.mid'}}));assert.throws(()=>snapshot({...value,version:2}));assert.throws(()=>snapshot({...value,workId:'another-work'}));
 });
 test('zero volume, selected entry, solo tracks and PDF page survive a snapshot',()=>{
@@ -17,6 +17,13 @@ class MemoryStore extends SessionStore {
   constructor(){super({factory:null,name:'test'});this.data=new Map();this.pause=null;this.failure=false;}
   async transaction(mode,operation){if(this.pause){const wait=this.pause;this.pause=null;await wait;}if(this.failure){this.failure=false;throw Error('Quota exceeded');}return operation({get:key=>this.data.get(key),put:(value,key)=>this.data.set(key,value),delete:key=>this.data.delete(key)});}
 }
+test('up to 500 percent survives save/reload while legacy and muted levels stay unchanged',async()=>{
+  const store=new MemoryStore();
+  for(const [input,expected] of [[500,500],[375,375],[100,100],[0,0],[-10,0],[999,500]]) {
+    const value=example();value.settings.volume=input;await store.save(value);
+    assert.equal((await store.load()).settings.volume,expected);
+  }
+});
 test('a slow earlier save cannot resurrect files after Clear',async()=>{
   const store=new MemoryStore();let release;store.pause=new Promise(resolve=>{release=resolve;});
   const save=store.save(example()),clear=store.clear();release();await Promise.all([save,clear]);assert.equal(await store.load(),null);

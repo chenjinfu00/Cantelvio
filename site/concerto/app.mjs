@@ -1,11 +1,11 @@
 import {parseMidi,splitScore} from './midi.mjs';
 import {Transport,restoreState} from './transport.mjs';
 import {BrowserFollower} from './follower.mjs';
-import {OrchestraSynth,LiveMic} from './audio.mjs';
+import {OrchestraSynth,LiveMic} from './audio.mjs?v=20261018-gain-1';
 import {demoMidi} from './demo.mjs';
 import {SCORE_BASIS,loadScoreMap,scoreStart} from './alignment.mjs?v=20261018-score-1';
-import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs?v=20261018-score-1';
-import {decodePreset,loadPublishedPreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs?v=20261018-score-1';
+import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs?v=20261018-gain-1';
+import {decodePreset,loadPublishedPreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs?v=20261018-gain-1';
 const $=id=>document.getElementById(id);
 const t=(zh,en)=>document.documentElement.lang.startsWith('zh')?zh:en;
 let midi=null,soloMidi=null,transport=null,follower=null,synth=null,mic=null,timer=null,run=0,starting=false,loading=false,fileGeneration=0,sourceLabel='',demo=false;

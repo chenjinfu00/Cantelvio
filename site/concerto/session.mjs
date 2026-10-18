@@ -1,10 +1,11 @@
 import {SCORE_BASIS} from './alignment.mjs?v=20261018-score-1';
+import {MAX_VOLUME} from './output.mjs?v=20261018-gain-1';
 export const WORK_ID='chopin-op21-1';
 export const SESSION_VERSION=1;
 const number=(value,fallback,min,max)=>Number.isFinite(Number(value))?Math.max(min,Math.min(max,Number(value))):fallback;
 export function settings(value={}) {
   const positionBasis=value.positionBasis===SCORE_BASIS?SCORE_BASIS:'midi';
-  return {positionBasis,measure:Math.round(number(value.measure,positionBasis===SCORE_BASIS?0:1,positionBasis===SCORE_BASIS?0:1,100000)),rate:number(value.rate,94,50,150),volume:number(value.volume,45,0,100),mode:value.mode==='follow'?'follow':'fixed',speaker:value.speaker!==false,deviceId:typeof value.deviceId==='string'?value.deviceId.slice(0,512):''};
+  return {positionBasis,measure:Math.round(number(value.measure,positionBasis===SCORE_BASIS?0:1,positionBasis===SCORE_BASIS?0:1,100000)),rate:number(value.rate,94,50,150),volume:number(value.volume,45,0,MAX_VOLUME),mode:value.mode==='follow'?'follow':'fixed',speaker:value.speaker!==false,deviceId:typeof value.deviceId==='string'?value.deviceId.slice(0,512):''};
 }
 function asset(value,maxSize) {
   if(value==null)return null;

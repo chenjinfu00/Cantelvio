@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Concerto offline audio checks</title>
+<h1>Concerto offline audio checks</h1><p>Offline rendering only: no speaker or microphone is opened.</p><button id="run">Run audio checks</button><pre id="results">Ready</pre>
+<script type="module">
+import {OrchestraOutput,clampGain} from './concerto/output.mjs?v=20261018-gain-1';
+const rate=48000,frames=rate;
+async function render(gain,amplitude=.01,change=false,disconnect=false) {
+  const context=new OfflineAudioContext(2,frames,rate),output=new OrchestraOutput(context,gain);
+  const buffer=context.createBuffer(2,frames,rate);
+  for(let ch=0;ch<2;ch++) {
+    const data=buffer.getChannelData(ch);
+    for(let i=0;i<frames;i++)data[i]=amplitude*Math.sin(2*Math.PI*220*i/rate)*(ch?-.5:1);
+  }
+  const source=context.createBufferSource();source.buffer=buffer;source.connect(output.input);
+  if(change)output.volume(5);
+  if(disconnect)output.disconnect();
+  source.start();const rendered=await context.startRendering(),samples=[];
+  for(let ch=0;ch<2;ch++) {
+    const data=rendered.getChannelData(ch);let peak=0,sum=0;
+    for(let i=0;i<data.length;i++){if(!Number.isFinite(data[i]))throw Error('nonfinite output');peak=Math.max(peak,Math.abs(data[i]));if(i>=rate/2)sum+=data[i]**2;}
+    samples.push({peak,rms:Math.sqrt(sum/(frames-rate/2))});
+  }
+  return samples;
+}
+document.querySelector('#run').onclick=async()=>{
+  const result=document.querySelector('#results');result.textContent='Rendering…';
+  try {
+    const muted=await render(0),unity=await render(1),five=await render(5),loud=await render(5,.9),changed=await render(0,.01,true),disconnected=await render(5,.01,false,true);
+    const checks={
+      mute:muted.every(c=>c.peak===0),
+      gain500:Math.abs(five[0].rms/unity[0].rms-5)<.001,
+      stereo:Math.abs(five[1].rms/five[0].rms-.5)<.001,
+      ceiling:loud.every(c=>c.peak<=.980001 && c.peak>.5),
+      liveAdjustment:Math.abs(changed[0].rms/five[0].rms-1)<.001,
+      disconnect:disconnected.every(c=>c.peak===0),
+      gainBounds:clampGain(999)===5 && clampGain(-1)===0 && clampGain(0)===0
+    };
+    result.textContent=JSON.stringify({passed:Object.values(checks).every(Boolean),checks,measurements:{muted,unity,five,loud,changed,disconnected}},null,2);
+  }catch(error){result.textContent=JSON.stringify({passed:false,error:error.message});}
+};
+</script></html>

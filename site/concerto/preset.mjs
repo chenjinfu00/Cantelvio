@@ -1,4 +1,4 @@
-import {snapshot,WORK_ID} from './session.mjs?v=20261018-score-1';
+import {snapshot,WORK_ID} from './session.mjs?v=20261018-gain-1';
 import {parseMidi} from './midi.mjs';
 import {SCORE_BASIS} from './alignment.mjs?v=20261018-score-1';
 // Only these two resources are approved for publication with this work.
