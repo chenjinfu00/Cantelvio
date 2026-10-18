@@ -1,0 +1,16 @@
+Cantelvio Concerto — Chopin, Piano Concerto No. 2 in F minor, Op. 21
+Prepared browser repertoire: I. Maestoso only.
+
+MIDI: Robert Finley performance MIDI, original embedded 1998 copyright notice retained.
+File: chopin-op21-mvt1.mid (complete, unchanged).
+The browser mutes the Pianoforte solo track during accompaniment.
+
+PDF: Chopin Op. 21, two-piano score, Polish National Edition.
+File: chopin-op21-two-pianos.pdf (original 110-page PDF, unchanged).
+Movement I opens on PDF page 13. Edition and publisher notices remain in the PDF.
+
+These two files were selected from the user's existing Concerto materials and
+published at the user's explicit request on 2026-10-18. No additional license
+or ownership is asserted by Cantelvio. Original credits and notices apply.
+
+Other local score-library materials, recordings and model weights are not included.

@@ -3,6 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {PUBLISHED_ASSETS} from './concerto/preset.mjs';
 const index = process.argv.indexOf('--out');
 if (index >= 0 && (!process.argv[index + 1] || process.argv[index + 1].startsWith('--'))) throw new Error('--out needs a path');
 const out = index >= 0 ? path.resolve(process.argv[index + 1]) : path.resolve(fileURLToPath(new URL('..', import.meta.url)), 'site-dist');
@@ -43,8 +45,14 @@ for (const file of ['index.html','play.html','app.mjs','session.mjs','preset.mjs
 for (const file of ['stage/matcher.js','stage/capture-worklet.js','stage/vendor/pdf.mjs','stage/vendor/pdf.worker.mjs','score/audio/soundfonts/MuseScore_General.sf3','score/licenses/spessasynth_lib/LICENSE','score/licenses/spessasynth_core/LICENSE']) {
   if (!fs.existsSync(path.join(out,file))) fail(`missing Concerto dependency: ${file}`);
 }
+const allowedMedia=new Map(PUBLISHED_ASSETS.map(asset=>[asset.path,asset]));
+for (const asset of PUBLISHED_ASSETS){
+  const file=path.join(out,'concerto',asset.path);
+  if(!fs.existsSync(file))fail(`missing approved Concerto resource: ${asset.path}`);
+  else {const bytes=fs.readFileSync(file);if(bytes.length!==asset.bytes || createHash('sha256').update(bytes).digest('hex')!==asset.sha256)fail(`Concerto resource identity mismatch: ${asset.path}`);}
+}
 for (const entry of fs.readdirSync(path.join(out,'concerto'),{recursive:true})) {
-  if (/\.(pdf|mid|midi|wav|mp3|concerto)$/i.test(entry) || /(^|\/)(local|\.runtime_cache)(\/|$)/.test(entry)) fail(`private media in Concerto bundle: ${entry}`);
+  if (/\.(pdf|mid|midi|wav|mp3|concerto)$/i.test(entry) && !allowedMedia.has(entry) || /(^|\/)(local|\.runtime_cache)(\/|$)/.test(entry)) fail(`unapproved media in Concerto bundle: ${entry}`);
 }
 const stageManifest = path.join(out, 'stage/cache-manifest.json');
 if (!fs.existsSync(stageManifest)) fail('missing Stage offline cache manifest');

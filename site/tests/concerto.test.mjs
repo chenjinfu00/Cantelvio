@@ -53,8 +53,8 @@ test('speaker mode refuses a reference indistinguishable from orchestra bleed',(
   const midi=parseMidi(demoMidi()),score=splitScore(midi,[2]),f=new BrowserFollower({...score,orchestra:score.solo,clock:midi.clock,speaker:true});f.control(8,1);
   const v=pitchVector(score.solo.filter(n=>n.beat===8));for(let i=0;i<20;i++)f.observe({active:true,db:-15,v:[...v,...Array(12).fill(0)]},8,2+i/10);assert.equal(f.locked,false);
 });
-const source=new URL('../../Concerto/Online_MIDI_Robert_Finley/Chopin_Op21_Mvt1_Maestoso_Finley.mid',import.meta.url);
-test('private complete Chopin source: all 7,871 orchestra note-ons and 16,825 channel events survive', {skip:!fs.existsSync(source)},()=>{
+const source=new URL('../concerto/assets/chopin-op21-mvt1.mid',import.meta.url);
+test('published complete Chopin source: all 7,871 orchestra note-ons and 16,825 channel events survive', ()=>{
   const midi=parseMidi(fs.readFileSync(source)),solo=midi.tracks.filter(t=>t.name==='Pianoforte').map(t=>t.id),score=splitScore(midi,solo);
   assert.equal(score.orchestra.length,16825);assert.equal(score.orchestra.filter(e=>e.command===9&&e.b).length,7871);assert.equal(score.solo.length,5811);assert.equal(score.solo[0].beat,259.3);
   let now=0;const sent=[];const p=new Transport({midi,events:score.orchestra,clock:()=>now,send:e=>sent.push(e)});p.start();

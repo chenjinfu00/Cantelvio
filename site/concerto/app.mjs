@@ -4,13 +4,13 @@ import {BrowserFollower} from './follower.mjs';
 import {OrchestraSynth,LiveMic} from './audio.mjs';
 import {demoMidi} from './demo.mjs';
 import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs';
-import {decodePreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs';
+import {decodePreset,loadPublishedPreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs';
 const $=id=>document.getElementById(id);
 const t=(zh,en)=>document.documentElement.lang.startsWith('zh')?zh:en;
 let midi=null,soloMidi=null,transport=null,follower=null,synth=null,mic=null,timer=null,run=0,starting=false,loading=false,fileGeneration=0,sourceLabel='',demo=false;
 let pdf=null,pdfTask=null,pdfRender=null,pdfGeneration=0,renderGeneration=0,page=1;
 const store=new SessionStore();
-let files={midi:null,solo:null,pdf:null},restoring=true,workRevision=0,saveTimer=null;
+let files={midi:null,solo:null,pdf:null},restoring=true,workRevision=0,saveTimer=null,presetAbort=null;
 const message=(text,error=false)=>{$('message').textContent=text;$('message').classList.toggle('error',error);};
 const savedStatus=(zh,en)=>{$('saved-status').textContent=t(zh,en);};
 const selected=()=>Array.from($('track-list').querySelectorAll('input:checked'),e=>Number(e.value));
@@ -53,7 +53,7 @@ async function saveNow(){
   if(restoring || demo || !files.midi && !files.pdf)return;
   const revision=workRevision;
   try{await store.save({version:1,workId:WORK_ID,...files,soloTrackIds:selected(),confirmed:$('confirmed').checked,settings:currentSettings(),page});if(revision===workRevision)savedStatus('已保存在此浏览器 · 下次打开自动恢复','Saved in this browser · automatically restored next time');}
-  catch(e){if(revision===workRevision)savedStatus('当前可用，但无法保存；刷新后需重新载入','Usable now, but not saved; reload will require importing again');}
+  catch(e){if(revision===workRevision)savedStatus('当前可用，但无法记住更改；下次将载入默认配置','Usable now, but changes cannot be saved; defaults load next time');}
 }
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;saveNow();},250);}
 async function applyConfiguration(value,revision){
@@ -66,15 +66,27 @@ async function applyConfiguration(value,revision){
   applySettings(clean.settings);
   const pdfReady=!clean.pdf || await loadPDF(clean.pdf,clean.page,false);
   if(revision!==workRevision)return false;
-  if(!pdfReady)throw Error('曲谱未完成载入，请重试演奏包 / PDF did not load; please retry the performance pack');
+  if(!pdfReady)throw Error('曲谱未完成载入，请恢复默认配置重试 / PDF did not load; restore defaults to retry');
   $('materials-details').open=!(midi && $('confirmed').checked);
   $('state').textContent=midi && $('confirmed').checked?t('已配置 · 可以开始','Configured · ready to start'):t('已恢复演奏文件','Performance files restored');
   return true;
 }
-async function restoreConfiguration(){
-  const revision=workRevision;controls();savedStatus('正在读取本机演奏配置…','Reading local performance settings…');
-  try{const clean=await store.load();if(revision!==workRevision)return;if(clean && await applyConfiguration(clean,revision)){savedStatus('已恢复本机配置 · 无需再次选择文件','Local configuration restored · no file selection needed');message(t('演奏文件和设置已恢复，点击「开始伴奏」即可。','Files and settings restored. Press Start accompaniment.'));}else savedStatus('导入一次演奏文件后，本浏览器会记住配置','Import once; this browser will remember your configuration');}
-  catch(e){if(revision===workRevision){savedStatus('暂未恢复配置，可重新导入演奏包或文件','Could not restore settings; import a pack or files');message(e.message,true);}}
+async function restoreConfiguration(defaults=false){
+  const revision=workRevision;restoring=true;presetAbort?.abort();const request=presetAbort=new AbortController();
+  controls();savedStatus('正在准备肖邦第一乐章…','Preparing Chopin movement I…');
+  try{
+    let restored=false;
+    if(!defaults){try{const clean=await store.load();if(revision!==workRevision)return;if(clean)restored=await applyConfiguration(clean,revision);}catch{/* A missing or damaged browser copy falls back to the published work. */}}
+    if(revision!==workRevision)return;
+    if(!restored){
+      savedStatus('正在下载完整 MIDI 和双钢琴曲谱，首次约 15 MB…','Downloading complete MIDI and two-piano score, about 15 MB on first use…');
+      const clean=await loadPublishedPreset({signal:request.signal});if(revision!==workRevision)return;
+      if(!await applyConfiguration(clean,revision))return;
+      restoring=false;await saveNow();
+    }else savedStatus('已恢复您的配置 · 无需再次选择文件','Your settings restored · no file selection needed');
+    if(revision===workRevision)message(t('曲目与设置已就绪，点击「开始伴奏」即可。','Work and settings are ready. Press Start accompaniment.'));
+  }
+  catch(e){if(revision===workRevision){savedStatus('准备未完成，请点击「恢复默认配置」重试','Preparation incomplete; select Restore defaults to retry');message(e.message,true);}}
   finally{if(revision===workRevision){restoring=false;controls();}}
 }
 async function importPreset(file){
@@ -136,7 +148,7 @@ $('pack').addEventListener('change',e=>importPreset(e.target.files[0]));for(cons
 $('start').addEventListener('click',start);$('stop').addEventListener('click',()=>stop());$('release').addEventListener('click',()=>follower?.release());
 for(const id of ['rate','volume'])$(id).addEventListener('input',()=>{$(id+'-label').textContent=$(id).value+'%';if(id==='volume')synth?.volume(Number($(id).value)/100);queueSave();});
 $('demo').addEventListener('click',async()=>{++workRevision;clearTimeout(saveTimer);restoring=false;await stop(false);++fileGeneration;loading=false;midi=parseMidi(demoMidi());soloMidi=null;sourceLabel=t('8 小节自制示例','8-bar original example');demo=true;$('midi').value='';$('solo').value='';$('solo-info').textContent='';showTracks();$('confirmed').checked=true;$('rate').value=100;$('rate-label').textContent='100%';message(t('自制示例已就绪，点击开始。它不是肖邦曲目的片段。','Original example ready. Press Start; this is not a Chopin excerpt.'));controls();});
-$('clear').addEventListener('click',async()=>{++workRevision;++fileGeneration;clearTimeout(saveTimer);restoring=true;loading=false;++pdfGeneration;files={midi:null,solo:null,pdf:null};await stop(false);try{await store.clear();savedStatus('本浏览器保存的配置已清除','Saved configuration cleared from this browser');}catch(e){savedStatus('未能清除浏览器保存，请重试','Could not clear saved settings; please retry');}midi=null;soloMidi=null;demo=false;sourceLabel='';$('midi').value='';$('solo').value='';$('pdf').value='';$('track-list').replaceChildren();$('confirmed').checked=false;$('solo-info').textContent='';$('midi-info').textContent=t('未载入 MIDI','No MIDI loaded');$('position').textContent='—';$('tempo').textContent='— BPM';++pdfGeneration;await pdfTask?.destroy();pdfTask=null;pdf=null;$('score-canvas').hidden=true;$('score-empty').hidden=false;$('page-count').textContent='/ —';for(const id of ['page','previous','next'])$(id).disabled=true;$('materials-details').open=true;message(t('已清除本浏览器的演奏文件与设置，电脑原文件保持。','Performance files and settings cleared from this browser. Original computer files remain.'));restoring=false;controls();});
+$('clear').addEventListener('click',async()=>{const revision=++workRevision;presetAbort?.abort();++fileGeneration;clearTimeout(saveTimer);restoring=true;loading=false;++pdfGeneration;files={midi:null,solo:null,pdf:null};await stop(false);if(revision!==workRevision)return;try{await store.clear();savedStatus('本浏览器保存的配置已清除','Saved configuration cleared from this browser');}catch(e){savedStatus('未能清除浏览器保存，请重试','Could not clear saved settings; please retry');}if(revision!==workRevision)return;midi=null;soloMidi=null;demo=false;sourceLabel='';$('midi').value='';$('solo').value='';$('pdf').value='';$('track-list').replaceChildren();$('confirmed').checked=false;$('solo-info').textContent='';$('midi-info').textContent=t('未载入 MIDI','No MIDI loaded');$('position').textContent='—';$('tempo').textContent='— BPM';++pdfGeneration;await pdfTask?.destroy();if(revision!==workRevision)return;pdfTask=null;pdf=null;$('score-canvas').hidden=true;$('score-empty').hidden=false;$('page-count').textContent='/ —';for(const id of ['page','previous','next'])$(id).disabled=true;$('materials-details').open=true;await restoreConfiguration(true);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden && (starting || transport?.playing)){stop(false);message(t('页面进入后台，伴奏已停止。','Page moved to the background; playback stopped.'));}});
 window.addEventListener('pagehide',()=>{stop(false);pdfTask?.destroy();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();stop();}if(!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)){if(e.key==='ArrowLeft'){e.preventDefault();turn(-1);}if(e.key==='ArrowRight'){e.preventDefault();turn(1);}}});
@@ -165,4 +177,4 @@ async function loadPDF(asset,targetPage=1,save=true) {
   }catch(error){if(id===pdfGeneration)message(error.message,true);return false;}
 }
 $('pdf').addEventListener('change',async e=>{const file=e.target.files[0];if(file){++workRevision;restoring=false;await loadPDF({name:file.name,blob:file});}});
-controls();$('state').textContent=t('待载入 MIDI','Load a MIDI to begin');restoreConfiguration();
+controls();$('state').textContent=t('正在准备曲目…','Preparing work…');restoreConfiguration();
