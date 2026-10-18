@@ -37,14 +37,14 @@ for (const page of pages) {
 for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
-for (const file of ['index.html','play.html','app.mjs','midi.mjs','transport.mjs','follower.mjs','audio.mjs','demo.mjs','style.css','vendor/synth.js','vendor/processor.js']) {
+for (const file of ['index.html','play.html','app.mjs','session.mjs','preset.mjs','remembered.mjs','midi.mjs','transport.mjs','follower.mjs','audio.mjs','demo.mjs','style.css','vendor/synth.js','vendor/processor.js']) {
   if (!fs.existsSync(path.join(out,'concerto',file))) fail(`missing Concerto browser asset: ${file}`);
 }
 for (const file of ['stage/matcher.js','stage/capture-worklet.js','stage/vendor/pdf.mjs','stage/vendor/pdf.worker.mjs','score/audio/soundfonts/MuseScore_General.sf3','score/licenses/spessasynth_lib/LICENSE','score/licenses/spessasynth_core/LICENSE']) {
   if (!fs.existsSync(path.join(out,file))) fail(`missing Concerto dependency: ${file}`);
 }
 for (const entry of fs.readdirSync(path.join(out,'concerto'),{recursive:true})) {
-  if (/\.(pdf|mid|midi|wav|mp3)$/i.test(entry) || /(^|\/)(local|\.runtime_cache)(\/|$)/.test(entry)) fail(`private media in Concerto bundle: ${entry}`);
+  if (/\.(pdf|mid|midi|wav|mp3|concerto)$/i.test(entry) || /(^|\/)(local|\.runtime_cache)(\/|$)/.test(entry)) fail(`private media in Concerto bundle: ${entry}`);
 }
 const stageManifest = path.join(out, 'stage/cache-manifest.json');
 if (!fs.existsSync(stageManifest)) fail('missing Stage offline cache manifest');

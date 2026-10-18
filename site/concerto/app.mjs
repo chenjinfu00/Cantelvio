@@ -3,17 +3,22 @@ import {Transport,restoreState} from './transport.mjs';
 import {BrowserFollower} from './follower.mjs';
 import {OrchestraSynth,LiveMic} from './audio.mjs';
 import {demoMidi} from './demo.mjs';
+import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs';
+import {decodePreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs';
 const $=id=>document.getElementById(id);
 const t=(zh,en)=>document.documentElement.lang.startsWith('zh')?zh:en;
 let midi=null,soloMidi=null,transport=null,follower=null,synth=null,mic=null,timer=null,run=0,starting=false,loading=false,fileGeneration=0,sourceLabel='',demo=false;
 let pdf=null,pdfTask=null,pdfRender=null,pdfGeneration=0,renderGeneration=0,page=1;
+const store=new SessionStore();
+let files={midi:null,solo:null,pdf:null},restoring=true,workRevision=0,saveTimer=null;
 const message=(text,error=false)=>{$('message').textContent=text;$('message').classList.toggle('error',error);};
+const savedStatus=(zh,en)=>{$('saved-status').textContent=t(zh,en);};
 const selected=()=>Array.from($('track-list').querySelectorAll('input:checked'),e=>Number(e.value));
 const split=()=>{const result=splitScore(midi,selected());if(soloMidi){result.solo=soloMidi.tracks.flatMap(t=>t.intervals).sort((a,b)=>a.beat-b.beat);result.phrases=splitScore(soloMidi,soloMidi.tracks.map(t=>t.id)).phrases;}return result;};
 function controls() {
-  const busy=starting || transport?.playing;
+  const busy=starting || transport?.playing || restoring;
   for(const input of document.querySelectorAll('.setup input:not(#rate):not(#volume),.setup select,.setup button'))input.disabled=!!busy;
-  $('tracks').disabled=!midi || !!busy;
+  $('tracks').disabled=!midi || !!busy;$('pdf').disabled=restoring;
   $('start').disabled=!!busy || loading || !midi || !$('confirmed').checked;
   $('release').disabled=!transport?.playing || !follower;
   $('mic-settings').hidden=$('mode').value!=='follow';
@@ -24,7 +29,7 @@ function showTracks() {
     const label=document.createElement('label');label.className='check';const check=document.createElement('input');check.type='checkbox';check.value=track.id;
     check.checked=/pianoforte|solo.*piano|piano.*solo/i.test(track.name);
     const text=document.createElement('span');text.textContent=`${track.id+1}. ${track.name} · ${track.notes} ${t('音','notes')}`;
-    label.append(check,text);$('track-list').append(label);check.addEventListener('change',()=>{$('confirmed').checked=false;controls();});
+    label.append(check,text);$('track-list').append(label);check.addEventListener('change',()=>{$('confirmed').checked=false;controls();queueSave();});
   }
   $('midi-info').textContent=`${sourceLabel} · ${midi.tracks.length} ${t('轨','tracks')} · ${midi.meter.atBeat(Math.max(0,midi.endBeat-.001)).measure} ${t('MIDI 小节','MIDI bars')}`;
   $('confirmed').checked=false;$('measure').value=1;$('measure').max=midi.meter.atBeat(midi.endBeat).measure;
@@ -32,14 +37,51 @@ function showTracks() {
 }
 async function loadMidi(file,reference=false) {
   if(!file)return;
-  const id=++fileGeneration;loading=true;controls();
+  ++workRevision;const id=++fileGeneration;loading=true;controls();
   try {
     if(file.size>20*1024*1024)throw Error(t('MIDI 文件需小于 20 MB','MIDI must be under 20 MB'));
-    const parsed=parseMidi(await file.arrayBuffer());if(id!==fileGeneration)return;
-    if(reference){soloMidi=parsed;$('solo-info').textContent=`${file.name} · ${parsed.tracks.reduce((s,t)=>s+t.notes,0)} ${t('音（仅参考，不发声）','notes (silent reference)')}`;}
-    else {await stop(false);midi=parsed;soloMidi=null;$('solo').value='';$('solo-info').textContent='';sourceLabel=file.name;demo=false;showTracks();}
-    message(t('文件已在浏览器载入，没有上传。请核对独奏轨与开始位置。','Loaded in your browser without uploading. Check solo tracks and starting bar.'));
+    const bytes=await file.arrayBuffer(),parsed=parseMidi(bytes),known=!reference && await digest(bytes)===CHOPIN_MIDI_SHA;if(id!==fileGeneration)return;
+    if(reference){soloMidi=parsed;files.solo={name:file.name,blob:file};$('solo-info').textContent=`${file.name} · ${parsed.tracks.reduce((s,t)=>s+t.notes,0)} ${t('音（仅参考，不发声）','notes (silent reference)')}`;}
+    else {await stop(false);if(id!==fileGeneration)return;midi=parsed;soloMidi=null;files.midi={name:file.name,blob:file};files.solo=null;$('solo').value='';$('solo-info').textContent='';sourceLabel=file.name;demo=false;showTracks();if(known){$('confirmed').checked=true;applySettings({measure:1,rate:94,volume:45,mode:'fixed',speaker:true});}}
+    await saveNow();
+    message(known?t('肖邦第一乐章已识别：独奏轨已静音，可直接开始。','Chopin movement I recognised: solo track muted, ready to start.'):t('文件已在浏览器载入并记住。请核对独奏轨与开始位置。','Files loaded and remembered in this browser. Check solo tracks and starting bar.'));
   }catch(e){if(id===fileGeneration)message(e.message,true);}finally{if(id===fileGeneration){loading=false;controls();}}
+}
+function currentSettings(){return settings({measure:$('measure').value,rate:$('rate').value,volume:$('volume').value,mode:$('mode').value,speaker:$('speaker').checked,deviceId:$('device').value});}
+function applySettings(value){const clean=settings(value);for(const id of ['measure','rate','volume','mode'])$(id).value=clean[id];$('speaker').checked=clean.speaker;if(clean.deviceId && !$('device').querySelector(`option[value="${CSS.escape(clean.deviceId)}"]`))$('device').add(new Option(t('上次使用的麦克风','Previously selected microphone'),clean.deviceId));$('device').value=clean.deviceId;for(const id of ['rate','volume'])$(id+'-label').textContent=$(id).value+'%';}
+async function saveNow(){
+  if(restoring || demo || !files.midi && !files.pdf)return;
+  const revision=workRevision;
+  try{await store.save({version:1,workId:WORK_ID,...files,soloTrackIds:selected(),confirmed:$('confirmed').checked,settings:currentSettings(),page});if(revision===workRevision)savedStatus('已保存在此浏览器 · 下次打开自动恢复','Saved in this browser · automatically restored next time');}
+  catch(e){if(revision===workRevision)savedStatus('当前可用，但无法保存；刷新后需重新载入','Usable now, but not saved; reload will require importing again');}
+}
+function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;saveNow();},250);}
+async function applyConfiguration(value,revision){
+  const clean=snapshot(value),parsed=clean.midi?parseMidi(await clean.midi.blob.arrayBuffer()):null,solo=clean.solo?parseMidi(await clean.solo.blob.arrayBuffer()):null;
+  if(revision!==workRevision)return false;
+  await stop(false);if(revision!==workRevision)return false;
+  files={midi:clean.midi,solo:clean.solo,pdf:clean.pdf};midi=parsed;soloMidi=solo;demo=false;sourceLabel=clean.midi?.name||'';
+  if(midi){showTracks();const valid=new Set(midi.tracks.filter(t=>t.notes).map(t=>t.id));for(const check of $('track-list').querySelectorAll('input'))check.checked=clean.soloTrackIds.includes(Number(check.value));$('confirmed').checked=clean.confirmed && clean.soloTrackIds.every(id=>valid.has(id));}
+  $('solo-info').textContent=clean.solo?`${clean.solo.name} · ${t('已恢复静音参考','Silent reference restored')}`:'';
+  applySettings(clean.settings);
+  const pdfReady=!clean.pdf || await loadPDF(clean.pdf,clean.page,false);
+  if(revision!==workRevision)return false;
+  if(!pdfReady)throw Error('曲谱未完成载入，请重试演奏包 / PDF did not load; please retry the performance pack');
+  $('materials-details').open=!(midi && $('confirmed').checked);
+  $('state').textContent=midi && $('confirmed').checked?t('已配置 · 可以开始','Configured · ready to start'):t('已恢复演奏文件','Performance files restored');
+  return true;
+}
+async function restoreConfiguration(){
+  const revision=workRevision;controls();savedStatus('正在读取本机演奏配置…','Reading local performance settings…');
+  try{const clean=await store.load();if(revision!==workRevision)return;if(clean && await applyConfiguration(clean,revision)){savedStatus('已恢复本机配置 · 无需再次选择文件','Local configuration restored · no file selection needed');message(t('演奏文件和设置已恢复，点击「开始伴奏」即可。','Files and settings restored. Press Start accompaniment.'));}else savedStatus('导入一次演奏文件后，本浏览器会记住配置','Import once; this browser will remember your configuration');}
+  catch(e){if(revision===workRevision){savedStatus('暂未恢复配置，可重新导入演奏包或文件','Could not restore settings; import a pack or files');message(e.message,true);}}
+  finally{if(revision===workRevision){restoring=false;controls();}}
+}
+async function importPreset(file){
+  if(!file)return;const revision=++workRevision;++fileGeneration;clearTimeout(saveTimer);restoring=true;controls();savedStatus('正在核对肖邦演奏包…','Verifying Chopin performance pack…');
+  try{if(file.size>121*1024*1024)throw Error('演奏包过大 / Performance pack is too large');const clean=await decodePreset(await file.arrayBuffer());if(revision!==workRevision)return;if(!await applyConfiguration(clean,revision))return;restoring=false;await saveNow();message(t('肖邦第一乐章已配置：完整乐队、独奏轨静音、双钢琴谱第13页。以后在此浏览器打开会自动恢复。','Chopin movement I configured: complete orchestra, solo muted, two-piano PDF at page 13. This browser will restore it next time.'));}
+  catch(e){if(revision===workRevision){savedStatus('演奏包未完整载入，可重新导入','Pack did not finish loading; please retry');message(e.message,true);}}
+  finally{if(revision===workRevision){restoring=false;controls();}$('pack').value='';}
 }
 async function stop(notify=true) {
   ++run;starting=false;if(timer)clearInterval(timer);timer=null;transport?.stop();
@@ -89,11 +131,12 @@ function showPlayback(player) {
   $('tempo').textContent=`${(midi.clock.bpm(player.beat)*player.rate).toFixed(0)} BPM`;
 }
 $('midi').addEventListener('change',e=>loadMidi(e.target.files[0]));$('solo').addEventListener('change',e=>loadMidi(e.target.files[0],true));
-$('confirmed').addEventListener('change',controls);$('mode').addEventListener('change',controls);
+$('confirmed').addEventListener('change',()=>{controls();queueSave();});$('mode').addEventListener('change',()=>{controls();queueSave();});
+$('pack').addEventListener('change',e=>importPreset(e.target.files[0]));for(const id of ['measure','speaker','device'])$(id).addEventListener('change',queueSave);
 $('start').addEventListener('click',start);$('stop').addEventListener('click',()=>stop());$('release').addEventListener('click',()=>follower?.release());
-for(const id of ['rate','volume'])$(id).addEventListener('input',()=>{$(id+'-label').textContent=$(id).value+'%';if(id==='volume')synth?.volume(Number($(id).value)/100);});
-$('demo').addEventListener('click',async()=>{await stop(false);++fileGeneration;loading=false;midi=parseMidi(demoMidi());soloMidi=null;sourceLabel=t('8 小节自制示例','8-bar original example');demo=true;$('midi').value='';$('solo').value='';$('solo-info').textContent='';showTracks();$('confirmed').checked=true;$('rate').value=100;$('rate-label').textContent='100%';message(t('自制示例已就绪，点击开始。它不是肖邦曲目的片段。','Original example ready. Press Start; this is not a Chopin excerpt.'));controls();});
-$('clear').addEventListener('click',async()=>{++fileGeneration;loading=false;await stop(false);midi=null;soloMidi=null;demo=false;sourceLabel='';$('midi').value='';$('solo').value='';$('pdf').value='';$('track-list').replaceChildren();$('confirmed').checked=false;$('solo-info').textContent='';$('midi-info').textContent=t('未载入 MIDI','No MIDI loaded');$('position').textContent='—';$('tempo').textContent='— BPM';++pdfGeneration;await pdfTask?.destroy();pdfTask=null;pdf=null;$('score-canvas').hidden=true;$('score-empty').hidden=false;$('page-count').textContent='/ —';for(const id of ['page','previous','next'])$(id).disabled=true;message(t('文件已从本页清除。','Files cleared from this page.'));controls();});
+for(const id of ['rate','volume'])$(id).addEventListener('input',()=>{$(id+'-label').textContent=$(id).value+'%';if(id==='volume')synth?.volume(Number($(id).value)/100);queueSave();});
+$('demo').addEventListener('click',async()=>{++workRevision;clearTimeout(saveTimer);restoring=false;await stop(false);++fileGeneration;loading=false;midi=parseMidi(demoMidi());soloMidi=null;sourceLabel=t('8 小节自制示例','8-bar original example');demo=true;$('midi').value='';$('solo').value='';$('solo-info').textContent='';showTracks();$('confirmed').checked=true;$('rate').value=100;$('rate-label').textContent='100%';message(t('自制示例已就绪，点击开始。它不是肖邦曲目的片段。','Original example ready. Press Start; this is not a Chopin excerpt.'));controls();});
+$('clear').addEventListener('click',async()=>{++workRevision;++fileGeneration;clearTimeout(saveTimer);restoring=true;loading=false;++pdfGeneration;files={midi:null,solo:null,pdf:null};await stop(false);try{await store.clear();savedStatus('本浏览器保存的配置已清除','Saved configuration cleared from this browser');}catch(e){savedStatus('未能清除浏览器保存，请重试','Could not clear saved settings; please retry');}midi=null;soloMidi=null;demo=false;sourceLabel='';$('midi').value='';$('solo').value='';$('pdf').value='';$('track-list').replaceChildren();$('confirmed').checked=false;$('solo-info').textContent='';$('midi-info').textContent=t('未载入 MIDI','No MIDI loaded');$('position').textContent='—';$('tempo').textContent='— BPM';++pdfGeneration;await pdfTask?.destroy();pdfTask=null;pdf=null;$('score-canvas').hidden=true;$('score-empty').hidden=false;$('page-count').textContent='/ —';for(const id of ['page','previous','next'])$(id).disabled=true;$('materials-details').open=true;message(t('已清除本浏览器的演奏文件与设置，电脑原文件保持。','Performance files and settings cleared from this browser. Original computer files remain.'));restoring=false;controls();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden && (starting || transport?.playing)){stop(false);message(t('页面进入后台，伴奏已停止。','Page moved to the background; playback stopped.'));}});
 window.addEventListener('pagehide',()=>{stop(false);pdfTask?.destroy();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();stop();}if(!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)){if(e.key==='ArrowLeft'){e.preventDefault();turn(-1);}if(e.key==='ArrowRight'){e.preventDefault();turn(1);}}});
@@ -106,19 +149,20 @@ async function renderPDF() {
     const scale=Math.min(2,Math.max(.5,($('score-canvas').parentElement.clientWidth-44)/sheet.getViewport({scale:1}).width))*(window.devicePixelRatio||1);
     const viewport=sheet.getViewport({scale}),canvas=$('score-canvas');canvas.width=viewport.width;canvas.height=viewport.height;canvas.hidden=false;$('score-empty').hidden=true;
     pdfRender=sheet.render({canvasContext:canvas.getContext('2d'),viewport});await pdfRender.promise;
-    if(id!==pdfGeneration || renderId!==renderGeneration)return;$('page').value=currentPage;$('page-count').textContent=`/ ${doc.numPages}`;$('page').max=doc.numPages;$('page').disabled=false;$('previous').disabled=currentPage<=1;$('next').disabled=currentPage>=doc.numPages;
-  }catch(e){if(e.name!=='RenderingCancelledException' && id===pdfGeneration)message(e.message,true);}
+    if(id!==pdfGeneration || renderId!==renderGeneration)return;$('page').value=currentPage;$('page-count').textContent=`/ ${doc.numPages}`;$('page').max=doc.numPages;$('page').disabled=false;$('previous').disabled=currentPage<=1;$('next').disabled=currentPage>=doc.numPages;queueSave();return true;
+  }catch(e){if(e.name!=='RenderingCancelledException' && id===pdfGeneration)message(e.message,true);return false;}
 }
 function turn(delta){if(pdf){page=Math.max(1,Math.min(pdf.numPages,page+delta));renderPDF();}}
 function jumpPDF(){if(pdf){page=Math.max(1,Math.min(pdf.numPages,Math.floor(Number($('page').value)||1)));renderPDF();}}
 $('previous').addEventListener('click',()=>turn(-1));$('next').addEventListener('click',()=>turn(1));$('page').addEventListener('change',jumpPDF);$('page').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();jumpPDF();}});
-$('pdf').addEventListener('change',async e=>{
-  const file=e.target.files[0];if(!file)return;const id=++pdfGeneration;
+async function loadPDF(asset,targetPage=1,save=true) {
+  const file=asset.blob,id=++pdfGeneration;
   try{if(file.size>100*1024*1024)throw Error(t('PDF 需小于 100 MB','PDF must be under 100 MB'));await pdfTask?.destroy();pdf=null;
     const pdfjs=await import('../stage/vendor/pdf.mjs');pdfjs.GlobalWorkerOptions.workerSrc=new URL('../stage/vendor/pdf.worker.mjs',import.meta.url).href;
-    const data=await file.arrayBuffer();if(id!==pdfGeneration)return;
+    const data=await file.arrayBuffer();if(id!==pdfGeneration)return false;
     pdfTask=pdfjs.getDocument({data,cMapUrl:new URL('../stage/vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('../stage/vendor/standard_fonts/',import.meta.url).href,wasmUrl:new URL('../stage/vendor/wasm/',import.meta.url).href,isEvalSupported:false});
-    const doc=await pdfTask.promise;if(id!==pdfGeneration){await doc.destroy();return;}pdf=doc;page=1;await renderPDF();$('pdf-info').textContent=`${file.name} · ${t('手动翻页，不自动对齐 MIDI','Manual page turns; no automatic MIDI alignment')}`;
-  }catch(error){if(id===pdfGeneration)message(error.message,true);}
-});
-controls();$('state').textContent=t('待载入 MIDI','Load a MIDI to begin');
+    const doc=await pdfTask.promise;if(id!==pdfGeneration){await doc.destroy();return false;}pdf=doc;page=Math.max(1,Math.min(doc.numPages,Math.floor(targetPage)||1));if(await renderPDF()===false)return false;if(id!==pdfGeneration)return false;files.pdf=asset;$('pdf-info').textContent=`${asset.name} · ${t('手动翻页，不自动对齐 MIDI','Manual page turns; no automatic MIDI alignment')}`;if(save)await saveNow();return true;
+  }catch(error){if(id===pdfGeneration)message(error.message,true);return false;}
+}
+$('pdf').addEventListener('change',async e=>{const file=e.target.files[0];if(file){++workRevision;restoring=false;await loadPDF({name:file.name,blob:file});}});
+controls();$('state').textContent=t('待载入 MIDI','Load a MIDI to begin');restoreConfiguration();

@@ -6,6 +6,8 @@
 - `/score/`, `/compose/`, `/harmony/` and `/stage/` remain usable module routes.
 - `/concerto/` lists prepared accompaniment repertoire; `/concerto/play.html` reads the user's PDF/MIDI inside the browser, with orchestra SoundFont playback and a separate experimental microphone follower. Only Chopin Op.21 movement I is currently prepared. No private score, MIDI or microphone recording is shipped or uploaded; Score edits do not change playback.
 
+Concerto remembers each performance's MIDI, PDF, muted solo tracks, page and rehearsal settings in project-scoped IndexedDB. A verified `.concerto` pack can configure Chopin movement I in one import. The pack itself is private and never part of the published bundle. Example playback does not replace a saved performance; Clear removes the browser copy. Other browsers/devices or cleared site data need another import. Sound never starts automatically, and microphone permission remains browser-controlled.
+
 All public pages share appearance settings rooted at the GitHub Pages project URL. The launcher and guide also share the existing `cantelvio-lang` preference. New Python piano models and private score libraries are excluded from the static bundle.
 
 Build only into a fresh directory:
