@@ -1,5 +1,6 @@
-import {snapshot,WORK_ID} from './session.mjs';
+import {snapshot,WORK_ID} from './session.mjs?v=20261018-score-1';
 import {parseMidi} from './midi.mjs';
+import {SCORE_BASIS} from './alignment.mjs?v=20261018-score-1';
 // Only these two resources are approved for publication with this work.
 export const CHOPIN_MIDI_SHA='09455ddd373d7bf4826f4ecc31aaa1a9619906d0223b20a2deccc6dcbd4bfb75';
 export const CHOPIN_PDF_SHA='88345f8f0f0a7270773ecaeed9fc02cb77b8c989ffd6664609b6051116a3dd72';
@@ -12,7 +13,7 @@ export async function digest(data) {return Array.from(new Uint8Array(await crypt
 async function verifiedConfiguration(midi,pdf){
   if(await digest(midi)!==CHOPIN_MIDI_SHA || await digest(pdf)!==CHOPIN_PDF_SHA)throw Error('曲目资源校验失败 / Performance resource verification failed');
   const parsed=parseMidi(midi);if(parsed.tracks[13]?.name!=='Pianoforte' || parsed.tracks[13].notes!==5811)throw Error('独奏轨不匹配 / Solo track does not match');
-  return snapshot({version:1,workId:WORK_ID,midi:{name:'Chopin_Op21_Mvt1_Maestoso_Finley.mid',blob:new Blob([midi],{type:'audio/midi'})},pdf:{name:'肖邦第二钢琴协奏曲·双钢琴谱.pdf',blob:new Blob([pdf],{type:'application/pdf'})},soloTrackIds:[13],confirmed:true,settings:{measure:1,rate:94,volume:45,mode:'fixed',speaker:true},page:13});
+  return snapshot({version:1,workId:WORK_ID,midi:{name:'Chopin_Op21_Mvt1_Maestoso_Finley.mid',blob:new Blob([midi],{type:'audio/midi'})},pdf:{name:'肖邦第二钢琴协奏曲·双钢琴谱.pdf',blob:new Blob([pdf],{type:'application/pdf'})},soloTrackIds:[13],confirmed:true,settings:{positionBasis:SCORE_BASIS,measure:0,rate:94,volume:45,mode:'fixed',speaker:true},page:13});
 }
 export async function loadPublishedPreset({fetcher=globalThis.fetch,signal}={}){
   const buffers=await Promise.all(PUBLISHED_ASSETS.map(async asset=>{

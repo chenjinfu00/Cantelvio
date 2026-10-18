@@ -42,7 +42,7 @@ test('published preset loads only the approved project-relative files with compl
   const clean=await loadPublishedPreset({fetcher:async(url,options)=>{requests.push({url,options});return new Response(fs.readFileSync(url));}});
   assert.deepEqual(requests.map(r=>r.url.pathname),PUBLISHED_ASSETS.map(a=>new URL('../concerto/'+a.path,import.meta.url).pathname));
   assert.ok(requests.every(r=>r.options.credentials==='omit' && r.options.redirect==='error'));
-  assert.deepEqual(clean.soloTrackIds,[13]);assert.equal(clean.confirmed,true);assert.equal(clean.page,13);assert.equal(clean.settings.measure,1);assert.equal(clean.settings.rate,94);assert.equal(clean.settings.volume,45);assert.equal(clean.settings.mode,'fixed');
+  assert.deepEqual(clean.soloTrackIds,[13]);assert.equal(clean.confirmed,true);assert.equal(clean.page,13);assert.equal(clean.settings.measure,0);assert.equal(clean.settings.rate,94);assert.equal(clean.settings.volume,45);assert.equal(clean.settings.mode,'fixed');
 });
 test('published preset rejects download errors, truncation and altered resource bytes',async()=>{
   await assert.rejects(loadPublishedPreset({fetcher:async()=>new Response('',{status:404})}),/Download failed/);

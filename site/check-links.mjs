@@ -5,6 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {PUBLISHED_ASSETS} from './concerto/preset.mjs';
+import {ScoreMap} from './concerto/alignment.mjs';
 const index = process.argv.indexOf('--out');
 if (index >= 0 && (!process.argv[index + 1] || process.argv[index + 1].startsWith('--'))) throw new Error('--out needs a path');
 const out = index >= 0 ? path.resolve(process.argv[index + 1]) : path.resolve(fileURLToPath(new URL('..', import.meta.url)), 'site-dist');
@@ -39,13 +40,14 @@ for (const page of pages) {
 for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
-for (const file of ['index.html','play.html','app.mjs','session.mjs','preset.mjs','remembered.mjs','midi.mjs','transport.mjs','follower.mjs','audio.mjs','demo.mjs','style.css','vendor/synth.js','vendor/processor.js']) {
+for (const file of ['index.html','play.html','app.mjs','session.mjs','preset.mjs','remembered.mjs','alignment.mjs','assets/chopin-op21-alignment.json','midi.mjs','transport.mjs','follower.mjs','audio.mjs','demo.mjs','style.css','vendor/synth.js','vendor/processor.js']) {
   if (!fs.existsSync(path.join(out,'concerto',file))) fail(`missing Concerto browser asset: ${file}`);
 }
 for (const file of ['stage/matcher.js','stage/capture-worklet.js','stage/vendor/pdf.mjs','stage/vendor/pdf.worker.mjs','score/audio/soundfonts/MuseScore_General.sf3','score/licenses/spessasynth_lib/LICENSE','score/licenses/spessasynth_core/LICENSE']) {
   if (!fs.existsSync(path.join(out,file))) fail(`missing Concerto dependency: ${file}`);
 }
 const allowedMedia=new Map(PUBLISHED_ASSETS.map(asset=>[asset.path,asset]));
+try {new ScoreMap(JSON.parse(fs.readFileSync(path.join(out,'concerto/assets/chopin-op21-alignment.json'),'utf8')),PUBLISHED_ASSETS[0].sha256);}catch(error){fail(`invalid published score alignment: ${error.message}`);}
 for (const asset of PUBLISHED_ASSETS){
   const file=path.join(out,'concerto',asset.path);
   if(!fs.existsSync(file))fail(`missing approved Concerto resource: ${asset.path}`);

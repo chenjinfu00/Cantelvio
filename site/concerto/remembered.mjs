@@ -1,4 +1,4 @@
-import {SessionStore} from './session.mjs';
+import {SessionStore} from './session.mjs?v=20261018-score-1';
 try{
   const value=await new SessionStore().load();
   if(value?.midi && value.confirmed){

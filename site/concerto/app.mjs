@@ -3,8 +3,9 @@ import {Transport,restoreState} from './transport.mjs';
 import {BrowserFollower} from './follower.mjs';
 import {OrchestraSynth,LiveMic} from './audio.mjs';
 import {demoMidi} from './demo.mjs';
-import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs';
-import {decodePreset,loadPublishedPreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs';
+import {SCORE_BASIS,loadScoreMap,scoreStart} from './alignment.mjs?v=20261018-score-1';
+import {SessionStore,snapshot,settings,WORK_ID} from './session.mjs?v=20261018-score-1';
+import {decodePreset,loadPublishedPreset,digest,CHOPIN_MIDI_SHA} from './preset.mjs?v=20261018-score-1';
 const $=id=>document.getElementById(id);
 const t=(zh,en)=>document.documentElement.lang.startsWith('zh')?zh:en;
 let midi=null,soloMidi=null,transport=null,follower=null,synth=null,mic=null,timer=null,run=0,starting=false,loading=false,fileGeneration=0,sourceLabel='',demo=false;
@@ -23,6 +24,22 @@ function controls() {
   $('release').disabled=!transport?.playing || !follower;
   $('mic-settings').hidden=$('mode').value!=='follow';
 }
+async function readMidi(blob,align=true){
+  const bytes=await blob.arrayBuffer(),parsed=parseMidi(bytes);
+  if(align && await digest(bytes)===CHOPIN_MIDI_SHA)parsed.scoreMap=await loadScoreMap(CHOPIN_MIDI_SHA);
+  return parsed;
+}
+function localText(id,zh,en){const e=$(id);e.dataset.zh=zh;e.dataset.en=en;e.textContent=t(zh,en);}
+function positionText(beat){
+  const p=(midi.scoreMap || midi.meter).atBeat(beat);
+  if(p.preparing)return t('准备 · 开头弱起','Ready · opening pickup');
+  if(p.complete)return t('第348小节 · 乐章结束','Bar 348 · movement end');
+  if(p.freeTime)return t(`第 ${p.measure} 小节 · 延长／华彩`,`Bar ${p.measure} · fermata / cadenza`);
+  if(p.pickup)return t(`弱起 · ${p.beat.toFixed(2)} 拍`,`Pickup · beat ${p.beat.toFixed(2)}`);
+  const count=(Math.floor((p.beat+1e-8)*10)/10).toFixed(1);
+  return midi.scoreMap?t(`第 ${p.measure} 小节 · ${count} 拍`,`Bar ${p.measure} · beat ${count}`):t(`MIDI格 ${p.measure} · ${count} 拍`,`MIDI grid ${p.measure} · beat ${count}`);
+}
+function startBeat(){return (midi.scoreMap || midi.meter).atMeasure(Number($('measure').value));}
 function showTracks() {
   $('track-list').replaceChildren();
   for(const track of midi.tracks.filter(t=>t.notes)) {
@@ -31,24 +48,27 @@ function showTracks() {
     const text=document.createElement('span');text.textContent=`${track.id+1}. ${track.name} · ${track.notes} ${t('音','notes')}`;
     label.append(check,text);$('track-list').append(label);check.addEventListener('change',()=>{$('confirmed').checked=false;controls();queueSave();});
   }
-  $('midi-info').textContent=`${sourceLabel} · ${midi.tracks.length} ${t('轨','tracks')} · ${midi.meter.atBeat(Math.max(0,midi.endBeat-.001)).measure} ${t('MIDI 小节','MIDI bars')}`;
-  $('confirmed').checked=false;$('measure').value=1;$('measure').max=midi.meter.atBeat(midi.endBeat).measure;
-  $('position').textContent=t('第 1 小节','Bar 1');$('state').textContent=t('已载入 · 核对独奏轨后开始','Loaded · check solo tracks before starting');controls();
+  const map=midi.scoreMap;
+  $('midi-info').textContent=map?`${sourceLabel} · ${midi.tracks.length} ${t('轨','tracks')} · 348 ${t('原谱完整小节 + 弱起','score bars + pickup')}`:`${sourceLabel} · ${midi.tracks.length} ${t('轨','tracks')} · ${midi.meter.atBeat(Math.max(0,midi.endBeat-.001)).measure} ${t('MIDI 时间格（非原谱编号）','MIDI grids (not score numbering)')}`;
+  $('confirmed').checked=false;$('measure').min=map?0:1;$('measure').value=map?0:1;$('measure').max=map?348:midi.meter.atBeat(midi.endBeat).measure;
+  localText('start-label',map?'开始位置（原谱小节；0 = 开头弱起）':'开始位置（MIDI 时间格，非原谱小节）',map?'Start at score bar (0 = opening pickup)':'Start at MIDI grid (not score bars)');
+  localText('entry-hint',map?'0 从开头弱起开始；1 从首个完整小节开始。原谱第71小节钢琴进入；拍数按四分音符计。':'此文件未与原谱对齐，显示文件自身的 MIDI 时间格。',map?'0 includes the pickup; 1 starts at the first complete bar. Piano enters in score bar 71. Beats count quarter notes.':'This file has no score alignment; positions use its own MIDI grid.');
+  $('position').textContent=positionText(startBeat());$('state').textContent=t('已载入 · 核对独奏轨后开始','Loaded · check solo tracks before starting');controls();
 }
 async function loadMidi(file,reference=false) {
   if(!file)return;
   ++workRevision;const id=++fileGeneration;loading=true;controls();
   try {
     if(file.size>20*1024*1024)throw Error(t('MIDI 文件需小于 20 MB','MIDI must be under 20 MB'));
-    const bytes=await file.arrayBuffer(),parsed=parseMidi(bytes),known=!reference && await digest(bytes)===CHOPIN_MIDI_SHA;if(id!==fileGeneration)return;
+    const parsed=await readMidi(file,!reference),known=!!parsed.scoreMap;if(id!==fileGeneration)return;
     if(reference){soloMidi=parsed;files.solo={name:file.name,blob:file};$('solo-info').textContent=`${file.name} · ${parsed.tracks.reduce((s,t)=>s+t.notes,0)} ${t('音（仅参考，不发声）','notes (silent reference)')}`;}
-    else {await stop(false);if(id!==fileGeneration)return;midi=parsed;soloMidi=null;files.midi={name:file.name,blob:file};files.solo=null;$('solo').value='';$('solo-info').textContent='';sourceLabel=file.name;demo=false;showTracks();if(known){$('confirmed').checked=true;applySettings({measure:1,rate:94,volume:45,mode:'fixed',speaker:true});}}
+    else {await stop(false);if(id!==fileGeneration)return;midi=parsed;soloMidi=null;files.midi={name:file.name,blob:file};files.solo=null;$('solo').value='';$('solo-info').textContent='';sourceLabel=file.name;demo=false;showTracks();if(known){$('confirmed').checked=true;applySettings({positionBasis:SCORE_BASIS,measure:0,rate:94,volume:$('volume').value,mode:'fixed',speaker:true});}}
     await saveNow();
     message(known?t('肖邦第一乐章已识别：独奏轨已静音，可直接开始。','Chopin movement I recognised: solo track muted, ready to start.'):t('文件已在浏览器载入并记住。请核对独奏轨与开始位置。','Files loaded and remembered in this browser. Check solo tracks and starting bar.'));
   }catch(e){if(id===fileGeneration)message(e.message,true);}finally{if(id===fileGeneration){loading=false;controls();}}
 }
-function currentSettings(){return settings({measure:$('measure').value,rate:$('rate').value,volume:$('volume').value,mode:$('mode').value,speaker:$('speaker').checked,deviceId:$('device').value});}
-function applySettings(value){const clean=settings(value);for(const id of ['measure','rate','volume','mode'])$(id).value=clean[id];$('speaker').checked=clean.speaker;if(clean.deviceId && !$('device').querySelector(`option[value="${CSS.escape(clean.deviceId)}"]`))$('device').add(new Option(t('上次使用的麦克风','Previously selected microphone'),clean.deviceId));$('device').value=clean.deviceId;for(const id of ['rate','volume'])$(id+'-label').textContent=$(id).value+'%';}
+function currentSettings(){return settings({positionBasis:midi?.scoreMap?SCORE_BASIS:'midi',measure:$('measure').value,rate:$('rate').value,volume:$('volume').value,mode:$('mode').value,speaker:$('speaker').checked,deviceId:$('device').value});}
+function applySettings(value){const clean=scoreStart(settings(value),midi?.scoreMap,midi?.meter);for(const id of ['measure','rate','volume','mode'])$(id).value=clean[id];$('speaker').checked=clean.speaker;if(clean.deviceId && !$('device').querySelector(`option[value="${CSS.escape(clean.deviceId)}"]`))$('device').add(new Option(t('上次使用的麦克风','Previously selected microphone'),clean.deviceId));$('device').value=clean.deviceId;for(const id of ['rate','volume'])$(id+'-label').textContent=$(id).value+'%';if(midi)$('position').textContent=positionText(startBeat());}
 async function saveNow(){
   if(restoring || demo || !files.midi && !files.pdf)return;
   const revision=workRevision;
@@ -57,7 +77,7 @@ async function saveNow(){
 }
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;saveNow();},250);}
 async function applyConfiguration(value,revision){
-  const clean=snapshot(value),parsed=clean.midi?parseMidi(await clean.midi.blob.arrayBuffer()):null,solo=clean.solo?parseMidi(await clean.solo.blob.arrayBuffer()):null;
+  const clean=snapshot(value),parsed=clean.midi?await readMidi(clean.midi.blob):null,solo=clean.solo?parseMidi(await clean.solo.blob.arrayBuffer()):null;
   if(revision!==workRevision)return false;
   await stop(false);if(revision!==workRevision)return false;
   files={midi:clean.midi,solo:clean.solo,pdf:clean.pdf};midi=parsed;soloMidi=solo;demo=false;sourceLabel=clean.midi?.name||'';
@@ -104,13 +124,13 @@ async function stop(notify=true) {
 }
 async function start() {
   if(starting || transport?.playing || !midi || !$('confirmed').checked)return;
-  const score=split(),measure=Number($('measure').value),beat=midi.meter.atMeasure(measure);
-  if(!Number.isInteger(measure) || measure<1 || beat>=midi.endBeat){message(t('请选择 MIDI 范围内的起始小节。','Choose a starting bar within this MIDI.'),true);return;}
+  const score=split(),measure=Number($('measure').value),beat=Number.isInteger(measure)?startBeat():NaN;
+  if(!Number.isInteger(measure) || measure<(midi.scoreMap?0:1) || !Number.isFinite(beat) || beat>=midi.endBeat){message(t('请选择 MIDI 范围内的起始小节。','Choose a starting bar within this MIDI.'),true);return;}
   if(!score.orchestra.some(e=>e.command===9 && e.b)){message(t('乐队没有音符，请保留至少一条伴奏轨。','No orchestra notes. Leave at least one accompaniment track.'),true);return;}
   const follow=$('mode').value==='follow';
   if(follow && !score.solo.length){message(t('跟随需要独奏参考：请勾选独奏轨，或另载入对齐的独奏 MIDI。','Following needs a solo reference. Select solo tracks or load aligned solo MIDI.'),true);return;}
   if(follow && !navigator.mediaDevices?.getUserMedia){message(t('此浏览器无法使用麦克风，请用 HTTPS 下的 Chrome 或 Edge。','Microphone unavailable. Use Chrome or Edge over HTTPS.'),true);return;}
-  const id=++run;starting=true;controls();$('position').textContent=t(`第 ${measure} 小节`,`Bar ${measure}`);$('state').textContent=t('正在准备音色…','Preparing sound…');message(t('首次需载入约 38 MB 乐队音色。可随时按停止取消。','First use downloads about 38 MB of orchestra sounds. Stop cancels preparation.'));
+  const id=++run;starting=true;controls();$('position').textContent=positionText(beat);$('state').textContent=t('正在准备音色…','Preparing sound…');message(t('首次需载入约 38 MB 乐队音色。可随时按停止取消。','First use downloads about 38 MB of orchestra sounds. Stop cancels preparation.'));
   const output=synth=new OrchestraSynth();let input;
   try {
     await output.init(Number($('volume').value)/100);if(id!==run){await output.stop();return;}
@@ -138,13 +158,14 @@ async function start() {
 }
 const states={fixed:['参考速度播放','Reference tempo'],rest:['乐队前奏 / 独奏休止','Orchestra / solo rest'],waiting:['等待独奏匹配','Waiting for solo'],lost:['匹配丢失 · 已等待','Alignment lost · holding'],following:['试验跟随','Experimental following'],manual:['此乐句按原速','Reference tempo for this phrase']};
 function showPlayback(player) {
-  const position=midi.meter.atBeat(player.beat),label=states[player.label] || states.fixed;
-  $('state').textContent=t(...label);$('position').textContent=t(`第 ${position.measure} 小节 · ${position.beat.toFixed(1)} 拍`,`Bar ${position.measure} · beat ${position.beat.toFixed(1)}`);
-  $('tempo').textContent=`${(midi.clock.bpm(player.beat)*player.rate).toFixed(0)} BPM`;
+  const label=states[player.label] || states.fixed;
+  $('state').textContent=t(...label);$('position').textContent=positionText(player.beat);
+  const bpm=midi.scoreMap?midi.scoreMap.bpmAt(player.beat,midi.clock,player.rate):midi.clock.bpm(player.beat)*player.rate;
+  $('tempo').textContent=midi.scoreMap?.atBeat(player.beat).freeTime?t('自由速度','Free time'):`${bpm.toFixed(0)} BPM`;
 }
 $('midi').addEventListener('change',e=>loadMidi(e.target.files[0]));$('solo').addEventListener('change',e=>loadMidi(e.target.files[0],true));
 $('confirmed').addEventListener('change',()=>{controls();queueSave();});$('mode').addEventListener('change',()=>{controls();queueSave();});
-$('pack').addEventListener('change',e=>importPreset(e.target.files[0]));for(const id of ['measure','speaker','device'])$(id).addEventListener('change',queueSave);
+$('pack').addEventListener('change',e=>importPreset(e.target.files[0]));for(const id of ['measure','speaker','device'])$(id).addEventListener('change',()=>{if(id==='measure' && midi && !transport?.playing){try{$('position').textContent=positionText(startBeat());}catch{}}queueSave();});
 $('start').addEventListener('click',start);$('stop').addEventListener('click',()=>stop());$('release').addEventListener('click',()=>follower?.release());
 for(const id of ['rate','volume'])$(id).addEventListener('input',()=>{$(id+'-label').textContent=$(id).value+'%';if(id==='volume')synth?.volume(Number($(id).value)/100);queueSave();});
 $('demo').addEventListener('click',async()=>{++workRevision;clearTimeout(saveTimer);restoring=false;await stop(false);++fileGeneration;loading=false;midi=parseMidi(demoMidi());soloMidi=null;sourceLabel=t('8 小节自制示例','8-bar original example');demo=true;$('midi').value='';$('solo').value='';$('solo-info').textContent='';showTracks();$('confirmed').checked=true;$('rate').value=100;$('rate-label').textContent='100%';message(t('自制示例已就绪，点击开始。它不是肖邦曲目的片段。','Original example ready. Press Start; this is not a Chopin excerpt.'));controls();});
@@ -173,7 +194,7 @@ async function loadPDF(asset,targetPage=1,save=true) {
     const pdfjs=await import('../stage/vendor/pdf.mjs');pdfjs.GlobalWorkerOptions.workerSrc=new URL('../stage/vendor/pdf.worker.mjs',import.meta.url).href;
     const data=await file.arrayBuffer();if(id!==pdfGeneration)return false;
     pdfTask=pdfjs.getDocument({data,cMapUrl:new URL('../stage/vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('../stage/vendor/standard_fonts/',import.meta.url).href,wasmUrl:new URL('../stage/vendor/wasm/',import.meta.url).href,isEvalSupported:false});
-    const doc=await pdfTask.promise;if(id!==pdfGeneration){await doc.destroy();return false;}pdf=doc;page=Math.max(1,Math.min(doc.numPages,Math.floor(targetPage)||1));if(await renderPDF()===false)return false;if(id!==pdfGeneration)return false;files.pdf=asset;$('pdf-info').textContent=`${asset.name} · ${t('手动翻页，不自动对齐 MIDI','Manual page turns; no automatic MIDI alignment')}`;if(save)await saveNow();return true;
+    const doc=await pdfTask.promise;if(id!==pdfGeneration){await doc.destroy();return false;}pdf=doc;page=Math.max(1,Math.min(doc.numPages,Math.floor(targetPage)||1));if(await renderPDF()===false)return false;if(id!==pdfGeneration)return false;files.pdf=asset;$('pdf-info').textContent=`${asset.name} · ${t('PDF手动翻页 · 页码对应所选PDF版本','Manual PDF page turns · page numbers refer to the selected PDF')}`;if(save)await saveNow();return true;
   }catch(error){if(id===pdfGeneration)message(error.message,true);return false;}
 }
 $('pdf').addEventListener('change',async e=>{const file=e.target.files[0];if(file){++workRevision;restoring=false;await loadPDF({name:file.name,blob:file});}});

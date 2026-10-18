@@ -14,3 +14,12 @@ published at the user's explicit request on 2026-10-18. No additional license
 or ownership is asserted by Cantelvio. Original credits and notices apply.
 
 Other local score-library materials, recordings and model weights are not included.
+
+Score-position alignment (2026-10-18): 348 complete bars plus opening 5/16 pickup.
+Symbolic reference: Fryderyk Chopin Institute digital first editions,
+Breitkopf & Haertel, Leipzig, 1836. Encoded by Mateusz Mrugas, revised by
+Emilia Zietek (2019); original metadata remains in the local source copy.
+https://chopinscores.org/krn/021-1a-BH-001.krn
+Cross-checked against the National Edition two-piano PDF used on this page.
+The site ships the derived timing map; it does not ship the downloaded encoding.
+The Finley MIDI events and expressive timing are unchanged.
