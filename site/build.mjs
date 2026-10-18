@@ -12,6 +12,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const args = process.argv.slice(2);
@@ -39,6 +40,16 @@ fs.mkdirSync(out, {recursive: true});
 fs.copyFileSync(path.join(root, 'site/index.html'), path.join(out, 'index.html'));
 for (const file of ['workspace.css', 'language.js']) fs.copyFileSync(path.join(root, 'site', file), path.join(out, file));
 fs.cpSync(path.join(root, 'site/demo'), path.join(out, 'demo'), {recursive: true});
+// Browser accompaniment: no local score, MIDI, recording or Python service.
+fs.cpSync(path.join(root, 'site/concerto'), path.join(out, 'concerto'), {
+  recursive: true, filter: s => !s.endsWith('/synth.mjs'),
+});
+const scoreRequire = createRequire(path.join(modulesRoot, 'Score/package.json'));
+const {buildSync} = scoreRequire('esbuild');
+buildSync({entryPoints:[path.join(root, 'site/concerto/synth.mjs')], bundle:true, format:'esm',
+  platform:'browser', minify:true, nodePaths:[path.join(modulesRoot,'Score/node_modules')],
+  outfile:path.join(out,'concerto/vendor/synth.js')});
+fs.copyFileSync(path.join(path.dirname(scoreRequire.resolve('spessasynth_lib')), 'spessasynth_processor.min.js'), path.join(out,'concerto/vendor/processor.js'));
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 
 if (rebuild) {
@@ -129,6 +140,8 @@ for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
 const publicPages = [
   ['index.html', 'home', './', './appearance/'],
   ['demo/index.html', 'home', '../', '../appearance/'],
+  ['concerto/index.html', 'home', '../', '../appearance/'],
+  ['concerto/play.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],

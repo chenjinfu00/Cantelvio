@@ -12,6 +12,8 @@ function setLanguage(language) {
   const page = document.documentElement.dataset.cvPage;
   document.title = page === 'demo'
     ? (value === 'en' ? 'Cantelvio · Guide & demos' : 'Cantelvio · 演示与使用说明')
+    : page === 'concerto' ? (value === 'en' ? 'Cantelvio Concerto · Repertoire' : 'Cantelvio Concerto · 协奏伴奏曲目')
+    : page === 'concerto-play' ? (value === 'en' ? 'Cantelvio Concerto · Rehearsal' : 'Cantelvio Concerto · 伴奏排练')
     : (value === 'en' ? 'Cantelvio · Music workspaces' : 'Cantelvio · 音乐工作台');
 }
 setLanguage(saved === 'en' || saved === 'zh' ? saved : navigator.language.startsWith('zh') ? 'zh' : 'en');
