@@ -71,7 +71,7 @@ export class ReaderShell {
   }
   arm(){
     clearTimeout(this.timer);if(!this.panel||!this.effects.performing())return;
-    this.timer=setTimeout(()=>{if(this.tools.contains(document.activeElement)&&document.activeElement.matches('input,select'))this.arm();else this.close();},5000);
+    this.timer=setTimeout(()=>{if(this.tools.querySelector('.touch-select-control[aria-expanded="true"]')||this.tools.contains(document.activeElement)&&document.activeElement.matches('input,select'))this.arm();else this.close();},5000);
   }
   close({focus=true,wake=true}={}){this.panel=null;clearTimeout(this.timer);this.sync();if(wake)this.idle?.wake();if(focus)this.stage.focus({preventScroll:true});}
   hideChrome(){

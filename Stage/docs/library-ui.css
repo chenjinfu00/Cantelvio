@@ -1,0 +1,754 @@
+/* Shared reader chrome and device library. Opaque surfaces also work without blur. */
+:root {
+  --glass-surface: var(--surface);
+  --glass-card: var(--surface);
+  --glass-control: var(--tint);
+  --glass-edge: var(--line);
+  --glass-shadow: 0 12px 44px #18304b16;
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass-surface: color-mix(in srgb, var(--surface) 87%, transparent);
+    --glass-card: color-mix(in srgb, var(--surface) 76%, transparent);
+    --glass-control: color-mix(in srgb, var(--tint) 75%, transparent);
+    --glass-edge: color-mix(in srgb, var(--line) 65%, transparent);
+  }
+
+  .focus-reader .sidebar,
+  .top-drawer,
+  dialog,
+  .pencil-dock,
+  .pencil-options-panel,
+  .edge-reveal {
+    -webkit-backdrop-filter: blur(26px) saturate(145%);
+    backdrop-filter: blur(26px) saturate(145%);
+  }
+}
+
+.focus-reader .sidebar,
+.top-drawer,
+dialog,
+.pencil-dock,
+.pencil-options-panel,
+.edge-reveal {
+  background: var(--glass-surface);
+  border-color: var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+
+dialog::backdrop {
+  background: #13294238;
+}
+
+.drawer-backdrop {
+  background: #13294224;
+}
+
+.focus-reader .sidebar {
+  padding-top: max(22px, env(safe-area-inset-top));
+  padding-bottom: max(22px, env(safe-area-inset-bottom));
+}
+
+.sidebar .drawer-heading {
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.sidebar .drawer-heading > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sidebar .drawer-heading strong {
+  display: block;
+  font-size: 25px;
+  line-height: 1.25;
+  letter-spacing: -.6px;
+}
+
+.sidebar .build-version {
+  display: block;
+  margin: 0 !important;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar .drawer-heading > button {
+  flex: none;
+  width: 40px;
+  min-height: 40px;
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.sidebar .library-entry {
+  min-height: 48px;
+  border-radius: 13px;
+  padding-inline: 16px;
+}
+
+.sidebar .recent-list {
+  gap: 5px;
+  max-height: 244px;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.sidebar .recent-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  min-height: 64px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 11px 12px;
+  background: var(--glass-control);
+  border-radius: 12px;
+}
+
+.sidebar .recent-name {
+  width: 100%;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar .recent-item small {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar .section-label {
+  letter-spacing: .3px;
+  font-size: 12px;
+}
+
+.sidebar .shelf-actions {
+  gap: 3px;
+}
+
+.sidebar .shelf-actions button {
+  padding-inline: 11px;
+  border-radius: 10px;
+}
+
+.top-drawer .edition-toolbar,
+.top-drawer #score-card,
+.top-drawer #practice-drawer,
+.pdf-outline,
+.bookmark-bar,
+.midi-bar {
+  border-color: var(--glass-edge);
+}
+
+.top-drawer .edition-toolbar select,
+.top-drawer .view-segments,
+.top-drawer #offline-save,
+.pencil-tool.selected {
+  background: var(--glass-control);
+}
+
+/* A library is a full window with two independently scrolling panes. */
+dialog.library-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  min-height: 0;
+  margin: 0;
+  padding: max(22px, env(safe-area-inset-top))
+    max(26px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(26px, env(safe-area-inset-left));
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+  color: var(--ink);
+}
+
+dialog.library-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.library-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  gap: 24px;
+  padding-bottom: 18px;
+}
+
+.library-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.library-dialog .library-heading h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 30px);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -.7px;
+}
+
+.library-dialog #library-summary {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.library-header-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.library-header-actions > button {
+  min-height: 44px;
+  padding: 11px 15px;
+  border-radius: 12px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.library-header-actions .secondary {
+  background: var(--glass-control);
+  border-color: transparent;
+}
+
+dialog.library-dialog .dialog-close {
+  position: static !important;
+  flex: none;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  margin: 0 0 0 4px;
+  padding: 0;
+  border: 0;
+  background: var(--glass-control);
+  box-shadow: none;
+}
+
+.library-dialog .library-filters {
+  display: flex;
+  position: static;
+  flex: none;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 0 0 18px;
+  background: transparent;
+}
+
+.library-dialog .library-filters input {
+  flex: 1 1 260px;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 15px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 13px;
+  background: var(--glass-card);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.library-dialog .library-filters input::placeholder {
+  color: var(--muted);
+}
+
+.library-dialog .library-filters label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.library-dialog .library-filters select {
+  min-width: 0;
+  max-width: 180px;
+  min-height: 44px;
+  padding: 9px 12px;
+  border-color: transparent;
+  border-radius: 12px;
+  background: var(--glass-control);
+  color: var(--ink);
+}
+
+.library-dialog #library-download-help {
+  flex: none;
+  margin: -4px 0 14px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.library-dialog #library-download-help:empty {
+  display: none;
+}
+
+.library-dialog .library-body {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: clamp(190px, 20vw, 250px) minmax(0, 1fr);
+  gap: 0;
+  min-height: 0;
+  border-top: 1px solid var(--glass-edge);
+  overflow: hidden;
+}
+
+.library-dialog .library-groups {
+  display: flex;
+  position: static;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 4px;
+  min-width: 0;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  padding: 16px 14px 20px 0;
+  border-right: 1px solid var(--glass-edge);
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.library-group,
+.library-subgroup {
+  display: grid;
+  flex: none;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.library-group {
+  font-weight: 600;
+}
+
+.library-group[aria-expanded] {
+  grid-template-columns: minmax(0, 1fr) auto 9px;
+}
+
+.library-group[aria-expanded]::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  opacity: .5;
+  transform: rotate(-45deg);
+  transition: transform .16s ease;
+}
+
+.library-group[aria-expanded=true]::after {
+  transform: rotate(45deg) translateY(-2px);
+}
+
+.library-group-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.library-group-count {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.library-group:hover:enabled,
+.library-subgroup:hover:enabled {
+  background: var(--glass-control);
+}
+
+.library-group.selected,
+.library-group[aria-current],
+.library-subgroup.selected,
+.library-subgroup[aria-current] {
+  background: var(--lime);
+  color: var(--accent);
+}
+
+.library-subgroups {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0 0 10px 11px;
+  padding-left: 9px;
+  border-left: 1px solid var(--glass-edge);
+}
+
+.library-subgroup {
+  min-height: 42px;
+  padding: 9px 10px;
+  font-size: 13px;
+}
+
+.library-dialog .library-content {
+  min-width: 0;
+  min-height: 0;
+  padding: 12px 0 24px 22px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.library-dialog .library-breadcrumbs {
+  gap: 5px;
+  min-height: 32px;
+  font-size: 12px;
+}
+
+.library-dialog .library-breadcrumbs .quiet {
+  min-height: 32px;
+  padding: 5px 3px;
+  font-size: 12px;
+}
+
+.library-dialog #library-count {
+  position: static;
+  margin: 0 0 12px;
+  padding: 5px 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.library-dialog .library-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  align-items: start;
+  gap: 12px;
+}
+
+.library-dialog .work-card {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 16px;
+  background: var(--glass-card);
+  box-shadow: 0 2px 12px #17314b05;
+}
+
+.library-dialog .work-card h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.work-title-button {
+  display: block;
+  width: calc(100% + 16px);
+  min-height: 44px;
+  margin: -8px -8px 0;
+  padding: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.work-title-button:hover:enabled {
+  background: var(--glass-control);
+}
+
+.library-dialog .work-card .work-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.library-dialog .work-versions {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.work-versions > summary {
+  min-height: 36px;
+  padding-block: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.library-dialog .work-version {
+  margin-top: 9px;
+  padding-top: 12px;
+  border-color: var(--glass-edge);
+}
+
+.library-dialog .work-version > strong {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.library-dialog .work-version > p {
+  margin: 5px 0 8px;
+  font-size: 12px;
+}
+
+.library-dialog .work-version button {
+  min-height: 44px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.library-dialog .work-card .library-open-status {
+  margin: 9px 0 0;
+  font-size: 12px;
+}
+
+.library-dialog button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+body.performance-mode .top-drawer {
+  background: #172131f0;
+  border-color: #344158;
+}
+
+/* The site theme loads after reader assets. Keep its palette and these surfaces. */
+html:root body.focus-reader:not(.performance-mode) :is(.sidebar, .top-drawer, .pencil-dock, .pencil-options-panel, .edge-reveal) {
+  background: var(--glass-surface);
+  border-color: var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+
+html:root body.focus-reader dialog:is(#performance-dialog, #settings-dialog, #metadata-dialog, #deploy-dialog, #help-dialog, #imslp-dialog) {
+  background: var(--glass-surface);
+  border-color: var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+
+html:root body.focus-reader #library-dialog.library-dialog {
+  border: 0;
+  border-radius: 0;
+  background: var(--glass-surface);
+  box-shadow: none;
+}
+
+html:root body.focus-reader #library-dialog.library-dialog[open] .library-filters input {
+  background: var(--glass-card);
+  border-color: var(--glass-edge);
+}
+
+html:root body.focus-reader #library-dialog.library-dialog[open] .library-filters select {
+  background: var(--glass-control);
+  border-color: transparent;
+}
+
+html:root body.focus-reader #library-dialog #library-count {
+  background: transparent;
+}
+
+html:root body.focus-reader #library-dialog .work-card {
+  background: var(--glass-card);
+  border-color: var(--glass-edge);
+  border-radius: 16px;
+}
+
+@media (max-width: 900px) {
+  dialog.library-dialog {
+    padding-inline: max(18px, env(safe-area-inset-left)) max(18px, env(safe-area-inset-right));
+  }
+
+  .library-header {
+    gap: 14px;
+  }
+
+  .library-dialog .library-filters {
+    flex-wrap: wrap;
+  }
+
+  .library-dialog .library-filters input {
+    flex-basis: 100%;
+  }
+
+  .library-dialog .library-body {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+
+  .library-dialog .library-content {
+    padding-left: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  dialog.library-dialog {
+    padding: max(16px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+  }
+
+  .library-header {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-bottom: 14px;
+  }
+
+  .library-heading {
+    flex-basis: 100%;
+    padding-right: 50px;
+  }
+
+  .library-dialog .library-heading h2 {
+    font-size: 23px;
+  }
+
+  .library-header-actions {
+    gap: 8px;
+  }
+
+  .library-header-actions > button {
+    min-height: 42px;
+    padding: 9px 13px;
+  }
+
+  dialog.library-dialog .dialog-close {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    margin: 0;
+  }
+
+  .library-dialog .library-filters {
+    gap: 8px;
+    padding-bottom: 14px;
+  }
+
+  .library-dialog .library-filters label {
+    flex: 1;
+    justify-content: space-between;
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .library-dialog .library-filters select {
+    max-width: 100%;
+    padding-inline: 8px;
+  }
+
+  .library-dialog .library-body {
+    grid-template-columns: 116px minmax(0, 1fr);
+  }
+
+  .library-dialog .library-groups {
+    gap: 3px;
+    padding: 12px 8px 18px 0;
+  }
+
+  .library-group {
+    gap: 5px;
+    padding: 10px 7px;
+    font-size: 12px;
+  }
+
+  .library-group[aria-expanded] {
+    grid-template-columns: minmax(0, 1fr) auto 6px;
+  }
+
+  .library-group-count {
+    font-size: 10px;
+  }
+
+  .library-subgroups {
+    margin-left: 5px;
+    padding-left: 4px;
+  }
+
+  .library-subgroup {
+    gap: 4px;
+    padding: 9px 6px;
+    font-size: 12px;
+  }
+
+  .library-dialog .library-content {
+    padding: 10px 0 20px 10px;
+  }
+
+  .library-dialog .library-results {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  html:root body.focus-reader #library-dialog .work-card {
+    padding: 13px;
+    border-radius: 13px;
+  }
+
+  .library-dialog .work-card h3 {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-surface: var(--surface);
+    --glass-card: var(--surface);
+    --glass-control: var(--tint);
+    --glass-edge: var(--line);
+  }
+
+  .focus-reader .sidebar,
+  .top-drawer,
+  dialog,
+  .pencil-dock,
+  .pencil-options-panel,
+  .edge-reveal {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body.performance-mode .top-drawer {
+    background: #172131;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library-group::after {
+    transition: none;
+  }
+}

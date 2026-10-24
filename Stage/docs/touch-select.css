@@ -1,0 +1,29 @@
+/* Native selects remain the state and event source behind these controls. */
+select.touch-select-source{display:none!important}
+.touch-select-control{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;min-width:0;max-width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line,#dce3ed);border-radius:11px;background:color-mix(in srgb,var(--surface,#fafcff) 76%,transparent);color:var(--ink,#24344d);font:inherit;font-size:14px;line-height:1.45;text-align:left;vertical-align:middle;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%)}
+.touch-select-control:hover:enabled,.touch-select-control[aria-expanded=true]{background:var(--tint,#eaf1fc);border-color:color-mix(in srgb,var(--accent,#245ca9) 35%,var(--line,#dce3ed))}
+.touch-select-control:focus-visible{outline:2px solid var(--accent,#245ca9);outline-offset:3px}
+.touch-select-control:disabled{opacity:.45;cursor:default}
+.touch-select-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.touch-select-chevron{flex-shrink:0;font-size:16px;color:var(--muted,#718098);line-height:1}
+.touch-select-control[aria-expanded=true] .touch-select-chevron{transform:rotate(180deg)}
+.touch-select-menu{position:fixed;inset:auto;margin:0;box-sizing:border-box;z-index:1000;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;max-width:calc(100vw - 16px);padding:6px;border:1px solid color-mix(in srgb,var(--line,#dce3ed) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--surface,#fafcff) 86%,transparent);color:var(--ink,#24344d);box-shadow:0 12px 48px #10244030,0 2px 8px #10244012;backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;animation:touch-select-appear .12s ease-out}
+.touch-select-menu::backdrop{background:transparent;pointer-events:none}
+.touch-select-menu[hidden]{display:none!important}
+.touch-select-option{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding:10px 12px;box-sizing:border-box;border-radius:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;overflow-wrap:anywhere;cursor:pointer}
+.touch-select-option>span:first-child{min-width:0}
+.touch-select-option.active{background:var(--tint,#eaf1fc);color:var(--accent,#245ca9)}
+.touch-select-option[aria-selected=true]{color:var(--accent,#245ca9);font-weight:600}
+.touch-select-option[aria-disabled=true]{opacity:.4;cursor:default}
+.touch-select-check{width:18px;flex-shrink:0;visibility:hidden;text-align:center;color:var(--accent,#245ca9)}
+.touch-select-option[aria-selected=true] .touch-select-check{visibility:visible}
+.zoom-control .touch-select-control{min-width:96px}
+.edition-toolbar .touch-select-control{flex:1;max-width:100%;min-width:0;background:var(--tint,#eaf1fc);font-size:13px}
+.midi-row .touch-select-control{max-width:220px}
+.library-filters .touch-select-control{font-size:13px}
+.setting-row .touch-select-control{max-width:180px;flex-shrink:0;font-size:13px}
+.reader-footer .touch-select-control{min-height:40px;padding:7px 10px;font-size:12px}
+@keyframes touch-select-appear{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.touch-select-menu{animation:none}}
+@media(prefers-reduced-transparency:reduce){.touch-select-control,.touch-select-menu{background:var(--surface,#fafcff);backdrop-filter:none;-webkit-backdrop-filter:none}}
+@supports not (backdrop-filter:blur(1px)){.touch-select-control,.touch-select-menu{background:var(--surface,#fafcff)}}

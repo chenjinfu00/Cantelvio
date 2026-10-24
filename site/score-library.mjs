@@ -8,8 +8,8 @@ export function brandReaderPage(html,{name='Cantelvio Score',eyebrow='CANTELVIO 
 
 // Score's PDF library shares Stage's reader without treating PDF pixels as editable notes.
 export function scoreLibraryPage(html,{connected=false}={}){
+  const editorLink=html.includes('score-editor-link')?'':'<a class="secondary full score-editor-link" href="../">乐谱编辑器 ↗</a>';
   return brandReaderPage(html).replace('<title>Cantelvio Score · 听谱翻页</title>','<title>Cantelvio Score · 曲谱库</title>')
     .replace('</head>',`${connected?'<script type="text/plain" id="score-library-connection">./library/connection.json</script>':''}<link rel="stylesheet" href="./score-library.css"></head>`)
-    .replace('<h2>曲目概览</h2>','<h2>我的曲谱库</h2><p class="score-library-tip">选择 iPad 本地或 iCloud 中的曲谱文件夹，然后搜索和阅读。曲谱保留在设备上。</p>')
-    .replace('<section class="local-folder"','<a class="secondary full score-editor-link" href="../">乐谱编辑器 ↗</a><section class="local-folder"');
+    .replace('<div class="shelf-actions">',editorLink+'<div class="shelf-actions">');
 }
