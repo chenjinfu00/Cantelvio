@@ -13,7 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
-import {scoreLibraryPage} from './score-library.mjs';
+import {scoreLibraryPage,brandReaderPage} from './score-library.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const args = process.argv.slice(2);
@@ -95,11 +95,11 @@ for (const app of ['harmony', 'stage']) rewrite(app + '/manifest.webmanifest', j
 rewrite('stage/index.html', html => {
   const shelfHeading = '<div class="drawer-heading"><div><strong>volta';
   if (!html.includes(shelfHeading)) throw new Error('Stage shelf heading changed; update site/build.mjs');
-  return html
+  return brandReaderPage(html
     .replace('<title>Volta · 听谱翻页</title>', '<title>Cantelvio Stage · 听谱翻页</title>')
     .replace('<a class="brand" href="./"><span class="brand-mark">V</span><span>volta', '<a class="brand" href="../" aria-label="Cantelvio 首页 / Home"><span class="brand-mark">C</span><span>Cantelvio Stage')
     .replace(shelfHeading, '<a class="secondary full" href="../" style="display:block;margin-bottom:12px;text-align:left;text-decoration:none">← Cantelvio</a>' + shelfHeading)
-    .replace('<strong>volta', '<strong>Cantelvio Stage').replace('，Volta 就把', '，Cantelvio Stage 就把');
+    .replace('<strong>volta', '<strong>Cantelvio Stage').replace('，Volta 就把', '，Cantelvio Stage 就把'),{name:'Cantelvio Stage',eyebrow:'CANTELVIO STAGE'});
 });
 
 // Compose: browser-only pages and their vendored model/audio assets.

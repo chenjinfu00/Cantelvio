@@ -3,7 +3,7 @@ export function parseBackup(value){
   let pages;
   if(value?.format==='volta-annotations'&&value.version===1)pages=value.pages;
   else if(value?.version===1&&typeof value.scoreId==='string'&&value.pages)pages=Object.entries(value.pages).map(([page,data])=>({id:value.scoreId+'/'+page,data}));
-  if(!Array.isArray(pages)||pages.length>20000)throw Error('不是有效的 Volta 批注备份。');
+  if(!Array.isArray(pages)||pages.length>20000)throw Error('不是有效的 Cantelvio 批注备份。');
   const keys=new Set();
   for(const row of pages){if(!/^[a-f0-9]{64}\/[1-9][0-9]{0,4}$/.test(row?.id)||keys.has(row.id)||!validateInk(row.data))throw Error('批注备份格式不完整，未导入。');keys.add(row.id);}
   return pages;
@@ -18,7 +18,7 @@ export async function exportBackup(rows){
   const name='volta-annotations.json',text=JSON.stringify(value,null,2),nav=globalThis.navigator;
   const file=typeof File==='function'?new File([text],name,{type:'application/json'}):null;
   if(file&&typeof nav?.share==='function'&&typeof nav?.canShare==='function'&&nav.canShare({files:[file]})){
-    await nav.share({title:'Volta 批注备份',files:[file]});
+    await nav.share({title:'Cantelvio 批注备份',files:[file]});
     return {count:value.pages.length,name,method:'share'};
   }
   if(typeof document==='undefined'||typeof globalThis.URL?.createObjectURL!=='function')throw Error('当前环境不支持导出批注文件。');
