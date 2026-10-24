@@ -141,6 +141,14 @@ const appearanceHash = createHash('sha256');
 for (const file of fs.readdirSync(appearanceDir).sort()) appearanceHash.update(fs.readFileSync(path.join(appearanceDir, file)));
 // Assembly repairs must also refresh the installed modules' offline caches.
 appearanceHash.update(fs.readFileSync(new URL(import.meta.url)));
+appearanceHash.update(fs.readFileSync(path.join(root,'site/score-library.mjs')));
+appearanceHash.update(fs.readFileSync(path.join(root,'Score/tools/score-library.css')));
+// Installed readers must refresh when their code changes, not only their colours.
+const readerAssets=path.join(out,'stage');
+for(const relative of JSON.parse(fs.readFileSync(path.join(readerAssets,'cache-manifest.json'),'utf8')).sort()){
+  const file=path.resolve(readerAssets,relative);
+  if(file.startsWith(readerAssets+path.sep)&&fs.existsSync(file)&&fs.statSync(file).isFile())appearanceHash.update(fs.readFileSync(file));
+}
 const appearanceVersion = appearanceHash.digest('hex').slice(0, 10);
 for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
   const destination = path.join(out, app === 'home' ? '' : app, 'appearance');
@@ -149,6 +157,9 @@ for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
     fs.copyFileSync(path.join(appearanceDir, file), path.join(destination, file));
   }
 }
+const readerAppearance=path.join(out,'score/library/appearance');
+fs.mkdirSync(readerAppearance,{recursive:true});
+for(const file of [...sharedFiles,'stage.css'])fs.copyFileSync(path.join(appearanceDir,file),path.join(readerAppearance,file));
 const publicPages = [
   ['index.html', 'home', './', './appearance/'],
   ['demo/index.html', 'home', '../', '../appearance/'],
@@ -156,7 +167,7 @@ const publicPages = [
   ['concerto/play.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
-  ['score/library/index.html', 'stage', '../../', '../../stage/appearance/'],
+  ['score/library/index.html', 'stage', '../../', './appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],
   ['stage/index.html', 'stage', '../', './appearance/'],
   ['compose/index.html', 'compose', '../', './appearance/'],
@@ -180,11 +191,13 @@ const localAppearance = app => [...sharedFiles, app + '.css'].map(file => './app
 rewrite('harmony/sw.js', js => js
   .replace(/const CACHE_NAME = [^;]+;/, `const CACHE_NAME = \`\${CACHE_PREFIX}appearance-${appearanceVersion}\`;`)
   .replace('const ASSETS = [', 'const ASSETS = [\n' + localAppearance('harmony').map(file => `  ${JSON.stringify(file)},`).join('\n')));
-for (const file of ['sw.js', 'offline.js', 'offline-deploy.js']) {
-  rewrite('stage/' + file, js => js.replaceAll('20261008-onboarding-1', '20261008-appearance-' + appearanceVersion));
+for(const [app,cachePrefix] of [['stage','cantelvio-stage-shell-'],['score/library','cantelvio-score-shell-']]){
+  for(const file of ['sw.js','offline.js','offline-deploy.js']){
+    rewrite(app+'/'+file,js=>js.replace(/20261008-onboarding-1|20260928-auto-turn-1/g,'20261024-reader-'+appearanceVersion).replaceAll('volta-shell-',cachePrefix));
+  }
+  // .nojekyll configures hosting; it is not a browser asset. Each reader keeps its own shell.
+  rewrite(app+'/cache-manifest.json',json=>JSON.stringify([...new Set([...JSON.parse(json).filter(file=>file!=='./.nojekyll'),...localAppearance('stage')])].sort(),null,2)+'\n');
 }
-// .nojekyll configures deployment; it is not a runtime asset served by Pages.
-rewrite('stage/cache-manifest.json', json => JSON.stringify([...new Set([...JSON.parse(json).filter(file => file !== './.nojekyll'), ...localAppearance('stage')])].sort(), null, 2) + '\n');
 
 // Identify the live release; this contains no local path or model/training artifact.
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim();
