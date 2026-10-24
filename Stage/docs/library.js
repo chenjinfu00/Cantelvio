@@ -1,6 +1,7 @@
 import {groupWorks,chooseVersion,compareNames} from './library-model.js';
 import {versionPreferences} from './version-preferences.js';
 import {prioritizeLibraryGroups,readLibraryRecency,rememberLibraryRecency} from './library-recency.js';
+import {matchesLibrarySearch} from './library-search.js';
 const $=id=>document.getElementById(id);
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
 
@@ -90,7 +91,7 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
   }
   function draw(){
     const query=$('library-search').value.toLocaleLowerCase().trim(),format=$('library-format').value;
-    const filtered=works.filter(work=>(!format||work.versions.some(v=>v.format===format))&&(!query||work.search.includes(query)));
+    const filtered=works.filter(work=>(!format||work.versions.some(v=>v.format===format))&&matchesLibrarySearch(work.search,query));
     const groupField=mode==='composer'?'browseGroup':mode,remembered=mode==='composer'?recency.composer:recency[mode];
     const groups=prioritizeLibraryGroups(counts(filtered,groupField),remembered);
     if(selected&&!groups.some(([key])=>key===selected)){selected='';genre='';}
@@ -124,18 +125,19 @@ export function setupLibrary(openPDF,toast,canOpen,getCurrentScore=()=>null,getO
     refreshTask=(async()=>{
       $('library-count').textContent='正在核对曲谱下载状态…';
       // The collection is a folder on this device. There is no server to ask.
+      if(loaded&&localSource?.reload)await localSource.reload();
       const data=localSource?.catalog||{items:[]};
       items=data.items||[];works=groupWorks(items);localLibrary=data.localLibrary===true;loaded=true;draw();setCurrent();
-      if(localLibrary)$('account-note').textContent='本地谱库 · 仅在当前局域网提供';
+      if(localLibrary)$('account-note').textContent=localSource?.kind==='server'?'本地谱库 · 仅在当前局域网提供':'本机曲谱库 · 文件保留在当前设备';
       const pending=items.filter(x=>!x.available).length,ready=items.filter(x=>x.format==='pdf'&&x.available).length;
       $('library-summary').textContent=works.filter(w=>w.versions.some(v=>v.format==='pdf')).length+' 首曲目／合集 · '+ready+' 份 PDF 可打开'+(pending?' · '+pending+' 份暂不可用':'');
       // Without a server there is nothing to refresh; the shelf is whatever folder you point at.
       if(!localSource&&!items.length){
         $('library-summary').textContent='曲谱库还是空的';
-        $('library-download-help').textContent='在左栏点「选择本地曲谱文件夹」，选中你存放曲谱的文件夹，这里就会出现你的全部曲目。';
+        $('library-download-help').textContent='点「选择曲谱文件夹」，选择包含「曲谱库数据」的整个曲谱文件夹，即可浏览全部曲目。';
         return;
       }
-      $('library-download-help').textContent='曲谱来自你选的本地文件夹 · 首次打开默认最新版本，以后记住你的选择。';
+      $('library-download-help').textContent=localSource?.kind==='server'?'已连接 Mac 最新谱库 · 按需读取 PDF · 记住阅读位置与版本':'曲谱来自你选的本地文件夹 · 首次打开默认最新版本，以后记住你的选择。';
     })().finally(()=>{refreshTask=null;$('library-refresh').disabled=false;$('library-refresh').textContent='刷新谱库';});
     return refreshTask;
   };

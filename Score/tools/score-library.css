@@ -1,0 +1,17 @@
+/* Touch-sized library navigation; the score itself keeps the existing reader geometry. */
+.library-dialog{height:calc(100dvh - 32px);max-height:none;border-radius:20px;padding:28px;overscroll-behavior:contain}
+.library-dialog h2{font-size:28px;margin:12px 0 6px;letter-spacing:-.03em}
+.score-library-tip{color:var(--muted);margin:0 0 18px}
+.library-filters input{min-height:48px;font-size:16px}
+.library-filters select,.library-groups button,.library-category-card,.work-card>button,.work-version button{min-height:46px;touch-action:manipulation}
+.library-filters{position:sticky;top:0;z-index:2;background:var(--surface);padding:8px 0}
+.library-groups{position:sticky;top:0;align-self:start;max-height:60dvh;overflow:auto;overscroll-behavior:contain}
+.library-results{align-items:start}
+.library-category-card{padding:20px;text-align:left;min-height:94px}
+.work-card{border-radius:16px;padding:20px}
+.work-card h3{line-height:1.5;overflow-wrap:anywhere}
+.work-card>button{width:100%;margin-top:12px}
+.score-editor-link{display:block;text-align:center;text-decoration:none;margin:12px 0}
+.dialog-close{min-height:44px;min-width:44px}
+@media(max-width:900px){.library-dialog{width:calc(100% - 20px);height:calc(100dvh - 20px);padding:22px}.library-results{grid-template-columns:repeat(2,minmax(0,1fr))}.library-body{grid-template-columns:160px minmax(0,1fr);gap:14px}}
+@media(max-width:600px){.library-dialog{width:100%;height:100dvh;margin:0;border-radius:0;padding:18px 14px;padding-bottom:calc(18px + env(safe-area-inset-bottom))}.library-body{display:block}.library-groups{display:flex;position:static;gap:8px;overflow:auto;white-space:nowrap;margin-bottom:16px;max-height:unset}.library-groups button{flex:none;width:auto}.library-results{grid-template-columns:1fr}.library-filters input{width:100%}}

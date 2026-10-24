@@ -13,6 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
+import {scoreLibraryPage} from './score-library.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const args = process.argv.slice(2);
@@ -66,6 +67,17 @@ rewrite('score/index.html', html => html.replace(/<title>[^<]*<\/title>/, '<titl
 
 fs.cpSync(path.join(modulesRoot, 'Harmony/public/tonnetz'), path.join(out, 'harmony'), {recursive: true, filter: skip});
 fs.cpSync(path.join(modulesRoot, 'Stage/docs'), path.join(out, 'stage'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
+
+// PDF library: the same on-device folder reader under Score's own entry point.
+// The local catalog, scores and page-boundary sidecars are never copied here.
+fs.cpSync(path.join(modulesRoot, 'Stage/docs'), path.join(out, 'score/library'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
+fs.copyFileSync(path.join(root, 'Score/tools/score-library.css'), path.join(out, 'score/library/score-library.css'));
+rewrite('score/library/index.html', html => scoreLibraryPage(html));
+rewrite('score/library/manifest.webmanifest', json => {
+  const manifest=JSON.parse(json);manifest.name='Cantelvio Score · 曲谱库';manifest.short_name='Score';manifest.start_url='./?library=1';
+  return JSON.stringify(manifest,null,2)+'\n';
+});
+rewrite('score/library/cache-manifest.json', json => JSON.stringify([...new Set([...JSON.parse(json),'./score-library.css'])].sort(),null,2)+'\n');
 
 // The public modules share an entrance without changing their standalone/local navigation.
 rewrite('harmony/index.html', html => html
@@ -144,6 +156,7 @@ const publicPages = [
   ['concerto/play.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
+  ['score/library/index.html', 'stage', '../../', '../../stage/appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],
   ['stage/index.html', 'stage', '../', './appearance/'],
   ['compose/index.html', 'compose', '../', './appearance/'],

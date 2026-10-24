@@ -24,6 +24,7 @@ import {TurnCue,showTurnCue} from './turn-cue.js';
 import {pageTurnMap,validatePageTurnMap} from './page-turn-map.js';
 import {CHOPIN_EXAMPLE,exampleFor} from './chopin-example.js';
 import {setupLocalFolder} from './local-library.js';
+import {connectRemoteLibrary} from './remote-library.js';
 import {drainInk,showMerged} from './annotation-backup.js';
 import {setupInkFolder} from './ink-folder.js';
 import {BUILD_INFO,VERSION_UPDATE} from './build-info.js';
@@ -510,7 +511,24 @@ midi=setupMIDI({
 });
 inkFolder=setupInkFolder({ink,library,toast,canRun:()=>state.phase==='idle'&&!performing(),drain:drainInk,showMerged});
   const localFolder=setupLocalFolder({toast,onLibrary:async source=>{await library?.useLocal(source);await inkFolder?.onFolder();emptyState();}});
-  const localRestore=localFolder?.restore?.()||Promise.resolve(null);
+  $('library-folder').onclick=async()=>{
+    await localFolder?.choose();
+  };
+  const serverLibrary=!!document.getElementById('score-library-connection');
+  const localRestore=serverLibrary?(async()=>{
+    try{
+      const source=await connectRemoteLibrary();
+      await library.useLocal(source);
+      $('local-folder-status').textContent=`已连接 Mac 曲谱库 · ${source.size} 份 PDF`;
+      $('local-folder-intro').hidden=true;
+      emptyState();
+      return source;
+    }catch(error){
+      $('local-folder-status').textContent=error.message;
+      toast(error.message);
+      return null;
+    }
+  })():localFolder?.restore?.()||Promise.resolve(null);
 // The first thing a reader sees should be the thing that fills the shelf. Once it is filled,
 // the same place becomes the way back into it.
 function emptyState(){
@@ -563,8 +581,8 @@ $('account-note').textContent='本机阅谱 · 曲谱来自你选的文件夹，
 (async()=>{
   const query=new URLSearchParams(location.search);
   // Library entry is a recovery route: do not reopen a heavy last PDF first.
-  if(query.get('library')==='1'){$('library-button').click();return;}
   await localRestore.catch(()=>null);
+  if(query.get('library')==='1'){$('library-button').click();return;}
   const saved=await loadScore();
   if(saved?.system){try{await openPDF(VERSION_UPDATE,VERSION_UPDATE.name,saved);}catch{toast('版本说明页暂时无法打开。');}}
   else if(saved?.buffer){try{await openPDF(saved.buffer,saved.name,saved);}catch{toast('上次曲谱无法恢复，请从本地曲谱库重新打开。');}}
