@@ -143,6 +143,8 @@ for (const file of fs.readdirSync(appearanceDir).sort()) appearanceHash.update(f
 appearanceHash.update(fs.readFileSync(new URL(import.meta.url)));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-library.mjs')));
 appearanceHash.update(fs.readFileSync(path.join(root,'Score/tools/score-library.css')));
+appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.mjs')));
+appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.html')));
 // Installed readers must refresh when their code changes, not only their colours.
 const readerAssets=path.join(out,'stage');
 for(const relative of JSON.parse(fs.readFileSync(path.join(readerAssets,'cache-manifest.json'),'utf8')).sort()){
@@ -150,6 +152,11 @@ for(const relative of JSON.parse(fs.readFileSync(path.join(readerAssets,'cache-m
   if(file.startsWith(readerAssets+path.sep)&&fs.existsSync(file)&&fs.statSync(file).isFile())appearanceHash.update(fs.readFileSync(file));
 }
 const appearanceVersion = appearanceHash.digest('hex').slice(0, 10);
+// An updater outside /score/library/ can escape an older cache-first worker.
+// It refreshes only public program assets and preserves the existing data path.
+fs.copyFileSync(path.join(root,'site/score-update.mjs'),path.join(out,'score/update.mjs'));
+fs.writeFileSync(path.join(out,'score/update.html'),fs.readFileSync(path.join(root,'site/score-update.html'),'utf8')
+  .replaceAll('__READER_VERSION__','20261024-reader-'+appearanceVersion));
 for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
   const destination = path.join(out, app === 'home' ? '' : app, 'appearance');
   fs.mkdirSync(destination, {recursive: true});
@@ -167,6 +174,7 @@ const publicPages = [
   ['concerto/play.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
+  ['score/update.html', 'stage', '../', './library/appearance/'],
   ['score/library/index.html', 'stage', '../../', './appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],
   ['stage/index.html', 'stage', '../', './appearance/'],

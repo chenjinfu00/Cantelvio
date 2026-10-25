@@ -84,7 +84,7 @@ export function TopBar() {
         )}
       </div>
       <nav className="menu" aria-label={t('menu.file')}>
-        <a className="score-library-link" href="./library/?library=1">
+        <a className="score-library-link" href="./update.html?library=1">
           {t('menu.library')}
         </a>
         <button

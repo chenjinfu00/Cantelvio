@@ -37,7 +37,7 @@ for (const page of pages) {
     }
   }
 }
-for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
+for (const relative of ['index.html', 'demo/index.html', 'workspace.css', 'language.js', 'score/index.html', 'score/update.html', 'score/update.mjs', 'compose/index.html', 'compose/orchestra/joint.html', 'harmony/index.html', 'stage/index.html', 'results/index.html', 'version.json', 'appearance/common.css', 'appearance/appearance.js', 'appearance/core.mjs']) {
   if (!fs.existsSync(path.join(out, relative))) fail(`missing public entry: ${relative}`);
 }
 for (const file of ['index.html','play.html','app.mjs','session.mjs','preset.mjs','remembered.mjs','alignment.mjs','assets/chopin-op21-alignment.json','midi.mjs','transport.mjs','follower.mjs','audio.mjs','demo.mjs','style.css','vendor/synth.js','vendor/processor.js']) {
