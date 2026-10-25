@@ -13,7 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
-import {scoreLibraryPage,brandReaderPage} from './score-library.mjs';
+import {brandReaderPage} from './score-library.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const args = process.argv.slice(2);
@@ -68,16 +68,11 @@ rewrite('score/index.html', html => html.replace(/<title>[^<]*<\/title>/, '<titl
 fs.cpSync(path.join(modulesRoot, 'Harmony/public/tonnetz'), path.join(out, 'harmony'), {recursive: true, filter: skip});
 fs.cpSync(path.join(modulesRoot, 'Stage/docs'), path.join(out, 'stage'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
 
-// PDF library: the same on-device folder reader under Score's own entry point.
-// The local catalog, scores and page-boundary sidecars are never copied here.
-fs.cpSync(path.join(modulesRoot, 'Stage/docs'), path.join(out, 'score/library'), {recursive: true, filter: (s) => skip(s) && !/\/(library|sources|fit)(\/|$)/.test(s)});
-fs.copyFileSync(path.join(root, 'Score/tools/score-library.css'), path.join(out, 'score/library/score-library.css'));
-rewrite('score/library/index.html', html => scoreLibraryPage(html));
-rewrite('score/library/manifest.webmanifest', json => {
-  const manifest=JSON.parse(json);manifest.name='Cantelvio Score · 曲谱库';manifest.short_name='Score';manifest.start_url='./?library=1';
-  return JSON.stringify(manifest,null,2)+'\n';
-});
-rewrite('score/library/cache-manifest.json', json => JSON.stringify([...new Set([...JSON.parse(json),'./score-library.css'])].sort(),null,2)+'\n');
+// Score is notation; Stage is the only PDF reader. Preserve old links with a
+// small compatibility entry/worker instead of publishing a second reader.
+fs.mkdirSync(path.join(out,'score/library'),{recursive:true});
+fs.copyFileSync(path.join(root,'site/score-reader-retired.html'),path.join(out,'score/library/index.html'));
+fs.copyFileSync(path.join(root,'site/score-reader-retired-sw.js'),path.join(out,'score/library/sw.js'));
 
 // The public modules share an entrance without changing their standalone/local navigation.
 rewrite('harmony/index.html', html => html
@@ -142,7 +137,6 @@ for (const file of fs.readdirSync(appearanceDir).sort()) appearanceHash.update(f
 // Assembly repairs must also refresh the installed modules' offline caches.
 appearanceHash.update(fs.readFileSync(new URL(import.meta.url)));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-library.mjs')));
-appearanceHash.update(fs.readFileSync(path.join(root,'Score/tools/score-library.css')));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.mjs')));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.html')));
 // Installed readers must refresh when their code changes, not only their colours.
@@ -152,8 +146,7 @@ for(const relative of JSON.parse(fs.readFileSync(path.join(readerAssets,'cache-m
   if(file.startsWith(readerAssets+path.sep)&&fs.existsSync(file)&&fs.statSync(file).isFile())appearanceHash.update(fs.readFileSync(file));
 }
 const appearanceVersion = appearanceHash.digest('hex').slice(0, 10);
-// An updater outside /score/library/ can escape an older cache-first worker.
-// It refreshes only public program assets and preserves the existing data path.
+// An entry outside /score/library/ can retire its older cache-first worker.
 fs.copyFileSync(path.join(root,'site/score-update.mjs'),path.join(out,'score/update.mjs'));
 fs.writeFileSync(path.join(out,'score/update.html'),fs.readFileSync(path.join(root,'site/score-update.html'),'utf8')
   .replaceAll('__READER_VERSION__','20261024-reader-'+appearanceVersion));
@@ -164,9 +157,6 @@ for (const app of ['home', 'score', 'harmony', 'stage', 'compose']) {
     fs.copyFileSync(path.join(appearanceDir, file), path.join(destination, file));
   }
 }
-const readerAppearance=path.join(out,'score/library/appearance');
-fs.mkdirSync(readerAppearance,{recursive:true});
-for(const file of [...sharedFiles,'stage.css'])fs.copyFileSync(path.join(appearanceDir,file),path.join(readerAppearance,file));
 const publicPages = [
   ['index.html', 'home', './', './appearance/'],
   ['demo/index.html', 'home', '../', '../appearance/'],
@@ -174,8 +164,8 @@ const publicPages = [
   ['concerto/play.html', 'home', '../', '../appearance/'],
   ['results/index.html', 'results', '../', '../appearance/'],
   ['score/index.html', 'score', '../', './appearance/'],
-  ['score/update.html', 'stage', '../', './library/appearance/'],
-  ['score/library/index.html', 'stage', '../../', './appearance/'],
+  ['score/update.html', 'score', '../', './appearance/'],
+  ['score/library/index.html', 'score', '../../', '../appearance/'],
   ['harmony/index.html', 'harmony', '../', './appearance/'],
   ['stage/index.html', 'stage', '../', './appearance/'],
   ['compose/index.html', 'compose', '../', './appearance/'],
@@ -199,7 +189,7 @@ const localAppearance = app => [...sharedFiles, app + '.css'].map(file => './app
 rewrite('harmony/sw.js', js => js
   .replace(/const CACHE_NAME = [^;]+;/, `const CACHE_NAME = \`\${CACHE_PREFIX}appearance-${appearanceVersion}\`;`)
   .replace('const ASSETS = [', 'const ASSETS = [\n' + localAppearance('harmony').map(file => `  ${JSON.stringify(file)},`).join('\n')));
-for(const [app,cachePrefix] of [['stage','cantelvio-stage-shell-'],['score/library','cantelvio-score-shell-']]){
+for(const [app,cachePrefix] of [['stage','cantelvio-stage-shell-']]){
   for(const file of ['sw.js','offline.js','offline-deploy.js']){
     rewrite(app+'/'+file,js=>js.replace(/20261008-onboarding-1|20260928-auto-turn-1/g,'20261024-reader-'+appearanceVersion).replaceAll('volta-shell-',cachePrefix));
   }

@@ -47,6 +47,10 @@ for (const file of ['stage/matcher.js','stage/capture-worklet.js','stage/vendor/
   if (!fs.existsSync(path.join(out,file))) fail(`missing Concerto dependency: ${file}`);
 }
 const allowedMedia=new Map(PUBLISHED_ASSETS.map(asset=>[asset.path,asset]));
+for(const retired of ['app.js','library.js','cache-manifest.json','manifest.webmanifest']){
+  if(fs.existsSync(path.join(out,'score/library',retired)))fail(`duplicate PDF reader under Score: ${retired}`);
+}
+if(!fs.existsSync(path.join(out,'score/library/sw.js')))fail('missing legacy Score worker retirement');
 try {new ScoreMap(JSON.parse(fs.readFileSync(path.join(out,'concerto/assets/chopin-op21-alignment.json'),'utf8')),PUBLISHED_ASSETS[0].sha256);}catch(error){fail(`invalid published score alignment: ${error.message}`);}
 for (const asset of PUBLISHED_ASSETS){
   const file=path.join(out,'concerto',asset.path);

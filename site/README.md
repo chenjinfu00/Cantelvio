@@ -1,5 +1,7 @@
 # Cantelvio web structure
 
+Score is the notation editor at `/score/`; PDF reading and performance belong to the existing `/stage/` workspace. The former `/score/library/` and `/score/update.html` paths now forward safely to the notation editor and no longer ship a duplicate PDF reader. Legacy user storage is retained, and Stage is unchanged.
+
 - `/` opens the software workspaces, with Score as the main action.
 - `/demo/` contains the introduction, walkthrough, capability explanation and results links.
 - `/results/` retains historical experiments and listening examples.
