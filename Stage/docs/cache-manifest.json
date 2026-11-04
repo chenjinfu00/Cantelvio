@@ -11,6 +11,7 @@
   "./dock-position.js",
   "./fit-layout.js",
   "./icon.svg",
+  "./apple-touch-icon.png",
   "./idle-chrome.js",
   "./index.html",
   "./ink-folder.js",

@@ -1,21 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#123b45"/>
-      <stop offset="1" stop-color="#061117"/>
-    </linearGradient>
-    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#a0fff5"/>
-      <stop offset="1" stop-color="#2fb9c2"/>
-    </linearGradient>
-    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#ffe097"/>
-      <stop offset="1" stop-color="#dc8f35"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <path d="M104 179 181 134 258 179 258 268 181 313 104 268Z" fill="url(#a)"/>
-  <path d="M254 93 331 48 408 93 408 182 331 227 254 182Z" fill="url(#b)"/>
-  <path d="M254 268 331 223 408 268 408 357 331 402 254 357Z" fill="url(#a)" opacity=".78"/>
-  <circle cx="181" cy="223" r="18" fill="#edfffc" opacity=".8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Cantelvio Harmony</title>
+<rect width="128" height="128" fill="#234C55"/>
+<g transform="translate(15.75 2.24) scale(.772)">
+<path d="M112 48C113 35 102 22 84 22C52 22 16 56 13 98C11 125 29 142 55 142C79 142 97 128 108 111L105 109C92 124 75 134 59 134C39 134 28 122 28 102C28 71 55 39 82 30C95 26 107 32 112 48Z" fill="#F6F5EF"/>
+<path d="M71 60L50 101H92Z" fill="none" stroke="#F6F5EF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="71" cy="60" r="7.3" fill="#F6F5EF"/>
+<circle cx="50" cy="101" r="7.3" fill="#F6F5EF"/>
+<circle cx="92" cy="101" r="7.3" fill="#F6F5EF"/>
+</g>
 </svg>

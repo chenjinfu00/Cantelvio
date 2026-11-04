@@ -9,6 +9,13 @@ html[data-cv-app] {
   color-scheme:light;
 }
 html[data-cv-theme="dark"] {color-scheme:dark}
+
+.cv-brand-link {display:inline-flex;align-items:center;gap:8px;flex:none}
+.cv-brand-symbol,.cv-app-icon {display:block;flex:none;border-radius:6px}
+.cv-wordmark {display:block;max-width:100%;height:auto}
+.cv-wordmark-dark,html[data-cv-theme="dark"] .cv-wordmark-light {display:none}
+html[data-cv-theme="dark"] .cv-wordmark-dark {display:block}
+.cv-app-label {display:flex;align-items:center;gap:8px}
 html[data-cv-app="home"],html[data-cv-app="results"],html[data-cv-app="compose"] {
   --bg:var(--cv-bg);--fg:var(--cv-text);--mute:var(--cv-muted);--card:var(--cv-surface);
   --surface:var(--cv-surface);--tilebg:var(--cv-surface);--line:var(--cv-border);

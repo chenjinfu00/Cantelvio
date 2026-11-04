@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1f2a44"/><g stroke="#e8ecf5" stroke-width="2"><line x1="10" y1="20" x2="54" y2="20"/><line x1="10" y1="27" x2="54" y2="27"/><line x1="10" y1="34" x2="54" y2="34"/><line x1="10" y1="41" x2="54" y2="41"/><line x1="10" y1="48" x2="54" y2="48"/></g><ellipse cx="27" cy="44.5" rx="6" ry="4.4" transform="rotate(-20 27 44.5)" fill="#7fb2ff"/><rect x="31.6" y="14" width="2.4" height="30" fill="#7fb2ff"/><path d="M34 14c6 3 9 7 8 13-2-4-5-6-8-7z" fill="#7fb2ff"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Cantelvio Score</title>
+  <rect width="128" height="128" fill="#2A3B62"/>
+  <g transform="translate(15.75 2.24) scale(.772)">
+    <path d="M112 48C113 35 102 22 84 22C52 22 16 56 13 98C11 125 29 142 55 142C79 142 97 128 108 111L105 109C92 124 75 134 59 134C39 134 28 122 28 102C28 71 55 39 82 30C95 26 107 32 112 48Z" fill="#F6F5EF"/>
+    <path d="M47 61H96M47 72H96M47 83H96M47 94H96M47 105H96" fill="none" stroke="#F6F5EF" stroke-width="3.4" stroke-linecap="round"/>
+    <rect x="75.2" y="55" width="10" height="38.8" fill="#2A3B62"/>
+    <path d="M0.388 0.500C0.744 0.500 1.180 0.172 1.180-0.168C1.180-0.372 1.020-0.500 0.792-0.500C0.352-0.500 0-0.176 0 0.168C0 0.376 0.172 0.500 0.388 0.500Z" transform="translate(59.7 94) scale(21.8 18.2)" fill="#2A3B62"/>
+    <rect x="78.4" y="56.5" width="3.6" height="35.6" fill="#F6F5EF"/>
+    <path d="M0.388 0.500C0.744 0.500 1.180 0.172 1.180-0.168C1.180-0.372 1.020-0.500 0.792-0.500C0.352-0.500 0-0.176 0 0.168C0 0.376 0.172 0.500 0.388 0.500Z" transform="translate(63.12 94) scale(16 12.8)" fill="#F6F5EF"/>
+  </g>
+</svg>

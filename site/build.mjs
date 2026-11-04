@@ -39,6 +39,15 @@ if (fs.existsSync(out)) throw new Error(`Output already exists: ${out}. Choose a
 fs.mkdirSync(out, {recursive: true});
 
 fs.copyFileSync(path.join(root, 'site/index.html'), path.join(out, 'index.html'));
+const brandDir = path.join(root, 'docs/brand');
+const brandOut = path.join(out, 'brand');
+fs.mkdirSync(brandOut);
+for (const [source, target] of [
+  ['cantelvio-app-icon.svg', 'mark.svg'],
+  ['cantelvio-lockup.svg', 'wordmark.svg'],
+  ['cantelvio-lockup-reverse.svg', 'wordmark-reverse.svg'],
+]) fs.copyFileSync(path.join(brandDir, source), path.join(brandOut, target));
+fs.copyFileSync(path.join(brandOut, 'mark.svg'), path.join(out, 'favicon.svg'));
 for (const file of ['workspace.css', 'language.js']) fs.copyFileSync(path.join(root, 'site', file), path.join(out, file));
 fs.cpSync(path.join(root, 'site/demo'), path.join(out, 'demo'), {recursive: true});
 // Browser accompaniment: no local score, MIDI, recording or Python service.
@@ -139,6 +148,9 @@ appearanceHash.update(fs.readFileSync(new URL(import.meta.url)));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-library.mjs')));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.mjs')));
 appearanceHash.update(fs.readFileSync(path.join(root,'site/score-update.html')));
+for (const file of ['icon.svg', 'manifest.webmanifest', 'sw.js']) {
+  appearanceHash.update(fs.readFileSync(path.join(out, 'harmony', file)));
+}
 // Installed readers must refresh when their code changes, not only their colours.
 const readerAssets=path.join(out,'stage');
 for(const relative of JSON.parse(fs.readFileSync(path.join(readerAssets,'cache-manifest.json'),'utf8')).sort()){
