@@ -5,3 +5,6 @@
 .prompt-text{white-space:pre-wrap;overflow-wrap:anywhere}.copy-prompt{background:#203f35;color:#fff;border:0;border-radius:4px;font:inherit;font-size:14px;font-weight:600;line-height:1.4;padding:9px 15px;cursor:pointer}.copy-prompt:hover{background:#365c4c}.copy-prompt:focus-visible{outline:3px solid #d4a653;outline-offset:3px}.copy-status{font-size:14px;color:#526f5d;margin-left:10px}
 /* Keep the library introduction and prompt aligned in one column. */
 .library-compact{grid-template-columns:1fr;gap:30px;align-items:start}
+
+/* Show complete app windows for the current landscape screenshots. */
+.screen img{height:auto;object-fit:contain}.screen-score,.screen-stage{height:auto}.screen-score{width:76%;left:0;top:84px}.screen-stage{width:55%;right:-3%;top:275px}.product-image img{height:auto;object-fit:contain}@media(max-width:800px){.screen-score{height:auto;width:76%;top:35px}.screen-stage{height:auto;width:55%;top:190px}}@media(max-width:450px){.screen-score,.screen-stage{height:auto}.screen-stage{top:155px}}
